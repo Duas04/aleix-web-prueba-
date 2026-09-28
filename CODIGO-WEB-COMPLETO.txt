@@ -1,8 +1,8 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 4eaf68b76cf862d71825844ac40f7c1a7e5ea6ca
-Incluye las mejoras de rendimiento, SEO, panel y textos legales del 28 de septiembre de 2026.
+Revisión Git de base: 7c787a50c98c2a402e906adcc80419e9382097ae
+Incluye el carrito y formulario de invitado de prueba, además de las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
 
@@ -22,40 +22,42 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 13. web/dist/assets/fonts/manrope-OFL.txt
 14. web/dist/assets/fonts/playfairdisplay-OFL.txt
 15. web/dist/aviso-legal.html
-16. web/dist/condiciones-de-venta.html
-17. web/dist/cookies.html
-18. web/dist/fonts.css
-19. web/dist/index.html
-20. web/dist/legal.css
-21. web/dist/privacidad.html
-22. web/dist/robots.txt
-23. web/dist/shop.css
-24. web/dist/shop.js
-25. web/dist/sitemap.xml
-26. web/dist/styles.css
-27. web/drizzle.config.ts
-28. web/drizzle/0000_cultured_mathemanic.sql
-29. web/drizzle/0001_lonely_black_bolt.sql
-30. web/drizzle/meta/0000_snapshot.json
-31. web/drizzle/meta/0001_snapshot.json
-32. web/drizzle/meta/_journal.json
-33. web/package.json
-34. web/pnpm-lock.yaml
-35. web/pnpm-workspace.yaml
-36. web/scripts/build.mjs
-37. web/scripts/package.mjs
-38. web/scripts/preview-admin.mjs
-39. web/serve.mjs
-40. web/tests/admin-ui.test.mjs
-41. web/tests/admin.test.mjs
-42. web/tests/breathing.test.mjs
-43. web/tests/cache.test.mjs
-44. web/tests/database.mjs
-45. web/tests/search.test.mjs
-46. web/tests/seo.test.mjs
-47. web/tests/separation.test.mjs
-48. web/worker/database.mjs
-49. web/worker/index.mjs
+16. web/dist/cart.js
+17. web/dist/condiciones-de-venta.html
+18. web/dist/cookies.html
+19. web/dist/fonts.css
+20. web/dist/index.html
+21. web/dist/legal.css
+22. web/dist/privacidad.html
+23. web/dist/robots.txt
+24. web/dist/shop.css
+25. web/dist/shop.js
+26. web/dist/sitemap.xml
+27. web/dist/styles.css
+28. web/drizzle.config.ts
+29. web/drizzle/0000_cultured_mathemanic.sql
+30. web/drizzle/0001_lonely_black_bolt.sql
+31. web/drizzle/meta/0000_snapshot.json
+32. web/drizzle/meta/0001_snapshot.json
+33. web/drizzle/meta/_journal.json
+34. web/package.json
+35. web/pnpm-lock.yaml
+36. web/pnpm-workspace.yaml
+37. web/scripts/build.mjs
+38. web/scripts/package.mjs
+39. web/scripts/preview-admin.mjs
+40. web/serve.mjs
+41. web/tests/admin-ui.test.mjs
+42. web/tests/admin.test.mjs
+43. web/tests/breathing.test.mjs
+44. web/tests/cache.test.mjs
+45. web/tests/cart.test.mjs
+46. web/tests/database.mjs
+47. web/tests/search.test.mjs
+48. web/tests/seo.test.mjs
+49. web/tests/separation.test.mjs
+50. web/worker/database.mjs
+51. web/worker/index.mjs
 
 
 ========================================================================
@@ -971,6 +973,51 @@ ARCHIVO: web/dist/aviso-legal.html
 
 
 ========================================================================
+ARCHIVO: web/dist/cart.js
+========================================================================
+
+// Only product quantities belong in storage. Prices always come from the catalog.
+export const CATALOG=Object.freeze({paperback:Object.freeze({name:'Tapa blanda',cents:1500}),hardcover:Object.freeze({name:'Tapa dura',cents:2000})});
+export const CART_KEY='fumada-cart-v1';
+export const CART_TTL=7*24*60*60*1000;
+export function normalizeItems(input){
+ const items={};
+ if(!input||typeof input!=='object'||Array.isArray(input))return items;
+ for(const key of Object.keys(CATALOG)){
+  const qty=Object.hasOwn(input,key)?input[key]:0;
+  if(Number.isInteger(qty)&&qty>=1&&qty<=10)items[key]=qty;
+ }
+ return items;
+}
+export function totals(input){
+ const items=normalizeItems(input);
+ const units=Object.values(items).reduce((sum,qty)=>sum+qty,0);
+ const subtotal=Object.entries(items).reduce((sum,[key,qty])=>sum+CATALOG[key].cents*qty,0);
+ const shipping=units?700:0;
+ return {units,subtotal,shipping,total:subtotal+shipping};
+}
+export function loadCart(storage,now=Date.now()){
+ try{
+  const raw=storage?.getItem(CART_KEY);if(!raw)return {};
+  if(raw.length>2048)throw Error('Invalid cart');
+  const data=JSON.parse(raw);
+  if(data?.version!==1||!Number.isFinite(data.expiresAt)||data.expiresAt<=now||data.expiresAt>now+CART_TTL)throw Error('Expired cart');
+  return normalizeItems(data.items);
+ }catch{try{storage?.removeItem(CART_KEY);}catch{}return {};}
+}
+export function saveCart(storage,input,now=Date.now()){
+ try{
+  if(!storage)return false;
+  const items=normalizeItems(input);
+  if(!Object.keys(items).length)storage.removeItem(CART_KEY);
+  else storage.setItem(CART_KEY,JSON.stringify({version:1,expiresAt:now+CART_TTL,items}));
+  return true;
+ }catch{return false;}
+}
+
+
+
+========================================================================
 ARCHIVO: web/dist/condiciones-de-venta.html
 ========================================================================
 
@@ -987,9 +1034,9 @@ ARCHIVO: web/dist/condiciones-de-venta.html
     </nav>
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Condiciones de venta</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#precios">Ediciones y precios</a><a href="#pedido">Pedido y pago</a><a href="#envios">Envíos</a><a href="#devoluciones">Desistimiento</a><a href="#garantia">Incidencias</a><a href="#formulario">Modelo de comunicación</a></nav>
-<section><h2>1. Vendedor y estado de la tienda</h2><p>Vendedor previsto: Alex Rivera Mosquera, NIF 54759360V, Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> · <a href="tel:+34684339309">+34 684 339 309</a>.</p><p>Estas condiciones preparan la venta directa de ejemplares físicos de <cite>Fumada XXL</cite>. <strong>La contratación no está habilitada.</strong> Seleccionar un formato o consultar el importe no constituye una reserva, pedido ni pago. Los datos operativos pendientes se completarán antes de aceptar compras.</p></section>
+<section><h2>1. Vendedor y estado de la tienda</h2><p>Vendedor previsto: Alex Rivera Mosquera, NIF 54759360V, Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> · <a href="tel:+34684339309">+34 684 339 309</a>.</p><p>Estas condiciones preparan la venta directa de ejemplares físicos de <cite>Fumada XXL</cite>. <strong>La contratación no está habilitada.</strong> Añadir libros al carrito, completar el formulario de prueba o consultar el resumen no constituye una reserva, pedido ni pago. Los datos operativos pendientes se completarán antes de aceptar compras.</p></section>
 <section id="precios"><h2>2. Ediciones y precios</h2><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Edición</th><th scope="col">Un ejemplar</th><th scope="col">Envío por pedido</th><th scope="col">Libro + envío</th></tr></thead><tbody><tr><td>Tapa blanda</td><td>15,00 €</td><td>7,00 €</td><td>22,00 €</td></tr><tr><td>Tapa dura</td><td>20,00 €</td><td>7,00 €</td><td>27,00 €</td></tr></tbody></table></div><p>Importes en euros e impuestos incluidos. El envío indicado es de 7,00 € por pedido a Europa, no por ejemplar. Con varios ejemplares, se suma su precio y una vez el envío. Los posibles costes de importación de un destino fuera del territorio aduanero de la UE deberán determinarse e informarse antes de aceptar el pedido.</p><p>Antes de la apertura se confirmarán las características definitivas de cada edición, la disponibilidad y los datos editoriales aplicables. La imagen actual es una propuesta de portada. No se ofrecen descuentos ni promociones.</p></section>
-<section id="pedido"><h2>3. Cómo se realizará la compra</h2><p>El comprador elegirá formato y cantidad y podrá corregirlos antes del pago. El proceso deberá mostrar identidad del vendedor, características del libro, destino, plazo, precio total, envío y condiciones aplicables antes de solicitar la confirmación con obligación de pago.</p><p>El pago seguro está pendiente de conexión y pruebas. La web actual no solicita tarjetas, no envía una orden a una pasarela y no considera pagado ningún pedido. Tampoco envía correos automáticos de confirmación.</p><p>Cuando se active la contratación, se enviará al comprador una confirmación en un soporte que pueda conservar, con el pedido y sus condiciones. Las condiciones de una compra aceptada no se cambiarán retroactivamente por una actualización de la web. La venta se preparará en español y sin suscripción.</p></section>
+<section id="pedido"><h2>3. Cómo se realizará la compra</h2><p>El carrito permite combinar formatos, cambiar cantidades, eliminar libros y revisar una selección con datos ficticios de envío. Los campos no se transmiten al vendedor ni crean un pedido. No se exige una cuenta de comprador. Cuando se abra la venta, el comprador podrá corregir su selección antes del pago. El proceso deberá mostrar identidad del vendedor, características del libro, destino, plazo, precio total, envío y condiciones aplicables antes de solicitar la confirmación con obligación de pago.</p><p>El pago seguro está pendiente de conexión y pruebas. La web actual no solicita tarjetas, no envía una orden a una pasarela y no considera pagado ningún pedido. Tampoco envía correos automáticos de confirmación.</p><p>Cuando se active la contratación, se enviará al comprador una confirmación en un soporte que pueda conservar, con el pedido y sus condiciones. Las condiciones de una compra aceptada no se cambiarán retroactivamente por una actualización de la web. La venta se preparará en español y sin suscripción.</p></section>
 <section id="envios"><h2>4. Envíos y plazos</h2><p>Se ha previsto el envío a Europa por 7,00 € por pedido. La lista de destinos efectivamente admitidos, el transportista y las restricciones se confirmarán antes de habilitar la contratación, teniendo en cuenta también territorios especiales y destinos extracomunitarios.</p><p><strong>No hay todavía una estimación de entrega confirmada.</strong> El plazo concreto o intervalo para la dirección de destino se comunicará antes de pagar. No se mostrará una fecha ficticia ni se sustituirá un plazo acordado por la indicación indefinida «depende del destino».</p><p>Salvo que las partes acuerden otra cosa, la normativa prevé la entrega sin demora indebida y, como máximo, en 30 días naturales desde la celebración del contrato. En caso de incumplimiento se aplicarán los derechos previstos legalmente, incluida la resolución cuando proceda. La pérdida o el daño durante el transporte se atenderá según el régimen legal de transmisión del riesgo.</p></section>
 <section id="devoluciones"><h2>5. Derecho de desistimiento</h2><p>En una compra a distancia de estos libros físicos ordinarios, la persona consumidora podrá comunicar que desiste sin necesidad de justificar su decisión durante los <strong>14 días naturales</strong> siguientes a su recepción. Si los libros de un mismo pedido se entregan por separado, el plazo comienza con la recepción del último. La diferencia entre tapa blanda y tapa dura no elimina este derecho.</p><p>La comunicación podrá dirigirse al correo <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal al vendedor. Debe identificar el pedido y expresar claramente la voluntad de desistir; no es obligatorio usar el modelo de esta página. Antes de activar contratos online deberá estar operativa la función de desistimiento electrónica que resulte exigible, con su confirmación. Este texto no sustituye su implementación.</p><p>El libro deberá devolverse sin demora y, como máximo, dentro de los 14 días naturales siguientes a la comunicación. Las devoluciones se recibirán en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. El comprador asumirá el coste directo de devolver un libro por desistimiento cuando se le haya informado de ello antes de contratar. Esta regla no se aplica a errores de envío o falta de conformidad imputables al vendedor.</p><p>Si desistes de todo el pedido, se devolverá el importe de los libros y el coste de la entrega ordinaria inicial dentro de los 14 días naturales desde la comunicación. No se devolverá el suplemento de una modalidad de entrega más costosa que hayas elegido expresamente. El vendedor podrá retener el reembolso hasta recibir los bienes o una prueba de devolución, según qué suceda primero, salvo que se haya ofrecido a recogerlos. El reembolso se realizará por el mismo medio de pago, salvo acuerdo expreso sin costes para el consumidor.</p><p>Solo podrá exigirse la disminución de valor causada por una manipulación distinta de la necesaria para comprobar la naturaleza, características y funcionamiento del producto, en los términos legales. No se impone conservar el embalaje original como requisito absoluto para desistir.</p></section>
 <section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin coste para ti, incluidos los gastos de transporte necesarios para resolver la falta de conformidad. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
@@ -1014,9 +1061,9 @@ ARCHIVO: web/dist/cookies.html
     </nav>
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de cookies</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#alcance">Qué utiliza la web</a><a href="#plataforma">Alojamiento</a><a href="#preferencias">Preferencias</a></nav>
-<section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>En el código actual del libro no se han incorporado cookies publicitarias, analítica de visitas ni almacenamiento local persistente. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Edición y cantidad elegidas</td><td>Estado en memoria; sin cesta persistente ni registro de pedido.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
+<section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>El código del libro no incorpora cookies publicitarias ni analítica de visitas. Al añadir un libro, el carrito utiliza almacenamiento local para recordar exclusivamente las ediciones y cantidades elegidas en este navegador. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Carrito: <code>fumada-cart-v1</code></td><td>Almacenamiento local propio con ediciones, cantidades y fecha de caducidad. Solo sirve para conservar la selección solicitada; no crea pedidos ni guarda nombre, correo o dirección.</td><td>7 días desde el último cambio. La web descarta el contenido caducado al volver a cargarlo. Se elimina al vaciar el carrito o borrar los datos del sitio.</td></tr><tr><td>Formulario de prueba</td><td>Campos y resumen en memoria; el código no los envía ni los guarda en almacenamiento local.</td><td>Hasta cerrar el carrito o recargar la página.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
 <section id="plataforma"><h2>2. Seguridad del alojamiento y acceso privado</h2><p>La web del libro y la demostración del panel son públicas. La demo utiliza exclusivamente pedidos ficticios. Solo el área de gestión del titular requiere iniciar sesión mediante ChatGPT y superar una autorización adicional.</p><p>En las respuestas del dominio público se ha observado la siguiente cookie de seguridad, incluida en el inventario el 28 de septiembre de 2026:</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Cookies observadas; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Nombre</th><th scope="col">Proveedor y finalidad</th><th scope="col">Duración</th></tr></thead><tbody><tr><td><code>__cf_bm</code></td><td>Cloudflare, infraestructura de seguridad: distinguir tráfico automatizado y proteger el servicio frente a abusos. Se establece en el dominio prueba-aleix.com.</td><td>30 minutos de inactividad continuada, según el proveedor.</td></tr></tbody></table></div><p>Cloudflare identifica esta cookie como necesaria para su protección frente a bots. No se utiliza en el código de esta tienda para publicidad ni analítica comercial. Consulta la <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">documentación de cookies de Cloudflare</a>.</p><p>Este inventario corresponde a las respuestas públicas comprobadas; no sustituye una revisión de todas las variantes de autenticación o de las cookies que puedan emitir desafíos de seguridad. El inicio de sesión del titular se gestiona en la plataforma y debe revisarse por separado conforme a su configuración.</p><p>Stripe aún no está integrado. Antes de conectar pagos, estadísticas o publicidad se actualizará el inventario y, cuando sea necesario, se habilitará el consentimiento previo.</p></section>
-<section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La cookie de seguridad descrita presta una función técnica necesaria. Cualquier tecnología opcional que se incorpore deberá tener su propia información y mecanismo de consentimiento.</p><p>Puedes consultar, eliminar o bloquear las cookies desde los ajustes de privacidad de tu navegador. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La cookie de seguridad descrita presta una función técnica necesaria. Cualquier tecnología opcional que se incorpore deberá tener su propia información y mecanismo de consentimiento.</p><p>Puedes eliminar la selección con «Vaciar carrito». También puedes consultar, eliminar o bloquear las cookies y el almacenamiento local desde los ajustes de privacidad del navegador. Si bloqueas el almacenamiento, el carrito funciona en memoria, pero se pierde al recargar. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
 
 
 ========================================================================
@@ -1105,7 +1152,7 @@ ARCHIVO: web/dist/index.html
   <link rel="stylesheet" href="shop.css">
   <link rel="stylesheet" href="legal.css">
   <script src="app.js" defer></script>
-  <script src="shop.js" defer></script>
+  <script src="shop.js" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -1120,7 +1167,7 @@ ARCHIVO: web/dist/index.html
       <a href="#comprar">Ediciones</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="header-cta" href="#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
+    <button class="header-cta cart-open" id="cart-open" type="button" aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h2l2 11h11l2-8H6M9 20h.01M17 20h.01"/></svg><span>Carrito</span><span id="cart-count" class="cart-count">0</span></button><noscript><a class="header-cta" href="#comprar">Ver ediciones</a></noscript>
   </header>
 
   <main id="contenido">
@@ -1158,8 +1205,8 @@ ARCHIVO: web/dist/index.html
         <div class="shop-heading"><div><p class="eyebrow">FUMADA XXL · ALEIX</p><h2 id="shop-title">Tu próxima pausa,<br><em>en papel.</em></h2></div><p>Dos formas de llevarte la calma.<br>Elige la edición que va contigo.</p></div>
         <p class="shop-status"><span aria-hidden="true">◷</span><span><strong>Venta en preparación.</strong> Consulta el importe de tu edición. Todavía no se aceptan pedidos ni pagos.</span></p>
         <div class="edition-grid">
-          <article class="edition-card"><p class="eyebrow">EDICIÓN FLEXIBLE</p><div class="edition-title"><h3>Tapa blanda</h3><p class="edition-price">15<span>,00 €</span></p></div><p>Una cubierta flexible para acompañar tus momentos de lectura.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="paperback">Elegir tapa blanda <span aria-hidden="true">↗</span></button></article>
-          <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover">Elegir tapa dura <span aria-hidden="true">↗</span></button></article>
+          <article class="edition-card"><p class="eyebrow">EDICIÓN FLEXIBLE</p><div class="edition-title"><h3>Tapa blanda</h3><p class="edition-price">15<span>,00 €</span></p></div><p>Una cubierta flexible para acompañar tus momentos de lectura.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="paperback">Añadir tapa blanda <span aria-hidden="true">+</span></button></article>
+          <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover">Añadir tapa dura <span aria-hidden="true">+</span></button></article>
         </div>
         <p class="shipping-highlight">Envío a Europa · <strong>7,00 € por pedido</strong></p><p class="shop-availability">La venta online está en preparación. Puedes consultar tu importe, pero todavía no se admiten pedidos ni se realizan cobros. La disponibilidad y el plazo para tu destino se confirmarán antes del pago.</p>
         <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
@@ -1169,7 +1216,7 @@ ARCHIVO: web/dist/index.html
     <section class="faq-section wrap" id="preguntas" aria-labelledby="faq-title">
       <div class="faq-intro"><p class="eyebrow">CON LAS COSAS CLARAS</p><h2 id="faq-title">Tus dudas,<br><em>con calma.</em></h2><p>Unas respuestas antes de elegir tu edición.</p><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Consulta%20sobre%20Fumada%20XXL">Escribir a Aleix <span aria-hidden="true">↗</span></a></div>
       <div class="faq-list">
-        <details><summary>¿Ya puedo comprar el libro?</summary><div><p>La venta online está en preparación. Puedes elegir formato y cantidad para consultar el importe, pero todavía no se crean pedidos, reservas ni cobros.</p><p>La disponibilidad y las condiciones de envío se confirmarán antes de activar el pago.</p></div></details>
+        <details><summary>¿Ya puedo comprar el libro?</summary><div><p>La venta online está en preparación. Puedes añadir ambas ediciones al carrito y probar el formulario como invitado con datos ficticios. Todavía no se crean pedidos, reservas ni cobros.</p><p>La disponibilidad y las condiciones de envío se confirmarán antes de activar el pago.</p></div></details>
         <details><summary>¿Qué ediciones hay y cuánto cuestan?</summary><div><p>Tapa blanda, <strong>15,00 €</strong>; tapa dura, <strong>20,00 €</strong>. Los precios incluyen impuestos. El envío previsto cuesta <strong>7,00 € por pedido</strong>, aunque elijas varios ejemplares.</p><p>Un ejemplar con envío suma 22,00 € en tapa blanda o 27,00 € en tapa dura. <a href="#comprar">Consulta el importe de tu selección</a>.</p></div></details>
         <details><summary>¿Dónde se enviará y cuándo llegará?</summary><div><p>El envío está previsto a Europa. Los destinos admitidos y los plazos todavía se están preparando: se indicará el plazo para tu dirección antes de pagar.</p><p>Para destinos fuera del territorio aduanero de la UE también se deberán concretar los posibles costes de importación. <a href="condiciones-de-venta.html#envios">Consulta la información sobre envíos</a>.</p></div></details>
         <details><summary>¿Cómo puedo contactar con Aleix?</summary><div><p>Escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para consultar sobre el libro o sus ediciones. También puedes llamar al <a href="tel:+34684339309">+34 684 339 309</a>.</p><p>Tienes la información del vendedor y de la tienda en el <a href="aviso-legal.html">aviso legal</a> y las <a href="condiciones-de-venta.html">condiciones de venta</a>.</p></div></details>
@@ -1194,18 +1241,48 @@ ARCHIVO: web/dist/index.html
   <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
 
   <dialog id="order-dialog" class="order-dialog" aria-labelledby="order-title" aria-describedby="order-notice">
-    <div class="order-top"><p class="eyebrow">FUMADA XXL · ALEIX</p><button class="dialog-close" type="button" aria-label="Cerrar resumen de compra">×</button></div>
-    <h2 id="order-title">Tu edición,<br><em>a tu ritmo.</em></h2>
-    <form id="order-form">
-      <fieldset class="edition-options"><legend>Elige el formato</legend><label><input type="radio" name="edition" value="paperback" checked><span>Tapa blanda</span><strong>15,00 €</strong></label><label><input type="radio" name="edition" value="hardcover"><span>Tapa dura</span><strong>20,00 €</strong></label></fieldset>
-      <div class="quantity-label"><label for="order-quantity">Ejemplares</label><select id="order-quantity" name="quantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
-      <div class="order-summary"><div><span id="order-description">1 × Tapa blanda</span><strong id="order-subtotal">15,00 €</strong></div><div><span>Envío a Europa</span><span>7,00 €</span></div><div class="order-total"><span>Libros + envío</span><strong id="order-total">22,00 €</strong></div><p>Impuestos incluidos. El plazo y la disponibilidad se confirmarán por destino antes del pago. Fuera del territorio aduanero de la UE deben concretarse también los posibles gastos de importación antes de admitir el pedido.</p></div>
-      <p id="order-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
-      <p id="order-notice" class="order-notice">Todavía no se aceptan pedidos. Estamos preparando el pago y las condiciones de envío. Esta selección no crea una reserva ni una obligación de compra.</p>
-      <button class="button button-primary payment-button" type="button" disabled aria-describedby="order-notice">Pago todavía no disponible</button>
-      <a class="order-contact" id="order-contact" href="mailto:theshoz@gmail.com?subject=Consulta%20sobre%20Fumada%20XXL">Consultar por correo</a>
-      <div class="order-legal"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="privacidad.html">Privacidad</a></div>
+    <div class="order-top"><span class="cart-brand">Fumada XXL · Aleix</span><button class="dialog-close" type="button" aria-label="Cerrar carrito" data-close-cart>×</button></div>
+    <ol class="checkout-steps" aria-label="Pasos de compra"><li data-step-label="cart" aria-current="step">1. Carrito</li><li data-step-label="details">2. Tus datos</li><li data-step-label="review">3. Resumen</li></ol>
+    <h2 id="order-title" tabindex="-1">Tu carrito</h2>
+    <p id="order-notice" class="checkout-notice"><strong>Venta en preparación.</strong> Puedes probar el recorrido. No se crean pedidos, reservas ni cobros.</p>
+    <p id="order-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+    <section data-step="cart" aria-label="Libros seleccionados">
+      <div id="cart-empty" class="cart-empty"><h3 id="cart-empty-heading" tabindex="-1">Un espacio para tu próxima lectura.</h3><p>Tu carrito está vacío. Elige el formato que prefieras para empezar.</p></div>
+      <div id="cart-filled" hidden><ul id="cart-lines" class="cart-lines"><li class="cart-row" data-cart-row="paperback" hidden><div class="cart-item-name"><h3>Tapa blanda</h3><p>15,00 € por ejemplar</p></div><div class="cart-item-controls"><label for="qty-paperback">Cantidad<span class="sr-only"> de tapa blanda</span></label><select id="qty-paperback" data-quantity="paperback"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><button type="button" class="cart-text-button" data-remove="paperback" aria-label="Eliminar tapa blanda">Eliminar</button></div><strong class="cart-item-total" data-line-total></strong></li>
+<li class="cart-row" data-cart-row="hardcover" hidden><div class="cart-item-name"><h3>Tapa dura</h3><p>20,00 € por ejemplar</p></div><div class="cart-item-controls"><label for="qty-hardcover">Cantidad<span class="sr-only"> de tapa dura</span></label><select id="qty-hardcover" data-quantity="hardcover"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><button type="button" class="cart-text-button" data-remove="hardcover" aria-label="Eliminar tapa dura">Eliminar</button></div><strong class="cart-item-total" data-line-total></strong></li></ul><button type="button" id="cart-clear" class="cart-text-button">Vaciar carrito</button>
+        <div class="order-summary"><div><span>Libros</span><strong id="order-subtotal">0,00 €</strong></div><div><span>Envío previsto · una vez por pedido</span><span id="order-shipping">0,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="order-total">0,00 €</strong></div><p>Impuestos incluidos. Destinos, disponibilidad y plazo de entrega pendientes de confirmar. Fuera del territorio aduanero de la UE pueden existir gastos de importación que deberán concretarse antes de aceptar la compra.</p></div>
+        <button id="cart-continue" class="button button-primary checkout-primary" type="button" disabled>Continuar con mis datos</button>
+      </div>
+      <div class="cart-add"><p>Añadir un ejemplar</p><div><button class="button cart-add-button" type="button" data-edition="paperback">Tapa blanda · 15 €</button><button class="button cart-add-button" type="button" data-edition="hardcover">Tapa dura · 20 €</button></div></div>
+      <p class="checkout-help" id="cart-storage-note">Solo guardamos los libros y cantidades en este navegador durante 7 días desde el último cambio. Puedes vaciar el carrito cuando quieras.</p>
+      <button class="cart-text-button keep-reading" type="button" data-close-cart>Seguir viendo el libro</button>
+    </section>
+    <form id="order-form" data-step="details" method="dialog" novalidate hidden>
+      <p class="checkout-intro">Como invitado, sin crear una cuenta.</p>
+      <p class="checkout-help" id="details-privacy">Formulario de prueba: usa datos ficticios. Los campos solo se usan para mostrar el resumen; no se envían al vendedor. Se borran al cerrar el carrito o recargar. <a href="privacidad.html" target="_blank" rel="noopener">Leer privacidad (otra pestaña)</a>.</p>
+      <p id="form-error" class="form-error" role="alert" hidden>Revisa los campos indicados para continuar.</p>
+      <fieldset class="checkout-fields" aria-describedby="details-privacy"><legend class="sr-only">Datos del destinatario</legend><div class="checkout-field field-wide"><label for="customer-fullName">Nombre y apellidos</label><input id="customer-fullName" name="fullName" type="text" autocomplete="name" maxlength="100" required data-customer-field aria-describedby="customer-fullName-error"><span class="field-error" id="customer-fullName-error"></span></div>
+<div class="checkout-field field-wide"><label for="customer-email">Correo electrónico</label><input id="customer-email" name="email" type="email" autocomplete="email" maxlength="254" required data-customer-field aria-describedby="customer-email-error email-help"><span class="field-error" id="customer-email-error"></span><p class="field-hint" id="email-help">Cuando se active la venta, la confirmación se enviará a este correo. Esta prueba no envía mensajes.</p></div>
+<div class="checkout-field field-wide"><label for="customer-address">Calle y número</label><input id="customer-address" name="address" type="text" autocomplete="shipping address-line1" maxlength="160" required data-customer-field aria-describedby="customer-address-error"><span class="field-error" id="customer-address-error"></span></div>
+<div class="checkout-field field-wide"><label for="customer-addressExtra">Piso, puerta u otras indicaciones (opcional)</label><input id="customer-addressExtra" name="addressExtra" type="text" autocomplete="shipping address-line2" maxlength="120"  data-customer-field aria-describedby="customer-addressExtra-error"><span class="field-error" id="customer-addressExtra-error"></span></div>
+<div class="checkout-field "><label for="customer-postalCode">Código postal</label><input id="customer-postalCode" name="postalCode" type="text" autocomplete="shipping postal-code" maxlength="20" required data-customer-field aria-describedby="customer-postalCode-error"><span class="field-error" id="customer-postalCode-error"></span></div>
+<div class="checkout-field "><label for="customer-city">Localidad</label><input id="customer-city" name="city" type="text" autocomplete="shipping address-level2" maxlength="100" required data-customer-field aria-describedby="customer-city-error"><span class="field-error" id="customer-city-error"></span></div>
+<div class="checkout-field "><label for="customer-region">Provincia o región (opcional)</label><input id="customer-region" name="region" type="text" autocomplete="shipping address-level1" maxlength="100"  data-customer-field aria-describedby="customer-region-error"><span class="field-error" id="customer-region-error"></span></div>
+<div class="checkout-field "><label for="customer-country">País</label><input id="customer-country" name="country" type="text" autocomplete="shipping country-name" maxlength="80" required data-customer-field aria-describedby="customer-country-error"><span class="field-error" id="customer-country-error"></span></div></fieldset>
+      <p class="checkout-help">No se comprueba todavía si el destino admite envíos. Podrás corregir los datos en el siguiente paso.</p>
+      <button class="button button-primary checkout-primary" type="submit">Revisar selección</button>
+      <button class="cart-text-button checkout-back" type="button" data-back="cart">Volver al carrito</button>
     </form>
+    <section data-step="review" aria-label="Resumen de prueba" hidden>
+      <p class="checkout-intro">Comprueba los libros y el destino.</p>
+      <ul id="review-items" class="review-items"></ul>
+      <div class="order-summary"><div><span>Envío previsto</span><span id="review-shipping">7,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="review-total"></strong></div><p>Impuestos incluidos. El destino y el plazo de entrega aún no están confirmados.</p></div>
+      <div class="review-details"><h3>Destinatario y dirección</h3><address id="review-address"></address><h3>Correo para la confirmación</h3><p id="review-email"></p><button class="cart-text-button" type="button" data-back="details">Editar mis datos</button></div>
+      <p class="checkout-notice"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
+      <button class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
+      <button class="cart-text-button checkout-back" type="button" data-back="cart">Editar los libros</button>
+    </section>
+    <div class="order-legal"><a href="condiciones-de-venta.html" target="_blank" rel="noopener">Condiciones de venta</a><a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></div>
   </dialog>
 </body>
 </html>
@@ -1240,8 +1317,8 @@ ARCHIVO: web/dist/privacidad.html
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#responsable">Responsable</a><a href="#tratamientos">Datos y finalidades</a><a href="#proveedores">Proveedores</a><a href="#derechos">Tus derechos</a></nav>
 <section id="responsable"><h2>1. Responsable del tratamiento</h2><p>El titular de la web es Alex Rivera Mosquera, con domicilio en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Puedes contactar en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Los datos de identificación fiscal figuran en el <a href="aviso-legal.html">aviso legal</a>.</p><p>Esta política describe la versión actual, sin pago ni recogida de pedidos. Antes de activar la tienda se actualizará para identificar los proveedores y las operaciones de compra efectivamente implantadas.</p></section>
-<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración y la selección de edición y cantidad funcionan en la memoria de la página: no se guardan en una cuenta ni se envían al titular.</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; la versión actual no los solicita.</p></section>
-<section><h2>3. Conservación</h2><p>El estado del ejercicio y del resumen de compra desaparece al recargar o cerrar la página. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>El identificador de la cuenta propietaria permanece vinculado mientras se mantenga el área privada; el titular debe gestionar su supresión cuando retire esa autorización. La aplicación no dispone de borrado automático programado. Los registros técnicos que mantengan los proveedores siguen sus condiciones y configuración; sus plazos concretos no se han verificado para esta cuenta. Los plazos de futuros pedidos, facturas y datos de pago se concretarán antes de recogerlos.</p></section>
+<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración funciona en memoria. El carrito recuerda las ediciones y cantidades en este navegador durante 7 días desde el último cambio, para conservar la selección solicitada; no se vincula a una cuenta ni se envía al titular. Puedes eliminarlo con «Vaciar carrito».</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Carrito y formulario de prueba</h3><p>Puedes probar el recorrido como invitado con datos ficticios: nombre, correo y dirección de envío. El código los utiliza únicamente en la memoria de la página para mostrarte el resumen solicitado. No los envía al vendedor, a una pasarela ni a la base de datos; tampoco los guarda en el carrito persistente. Se borran al cerrar el carrito o recargar. No se crea una cuenta ni se mandan confirmaciones por correo.</p><p>El navegador puede ofrecer su propio autocompletado; puedes gestionarlo desde sus ajustes. No introduzcas datos de tarjeta ni documentos de identidad en esta prueba.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; el formulario actual es solo una prueba local, sin envío ni contratación.</p></section>
+<section><h2>3. Conservación</h2><p>El estado del ejercicio desaparece al recargar o cerrar la página. El nombre, el correo y la dirección de la prueba se borran al cerrar el carrito o recargar. Las ediciones y cantidades se conservan localmente un máximo de 7 días desde el último cambio y se descartan al volver a cargar un carrito caducado; puedes eliminarlas antes con «Vaciar carrito» o borrando los datos del sitio. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>El identificador de la cuenta propietaria permanece vinculado mientras se mantenga el área privada; el titular debe gestionar su supresión cuando retire esa autorización. La aplicación no dispone de borrado automático programado. Los registros técnicos que mantengan los proveedores siguen sus condiciones y configuración; sus plazos concretos no se han verificado para esta cuenta. Los plazos de futuros pedidos, facturas y datos de pago se concretarán antes de recogerlos.</p></section>
 <section id="proveedores"><h2>4. Servicios y comunicaciones de datos</h2><p>La web se publica mediante Sites de OpenAI y utiliza infraestructura de seguridad de Cloudflare. El correo de contacto utiliza Gmail, de Google. Estos proveedores intervienen en el alojamiento, seguridad, autenticación o correo según el servicio utilizado. Puedes consultar la <a href="https://openai.com/policies/eu-privacy-policy/">política europea de OpenAI</a>, la <a href="https://www.cloudflare.com/privacypolicy/">política de Cloudflare</a> y la <a href="https://policies.google.com/privacy?hl=es">política de Google</a>. Las fuentes tipográficas y la imagen se sirven desde el propio sitio, sin solicitar Google Fonts al navegar.</p><p>La integración de pagos con Stripe se encuentra pendiente: en esta versión no se carga su formulario ni se le envían datos de compra. Tampoco hay un transportista conectado. Antes de activar estos servicios se revisarán sus roles, contratos, destinatarios y posibles transferencias internacionales y se actualizará esta política.</p><p>Las transferencias fuera del Espacio Económico Europeo, si se realizan, deberán contar con el mecanismo legal aplicable, como una decisión de adecuación o garantías contractuales apropiadas. La ubicación del servidor y las garantías de cada proveedor requieren confirmación; no se afirma que todos los datos permanezcan en España.</p></section>
 <section id="derechos"><h2>5. Cómo ejercer tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación o portabilidad cuando sean aplicables escribiendo a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o al domicilio del titular. Si un tratamiento se basa en tu consentimiento, puedes retirarlo sin afectar a la licitud del tratamiento anterior.</p><p>Se pedirá únicamente la información necesaria para verificar la identidad cuando existan dudas razonables. Las solicitudes se atenderán en los plazos previstos por el RGPD, normalmente un mes, con las ampliaciones justificadas que permita la normativa.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>, sin perjuicio de otras autoridades competentes. El código actual no realiza perfiles comerciales ni decisiones automatizadas con efectos jurídicos.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html" aria-current="page">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
 
@@ -1275,56 +1352,183 @@ ARCHIVO: web/dist/shop.css
 .shop-status strong{font-weight:600}
 .order-summary strong,.edition-price{font-variant-numeric:tabular-nums}
 
+/* The cart extends the book's existing paper, olive and serif palette. */
+[hidden]{display:none!important}
+.cart-open{background:transparent;color:var(--ink);cursor:pointer;gap:10px;font-size:.875rem;min-height:44px}
+.cart-open svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.cart-count{font-variant-numeric:tabular-nums;min-width:1.5em;text-align:center}
+.order-dialog{width:min(640px,calc(100% - 32px));padding:28px 32px;scrollbar-color:#87936f var(--paper)}
+.cart-brand{font-size:.875rem;color:#59654b}
+.checkout-steps{display:flex;list-style:none;padding:0;margin:22px 0 0;gap:18px;font-size:.875rem;line-height:1.5;color:#647056;flex-wrap:wrap}
+.checkout-steps li[aria-current]{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:7px}
+.order-dialog h2{margin:22px 0 14px;font-size:2.3rem}
+.checkout-notice{font-size:.875rem;line-height:1.7;color:#4f5c41;background:#e9eddf;padding:14px 16px;border-radius:4px;margin:0 0 24px}
+.checkout-notice strong{font-weight:600}
+.cart-lines{list-style:none;margin:0;padding:0}
+.cart-row{display:grid;grid-template-columns:1fr auto;gap:12px 20px;padding:22px 0;border-bottom:1px solid var(--line)}
+.cart-row:first-child{padding-top:0}
+.cart-item-name h3,.review-details h3{margin:0;font-size:1.0625rem;font-weight:600}
+.cart-item-name p{font-size:.875rem;line-height:1.6;color:var(--muted);margin:6px 0 0}
+.cart-item-total{grid-column:2;grid-row:1;align-self:center;font-variant-numeric:tabular-nums;font-size:1rem;font-weight:600;white-space:nowrap}
+.cart-item-controls{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:.875rem}
+.cart-item-controls select{border:1px solid #aab599;border-radius:4px;background:var(--paper);color:var(--ink);font:inherit;font-size:1rem;min-height:44px;min-width:72px;padding:8px 12px}
+.cart-text-button{border:0;background:transparent;color:var(--olive);cursor:pointer;font:inherit;font-size:.875rem;min-height:44px;text-decoration:underline;text-underline-offset:4px;padding:8px 0;line-height:1.5}
+.cart-text-button:hover{color:var(--ink);text-decoration-thickness:2px}
+.cart-item-controls .cart-text-button{margin-left:auto}
+.cart-empty{padding:12px 0 22px}
+.cart-empty h3{font:400 1.6rem/1.4 var(--serif);margin:0 0 12px}
+.cart-empty p,.checkout-intro{font-size:1rem;line-height:1.7;margin:0 0 18px;color:#59654b}
+.cart-add{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.cart-add>p{font-size:.875rem;margin:0 0 12px}
+.cart-add>div{display:flex;gap:12px;flex-wrap:wrap}
+.cart-add-button{border:1px solid #aab599;background:transparent;color:var(--ink);min-height:44px;padding:10px 16px;font-size:.875rem}
+.cart-add-button:hover{background:#e5e9dc;transform:none}
+.checkout-help,.field-hint{font-size:.875rem;line-height:1.7;color:#59654b;margin:18px 0}
+.checkout-help a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.checkout-primary{width:100%;margin-top:20px;font-size:1rem}
+.checkout-back,.keep-reading{display:block;margin:8px auto;text-align:center}
+.order-legal{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:.875rem}
+.checkout-fields{border:0;padding:0;margin:24px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:20px 18px;min-width:0}
+.checkout-field{min-width:0}.field-wide{grid-column:1/-1}
+.checkout-field label{display:block;font-size:.9375rem;margin-bottom:8px;line-height:1.5}
+.checkout-field input{display:block;width:100%;min-height:48px;padding:11px 12px;border:1px solid #98a587;background:#fcfbf6;border-radius:4px;font:inherit;font-size:1rem;color:var(--ink);caret-color:var(--olive)}
+.checkout-field input[aria-invalid]{border-color:#a13b28}
+.field-error{display:block;color:#913722;font-size:.875rem;line-height:1.6;margin-top:6px}
+.field-error:empty{display:none}
+.field-hint{margin:8px 0 0}
+.form-error{font-size:.9375rem;line-height:1.6;color:#913722;background:#f8e9e2;padding:14px;border-radius:4px}
+.review-items{list-style:none;padding:0;margin:0 0 20px}
+.review-items li{display:flex;justify-content:space-between;gap:20px;margin:14px 0;font-size:1rem;line-height:1.6}
+.review-items strong{white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+.review-details{margin:26px 0}
+.review-details h3{margin-top:22px}
+.review-details address,.review-details p{font-style:normal;font-size:1rem;line-height:1.7;margin:10px 0;color:#59654b;overflow-wrap:anywhere}
+.review-details address span{display:block}
+.payment-button{font-size:1rem}
+@media(max-width:580px){.order-dialog{padding:20px;width:calc(100% - 20px);max-height:calc(100dvh - 20px)}.checkout-steps{gap:12px;font-size:.8125rem}.order-dialog h2{font-size:2rem}.checkout-fields{grid-template-columns:1fr;gap:18px}.field-wide{grid-column:auto}.cart-add>div{display:grid;grid-template-columns:1fr}.cart-open{max-width:none;gap:7px}.cart-open svg{width:20px}.cart-brand{font-size:.8125rem}}
+
 
 
 ========================================================================
 ARCHIVO: web/dist/shop.js
 ========================================================================
 
-(() => {
-  'use strict';
-  const dialog = document.querySelector('#order-dialog');
-  if (!dialog) return;
-  const form = document.querySelector('#order-form');
-  const quantity = document.querySelector('#order-quantity');
-  const catalog = Object.freeze({paperback: {name: 'Tapa blanda', cents: 1500}, hardcover: {name: 'Tapa dura', cents: 2000}});
-  const money = new Intl.NumberFormat('es-ES', {style: 'currency', currency: 'EUR'});
-  let opener;
+import {CATALOG, CART_KEY, loadCart, saveCart, totals} from './cart.js';
 
-  function updateSummary() {
-    const key = form.elements.edition.value;
-    const item = catalog[key];
-    const units = Number(quantity.value);
-    if (!item || !Number.isInteger(units) || units < 1 || units > 10) return;
-    document.querySelector('#order-description').textContent = `${units} × ${item.name}`;
-    document.querySelector('#order-subtotal').textContent = money.format(item.cents * units / 100);
-    document.querySelector('#order-total').textContent = money.format((item.cents * units + 700) / 100);
-    document.querySelector('#order-announcement').textContent = `${units} ${units === 1 ? 'ejemplar' : 'ejemplares'} de ${item.name.toLowerCase()}. Total con envío: ${money.format((item.cents * units + 700) / 100)}.`;
-    const subject = `Consulta sobre Fumada XXL: ${units} × ${item.name}`;
-    document.querySelector('#order-contact').href = `mailto:theshoz@gmail.com?subject=${encodeURIComponent(subject)}`;
+const dialog=document.querySelector('#order-dialog');
+if(dialog){
+ const $=selector=>dialog.querySelector(selector);
+ const form=$('#order-form');
+ const cartButton=document.querySelector('#cart-open');
+ const fields=[...form.querySelectorAll('[data-customer-field]')];
+ const money=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'});
+ let storage;try{storage=window.localStorage;}catch{}
+ let items=loadCart(storage),step='cart',opener;
+ const titles={cart:'Tu carrito',details:'Datos de envío',review:'Revisa tu selección'};
+ const format=cents=>money.format(cents/100);
+ const announce=text=>{$('#order-announcement').textContent=text;};
+ function go(next,{focus=true}={}){
+  step=next;
+  dialog.querySelectorAll('[data-step]').forEach(panel=>{panel.hidden=panel.dataset.step!==next;});
+  $('#order-title').textContent=titles[next];
+  dialog.querySelectorAll('[data-step-label]').forEach(label=>{
+   if(label.dataset.stepLabel===next)label.setAttribute('aria-current','step');else label.removeAttribute('aria-current');
+  });
+  dialog.scrollTop=0;
+  if(focus&&dialog.open)$('#order-title').focus();
+ }
+ function clearDetails(){
+  form.reset();
+  for(const field of fields){field.setCustomValidity('');field.removeAttribute('aria-invalid');$(`#${field.id}-error`).textContent='';}
+  $('#form-error').hidden=true;
+  $('#review-address').replaceChildren();$('#review-email').textContent='';$('#review-items').replaceChildren();
+ }
+ function render(){
+  const cost=totals(items);
+  cartButton.hidden=false;
+  document.querySelector('#cart-count').textContent=String(cost.units);
+  cartButton.setAttribute('aria-label',`Abrir carrito, ${cost.units} ${cost.units===1?'libro':'libros'}`);
+  $('#cart-empty').hidden=!!cost.units;$('#cart-filled').hidden=!cost.units;
+  for(const [key,item]of Object.entries(CATALOG)){
+   const row=$(`[data-cart-row="${key}"]`),qty=items[key]||0;
+   row.hidden=!qty;row.querySelector('select').value=String(qty||1);
+   row.querySelector('[data-line-total]').textContent=format(qty*item.cents);
   }
-
-  document.querySelectorAll('[data-edition]').forEach(button => {
-    button.addEventListener('click', () => {
-      const key = button.dataset.edition;
-      if (!catalog[key]) return;
-      opener = button;
-      form.elements.edition.value = key;
-      quantity.value = '1';
-      updateSummary();
-      dialog.showModal();
-    });
-  });
-  form.addEventListener('change', updateSummary);
-  form.addEventListener('submit', event => event.preventDefault());
-  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => opener?.focus());
-  dialog.addEventListener('click', event => {
-    if (event.target !== dialog) return;
-    const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
-  });
-})();
+  $('#order-subtotal').textContent=format(cost.subtotal);$('#order-shipping').textContent=format(cost.shipping);$('#order-total').textContent=format(cost.total);
+  $('#cart-continue').disabled=!cost.units;
+ }
+ function persist(){
+  const saved=saveCart(storage,items);
+  $('#cart-storage-note').textContent=saved?'Solo guardamos los libros y cantidades en este navegador durante 7 días desde el último cambio. Puedes vaciar el carrito cuando quieras.':'Tu navegador no permite guardar el carrito. Puedes usarlo, pero se perderá al recargar la página.';
+ }
+ function open(source){
+  opener=source;go('cart',{focus:false});render();
+  if(!dialog.open)dialog.showModal();$('#order-title').focus();
+ }
+ document.querySelectorAll('[data-edition]').forEach(button=>button.addEventListener('click',()=>{
+  const key=button.dataset.edition;if(!Object.hasOwn(CATALOG,key))return;
+  const qty=items[key]||0;if(qty<10){items[key]=qty+1;persist();}
+  if(!dialog.open)open(button);else{go('cart',{focus:false});render();}
+  const units=totals(items).units;
+  announce(qty<10?`${CATALOG[key].name} añadida. ${units} ${units===1?'libro':'libros'} en el carrito.`:'Puedes seleccionar hasta 10 ejemplares por formato.');
+ }));
+ cartButton.addEventListener('click',()=>open(cartButton));
+ $('#cart-lines').addEventListener('change',event=>{
+  const key=event.target.dataset.quantity;if(!Object.hasOwn(CATALOG,key))return;
+  const qty=Number(event.target.value);if(!Number.isInteger(qty)||qty<1||qty>10)return;
+  items[key]=qty;persist();render();announce(`Total estimado con envío: ${format(totals(items).total)}.`);
+ });
+ $('#cart-lines').addEventListener('click',event=>{
+  const button=event.target.closest('[data-remove]');if(!button)return;
+  const key=button.dataset.remove;if(!Object.hasOwn(CATALOG,key))return;
+  delete items[key];persist();render();
+  const remaining=$('[data-cart-row]:not([hidden]) select');(remaining||$('#cart-empty-heading')).focus();
+  announce(`${CATALOG[key].name} eliminada del carrito.`);
+ });
+ $('#cart-clear').addEventListener('click',()=>{items={};clearDetails();persist();render();$('#cart-empty-heading').focus();announce('Carrito vacío.');});
+ $('#cart-continue').addEventListener('click',()=>{if(totals(items).units)go('details');});
+ dialog.querySelectorAll('[data-back]').forEach(button=>button.addEventListener('click',()=>go(button.dataset.back)));
+ function validateField(field){
+  field.setCustomValidity('');let error='';
+  if(field.required&&!field.value.trim())error='Completa este campo.';
+  else if(field.validity.typeMismatch)error='Escribe un correo válido, por ejemplo nombre@dominio.com.';
+  else if(field.value.trim().length>(field.maxLength>0?field.maxLength:254))error='El texto es demasiado largo.';
+  else if(field.validity.tooShort)error='Revisa este dato: es demasiado corto.';
+  field.setCustomValidity(error);
+  if(error)field.setAttribute('aria-invalid','true');else field.removeAttribute('aria-invalid');
+  $(`#${field.id}-error`).textContent=error;return !error;
+ }
+ for(const field of fields)field.addEventListener('input',()=>{if(field.hasAttribute('aria-invalid'))validateField(field);});
+ form.addEventListener('submit',event=>{
+  event.preventDefault();if(step!=='details'||!totals(items).units)return;
+  let firstInvalid;
+  for(const field of fields){field.value=field.value.trim();if(!validateField(field)&&!firstInvalid)firstInvalid=field;}
+  $('#form-error').hidden=!firstInvalid;if(firstInvalid){firstInvalid.focus();return;}
+  const value=name=>form.elements.namedItem(name).value.trim();
+  $('#review-email').textContent=value('email');
+  const address=[value('fullName'),value('address'),value('addressExtra'),`${value('postalCode')} · ${value('city')}`,value('region'),value('country')].filter(Boolean);
+  $('#review-address').replaceChildren(...address.map(text=>{const line=document.createElement('span');line.textContent=text;return line;}));
+  $('#review-items').replaceChildren(...Object.entries(items).map(([key,qty])=>{
+   const li=document.createElement('li'),name=document.createElement('span'),price=document.createElement('strong');
+   name.textContent=`${qty} × ${CATALOG[key].name}`;price.textContent=format(qty*CATALOG[key].cents);li.append(name,price);return li;
+  }));
+  const cost=totals(items);$('#review-total').textContent=format(cost.total);$('#review-shipping').textContent=format(cost.shipping);go('review');
+ });
+ // No payment integration: no address, email or order leaves this page.
+ dialog.querySelectorAll('[data-close-cart]').forEach(button=>button.addEventListener('click',()=>dialog.close()));
+ dialog.addEventListener('close',()=>{clearDetails();go('cart',{focus:false});opener?.focus();});
+ dialog.addEventListener('click',event=>{
+  if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();
+  if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();
+ });
+ window.addEventListener('storage',event=>{
+  if(event.key!==CART_KEY&&event.key!==null)return;
+  items=loadCart(storage);render();if(dialog.open){go('cart');announce('Carrito actualizado desde otra pestaña.');}
+ });
+ window.addEventListener('pageshow',event=>{if(event.persisted){clearDetails();items=loadCart(storage);render();go('cart',{focus:false});}});
+ render();
+ if(!storage)$('#cart-storage-note').textContent='Tu navegador no permite guardar el carrito. Se perderá al recargar la página.';
+}
 
 
 
@@ -3115,6 +3319,46 @@ test('built public assets have content-derived validators, including binary font
     assert.equal(cached.status,304);
     assert.equal((await cached.arrayBuffer()).byteLength,0);
   }
+});
+
+
+
+========================================================================
+ARCHIVO: web/tests/cart.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {CATALOG, CART_KEY, CART_TTL, normalizeItems, totals, loadCart, saveCart} from '../dist/cart.js';
+
+const memory=()=>{const data=new Map();return {getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value),removeItem:key=>data.delete(key)};};
+test('mixed editions charge shipping once and an empty cart costs zero',()=>{
+ assert.deepEqual(totals({paperback:1,hardcover:2}),{units:3,subtotal:5500,shipping:700,total:6200});
+ assert.deepEqual(totals({}),{units:0,subtotal:0,shipping:0,total:0});
+ assert.equal(totals({hardcover:2}).total,4700);
+ assert.equal(CATALOG.paperback.cents,1500);
+});
+test('storage is untrusted: unknown keys and invalid quantities cannot affect totals',()=>{
+ const dirty=JSON.parse('{"paperback":2,"hardcover":-1,"constructor":99,"__proto__":{"cents":1},"email":"private@example.com","total":1}');
+ assert.deepEqual(normalizeItems(dirty),{paperback:2});
+ for(const value of [null,[],5,'invalid'])assert.deepEqual(normalizeItems(value),{});
+ for(const qty of [-2,0,1.5,11,'2',null])assert.deepEqual(normalizeItems({paperback:qty}),{});
+});
+test('cart persists only known quantities and expires; clearing removes its storage',()=>{
+ const store=memory(),now=1000;
+ assert.equal(saveCart(store,{paperback:2,email:'private@example.com',address:'secret'},now),true);
+ const raw=store.getItem(CART_KEY);assert.doesNotMatch(raw,/private|secret|address|email|cents|total/);
+ assert.deepEqual(loadCart(store,now+1),{paperback:2});
+ assert.deepEqual(loadCart(store,now+CART_TTL),{});assert.equal(store.getItem(CART_KEY),null);
+ saveCart(store,{hardcover:1},now);saveCart(store,{},now);assert.equal(store.getItem(CART_KEY),null);
+});
+test('corrupt, oversized, future, or unavailable storage fails safely',()=>{
+ const store=memory();
+ for(const raw of ['{','x'.repeat(3000),JSON.stringify({version:1,expiresAt:1e20,items:{paperback:1}})]){
+  store.setItem(CART_KEY,raw);assert.deepEqual(loadCart(store,1000),{});
+ }
+ const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('blocked');},removeItem(){throw Error('blocked');}};
+ assert.deepEqual(loadCart(blocked),{});assert.equal(saveCart(blocked,{paperback:1}),false);
 });
 
 

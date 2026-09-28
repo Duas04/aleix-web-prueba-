@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="shop.css">
   <link rel="stylesheet" href="legal.css">
   <script src="app.js" defer></script>
-  <script src="shop.js" defer></script>
+  <script src="shop.js" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -39,7 +39,7 @@
       <a href="#comprar">Ediciones</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="header-cta" href="#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
+    <button class="header-cta cart-open" id="cart-open" type="button" aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h2l2 11h11l2-8H6M9 20h.01M17 20h.01"/></svg><span>Carrito</span><span id="cart-count" class="cart-count">0</span></button><noscript><a class="header-cta" href="#comprar">Ver ediciones</a></noscript>
   </header>
 
   <main id="contenido">
@@ -77,8 +77,8 @@
         <div class="shop-heading"><div><p class="eyebrow">FUMADA XXL · ALEIX</p><h2 id="shop-title">Tu próxima pausa,<br><em>en papel.</em></h2></div><p>Dos formas de llevarte la calma.<br>Elige la edición que va contigo.</p></div>
         <p class="shop-status"><span aria-hidden="true">◷</span><span><strong>Venta en preparación.</strong> Consulta el importe de tu edición. Todavía no se aceptan pedidos ni pagos.</span></p>
         <div class="edition-grid">
-          <article class="edition-card"><p class="eyebrow">EDICIÓN FLEXIBLE</p><div class="edition-title"><h3>Tapa blanda</h3><p class="edition-price">15<span>,00 €</span></p></div><p>Una cubierta flexible para acompañar tus momentos de lectura.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="paperback">Elegir tapa blanda <span aria-hidden="true">↗</span></button></article>
-          <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover">Elegir tapa dura <span aria-hidden="true">↗</span></button></article>
+          <article class="edition-card"><p class="eyebrow">EDICIÓN FLEXIBLE</p><div class="edition-title"><h3>Tapa blanda</h3><p class="edition-price">15<span>,00 €</span></p></div><p>Una cubierta flexible para acompañar tus momentos de lectura.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="paperback">Añadir tapa blanda <span aria-hidden="true">+</span></button></article>
+          <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover">Añadir tapa dura <span aria-hidden="true">+</span></button></article>
         </div>
         <p class="shipping-highlight">Envío a Europa · <strong>7,00 € por pedido</strong></p><p class="shop-availability">La venta online está en preparación. Puedes consultar tu importe, pero todavía no se admiten pedidos ni se realizan cobros. La disponibilidad y el plazo para tu destino se confirmarán antes del pago.</p>
         <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
@@ -88,7 +88,7 @@
     <section class="faq-section wrap" id="preguntas" aria-labelledby="faq-title">
       <div class="faq-intro"><p class="eyebrow">CON LAS COSAS CLARAS</p><h2 id="faq-title">Tus dudas,<br><em>con calma.</em></h2><p>Unas respuestas antes de elegir tu edición.</p><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Consulta%20sobre%20Fumada%20XXL">Escribir a Aleix <span aria-hidden="true">↗</span></a></div>
       <div class="faq-list">
-        <details><summary>¿Ya puedo comprar el libro?</summary><div><p>La venta online está en preparación. Puedes elegir formato y cantidad para consultar el importe, pero todavía no se crean pedidos, reservas ni cobros.</p><p>La disponibilidad y las condiciones de envío se confirmarán antes de activar el pago.</p></div></details>
+        <details><summary>¿Ya puedo comprar el libro?</summary><div><p>La venta online está en preparación. Puedes añadir ambas ediciones al carrito y probar el formulario como invitado con datos ficticios. Todavía no se crean pedidos, reservas ni cobros.</p><p>La disponibilidad y las condiciones de envío se confirmarán antes de activar el pago.</p></div></details>
         <details><summary>¿Qué ediciones hay y cuánto cuestan?</summary><div><p>Tapa blanda, <strong>15,00 €</strong>; tapa dura, <strong>20,00 €</strong>. Los precios incluyen impuestos. El envío previsto cuesta <strong>7,00 € por pedido</strong>, aunque elijas varios ejemplares.</p><p>Un ejemplar con envío suma 22,00 € en tapa blanda o 27,00 € en tapa dura. <a href="#comprar">Consulta el importe de tu selección</a>.</p></div></details>
         <details><summary>¿Dónde se enviará y cuándo llegará?</summary><div><p>El envío está previsto a Europa. Los destinos admitidos y los plazos todavía se están preparando: se indicará el plazo para tu dirección antes de pagar.</p><p>Para destinos fuera del territorio aduanero de la UE también se deberán concretar los posibles costes de importación. <a href="condiciones-de-venta.html#envios">Consulta la información sobre envíos</a>.</p></div></details>
         <details><summary>¿Cómo puedo contactar con Aleix?</summary><div><p>Escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para consultar sobre el libro o sus ediciones. También puedes llamar al <a href="tel:+34684339309">+34 684 339 309</a>.</p><p>Tienes la información del vendedor y de la tienda en el <a href="aviso-legal.html">aviso legal</a> y las <a href="condiciones-de-venta.html">condiciones de venta</a>.</p></div></details>
@@ -113,18 +113,48 @@
   <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/demo" rel="nofollow">Demo del panel</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
 
   <dialog id="order-dialog" class="order-dialog" aria-labelledby="order-title" aria-describedby="order-notice">
-    <div class="order-top"><p class="eyebrow">FUMADA XXL · ALEIX</p><button class="dialog-close" type="button" aria-label="Cerrar resumen de compra">×</button></div>
-    <h2 id="order-title">Tu edición,<br><em>a tu ritmo.</em></h2>
-    <form id="order-form">
-      <fieldset class="edition-options"><legend>Elige el formato</legend><label><input type="radio" name="edition" value="paperback" checked><span>Tapa blanda</span><strong>15,00 €</strong></label><label><input type="radio" name="edition" value="hardcover"><span>Tapa dura</span><strong>20,00 €</strong></label></fieldset>
-      <div class="quantity-label"><label for="order-quantity">Ejemplares</label><select id="order-quantity" name="quantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
-      <div class="order-summary"><div><span id="order-description">1 × Tapa blanda</span><strong id="order-subtotal">15,00 €</strong></div><div><span>Envío a Europa</span><span>7,00 €</span></div><div class="order-total"><span>Libros + envío</span><strong id="order-total">22,00 €</strong></div><p>Impuestos incluidos. El plazo y la disponibilidad se confirmarán por destino antes del pago. Fuera del territorio aduanero de la UE deben concretarse también los posibles gastos de importación antes de admitir el pedido.</p></div>
-      <p id="order-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
-      <p id="order-notice" class="order-notice">Todavía no se aceptan pedidos. Estamos preparando el pago y las condiciones de envío. Esta selección no crea una reserva ni una obligación de compra.</p>
-      <button class="button button-primary payment-button" type="button" disabled aria-describedby="order-notice">Pago todavía no disponible</button>
-      <a class="order-contact" id="order-contact" href="mailto:theshoz@gmail.com?subject=Consulta%20sobre%20Fumada%20XXL">Consultar por correo</a>
-      <div class="order-legal"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="privacidad.html">Privacidad</a></div>
+    <div class="order-top"><span class="cart-brand">Fumada XXL · Aleix</span><button class="dialog-close" type="button" aria-label="Cerrar carrito" data-close-cart>×</button></div>
+    <ol class="checkout-steps" aria-label="Pasos de compra"><li data-step-label="cart" aria-current="step">1. Carrito</li><li data-step-label="details">2. Tus datos</li><li data-step-label="review">3. Resumen</li></ol>
+    <h2 id="order-title" tabindex="-1">Tu carrito</h2>
+    <p id="order-notice" class="checkout-notice"><strong>Venta en preparación.</strong> Puedes probar el recorrido. No se crean pedidos, reservas ni cobros.</p>
+    <p id="order-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+    <section data-step="cart" aria-label="Libros seleccionados">
+      <div id="cart-empty" class="cart-empty"><h3 id="cart-empty-heading" tabindex="-1">Un espacio para tu próxima lectura.</h3><p>Tu carrito está vacío. Elige el formato que prefieras para empezar.</p></div>
+      <div id="cart-filled" hidden><ul id="cart-lines" class="cart-lines"><li class="cart-row" data-cart-row="paperback" hidden><div class="cart-item-name"><h3>Tapa blanda</h3><p>15,00 € por ejemplar</p></div><div class="cart-item-controls"><label for="qty-paperback">Cantidad<span class="sr-only"> de tapa blanda</span></label><select id="qty-paperback" data-quantity="paperback"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><button type="button" class="cart-text-button" data-remove="paperback" aria-label="Eliminar tapa blanda">Eliminar</button></div><strong class="cart-item-total" data-line-total></strong></li>
+<li class="cart-row" data-cart-row="hardcover" hidden><div class="cart-item-name"><h3>Tapa dura</h3><p>20,00 € por ejemplar</p></div><div class="cart-item-controls"><label for="qty-hardcover">Cantidad<span class="sr-only"> de tapa dura</span></label><select id="qty-hardcover" data-quantity="hardcover"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><button type="button" class="cart-text-button" data-remove="hardcover" aria-label="Eliminar tapa dura">Eliminar</button></div><strong class="cart-item-total" data-line-total></strong></li></ul><button type="button" id="cart-clear" class="cart-text-button">Vaciar carrito</button>
+        <div class="order-summary"><div><span>Libros</span><strong id="order-subtotal">0,00 €</strong></div><div><span>Envío previsto · una vez por pedido</span><span id="order-shipping">0,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="order-total">0,00 €</strong></div><p>Impuestos incluidos. Destinos, disponibilidad y plazo de entrega pendientes de confirmar. Fuera del territorio aduanero de la UE pueden existir gastos de importación que deberán concretarse antes de aceptar la compra.</p></div>
+        <button id="cart-continue" class="button button-primary checkout-primary" type="button" disabled>Continuar con mis datos</button>
+      </div>
+      <div class="cart-add"><p>Añadir un ejemplar</p><div><button class="button cart-add-button" type="button" data-edition="paperback">Tapa blanda · 15 €</button><button class="button cart-add-button" type="button" data-edition="hardcover">Tapa dura · 20 €</button></div></div>
+      <p class="checkout-help" id="cart-storage-note">Solo guardamos los libros y cantidades en este navegador durante 7 días desde el último cambio. Puedes vaciar el carrito cuando quieras.</p>
+      <button class="cart-text-button keep-reading" type="button" data-close-cart>Seguir viendo el libro</button>
+    </section>
+    <form id="order-form" data-step="details" method="dialog" novalidate hidden>
+      <p class="checkout-intro">Como invitado, sin crear una cuenta.</p>
+      <p class="checkout-help" id="details-privacy">Formulario de prueba: usa datos ficticios. Los campos solo se usan para mostrar el resumen; no se envían al vendedor. Se borran al cerrar el carrito o recargar. <a href="privacidad.html" target="_blank" rel="noopener">Leer privacidad (otra pestaña)</a>.</p>
+      <p id="form-error" class="form-error" role="alert" hidden>Revisa los campos indicados para continuar.</p>
+      <fieldset class="checkout-fields" aria-describedby="details-privacy"><legend class="sr-only">Datos del destinatario</legend><div class="checkout-field field-wide"><label for="customer-fullName">Nombre y apellidos</label><input id="customer-fullName" name="fullName" type="text" autocomplete="name" maxlength="100" required data-customer-field aria-describedby="customer-fullName-error"><span class="field-error" id="customer-fullName-error"></span></div>
+<div class="checkout-field field-wide"><label for="customer-email">Correo electrónico</label><input id="customer-email" name="email" type="email" autocomplete="email" maxlength="254" required data-customer-field aria-describedby="customer-email-error email-help"><span class="field-error" id="customer-email-error"></span><p class="field-hint" id="email-help">Cuando se active la venta, la confirmación se enviará a este correo. Esta prueba no envía mensajes.</p></div>
+<div class="checkout-field field-wide"><label for="customer-address">Calle y número</label><input id="customer-address" name="address" type="text" autocomplete="shipping address-line1" maxlength="160" required data-customer-field aria-describedby="customer-address-error"><span class="field-error" id="customer-address-error"></span></div>
+<div class="checkout-field field-wide"><label for="customer-addressExtra">Piso, puerta u otras indicaciones (opcional)</label><input id="customer-addressExtra" name="addressExtra" type="text" autocomplete="shipping address-line2" maxlength="120"  data-customer-field aria-describedby="customer-addressExtra-error"><span class="field-error" id="customer-addressExtra-error"></span></div>
+<div class="checkout-field "><label for="customer-postalCode">Código postal</label><input id="customer-postalCode" name="postalCode" type="text" autocomplete="shipping postal-code" maxlength="20" required data-customer-field aria-describedby="customer-postalCode-error"><span class="field-error" id="customer-postalCode-error"></span></div>
+<div class="checkout-field "><label for="customer-city">Localidad</label><input id="customer-city" name="city" type="text" autocomplete="shipping address-level2" maxlength="100" required data-customer-field aria-describedby="customer-city-error"><span class="field-error" id="customer-city-error"></span></div>
+<div class="checkout-field "><label for="customer-region">Provincia o región (opcional)</label><input id="customer-region" name="region" type="text" autocomplete="shipping address-level1" maxlength="100"  data-customer-field aria-describedby="customer-region-error"><span class="field-error" id="customer-region-error"></span></div>
+<div class="checkout-field "><label for="customer-country">País</label><input id="customer-country" name="country" type="text" autocomplete="shipping country-name" maxlength="80" required data-customer-field aria-describedby="customer-country-error"><span class="field-error" id="customer-country-error"></span></div></fieldset>
+      <p class="checkout-help">No se comprueba todavía si el destino admite envíos. Podrás corregir los datos en el siguiente paso.</p>
+      <button class="button button-primary checkout-primary" type="submit">Revisar selección</button>
+      <button class="cart-text-button checkout-back" type="button" data-back="cart">Volver al carrito</button>
     </form>
+    <section data-step="review" aria-label="Resumen de prueba" hidden>
+      <p class="checkout-intro">Comprueba los libros y el destino.</p>
+      <ul id="review-items" class="review-items"></ul>
+      <div class="order-summary"><div><span>Envío previsto</span><span id="review-shipping">7,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="review-total"></strong></div><p>Impuestos incluidos. El destino y el plazo de entrega aún no están confirmados.</p></div>
+      <div class="review-details"><h3>Destinatario y dirección</h3><address id="review-address"></address><h3>Correo para la confirmación</h3><p id="review-email"></p><button class="cart-text-button" type="button" data-back="details">Editar mis datos</button></div>
+      <p class="checkout-notice"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
+      <button class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
+      <button class="cart-text-button checkout-back" type="button" data-back="cart">Editar los libros</button>
+    </section>
+    <div class="order-legal"><a href="condiciones-de-venta.html" target="_blank" rel="noopener">Condiciones de venta</a><a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></div>
   </dialog>
 </body>
 </html>
