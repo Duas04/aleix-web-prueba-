@@ -24,13 +24,15 @@ async function demoApi(path,options={}) {
 }
 
 const $=id=>document.getElementById(id);
-const money=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(n/100);
-const date=n=>new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(n));
+const moneyFormat=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'});
+const dateFormat=new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'});
+const money=n=>moneyFormat.format(n/100);
+const date=n=>dateFormat.format(new Date(n));
 const payments={paid:'Pagado',pending:'Pago pendiente',failed:'Pago fallido',refunded:'Reembolsado',partially_refunded:'Reembolso parcial'};
 const edition=e=>e==='paperback'?'Tapa blanda':'Tapa dura';
 const shippingLabel=order=>order.fulfillment_status==='shipped'?'Enviado':order.payment_status==='refunded'?'No enviar':'Por enviar';
 const shippingTone=order=>order.payment_status==='refunded'&&order.fulfillment_status!=='shipped'?'refunded':order.fulfillment_status;
-let detailOpener=null;
+let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
 async function api(path,options={}) { return demoApi(path,options); }
 function cell(text,label){const e=document.createElement('td');e.setAttribute('role','cell');e.textContent=text;if(label)e.dataset.label=label;return e;}
@@ -76,6 +78,7 @@ const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
 async function openDetail(id){
+  detailId=id;$('retry-detail').hidden=true;
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
     const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;currentOrder=order;
@@ -88,13 +91,14 @@ async function openDetail(id){
     $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending';$('ship-confirm').checked=false;$('tracking').value='';$('ship-button').disabled=false;
     $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.tracking?' Seguimiento: '+order.tracking:''}`:'';
     $('detail-feedback').textContent='';$('detail-body').hidden=false;
-  }catch(error){if(version===detailRequest)$('detail-feedback').textContent=error.message;}
+  }catch(error){if(version===detailRequest){$('detail-feedback').textContent=error.message;$('retry-detail').hidden=false;}}
 }
+$('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
 $('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;try{await navigator.clipboard.writeText(address(currentOrder));$('detail-message').textContent='Dirección copiada.';}catch{$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-$('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);$('close-detail').focus();$('detail-message').textContent='Envío simulado. No se ha modificado ningún pedido real.';}}catch(error){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}});
+$('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);if($('detail').open&&currentOrder?.id===id){$('close-detail').focus();$('detail-message').textContent='Envío simulado. No se ha modificado ningún pedido real.';}}}catch(error){if($('detail').open&&currentOrder?.id===id){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}}});
 load();
 
 // Included only in the fictional demo bundle; never served with the private panel.

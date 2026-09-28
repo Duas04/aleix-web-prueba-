@@ -8,6 +8,13 @@
       "when": 1790550311892,
       "tag": "0000_cultured_mathemanic",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790589562796,
+      "tag": "0001_lonely_black_bolt",
+      "breakpoints": true
     }
   ]
 }

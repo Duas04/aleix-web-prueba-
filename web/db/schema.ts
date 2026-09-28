@@ -13,6 +13,8 @@ export const orders = sqliteTable('orders', {
   paymentStatus: text('payment_status').notNull(), fulfillmentStatus: text('fulfillment_status').notNull().default('pending'),
   paidAt: integer('paid_at'), shippedAt: integer('shipped_at'), tracking: text('tracking'),
 }, t => [index('orders_created').on(t.createdAt,t.id),
+index('orders_payment_fulfillment_created').on(t.paymentStatus,t.fulfillmentStatus,t.createdAt,t.id),
+index('orders_fulfillment_created').on(t.fulfillmentStatus,t.createdAt,t.id),
 check('order_edition',sql`${t.edition} IN ('paperback','hardcover')`),
 check('order_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
 check('order_payment',sql`${t.paymentStatus} IN ('pending','paid','failed','refunded','partially_refunded')`),

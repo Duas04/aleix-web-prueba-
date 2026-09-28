@@ -1,8 +1,8 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 456f2464a22efbefd4bf83347d228d5f61bea0fe
-Incluye las correcciones posteriores de búsqueda, caché y movimiento reducido.
+Revisión Git de base: 4eaf68b76cf862d71825844ac40f7c1a7e5ea6ca
+Incluye las mejoras de rendimiento, SEO, panel y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
 
@@ -28,28 +28,34 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 19. web/dist/index.html
 20. web/dist/legal.css
 21. web/dist/privacidad.html
-22. web/dist/shop.css
-23. web/dist/shop.js
-24. web/dist/styles.css
-25. web/drizzle.config.ts
-26. web/drizzle/0000_cultured_mathemanic.sql
-27. web/drizzle/meta/0000_snapshot.json
-28. web/drizzle/meta/_journal.json
-29. web/package.json
-30. web/pnpm-lock.yaml
-31. web/pnpm-workspace.yaml
-32. web/scripts/build.mjs
-33. web/scripts/package.mjs
-34. web/scripts/preview-admin.mjs
-35. web/serve.mjs
-36. web/tests/admin.test.mjs
-37. web/tests/breathing.test.mjs
-38. web/tests/cache.test.mjs
-39. web/tests/database.mjs
-40. web/tests/search.test.mjs
-41. web/tests/separation.test.mjs
-42. web/worker/database.mjs
-43. web/worker/index.mjs
+22. web/dist/robots.txt
+23. web/dist/shop.css
+24. web/dist/shop.js
+25. web/dist/sitemap.xml
+26. web/dist/styles.css
+27. web/drizzle.config.ts
+28. web/drizzle/0000_cultured_mathemanic.sql
+29. web/drizzle/0001_lonely_black_bolt.sql
+30. web/drizzle/meta/0000_snapshot.json
+31. web/drizzle/meta/0001_snapshot.json
+32. web/drizzle/meta/_journal.json
+33. web/package.json
+34. web/pnpm-lock.yaml
+35. web/pnpm-workspace.yaml
+36. web/scripts/build.mjs
+37. web/scripts/package.mjs
+38. web/scripts/preview-admin.mjs
+39. web/serve.mjs
+40. web/tests/admin-ui.test.mjs
+41. web/tests/admin.test.mjs
+42. web/tests/breathing.test.mjs
+43. web/tests/cache.test.mjs
+44. web/tests/database.mjs
+45. web/tests/search.test.mjs
+46. web/tests/seo.test.mjs
+47. web/tests/separation.test.mjs
+48. web/worker/database.mjs
+49. web/worker/index.mjs
 
 
 ========================================================================
@@ -244,13 +250,15 @@ ARCHIVO: web/admin/app.js
 ========================================================================
 
 const $=id=>document.getElementById(id);
-const money=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(n/100);
-const date=n=>new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(n));
+const moneyFormat=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'});
+const dateFormat=new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'});
+const money=n=>moneyFormat.format(n/100);
+const date=n=>dateFormat.format(new Date(n));
 const payments={paid:'Pagado',pending:'Pago pendiente',failed:'Pago fallido',refunded:'Reembolsado',partially_refunded:'Reembolso parcial'};
 const edition=e=>e==='paperback'?'Tapa blanda':'Tapa dura';
 const shippingLabel=order=>order.fulfillment_status==='shipped'?'Enviado':order.payment_status==='refunded'?'No enviar':'Por enviar';
 const shippingTone=order=>order.payment_status==='refunded'&&order.fulfillment_status!=='shipped'?'refunded':order.fulfillment_status;
-let detailOpener=null;
+let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
 async function api(path,options={}) {
   const response=await fetch(path,{credentials:'same-origin',cache:'no-store',...options});
@@ -301,6 +309,7 @@ const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
 async function openDetail(id){
+  detailId=id;$('retry-detail').hidden=true;
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
     const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;currentOrder=order;
@@ -313,13 +322,14 @@ async function openDetail(id){
     $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending';$('ship-confirm').checked=false;$('tracking').value='';$('ship-button').disabled=false;
     $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.tracking?' Seguimiento: '+order.tracking:''}`:'';
     $('detail-feedback').textContent='';$('detail-body').hidden=false;
-  }catch(error){if(version===detailRequest)$('detail-feedback').textContent=error.message;}
+  }catch(error){if(version===detailRequest){$('detail-feedback').textContent=error.message;$('retry-detail').hidden=false;}}
 }
+$('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
 $('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;try{await navigator.clipboard.writeText(address(currentOrder));$('detail-message').textContent='Dirección copiada.';}catch{$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-$('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);$('close-detail').focus();$('detail-message').textContent='Pedido marcado como enviado.';}}catch(error){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}});
+$('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);if($('detail').open&&currentOrder?.id===id){$('close-detail').focus();$('detail-message').textContent='Pedido marcado como enviado.';}}}catch(error){if($('detail').open&&currentOrder?.id===id){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}}});
 load();
 
 
@@ -339,7 +349,7 @@ ARCHIVO: web/admin/index.html
 <div id="feedback" role="status" aria-live="polite" class="feedback">Cargando tus pedidos…</div><div id="table-wrap" class="table-wrap" tabindex="0" role="region" aria-label="Lista de pedidos" hidden><table role="table" aria-label="Tus pedidos"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Pedido / cliente</th><th scope="col" role="columnheader">Libro</th><th scope="col" role="columnheader">Total</th><th scope="col" role="columnheader">Pago</th><th scope="col" role="columnheader">Envío</th><th scope="col" role="columnheader"><span class="sr-only">Detalles</span></th></tr></thead><tbody id="rows" role="rowgroup"></tbody></table></div>
 <div id="empty" class="empty" hidden><div class="empty-icon" aria-hidden="true">▤</div><h3 id="empty-title">Tu primer pedido tendrá su lugar aquí</h3><p id="empty-text">Podrás ver quién ha comprado, a qué dirección enviar el libro y si el pago está confirmado.</p><a href="/#comprar" class="text-link">Ver cómo queda la tienda <span aria-hidden="true">↗</span></a></div><div class="pagination" id="pagination" hidden><button class="secondary" id="previous">← Anterior</button><span id="page-label" tabindex="-1" role="status" aria-live="polite"></span><button class="secondary" id="next">Siguiente →</button></div></section>
 <footer class="dashboard-footer"><span><span aria-hidden="true">◈</span> Solo tu cuenta puede ver los datos de los compradores.</span><a href="/privacidad.html">Privacidad</a></footer></main></div>
-<dialog id="detail" aria-labelledby="detail-heading"><div class="dialog-top"><p class="eyebrow" id="detail-heading">DETALLE DEL PEDIDO</p><button id="close-detail" class="close" aria-label="Cerrar detalle">×</button></div><div id="detail-feedback" role="status"></div><div id="detail-body" hidden><p class="print-only print-heading">Fumada XXL · Hoja de preparación<br><span>No es una factura</span></p><h2 id="detail-title"></h2><p class="caption" id="detail-date"></p><div class="status-line"><span id="detail-payment" class="badge"></span><span id="detail-shipping" class="badge"></span></div><div class="detail-grid"><section><h3>Comprador</h3><p id="customer"></p><p id="email"></p><p id="phone"></p></section><section><h3>Enviar a</h3><address id="address"></address><div class="address-actions"><button class="text-link" id="copy-address" type="button">Copiar dirección</button><button class="text-link" id="print-order" type="button">Imprimir pedido</button></div></section></div><section class="order-summary"><h3>Resumen de compra</h3><p id="items"></p><dl><div><dt>Libro(s)</dt><dd id="subtotal"></dd></div><div><dt>Envío</dt><dd id="shipping"></dd></div><div><dt>Total</dt><dd id="total"></dd></div></dl></section><p id="payment-note" class="payment-note"></p><form id="ship-form" class="ship-form" hidden><h3>Preparar el envío</h3><label for="tracking">Número de seguimiento <span class="caption">(opcional)</span></label><input id="tracking" name="tracking" spellcheck="false" maxlength="120" autocomplete="off" placeholder="Código del transportista"><label class="confirmation"><input type="checkbox" id="ship-confirm" required> Confirmo que he entregado este pedido al transportista.</label><button class="button" type="submit" id="ship-button">Marcar como enviado</button></form><p id="shipping-info"></p></div><p id="detail-message" role="status" aria-live="polite"></p></dialog>
+<dialog id="detail" aria-labelledby="detail-heading"><div class="dialog-top"><p class="eyebrow" id="detail-heading">DETALLE DEL PEDIDO</p><button id="close-detail" class="close" aria-label="Cerrar detalle">×</button></div><div id="detail-feedback" role="status"></div><button id="retry-detail" class="secondary" type="button" hidden>Reintentar</button><div id="detail-body" hidden><p class="print-only print-heading">Fumada XXL · Hoja de preparación<br><span>No es una factura</span></p><h2 id="detail-title"></h2><p class="caption" id="detail-date"></p><div class="status-line"><span id="detail-payment" class="badge"></span><span id="detail-shipping" class="badge"></span></div><div class="detail-grid"><section><h3>Comprador</h3><p id="customer"></p><p id="email"></p><p id="phone"></p></section><section><h3>Enviar a</h3><address id="address"></address><div class="address-actions"><button class="text-link" id="copy-address" type="button">Copiar dirección</button><button class="text-link" id="print-order" type="button">Imprimir pedido</button></div></section></div><section class="order-summary"><h3>Resumen de compra</h3><p id="items"></p><dl><div><dt>Libro(s)</dt><dd id="subtotal"></dd></div><div><dt>Envío</dt><dd id="shipping"></dd></div><div><dt>Total</dt><dd id="total"></dd></div></dl></section><p id="payment-note" class="payment-note"></p><form id="ship-form" class="ship-form" hidden><h3>Preparar el envío</h3><label for="tracking">Número de seguimiento <span class="caption">(opcional)</span></label><input id="tracking" name="tracking" spellcheck="false" maxlength="120" autocomplete="off" placeholder="Código del transportista"><label class="confirmation"><input type="checkbox" id="ship-confirm" required> Confirmo que he entregado este pedido al transportista.</label><button class="button" type="submit" id="ship-button">Marcar como enviado</button></form><p id="shipping-info"></p></div><p id="detail-message" role="status" aria-live="polite"></p></dialog>
 </body></html>
 
 
@@ -463,6 +473,8 @@ export const orders = sqliteTable('orders', {
   paymentStatus: text('payment_status').notNull(), fulfillmentStatus: text('fulfillment_status').notNull().default('pending'),
   paidAt: integer('paid_at'), shippedAt: integer('shipped_at'), tracking: text('tracking'),
 }, t => [index('orders_created').on(t.createdAt,t.id),
+index('orders_payment_fulfillment_created').on(t.paymentStatus,t.fulfillmentStatus,t.createdAt,t.id),
+index('orders_fulfillment_created').on(t.fulfillmentStatus,t.createdAt,t.id),
 check('order_edition',sql`${t.edition} IN ('paperback','hardcover')`),
 check('order_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
 check('order_payment',sql`${t.paymentStatus} IN ('pending','paid','failed','refunded','partially_refunded')`),
@@ -938,23 +950,24 @@ ARCHIVO: web/dist/aviso-legal.html
 
 <!doctype html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex"><title>Aviso legal y términos de uso · Fumada XXL</title><meta name="description" content="Aviso legal y términos de uso de la web Fumada XXL, de Aleix. Información sobre el titular y las condiciones de la versión actual.">  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233f4a33'/%3E%3Ccircle cx='32' cy='30' r='12' fill='none' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3Cpath d='M14 47h36M32 8v5M10 30h5M49 30h5M17 15l4 4M43 19l4-4' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3C/svg%3E"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css"><link rel="stylesheet" href="legal.css"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a>  <header class="site-header wrap">
-    <a class="wordmark" href="index.html#inicio" aria-label="Fumada XXL, inicio">
+    <a class="wordmark" href="/#inicio" aria-label="Fumada XXL, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Fumada XXL<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="index.html#el-libro">El libro</a>
-      <a href="index.html#una-pausa">Tu pausa</a>
-      <a href="index.html#comprar">Ediciones</a>
+      <a href="/#el-libro">El libro</a>
+      <a href="/#una-pausa">Tu pausa</a>
+      <a href="/#comprar">Ediciones</a>
     </nav>
-    <a class="header-cta" href="index.html#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
-  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="index.html#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Aviso legal y términos de uso</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#titular">Titular</a><a href="#uso">Uso de la web</a><a href="#propiedad">Contenidos</a><a href="#contacto">Contacto</a></nav>
+    <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
+  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Aviso legal y términos de uso</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#titular">Titular</a><a href="#uso">Uso de la web</a><a href="#propiedad">Contenidos</a><a href="#contacto">Contacto</a></nav>
 <section id="titular"><h2>1. Identificación del titular</h2><dl class="legal-details"><dt>Titular</dt><dd>Alex Rivera Mosquera</dd><dt>NIF</dt><dd>54759360V</dd><dt>Domicilio</dt><dd>Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España</dd><dt>Correo electrónico</dt><dd><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></dd><dt>Teléfono</dt><dd><a href="tel:+34684339309">+34 684 339 309</a></dd><dt>Libro y nombre de autor</dt><dd>Fumada XXL · Aleix</dd></dl><p>Esta web presenta el libro <cite>Fumada XXL</cite> y prepara su venta directa en formato físico. El nombre de autor mostrado en la portada es Aleix. Actualmente solo permite consultar las ediciones y calcular su importe con envío.</p></section>
-<section id="uso"><h2>2. Condiciones de uso</h2><p>Puedes consultar los contenidos y utilizar la pausa de respiración sin crear una cuenta de cliente en la tienda. El acceso a esta versión privada puede requerir identificación ante el proveedor de alojamiento.</p><p>Utiliza la web de forma lícita, sin interferir en su funcionamiento, introducir código malicioso ni acceder a información ajena. El uso de la web no supone aceptar comunicaciones comerciales ni un tratamiento basado en consentimiento.</p><p>Elegir una edición o una cantidad en el resumen no formaliza una compraventa ni reserva existencias. Las condiciones de una futura compra se mostrarán antes de confirmar un pedido con obligación de pago.</p></section>
+<section id="uso"><h2>2. Condiciones de uso</h2><p>Puedes consultar los contenidos y utilizar la pausa de respiración sin crear una cuenta de cliente en la tienda. La web y la demostración son públicas. Solo el área de gestión del titular requiere iniciar sesión mediante ChatGPT y superar una autorización adicional.</p><p>Utiliza la web de forma lícita, sin interferir en su funcionamiento, introducir código malicioso ni acceder a información ajena. El uso de la web no supone aceptar comunicaciones comerciales ni un tratamiento basado en consentimiento.</p><p>Elegir una edición o una cantidad en el resumen no formaliza una compraventa ni reserva existencias. Las condiciones de una futura compra se mostrarán antes de confirmar un pedido con obligación de pago.</p></section>
 <section id="propiedad"><h2>3. Contenidos y propiedad intelectual</h2><p>El libro, los textos, la composición y demás elementos están sujetos a los derechos de sus respectivos titulares y a las licencias que les sean aplicables. El acceso a la web no concede una licencia general de explotación comercial. Se respetan los usos permitidos por la legislación, incluidos sus límites y excepciones.</p><p>La portada mostrada es una propuesta visual creada para esta web. Las características definitivas de las ediciones físicas deben confirmarse antes de habilitar la compra. Las tipografías se distribuyen con sus licencias de código abierto.</p></section>
 <section><h2>4. Información sobre bienestar</h2><p>Los contenidos de meditación y la pausa de respiración tienen carácter divulgativo. No constituyen atención sanitaria individual ni prometen resultados clínicos. Puedes detener la práctica cuando lo desees y respirar a tu ritmo.</p></section>
 <section><h2>5. Enlaces y disponibilidad</h2><p>Los enlaces a fuentes oficiales y a servicios externos permiten consultar información adicional. Al abrirlos se aplican las condiciones y políticas de esos servicios. Se procurará mantener la web disponible y corregir errores, sin limitar los derechos que la ley reconoce a las personas consumidoras.</p></section>
-<section id="contacto"><h2>6. Consultas y reclamaciones</h2><p>Puedes contactar con el titular en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal en el domicilio anterior. Las comunicaciones relacionadas con un pedido deberán incluir los datos necesarios para identificarlo, evitando enviar datos de tarjeta o información de salud.</p><p>Se aplica la normativa española que corresponda, sin privar a una persona consumidora de las disposiciones imperativas que la protejan ni imponer una jurisdicción distinta de la legalmente competente.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="index.html#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html" aria-current="page">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="contacto"><h2>6. Consultas y reclamaciones</h2><p>Puedes contactar con el titular en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal en el domicilio anterior. Las comunicaciones relacionadas con un pedido deberán incluir los datos necesarios para identificarlo, evitando enviar datos de tarjeta o información de salud.</p><p>Se aplica la normativa española que corresponda, sin privar a una persona consumidora de las disposiciones imperativas que la protejan ni imponer una jurisdicción distinta de la legalmente competente.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html" aria-current="page">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+
 
 
 ========================================================================
@@ -963,25 +976,25 @@ ARCHIVO: web/dist/condiciones-de-venta.html
 
 <!doctype html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex"><title>Condiciones de venta · Fumada XXL</title><meta name="description" content="Condiciones de venta de la web Fumada XXL, de Aleix. Información sobre el titular y las condiciones de la versión actual.">  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233f4a33'/%3E%3Ccircle cx='32' cy='30' r='12' fill='none' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3Cpath d='M14 47h36M32 8v5M10 30h5M49 30h5M17 15l4 4M43 19l4-4' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3C/svg%3E"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css"><link rel="stylesheet" href="legal.css"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a>  <header class="site-header wrap">
-    <a class="wordmark" href="index.html#inicio" aria-label="Fumada XXL, inicio">
+    <a class="wordmark" href="/#inicio" aria-label="Fumada XXL, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Fumada XXL<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="index.html#el-libro">El libro</a>
-      <a href="index.html#una-pausa">Tu pausa</a>
-      <a href="index.html#comprar">Ediciones</a>
+      <a href="/#el-libro">El libro</a>
+      <a href="/#una-pausa">Tu pausa</a>
+      <a href="/#comprar">Ediciones</a>
     </nav>
-    <a class="header-cta" href="index.html#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
-  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="index.html#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Condiciones de venta</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#precios">Ediciones y precios</a><a href="#pedido">Pedido y pago</a><a href="#envios">Envíos</a><a href="#devoluciones">Desistimiento</a><a href="#garantia">Incidencias</a><a href="#formulario">Modelo de comunicación</a></nav>
+    <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
+  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Condiciones de venta</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#precios">Ediciones y precios</a><a href="#pedido">Pedido y pago</a><a href="#envios">Envíos</a><a href="#devoluciones">Desistimiento</a><a href="#garantia">Incidencias</a><a href="#formulario">Modelo de comunicación</a></nav>
 <section><h2>1. Vendedor y estado de la tienda</h2><p>Vendedor previsto: Alex Rivera Mosquera, NIF 54759360V, Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> · <a href="tel:+34684339309">+34 684 339 309</a>.</p><p>Estas condiciones preparan la venta directa de ejemplares físicos de <cite>Fumada XXL</cite>. <strong>La contratación no está habilitada.</strong> Seleccionar un formato o consultar el importe no constituye una reserva, pedido ni pago. Los datos operativos pendientes se completarán antes de aceptar compras.</p></section>
 <section id="precios"><h2>2. Ediciones y precios</h2><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Edición</th><th scope="col">Un ejemplar</th><th scope="col">Envío por pedido</th><th scope="col">Libro + envío</th></tr></thead><tbody><tr><td>Tapa blanda</td><td>15,00 €</td><td>7,00 €</td><td>22,00 €</td></tr><tr><td>Tapa dura</td><td>20,00 €</td><td>7,00 €</td><td>27,00 €</td></tr></tbody></table></div><p>Importes en euros e impuestos incluidos. El envío indicado es de 7,00 € por pedido a Europa, no por ejemplar. Con varios ejemplares, se suma su precio y una vez el envío. Los posibles costes de importación de un destino fuera del territorio aduanero de la UE deberán determinarse e informarse antes de aceptar el pedido.</p><p>Antes de la apertura se confirmarán las características definitivas de cada edición, la disponibilidad y los datos editoriales aplicables. La imagen actual es una propuesta de portada. No se ofrecen descuentos ni promociones.</p></section>
 <section id="pedido"><h2>3. Cómo se realizará la compra</h2><p>El comprador elegirá formato y cantidad y podrá corregirlos antes del pago. El proceso deberá mostrar identidad del vendedor, características del libro, destino, plazo, precio total, envío y condiciones aplicables antes de solicitar la confirmación con obligación de pago.</p><p>El pago seguro está pendiente de conexión y pruebas. La web actual no solicita tarjetas, no envía una orden a una pasarela y no considera pagado ningún pedido. Tampoco envía correos automáticos de confirmación.</p><p>Cuando se active la contratación, se enviará al comprador una confirmación en un soporte que pueda conservar, con el pedido y sus condiciones. Las condiciones de una compra aceptada no se cambiarán retroactivamente por una actualización de la web. La venta se preparará en español y sin suscripción.</p></section>
 <section id="envios"><h2>4. Envíos y plazos</h2><p>Se ha previsto el envío a Europa por 7,00 € por pedido. La lista de destinos efectivamente admitidos, el transportista y las restricciones se confirmarán antes de habilitar la contratación, teniendo en cuenta también territorios especiales y destinos extracomunitarios.</p><p><strong>No hay todavía una estimación de entrega confirmada.</strong> El plazo concreto o intervalo para la dirección de destino se comunicará antes de pagar. No se mostrará una fecha ficticia ni se sustituirá un plazo acordado por la indicación indefinida «depende del destino».</p><p>Salvo que las partes acuerden otra cosa, la normativa prevé la entrega sin demora indebida y, como máximo, en 30 días naturales desde la celebración del contrato. En caso de incumplimiento se aplicarán los derechos previstos legalmente, incluida la resolución cuando proceda. La pérdida o el daño durante el transporte se atenderá según el régimen legal de transmisión del riesgo.</p></section>
-<section id="devoluciones"><h2>5. Derecho de desistimiento</h2><p>En una compra a distancia de estos libros físicos ordinarios, la persona consumidora podrá comunicar que desiste sin necesidad de justificar su decisión durante los <strong>14 días naturales</strong> siguientes a su recepción. La diferencia entre tapa blanda y tapa dura no elimina este derecho.</p><p>La comunicación podrá dirigirse al correo <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal al vendedor. Debe identificar el pedido y expresar claramente la voluntad de desistir; no es obligatorio usar el modelo de esta página. Antes de activar contratos online deberá estar operativa la función de desistimiento electrónica que resulte exigible, con su confirmación. Este texto no sustituye su implementación.</p><p>El libro deberá devolverse sin demora y, como máximo, dentro de los 14 días naturales siguientes a la comunicación. Las devoluciones se recibirán en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. El comprador asumirá el coste directo de devolver un libro por desistimiento cuando se le haya informado de ello antes de contratar. Esta regla no se aplica a errores de envío o falta de conformidad imputables al vendedor.</p><p>Se reembolsarán los importes procedentes, incluido el envío ordinario inicial cuando corresponda, dentro de los 14 días naturales desde la comunicación. El vendedor podrá retener el reembolso hasta recibir los bienes o una prueba de devolución, según qué suceda primero, salvo que se haya ofrecido a recogerlos. El reembolso se realizará por el mismo medio de pago, salvo acuerdo expreso sin costes para el consumidor.</p><p>Solo podrá exigirse la disminución de valor causada por una manipulación distinta de la necesaria para comprobar la naturaleza, características y funcionamiento del producto, en los términos legales. No se impone conservar el embalaje original como requisito absoluto para desistir.</p></section>
-<section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin costes indebidos. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
+<section id="devoluciones"><h2>5. Derecho de desistimiento</h2><p>En una compra a distancia de estos libros físicos ordinarios, la persona consumidora podrá comunicar que desiste sin necesidad de justificar su decisión durante los <strong>14 días naturales</strong> siguientes a su recepción. Si los libros de un mismo pedido se entregan por separado, el plazo comienza con la recepción del último. La diferencia entre tapa blanda y tapa dura no elimina este derecho.</p><p>La comunicación podrá dirigirse al correo <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal al vendedor. Debe identificar el pedido y expresar claramente la voluntad de desistir; no es obligatorio usar el modelo de esta página. Antes de activar contratos online deberá estar operativa la función de desistimiento electrónica que resulte exigible, con su confirmación. Este texto no sustituye su implementación.</p><p>El libro deberá devolverse sin demora y, como máximo, dentro de los 14 días naturales siguientes a la comunicación. Las devoluciones se recibirán en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. El comprador asumirá el coste directo de devolver un libro por desistimiento cuando se le haya informado de ello antes de contratar. Esta regla no se aplica a errores de envío o falta de conformidad imputables al vendedor.</p><p>Si desistes de todo el pedido, se devolverá el importe de los libros y el coste de la entrega ordinaria inicial dentro de los 14 días naturales desde la comunicación. No se devolverá el suplemento de una modalidad de entrega más costosa que hayas elegido expresamente. El vendedor podrá retener el reembolso hasta recibir los bienes o una prueba de devolución, según qué suceda primero, salvo que se haya ofrecido a recogerlos. El reembolso se realizará por el mismo medio de pago, salvo acuerdo expreso sin costes para el consumidor.</p><p>Solo podrá exigirse la disminución de valor causada por una manipulación distinta de la necesaria para comprobar la naturaleza, características y funcionamiento del producto, en los términos legales. No se impone conservar el embalaje original como requisito absoluto para desistir.</p></section>
+<section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin coste para ti, incluidos los gastos de transporte necesarios para resolver la falta de conformidad. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
 <section><h2>7. Atención y reclamaciones</h2><p>Escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> indicando el número de pedido, si existe, y el motivo. No envíes datos completos de tarjeta. Se facilitarán las vías de reclamación que correspondan al establecimiento y al consumidor, sin limitar el acceso a las autoridades o tribunales competentes.</p><p>También puedes llamar al <a href="tel:+34684339309">+34 684 339 309</a>. No se afirma adhesión a un sistema arbitral o entidad de resolución alternativa que no haya sido confirmada.</p></section>
-<section id="formulario"><h2>8. Modelo de comunicación de desistimiento</h2><p>Cuando existan pedidos, puedes utilizar este modelo, sin que sea obligatorio. Es una plantilla para copiar y enviar; esta página no transmite una solicitud automáticamente.</p><div class="legal-template"><p><strong>Destinatario:</strong> Alex Rivera Mosquera · <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a><br>Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España</p><p>Por la presente comunico que desisto de mi contrato de compraventa del siguiente bien:</p><p>Libro, formato y cantidad: ____________________<br>Número de pedido: ____________________<br>Fecha de pedido y de recepción: ____________________<br>Nombre de la persona consumidora: ____________________<br>Domicilio y correo de contacto: ____________________<br>Fecha: ____________________<br>Firma, solo si se presenta en papel: ____________________</p></div><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Desistimiento%20de%20compra%20-%20Fumada%20XXL">Abrir un correo al vendedor <span aria-hidden="true">↗</span></a></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="index.html#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html" aria-current="page">Condiciones de venta</a></nav></footer></body></html>
+<section id="formulario"><h2>8. Modelo de comunicación de desistimiento</h2><p>Cuando existan pedidos, puedes utilizar este modelo, sin que sea obligatorio. Es una plantilla para copiar y enviar; esta página no transmite una solicitud automáticamente.</p><div class="legal-template"><p><strong>Destinatario:</strong> Alex Rivera Mosquera · <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a><br>Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España</p><p>Por la presente comunico que desisto de mi contrato de compraventa del siguiente bien:</p><p>Libro, formato y cantidad: ____________________<br>Número de pedido: ____________________<br>Fecha de pedido y de recepción: ____________________<br>Nombre de la persona consumidora: ____________________<br>Domicilio y correo de contacto: ____________________<br>Fecha: ____________________<br>Firma, solo si se presenta en papel: ____________________</p></div><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Desistimiento%20de%20compra%20-%20Fumada%20XXL">Abrir un correo al vendedor <span aria-hidden="true">↗</span></a></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html" aria-current="page">Condiciones de venta</a></nav></footer></body></html>
 
 
 ========================================================================
@@ -990,20 +1003,20 @@ ARCHIVO: web/dist/cookies.html
 
 <!doctype html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex"><title>Política de cookies · Fumada XXL</title><meta name="description" content="Política de cookies de la web Fumada XXL, de Aleix. Información sobre el titular y las condiciones de la versión actual.">  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233f4a33'/%3E%3Ccircle cx='32' cy='30' r='12' fill='none' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3Cpath d='M14 47h36M32 8v5M10 30h5M49 30h5M17 15l4 4M43 19l4-4' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3C/svg%3E"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css"><link rel="stylesheet" href="legal.css"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a>  <header class="site-header wrap">
-    <a class="wordmark" href="index.html#inicio" aria-label="Fumada XXL, inicio">
+    <a class="wordmark" href="/#inicio" aria-label="Fumada XXL, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Fumada XXL<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="index.html#el-libro">El libro</a>
-      <a href="index.html#una-pausa">Tu pausa</a>
-      <a href="index.html#comprar">Ediciones</a>
+      <a href="/#el-libro">El libro</a>
+      <a href="/#una-pausa">Tu pausa</a>
+      <a href="/#comprar">Ediciones</a>
     </nav>
-    <a class="header-cta" href="index.html#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
-  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="index.html#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de cookies</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#alcance">Qué utiliza la web</a><a href="#plataforma">Alojamiento</a><a href="#preferencias">Preferencias</a></nav>
+    <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
+  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de cookies</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#alcance">Qué utiliza la web</a><a href="#plataforma">Alojamiento</a><a href="#preferencias">Preferencias</a></nav>
 <section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>En el código actual del libro no se han incorporado cookies publicitarias, analítica de visitas ni almacenamiento local persistente. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Edición y cantidad elegidas</td><td>Estado en memoria; sin cesta persistente ni registro de pedido.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
-<section id="plataforma"><h2>2. Cookies del alojamiento y del pago</h2><p>La versión privada se sirve mediante Sites y puede requerir autenticación gestionada por la plataforma. Su infraestructura puede utilizar tecnologías de sesión, seguridad o acceso que no aparecen en el código estático del libro.</p><p><strong>Inventario pendiente de completar:</strong> antes de abrir la venta se verificarán los nombres, titulares, finalidades y duraciones reales de esas cookies, incluidas las que el navegador no permite leer desde JavaScript. No se ha clasificado automáticamente como «necesaria» ninguna cookie desconocida.</p><p>Stripe aún no está integrado. Al incorporarlo se revisarán sus tecnologías de seguridad y pago, así como cualquier uso no estrictamente necesario. No se presentará una política definitiva del cobro hasta comprobar la integración real.</p></section>
-<section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La necesidad de un panel para los servicios de la plataforma se determinará tras completar su inventario.</p><p>Puedes consultar, eliminar o bloquear las cookies desde los ajustes de privacidad de tu navegador. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="index.html#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="plataforma"><h2>2. Seguridad del alojamiento y acceso privado</h2><p>La web del libro y la demostración del panel son públicas. La demo utiliza exclusivamente pedidos ficticios. Solo el área de gestión del titular requiere iniciar sesión mediante ChatGPT y superar una autorización adicional.</p><p>En las respuestas del dominio público se ha observado la siguiente cookie de seguridad, incluida en el inventario el 28 de septiembre de 2026:</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Cookies observadas; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Nombre</th><th scope="col">Proveedor y finalidad</th><th scope="col">Duración</th></tr></thead><tbody><tr><td><code>__cf_bm</code></td><td>Cloudflare, infraestructura de seguridad: distinguir tráfico automatizado y proteger el servicio frente a abusos. Se establece en el dominio prueba-aleix.com.</td><td>30 minutos de inactividad continuada, según el proveedor.</td></tr></tbody></table></div><p>Cloudflare identifica esta cookie como necesaria para su protección frente a bots. No se utiliza en el código de esta tienda para publicidad ni analítica comercial. Consulta la <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">documentación de cookies de Cloudflare</a>.</p><p>Este inventario corresponde a las respuestas públicas comprobadas; no sustituye una revisión de todas las variantes de autenticación o de las cookies que puedan emitir desafíos de seguridad. El inicio de sesión del titular se gestiona en la plataforma y debe revisarse por separado conforme a su configuración.</p><p>Stripe aún no está integrado. Antes de conectar pagos, estadísticas o publicidad se actualizará el inventario y, cuando sea necesario, se habilitará el consentimiento previo.</p></section>
+<section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La cookie de seguridad descrita presta una función técnica necesaria. Cualquier tecnología opcional que se incorpore deberá tener su propia información y mecanismo de consentimiento.</p><p>Puedes consultar, eliminar o bloquear las cookies desde los ajustes de privacidad de tu navegador. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
 
 
 ========================================================================
@@ -1073,7 +1086,7 @@ ARCHIVO: web/dist/index.html
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f6f0">
   <meta name="description" content="Fumada XXL. Un libro sobre meditación y el pequeño arte de bajar el ritmo. Encuentra un momento para respirar y volver a ti.">
-  <title>Fumada XXL · Aleix</title>
+  <title>Fumada XXL de Aleix | Libro de meditación</title>
   <link rel="canonical" href="https://prueba-aleix.com/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
@@ -1081,6 +1094,11 @@ ARCHIVO: web/dist/index.html
   <meta property="og:title" content="Fumada XXL · Aleix">
   <meta property="og:description" content="Un libro sobre meditación y el pequeño arte de bajar el ritmo. Descubre sus ediciones y regálate una pausa.">
   <meta property="og:url" content="https://prueba-aleix.com/">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://prueba-aleix.com/#website","url":"https://prueba-aleix.com/","name":"Fumada XXL · Aleix","inLanguage":"es"},{"@type":"Book","@id":"https://prueba-aleix.com/#book","name":"Fumada XXL","author":{"@type":"Person","name":"Aleix"},"url":"https://prueba-aleix.com/#el-libro","inLanguage":"es","description":"Un libro de Aleix sobre meditación, respiración y aprender a bajar el ritmo."}]}
+  </script>
+  <link rel="preload" href="assets/fonts/font-1.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/font-6.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233f4a33'/%3E%3Ccircle cx='32' cy='30' r='12' fill='none' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3Cpath d='M14 47h36M32 8v5M10 30h5M49 30h5M17 15l4 4M43 19l4-4' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="styles.css">
@@ -1118,7 +1136,7 @@ ARCHIVO: web/dist/index.html
         <div class="hero-note"><span class="small-sun" aria-hidden="true">✳</span><span>No necesitas hacerlo perfecto. Solo empezar.</span></div>
       </div>
       <div class="hero-visual" id="hero-visual">
-        <div class="book-art" id="book-art"><img src="assets/fumada-xxl-aleix.png" alt="Propuesta de portada de Fumada XXL, de Aleix: un libro en tonos marfil y oliva, junto a una rama y bañado por luz natural." width="1536" height="1024" fetchpriority="high"></div>
+        <div class="book-art" id="book-art"><img src="assets/fumada-xxl-1536-361c27f2300b.webp" srcset="assets/fumada-xxl-768-274c44d1ba5f.webp 768w, assets/fumada-xxl-1152-52fb6e6b2cc1.webp 1152w, assets/fumada-xxl-1536-361c27f2300b.webp 1536w" sizes="(max-width:580px) calc((100vw - 40px) * 1.43), (max-width:800px) 735px, (max-width:1100px) 788px, (min-width:1600px) 915px, 849px" alt="Propuesta de portada de Fumada XXL, de Aleix: un libro en tonos marfil y oliva, junto a una rama y bañado por luz natural." width="1536" height="1024" fetchpriority="high" decoding="async"></div>
         <div class="visual-label"><span>MEDITACIÓN & VIDA CONSCIENTE</span><span>01 — VUELVE A LO ESENCIAL</span></div>
       </div>
     </section>
@@ -1210,22 +1228,33 @@ ARCHIVO: web/dist/privacidad.html
 
 <!doctype html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex"><title>Política de privacidad · Fumada XXL</title><meta name="description" content="Política de privacidad de la web Fumada XXL, de Aleix. Información sobre el titular y las condiciones de la versión actual.">  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233f4a33'/%3E%3Ccircle cx='32' cy='30' r='12' fill='none' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3Cpath d='M14 47h36M32 8v5M10 30h5M49 30h5M17 15l4 4M43 19l4-4' stroke='%23f7f6f0' stroke-width='2.5'/%3E%3C/svg%3E"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css"><link rel="stylesheet" href="legal.css"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a>  <header class="site-header wrap">
-    <a class="wordmark" href="index.html#inicio" aria-label="Fumada XXL, inicio">
+    <a class="wordmark" href="/#inicio" aria-label="Fumada XXL, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Fumada XXL<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="index.html#el-libro">El libro</a>
-      <a href="index.html#una-pausa">Tu pausa</a>
-      <a href="index.html#comprar">Ediciones</a>
+      <a href="/#el-libro">El libro</a>
+      <a href="/#una-pausa">Tu pausa</a>
+      <a href="/#comprar">Ediciones</a>
     </nav>
-    <a class="header-cta" href="index.html#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
-  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="index.html#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#responsable">Responsable</a><a href="#tratamientos">Datos y finalidades</a><a href="#proveedores">Proveedores</a><a href="#derechos">Tus derechos</a></nav>
+    <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
+  </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#responsable">Responsable</a><a href="#tratamientos">Datos y finalidades</a><a href="#proveedores">Proveedores</a><a href="#derechos">Tus derechos</a></nav>
 <section id="responsable"><h2>1. Responsable del tratamiento</h2><p>El titular de la web es Alex Rivera Mosquera, con domicilio en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Puedes contactar en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Los datos de identificación fiscal figuran en el <a href="aviso-legal.html">aviso legal</a>.</p><p>Esta política describe la versión actual, sin pago ni recogida de pedidos. Antes de activar la tienda se actualizará para identificar los proveedores y las operaciones de compra efectivamente implantadas.</p></section>
-<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración y la selección de edición y cantidad funcionan en la memoria de la página: no se guardan en una cuenta ni se envían al titular.</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. El acceso al área privada y la protección del servicio pueden implicar tratamientos adicionales de la plataforma; su alcance y conservación deben verificarse antes del lanzamiento de la tienda.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; otras consultas se atenderán sobre la base que corresponda a su naturaleza, incluida la gestión de solicitudes y obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se conserva un identificador de la cuenta propietaria para restringir el acceso. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; la versión actual no los solicita.</p></section>
-<section><h2>3. Conservación</h2><p>El estado del ejercicio y del resumen de compra desaparece al recargar o cerrar la página. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>Antes de la apertura deberán concretarse y aplicarse los plazos de los registros del alojamiento, los pedidos, las facturas y la pasarela de pago, según sus finalidades y obligaciones legales. No se atribuye a los proveedores un plazo que no haya sido comprobado.</p></section>
-<section id="proveedores"><h2>4. Servicios y comunicaciones de datos</h2><p>La web se publica mediante Sites. El correo de contacto utiliza Gmail. Estos servicios pueden intervenir en la prestación técnica del alojamiento y del correo conforme a sus condiciones y funciones respectivas. Las fuentes tipográficas y la imagen se sirven desde el propio sitio, sin solicitar Google Fonts al navegar.</p><p>La integración de pagos con Stripe se encuentra pendiente: en esta versión no se carga su formulario ni se le envían datos de compra. Tampoco hay un transportista conectado. Antes de activar estos servicios se revisarán sus roles, contratos, destinatarios y posibles transferencias internacionales y se actualizará esta política.</p><p>Las transferencias fuera del Espacio Económico Europeo, si se realizan, deberán contar con el mecanismo legal aplicable, como una decisión de adecuación o garantías contractuales apropiadas. La ubicación del servidor y las garantías de cada proveedor requieren confirmación; no se afirma que todos los datos permanezcan en España.</p></section>
-<section id="derechos"><h2>5. Cómo ejercer tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación o portabilidad cuando sean aplicables escribiendo a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o al domicilio del titular. Si un tratamiento se basa en tu consentimiento, puedes retirarlo sin afectar a la licitud del tratamiento anterior.</p><p>Se pedirá únicamente la información necesaria para verificar la identidad cuando existan dudas razonables. Las solicitudes se atenderán en los plazos previstos por el RGPD, normalmente un mes, con las ampliaciones justificadas que permita la normativa.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>, sin perjuicio de otras autoridades competentes. El código actual no realiza perfiles comerciales ni decisiones automatizadas con efectos jurídicos.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="index.html#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html" aria-current="page">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración y la selección de edición y cantidad funcionan en la memoria de la página: no se guardan en una cuenta ni se envían al titular.</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; la versión actual no los solicita.</p></section>
+<section><h2>3. Conservación</h2><p>El estado del ejercicio y del resumen de compra desaparece al recargar o cerrar la página. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>El identificador de la cuenta propietaria permanece vinculado mientras se mantenga el área privada; el titular debe gestionar su supresión cuando retire esa autorización. La aplicación no dispone de borrado automático programado. Los registros técnicos que mantengan los proveedores siguen sus condiciones y configuración; sus plazos concretos no se han verificado para esta cuenta. Los plazos de futuros pedidos, facturas y datos de pago se concretarán antes de recogerlos.</p></section>
+<section id="proveedores"><h2>4. Servicios y comunicaciones de datos</h2><p>La web se publica mediante Sites de OpenAI y utiliza infraestructura de seguridad de Cloudflare. El correo de contacto utiliza Gmail, de Google. Estos proveedores intervienen en el alojamiento, seguridad, autenticación o correo según el servicio utilizado. Puedes consultar la <a href="https://openai.com/policies/eu-privacy-policy/">política europea de OpenAI</a>, la <a href="https://www.cloudflare.com/privacypolicy/">política de Cloudflare</a> y la <a href="https://policies.google.com/privacy?hl=es">política de Google</a>. Las fuentes tipográficas y la imagen se sirven desde el propio sitio, sin solicitar Google Fonts al navegar.</p><p>La integración de pagos con Stripe se encuentra pendiente: en esta versión no se carga su formulario ni se le envían datos de compra. Tampoco hay un transportista conectado. Antes de activar estos servicios se revisarán sus roles, contratos, destinatarios y posibles transferencias internacionales y se actualizará esta política.</p><p>Las transferencias fuera del Espacio Económico Europeo, si se realizan, deberán contar con el mecanismo legal aplicable, como una decisión de adecuación o garantías contractuales apropiadas. La ubicación del servidor y las garantías de cada proveedor requieren confirmación; no se afirma que todos los datos permanezcan en España.</p></section>
+<section id="derechos"><h2>5. Cómo ejercer tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación o portabilidad cuando sean aplicables escribiendo a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o al domicilio del titular. Si un tratamiento se basa en tu consentimiento, puedes retirarlo sin afectar a la licitud del tratamiento anterior.</p><p>Se pedirá únicamente la información necesaria para verificar la identidad cuando existan dudas razonables. Las solicitudes se atenderán en los plazos previstos por el RGPD, normalmente un mes, con las ampliaciones justificadas que permita la normativa.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>, sin perjuicio de otras autoridades competentes. El código actual no realiza perfiles comerciales ni decisiones automatizadas con efectos jurídicos.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html" aria-current="page">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+
+
+========================================================================
+ARCHIVO: web/dist/robots.txt
+========================================================================
+
+User-agent: *
+Allow: /
+
+Sitemap: https://prueba-aleix.com/sitemap.xml
+
 
 
 ========================================================================
@@ -1296,6 +1325,17 @@ ARCHIVO: web/dist/shop.js
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
   });
 })();
+
+
+
+========================================================================
+ARCHIVO: web/dist/sitemap.xml
+========================================================================
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://prueba-aleix.com/</loc></url>
+</urlset>
 
 
 
@@ -1413,6 +1453,14 @@ CREATE TABLE `admin_owner` (
 	CONSTRAINT "one_owner" CHECK("admin_owner"."slot" = 1)
 );
 
+
+
+========================================================================
+ARCHIVO: web/drizzle/0001_lonely_black_bolt.sql
+========================================================================
+
+CREATE INDEX `orders_payment_fulfillment_created` ON `orders` (`payment_status`,`fulfillment_status`,`created_at`,`id`);--> statement-breakpoint
+CREATE INDEX `orders_fulfillment_created` ON `orders` (`fulfillment_status`,`created_at`,`id`);
 
 
 ========================================================================
@@ -1664,6 +1712,273 @@ ARCHIVO: web/drizzle/meta/0000_snapshot.json
 
 
 ========================================================================
+ARCHIVO: web/drizzle/meta/0001_snapshot.json
+========================================================================
+
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "5572bba7-755b-41aa-923d-578c19d10277",
+  "prevId": "f661fc4c-678f-4970-989e-8f3d1c3a91cd",
+  "tables": {
+    "orders": {
+      "name": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_name": {
+          "name": "customer_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address1": {
+          "name": "address1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address2": {
+          "name": "address2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shipping": {
+          "name": "shipping",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total": {
+          "name": "total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fulfillment_status": {
+          "name": "fulfillment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shipped_at": {
+          "name": "shipped_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tracking": {
+          "name": "tracking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "orders_created": {
+          "name": "orders_created",
+          "columns": [
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_payment_fulfillment_created": {
+          "name": "orders_payment_fulfillment_created",
+          "columns": [
+            "payment_status",
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_fulfillment_created": {
+          "name": "orders_fulfillment_created",
+          "columns": [
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "order_edition": {
+          "name": "order_edition",
+          "value": "\"orders\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "order_quantity": {
+          "name": "order_quantity",
+          "value": "\"orders\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "order_payment": {
+          "name": "order_payment",
+          "value": "\"orders\".\"payment_status\" IN ('pending','paid','failed','refunded','partially_refunded')"
+        },
+        "order_fulfillment": {
+          "name": "order_fulfillment",
+          "value": "\"orders\".\"fulfillment_status\" IN ('pending','shipped')"
+        },
+        "order_total": {
+          "name": "order_total",
+          "value": "\"orders\".\"total\" = \"orders\".\"subtotal\" + \"orders\".\"shipping\" AND \"orders\".\"shipping\" >= 0 AND \"orders\".\"subtotal\" >= 0"
+        }
+      }
+    },
+    "admin_owner": {
+      "name": "admin_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "one_owner": {
+          "name": "one_owner",
+          "value": "\"admin_owner\".\"slot\" = 1"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+========================================================================
 ARCHIVO: web/drizzle/meta/_journal.json
 ========================================================================
 
@@ -1676,6 +1991,13 @@ ARCHIVO: web/drizzle/meta/_journal.json
       "version": "6",
       "when": 1790550311892,
       "tag": "0000_cultured_mathemanic",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790589562796,
+      "tag": "0001_lonely_black_bolt",
       "breakpoints": true
     }
   ]
@@ -2421,12 +2743,14 @@ import {readFile,writeFile,readdir,mkdir,cp} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 // Bundle the existing static bytes without changing public URLs or introducing third-party assets.
-const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.ttf':'font/ttf','.woff2':'font/woff2','.txt':'text/plain; charset=utf-8'};
+const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.webp':'image/webp','.xml':'application/xml; charset=utf-8','.ttf':'font/ttf','.woff2':'font/woff2','.txt':'text/plain; charset=utf-8'};
 const assets={};
 async function walk(dir,prefix='') {
   for(const ent of await readdir(dir,{withFileTypes:true})) {
     if(ent.name==='server'||ent.name==='.openai') continue;
     const file=path.join(dir,ent.name), key=prefix+'/'+ent.name;
+    // Original image and unused TTF sources stay in Git, not in the deployed Worker.
+    if(key==='/assets/fumada-xxl-aleix.png'||key.startsWith('/assets/fonts/')&&key.endsWith('.ttf'))continue;
     if(ent.isDirectory()) await walk(file,key);
     else assets[key]={type:types[path.extname(file)]||'application/octet-stream',data:(await readFile(file)).toString('base64')};
   }
@@ -2435,7 +2759,13 @@ await walk('dist');
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
 const database=await readFile('worker/database.mjs','utf8');
 // Hash once at build time; unchanged public files can revalidate without downloading again.
-for(const asset of Object.values(assets)) asset.etag=`W/"${createHash('sha256').update(Buffer.from(asset.data,'base64')).digest('hex')}"`;
+for(const [key,asset] of Object.entries(assets)) {
+  asset.etag=`W/"${createHash('sha256').update(Buffer.from(asset.data,'base64')).digest('hex')}"`;
+  asset.immutable=/^\/assets\/fumada-xxl-\d+-[a-f0-9]{12}\.webp$/.test(key);
+}
+const originalCover=Object.keys(assets).find(key=>/^\/assets\/fumada-xxl-1536-[a-f0-9]{12}\.webp$/.test(key));
+if(!originalCover)throw new Error('Optimized cover missing');
+assets['/assets/fumada-xxl-aleix.png']={redirect:originalCover};
 const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .*database\.mjs';\s*/,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
@@ -2520,6 +2850,47 @@ const server = http.createServer(async (req, res) => {
   } catch { res.writeHead(404); res.end('No encontrado'); }
 });
 server.listen(4173, '127.0.0.1', () => console.log('Local: http://127.0.0.1:4173'));
+
+
+
+========================================================================
+ARCHIVO: web/tests/admin-ui.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const source=readFileSync('admin/app.js','utf8').replace(/\nload\(\);\s*$/,'\n');
+const order=id=>({id,created_at:1,customer_name:'Prueba',email:'fixture@example.invalid',recipient:'Prueba',address1:'Calle ficticia',postal_code:'00000',city:'Ciudad',country:'ES',edition:'paperback',quantity:1,subtotal:1500,shipping:700,total:2200,payment_status:'paid',fulfillment_status:'pending'});
+function harness(){
+ const elements=new Map();let resolveShip,failDetail=false;
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
+ const document={getElementById:element,activeElement:element('opener'),createElement:()=>({...element('node'),dataset:{}})};
+ const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:async()=>{}}},fetch:async path=>{
+  if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
+  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:0,pending:0,shipped:0}}));
+  return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:order(path.split('/').pop())}),{status:failDetail?503:200});
+ }});
+ vm.runInContext(source,context);
+ return {element,open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
+}
+test('a delayed shipping error never changes another open order',async()=>{
+ const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;
+ const pending=ui.element('ship-form').events.submit({preventDefault(){}});
+ ui.element('detail').close();await ui.open('B');
+ ui.element('detail-message').textContent='Mensaje del pedido B';
+ ui.element('ship-button').disabled=true;
+ ui.failShipping();await pending;
+ assert.equal(ui.element('detail-message').textContent,'Mensaje del pedido B');assert.equal(ui.element('ship-button').disabled,true);
+});
+test('failed order details offer a working retry without closing the dialog',async()=>{
+ const ui=harness();ui.failDetails(true);await ui.open('A');
+ assert.equal(ui.element('retry-detail').hidden,false);
+ assert.ok(ui.element('retry-detail').events.click,'retry is connected');
+ ui.failDetails(false);await ui.element('retry-detail').events.click();
+ assert.equal(ui.element('detail-body').hidden,false);assert.equal(ui.element('retry-detail').hidden,true);assert.equal(ui.element('detail-title').textContent,'Pedido A');
+});
 
 
 
@@ -2810,6 +3181,54 @@ test('normalized search filters/counts before pagination, including email and ID
 
 
 ========================================================================
+ARCHIVO: web/tests/seo.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import worker from '../dist/server/index.js';
+const call=(path,headers={},method='GET')=>worker.fetch(new Request('https://book.example'+path,{headers,method}),{});
+test('search metadata identifies the real book without advertising an active checkout',async()=>{
+ const html=await(await call('/')).text();
+ assert.match(html,/<title>Fumada XXL de Aleix \| Libro de meditación<\/title>/);
+ const data=JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+ const book=data['@graph'].find(item=>item['@type']==='Book');
+ assert.equal(book.name,'Fumada XXL');assert.equal(book.author.name,'Aleix');
+ assert.equal(book.url,'https://prueba-aleix.com/#el-libro');
+ assert.equal(book.offers,undefined);assert.equal(book.isbn,undefined);assert.equal(book.aggregateRating,undefined);
+ assert.match(html,/rel="canonical" href="https:\/\/prueba-aleix.com\/"/);
+});
+test('sitemap contains the canonical public page and robots lets noindex pages be read',async()=>{
+ const sitemap=await call('/sitemap.xml');assert.equal(sitemap.status,200);
+ assert.match(sitemap.headers.get('content-type'),/xml/);
+ const xml=await sitemap.text();assert.deepEqual([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]),['https://prueba-aleix.com/']);
+ const robots=await call('/robots.txt');assert.equal(robots.status,200);const text=await robots.text();
+ assert.match(text,/Sitemap: https:\/\/prueba-aleix.com\/sitemap.xml/);assert.doesNotMatch(text,/Disallow:\s*\//);
+
+});
+test('only known duplicate routes redirect, preserving queries and private access',async()=>{
+ for(const method of ['GET','HEAD']) {
+  const r=await call('/index.html?source=test',{},method);assert.equal(r.status,301);assert.equal(r.headers.get('location'),'/?source=test');
+ }
+ assert.equal((await call('/aviso-legal.html/')).status,404);
+ assert.equal((await call('/api/admin/orders')).status,401);
+ assert.equal((await call('/admin')).status,302);
+});
+test('responsive cover is smaller, typed correctly and cacheable by its content version',async()=>{
+ const html=await(await call('/')).text();
+ const image=html.match(/<img[^>]*fumada-xxl[^>]*>/)[0];
+ const paths=[...image.matchAll(/assets\/fumada-xxl-\d+-[a-f0-9]{12}\.webp/g)].map(m=>'/'+m[0]);
+ assert.equal(new Set(paths).size,3);assert.match(image,/srcset=/);assert.match(image,/sizes=/);assert.match(image,/fetchpriority="high"/);
+ for(const path of new Set(paths)){const r=await call(path);assert.equal(r.status,200);assert.match(r.headers.get('content-type'),/image\/webp/);assert.match(r.headers.get('cache-control'),/immutable/);assert.ok((await r.arrayBuffer()).byteLength<200000);}
+ const old=await call('/assets/fumada-xxl-aleix.png');assert.equal(old.status,301);assert.match(old.headers.get('location'),/\.webp$/);
+ assert.equal((await call('/assets/fonts/font-1.ttf')).status,404);
+ assert.ok(readFileSync('dist/server/index.js').length<1500000,'unused originals excluded from Worker');
+});
+
+
+
+========================================================================
 ARCHIVO: web/tests/separation.test.mjs
 ========================================================================
 
@@ -2865,16 +3284,19 @@ export async function listOrders(env, url) {
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
   const filters = { all:'1=1', pending:"payment_status = 'paid' AND fulfillment_status = 'pending'", shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:"payment_status IN ('failed','refunded','partially_refunded')" };
   if (!Object.hasOwn(filters,filter)) return null;
-  const matches = ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ');
-  const where = `${filters[filter]} AND (? = '' OR ${matches})`;
-  const params = [query,query,query,query];
-  const results = await db.batch([
+  const matches = query ? ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ') : '';
+  const where = matches ? `${filters[filter]} AND (${matches})` : filters[filter];
+  const params = query ? [query,query,query] : [];
+  const statements = [
     db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,total,payment_status,fulfillment_status FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
-    db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params),
     db.prepare("SELECT count(*) AS total, coalesce(sum(payment_status = 'paid' AND fulfillment_status = 'pending'),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped FROM orders"),
-  ]);
+  ];
+  // The unfiltered list already gets its total from statistics in this same batch.
+  if(query||filter!=='all')statements.push(db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params));
+  const results = await db.batch(statements);
   if (results.some(r=>!r.success)) throw new Error('Order query failed');
-  return {orders:results[0].results,count:results[1].results[0].count,stats:results[2].results[0],page,paymentConnected:false};
+  const stats=results[1].results[0];
+  return {orders:results[0].results,count:results[2]?.results[0].count??stats.total,stats,page,paymentConnected:false};
 }
 export async function getOrder(env,id) {
   return database(env).prepare('SELECT * FROM orders WHERE id = ?').bind(id).first();
@@ -2937,7 +3359,9 @@ export function createWorker(assets) {
       }
       if (p.startsWith('/api/') || p.startsWith('/admin/') && !['/admin/styles.css','/admin/app.js'].includes(p)) return json({error:'No encontrado.'},404);
       if (!['GET','HEAD'].includes(request.method)) return new Response('Método no permitido',{status:405});
+      if(p==='/index.html')return new Response(null,{status:301,headers:{Location:'/'+url.search,'Cache-Control':'public, max-age=3600'}});
       const asset=assets[p === '/'?'/index.html':p];
+      if(asset?.redirect)return new Response(null,{status:301,headers:{Location:asset.redirect+url.search,'Cache-Control':'public, max-age=3600'}});
       if(asset) return assetResponse(asset,request,p.startsWith('/admin/'));
       return assets['/404.html'] ? assetResponse(assets['/404.html'],request,false,404) : new Response('No encontrado',{status:404});
     } catch {
@@ -2949,6 +3373,8 @@ export function createWorker(assets) {
 }
 function assetResponse(asset,request,isPrivate,status=200) {
   const headers={'Content-Type':asset.type,'X-Content-Type-Options':'nosniff',...(isPrivate?privateHeaders:{'Cache-Control':'public, max-age=0, must-revalidate'})};
+  if(asset.noIndex)headers['X-Robots-Tag']='noindex, nofollow';
+  if(!isPrivate&&status===200&&asset.immutable)headers['Cache-Control']='public, max-age=31536000, immutable';
   if(!isPrivate && status===200 && asset.etag) {
     headers.ETag=asset.etag;
     // GET/HEAD use weak comparison; private pages and errors never return cached content.
@@ -2978,6 +3404,9 @@ web/dist/assets/fonts/font-6.ttf
 web/dist/assets/fonts/font-6.woff2
 web/dist/assets/fonts/font-7.ttf
 web/dist/assets/fonts/font-7.woff2
+web/dist/assets/fumada-xxl-1152-52fb6e6b2cc1.webp
+web/dist/assets/fumada-xxl-1536-361c27f2300b.webp
+web/dist/assets/fumada-xxl-768-274c44d1ba5f.webp
 web/dist/assets/fumada-xxl-aleix.png
 
 Repositorio: https://github.com/Duas04/aleix-web-prueba-/tree/main/web

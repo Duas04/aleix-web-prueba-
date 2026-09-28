@@ -46,7 +46,9 @@ export function createWorker(assets) {
       }
       if (p.startsWith('/api/') || p.startsWith('/admin/') && !['/admin/styles.css','/admin/app.js'].includes(p)) return json({error:'No encontrado.'},404);
       if (!['GET','HEAD'].includes(request.method)) return new Response('Método no permitido',{status:405});
+      if(p==='/index.html')return new Response(null,{status:301,headers:{Location:'/'+url.search,'Cache-Control':'public, max-age=3600'}});
       const asset=assets[p === '/'?'/index.html':p];
+      if(asset?.redirect)return new Response(null,{status:301,headers:{Location:asset.redirect+url.search,'Cache-Control':'public, max-age=3600'}});
       if(asset) return assetResponse(asset,request,p.startsWith('/admin/'));
       return assets['/404.html'] ? assetResponse(assets['/404.html'],request,false,404) : new Response('No encontrado',{status:404});
     } catch {
@@ -58,6 +60,8 @@ export function createWorker(assets) {
 }
 function assetResponse(asset,request,isPrivate,status=200) {
   const headers={'Content-Type':asset.type,'X-Content-Type-Options':'nosniff',...(isPrivate?privateHeaders:{'Cache-Control':'public, max-age=0, must-revalidate'})};
+  if(asset.noIndex)headers['X-Robots-Tag']='noindex, nofollow';
+  if(!isPrivate&&status===200&&asset.immutable)headers['Cache-Control']='public, max-age=31536000, immutable';
   if(!isPrivate && status===200 && asset.etag) {
     headers.ETag=asset.etag;
     // GET/HEAD use weak comparison; private pages and errors never return cached content.

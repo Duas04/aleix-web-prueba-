@@ -32,16 +32,19 @@ export async function listOrders(env, url) {
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
   const filters = { all:'1=1', pending:"payment_status = 'paid' AND fulfillment_status = 'pending'", shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:"payment_status IN ('failed','refunded','partially_refunded')" };
   if (!Object.hasOwn(filters,filter)) return null;
-  const matches = ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ');
-  const where = `${filters[filter]} AND (? = '' OR ${matches})`;
-  const params = [query,query,query,query];
-  const results = await db.batch([
+  const matches = query ? ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ') : '';
+  const where = matches ? `${filters[filter]} AND (${matches})` : filters[filter];
+  const params = query ? [query,query,query] : [];
+  const statements = [
     db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,total,payment_status,fulfillment_status FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
-    db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params),
     db.prepare("SELECT count(*) AS total, coalesce(sum(payment_status = 'paid' AND fulfillment_status = 'pending'),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped FROM orders"),
-  ]);
+  ];
+  // The unfiltered list already gets its total from statistics in this same batch.
+  if(query||filter!=='all')statements.push(db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params));
+  const results = await db.batch(statements);
   if (results.some(r=>!r.success)) throw new Error('Order query failed');
-  return {orders:results[0].results,count:results[1].results[0].count,stats:results[2].results[0],page,paymentConnected:false};
+  const stats=results[1].results[0];
+  return {orders:results[0].results,count:results[2]?.results[0].count??stats.total,stats,page,paymentConnected:false};
 }
 export async function getOrder(env,id) {
   return database(env).prepare('SELECT * FROM orders WHERE id = ?').bind(id).first();
