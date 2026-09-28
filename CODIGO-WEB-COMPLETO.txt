@@ -1,7 +1,7 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: bf814c0426fba3204bc86c6c6be9f29dd4a16c89
+Revisión Git de base: 6c67514aba45658a21e6e09a5bdfef4f1da63130
 Incluye el portal privado de devoluciones, enlaces manuales, respuestas y etiquetas; el panel ampliado con tareas, seguimiento y notas, junto al carrito de prueba y las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
@@ -10,80 +10,81 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 1. web/.gitignore
 2. web/.openai/hosting.json
 3. web/DEMO-CONECTADA-2026-09-28.md
-4. web/LEGAL-READINESS.md
-5. web/README.md
-6. web/REVIEW-2026-09-28.md
-7. web/admin/app.js
-8. web/admin/demo-shared-controls.js
-9. web/admin/demo-shared.js
-10. web/admin/index.html
-11. web/admin/live-updates.js
-12. web/admin/styles.css
-13. web/db/schema.ts
-14. web/dist/404.html
-15. web/dist/app.js
-16. web/dist/assets/fonts/dmsans-OFL.txt
-17. web/dist/assets/fonts/manrope-OFL.txt
-18. web/dist/assets/fonts/playfairdisplay-OFL.txt
-19. web/dist/aviso-legal.html
-20. web/dist/cart.js
-21. web/dist/condiciones-de-venta.html
-22. web/dist/cookies.html
-23. web/dist/demo-checkout.js
-24. web/dist/demo-session.css
-25. web/dist/demo-session.js
-26. web/dist/devoluciones.html
-27. web/dist/fonts.css
-28. web/dist/index.html
-29. web/dist/legal.css
-30. web/dist/privacidad.html
-31. web/dist/returns.css
-32. web/dist/returns.js
-33. web/dist/robots.txt
-34. web/dist/shop.css
-35. web/dist/shop.js
-36. web/dist/sitemap.xml
-37. web/dist/styles.css
-38. web/drizzle.config.ts
-39. web/drizzle/0000_cultured_mathemanic.sql
-40. web/drizzle/0001_lonely_black_bolt.sql
-41. web/drizzle/0002_cute_blazing_skull.sql
-42. web/drizzle/0003_colossal_nehzno.sql
-43. web/drizzle/0004_chunky_microchip.sql
-44. web/drizzle/meta/0000_snapshot.json
-45. web/drizzle/meta/0001_snapshot.json
-46. web/drizzle/meta/0002_snapshot.json
-47. web/drizzle/meta/0003_snapshot.json
-48. web/drizzle/meta/0004_snapshot.json
-49. web/drizzle/meta/_journal.json
-50. web/package.json
-51. web/pnpm-lock.yaml
-52. web/pnpm-workspace.yaml
-53. web/scripts/build.mjs
-54. web/scripts/package.mjs
-55. web/scripts/preview-admin.mjs
-56. web/serve.mjs
-57. web/tests/admin-live.test.mjs
-58. web/tests/admin-ui.test.mjs
-59. web/tests/admin.test.mjs
-60. web/tests/breathing.test.mjs
-61. web/tests/cache.test.mjs
-62. web/tests/cart.test.mjs
-63. web/tests/customer-returns-ui.test.mjs
-64. web/tests/customer-returns.test.mjs
-65. web/tests/database.mjs
-66. web/tests/demo-checkout.test.mjs
-67. web/tests/export-isolation.test.mjs
-68. web/tests/management.test.mjs
-69. web/tests/search.test.mjs
-70. web/tests/seo.test.mjs
-71. web/tests/separation.test.mjs
-72. web/tests/shared-demo-ui.test.mjs
-73. web/tests/shared-demo.test.mjs
-74. web/worker/database.mjs
-75. web/worker/demo.mjs
-76. web/worker/index.mjs
-77. web/worker/returns.mjs
+4. web/DEMO-REVISION-2026-09-28.md
+5. web/LEGAL-READINESS.md
+6. web/README.md
+7. web/REVIEW-2026-09-28.md
+8. web/admin/app.js
+9. web/admin/demo-shared-controls.js
+10. web/admin/demo-shared.js
+11. web/admin/index.html
+12. web/admin/live-updates.js
+13. web/admin/styles.css
+14. web/db/schema.ts
+15. web/dist/404.html
+16. web/dist/app.js
+17. web/dist/assets/fonts/dmsans-OFL.txt
+18. web/dist/assets/fonts/manrope-OFL.txt
+19. web/dist/assets/fonts/playfairdisplay-OFL.txt
+20. web/dist/aviso-legal.html
+21. web/dist/cart.js
+22. web/dist/condiciones-de-venta.html
+23. web/dist/cookies.html
+24. web/dist/demo-checkout.js
+25. web/dist/demo-session.css
+26. web/dist/demo-session.js
+27. web/dist/devoluciones.html
+28. web/dist/fonts.css
+29. web/dist/index.html
+30. web/dist/legal.css
+31. web/dist/privacidad.html
+32. web/dist/returns.css
+33. web/dist/returns.js
+34. web/dist/robots.txt
+35. web/dist/shop.css
+36. web/dist/shop.js
+37. web/dist/sitemap.xml
+38. web/dist/styles.css
+39. web/drizzle.config.ts
+40. web/drizzle/0000_cultured_mathemanic.sql
+41. web/drizzle/0001_lonely_black_bolt.sql
+42. web/drizzle/0002_cute_blazing_skull.sql
+43. web/drizzle/0003_colossal_nehzno.sql
+44. web/drizzle/0004_chunky_microchip.sql
+45. web/drizzle/meta/0000_snapshot.json
+46. web/drizzle/meta/0001_snapshot.json
+47. web/drizzle/meta/0002_snapshot.json
+48. web/drizzle/meta/0003_snapshot.json
+49. web/drizzle/meta/0004_snapshot.json
+50. web/drizzle/meta/_journal.json
+51. web/package.json
+52. web/pnpm-lock.yaml
+53. web/pnpm-workspace.yaml
+54. web/scripts/build.mjs
+55. web/scripts/package.mjs
+56. web/scripts/preview-admin.mjs
+57. web/serve.mjs
+58. web/tests/admin-live.test.mjs
+59. web/tests/admin-ui.test.mjs
+60. web/tests/admin.test.mjs
+61. web/tests/breathing.test.mjs
+62. web/tests/cache.test.mjs
+63. web/tests/cart.test.mjs
+64. web/tests/customer-returns-ui.test.mjs
+65. web/tests/customer-returns.test.mjs
+66. web/tests/database.mjs
+67. web/tests/demo-checkout.test.mjs
+68. web/tests/export-isolation.test.mjs
+69. web/tests/management.test.mjs
+70. web/tests/search.test.mjs
+71. web/tests/seo.test.mjs
+72. web/tests/separation.test.mjs
+73. web/tests/shared-demo-ui.test.mjs
+74. web/tests/shared-demo.test.mjs
+75. web/worker/database.mjs
+76. web/worker/demo.mjs
+77. web/worker/index.mjs
+78. web/worker/returns.mjs
 
 
 ========================================================================
@@ -150,6 +151,42 @@ El panel conserva borradores y avisa si otra persona cambia el pedido. El guarda
 En GitHub, `presentacion` incluye servidor Node y SQLite para la demo ficticia; `web` mantiene el panel privado y deshabilita las rutas de demo pública en su compilación. El alojamiento publicado combina ambas partes con separación de datos. La copia de GitHub no despliega automáticamente por sí sola.
 
 Referencia informativa de almacenamiento técnico y transparencia: [Guía sobre cookies de la AEPD](https://www.aepd.es/guias/guia-cookies.pdf). Los cambios de esta entrega describen el funcionamiento técnico; no certifican el cumplimiento integral de una tienda aún pendiente de activación.
+
+
+
+========================================================================
+ARCHIVO: web/DEMO-REVISION-2026-09-28.md
+========================================================================
+
+# Revisión de las demostraciones · 28 de septiembre de 2026
+
+## Correcciones
+
+- Invalidar el acceso del comprador a un pedido ya no desconecta toda la sesión de demostración. El portal oculta el caso revocado y permite consultar otro pedido.
+- Una respuesta de compra que llega tarde ya no confirma una selección de libros que se haya cambiado mientras se guardaba el pedido. Se informa del número del pedido anterior, que sigue disponible en el panel.
+- Tras confirmar una compra se desactiva el botón de confirmación. «Preparar otro pedido de prueba» permite crear deliberadamente otro pedido con los mismos libros, sin reutilizar su identificador de reintento.
+- La búsqueda manual de una devolución ficticia acepta el número escrito en minúsculas.
+- Los errores de la demo indican cómo recuperar el pedido y compartir la misma sesión; no remiten a un correo que la demostración no envía.
+
+## Comprobaciones
+
+- Compilación del Worker y 126 pruebas automatizadas, incluidas seis pruebas nuevas. Antes de corregir, los casos de regresión reproducían los fallos.
+- Compra mixta: 15 € + 20 € + un único envío de 7 € = 42 €; número de pedido, segunda compra independiente y enlaces al panel y a devoluciones.
+- Solicitud por libro dañado, aprobación, respuesta del vendedor y etiqueta ficticia entre pestañas independientes usando el mismo enlace.
+- Pantalla estrecha de 390 px mediante un marco local: compra, devolución y gestión desde el panel, sin desbordamiento en los diálogos comprobados. Es una simulación de tamaño; no una prueba en un teléfono físico.
+- Batería de pruebas de aislamiento entre sesiones, caducidad, cuotas, escrituras simultáneas, conservación de borradores, validación de importes y protección del panel privado.
+
+## Para la presentación
+
+1. Abre `https://prueba-aleix.com/?demo=1` e inicia una demostración.
+2. Añade los libros y crea un pedido ficticio. Conserva su número.
+3. Usa «Solicitar devolución de este pedido» y registra un motivo de ejemplo.
+4. Abre «Panel» en la barra de la misma demostración para gestionarlo.
+5. Para otro dispositivo, usa «Copiar enlace para otro dispositivo». No crees otra sesión si quieres ver los mismos pedidos.
+
+Las sesiones duran siete días. Se admiten cinco sesiones nuevas por IP cada quince minutos y veinte pedidos por sesión, incluidos los cuatro ejemplos. Reutilizar una sesión existente evita consumir nuevas creaciones.
+
+Los cobros, correos y reembolsos de dinero real siguen desactivados. La etiqueta descargable de la demo no sirve para enviar paquetes. Esta revisión funcional no sustituye la configuración pendiente de venta real.
 
 
 
@@ -1382,7 +1419,7 @@ ARCHIVO: web/dist/demo-checkout.js
  const session=window.DemoSession,dialog=document.getElementById('order-dialog');
  if(!session?.enabled||!dialog)return;
  const $=id=>document.getElementById(id),button=$('demo-purchase');
- let selection={},requestId='',fingerprint='',pending=false,epoch=0;
+ let selection={},requestId='',fingerprint='',pending=false,completed=false,epoch=0;
  const fictitious={fullName:'Persona de ejemplo',email:'compra-ficticia@example.invalid',address:'Calle de ejemplo, sin dirección real',addressExtra:'Datos ficticios · No realizar envíos',postalCode:'00000',city:'Ciudad de ejemplo',region:'Provincia de ejemplo',country:'España'};
  for(const [key,value]of Object.entries(fictitious)){const field=$('customer-'+key);field.value=value;field.readOnly=true;field.autocomplete='off';}
  $('details-privacy').textContent='Demostración conectada: estos datos son ficticios. Solo se enviarán los formatos y cantidades para crear un pedido de prueba; no habrá cobros ni correos.';
@@ -1394,24 +1431,26 @@ ARCHIVO: web/dist/demo-checkout.js
   $('demo-order-returns').href=session.link('/devoluciones?demo=1',{orderId});
   $('demo-order-admin').href=session.link('/demo',{orderId});
  };
- const availability=()=>{button.disabled=pending||!session.ready()||!Object.keys(selection).length;};
- session.subscribe(()=>{epoch++;requestId='';fingerprint='';$('demo-order-confirmation').hidden=true;availability();});
+ const availability=()=>{button.disabled=pending||completed||!session.ready()||!Object.keys(selection).length;button.textContent=completed?'Pedido de prueba creado':'Crear pedido de prueba · sin pagar';};
+ session.subscribe(()=>{epoch++;requestId='';fingerprint='';completed=false;$('demo-order-confirmation').hidden=true;availability();});
  window.addEventListener('fumada-cart-reviewed',event=>{
   selection={};for(const key of ['paperback','hardcover']){const quantity=event.detail?.items?.[key];if(Number.isInteger(quantity)&&quantity>0&&quantity<=10)selection[key]=quantity;}
-  const next=JSON.stringify(selection);if(next!==fingerprint){fingerprint=next;requestId=crypto.randomUUID();$('demo-order-confirmation').hidden=true;}
+  const next=JSON.stringify(selection);if(next!==fingerprint){fingerprint=next;requestId=crypto.randomUUID();completed=false;$('demo-order-confirmation').hidden=true;}
   availability();$('demo-purchase-status').textContent=session.ready()?'':'Inicia una demostración con la barra superior antes de crear el pedido.';
  });
  // The cart clears its fields on close. Restore only synthetic values on reopening.
  window.addEventListener('fumada-cart-details',()=>{for(const [key,value]of Object.entries(fictitious))$('customer-'+key).value=value;});
  button.addEventListener('click',async()=>{
-  if(pending||!session.ready()||!Object.keys(selection).length)return;
+  if(pending||completed||!session.ready()||!Object.keys(selection).length)return;
   if(!requestId)requestId=crypto.randomUUID();
-  const version=epoch;pending=true;availability();$('demo-purchase-status').textContent='Creando pedido de prueba…';
+  const version=epoch,purchaseId=requestId;pending=true;availability();$('demo-purchase-status').textContent='Creando pedido de prueba…';
   try{
    const response=await session.request('/api/demo/orders',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Action':'purchase'},body:JSON.stringify({items:selection,requestId})});
    const result=await response.json();if(version!==epoch)return;
    if(!response.ok)throw new Error(result.error||'No se ha podido crear el pedido. Puedes reintentarlo.');
    const order=result.order;if(!/^DEMO-[A-Za-z0-9]+$/.test(order?.id||''))throw new Error('No se ha recibido un número de pedido válido.');
+   if(purchaseId!==requestId){$('demo-purchase-status').textContent='El pedido anterior se ha guardado como '+order.id+'. Puedes verlo en el panel. Revisa la selección actual antes de crear otro.';return;}
+   completed=true;
    session.selectOrder(order.id);$('demo-order-number').textContent=order.id;
    $('demo-order-total').textContent=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(order.total/100);
    $('demo-order-confirmation').hidden=false;updateLinks(order.id);
@@ -1419,6 +1458,10 @@ ARCHIVO: web/dist/demo-checkout.js
    if(dialog.open)$('demo-order-title').focus();
   }catch(error){if(version===epoch)$('demo-purchase-status').textContent=error.message;}
   finally{pending=false;availability();}
+ });
+ $('demo-new-purchase').addEventListener('click',()=>{
+  if(pending||!completed||!session.ready())return;
+  completed=false;requestId=crypto.randomUUID();$('demo-order-confirmation').hidden=true;availability();$('demo-purchase-status').textContent='Puedes crear otro pedido con esta selección o editar los libros. El pedido anterior sigue guardado en el panel.';button.focus();
  });
  $('demo-order-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('demo-order-number').textContent);$('demo-purchase-status').textContent='Número de pedido copiado.';}catch{$('demo-purchase-status').textContent='Selecciona el número para copiarlo.';}});
  $('demo-order-receipt').addEventListener('click',()=>{
@@ -1761,7 +1804,7 @@ ARCHIVO: web/dist/index.html
       <div class="review-details"><h3>Destinatario y dirección</h3><address id="review-address"></address><h3>Correo para la confirmación</h3><p id="review-email"></p><button class="cart-text-button" type="button" data-back="details">Editar mis datos</button></div>
       <p class="checkout-notice" id="review-preparation-note"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
       <button id="real-payment-unavailable" class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
-      <div id="demo-purchase-area" hidden><p id="demo-purchase-note" class="checkout-notice"></p><button id="demo-purchase" type="button" class="button button-primary" disabled>Crear pedido de prueba · sin pagar</button><p id="demo-purchase-status" class="checkout-help" role="status" aria-live="polite"></p><section id="demo-order-confirmation" class="demo-order-confirmation" hidden aria-labelledby="demo-order-title"><h3 id="demo-order-title" tabindex="-1">Tu pedido de prueba está confirmado.</h3><p>Conserva este número para cualquier consulta o devolución.</p><p class="demo-order-number"><strong id="demo-order-number"></strong></p><p>Total simulado: <strong id="demo-order-total"></strong>. No se ha cobrado dinero ni enviado un correo.</p><div class="demo-order-actions"><button type="button" class="cart-text-button" id="demo-order-copy">Copiar número</button><button type="button" class="cart-text-button" id="demo-order-receipt">Guardar justificante</button><a id="demo-order-returns" class="button button-primary">Solicitar devolución de este pedido</a><a id="demo-order-admin" class="button">Ver este pedido en el panel</a></div></section></div>
+      <div id="demo-purchase-area" hidden><p id="demo-purchase-note" class="checkout-notice"></p><button id="demo-purchase" type="button" class="button button-primary" disabled>Crear pedido de prueba · sin pagar</button><p id="demo-purchase-status" class="checkout-help" role="status" aria-live="polite"></p><section id="demo-order-confirmation" class="demo-order-confirmation" hidden aria-labelledby="demo-order-title"><h3 id="demo-order-title" tabindex="-1">Tu pedido de prueba está confirmado.</h3><p>Conserva este número para cualquier consulta o devolución.</p><p class="demo-order-number"><strong id="demo-order-number"></strong></p><p>Total simulado: <strong id="demo-order-total"></strong>. No se ha cobrado dinero ni enviado un correo.</p><div class="demo-order-actions"><button type="button" class="cart-text-button" id="demo-order-copy">Copiar número</button><button type="button" class="cart-text-button" id="demo-order-receipt">Guardar justificante</button><a id="demo-order-returns" class="button button-primary">Solicitar devolución de este pedido</a><a id="demo-order-admin" class="button">Ver este pedido en el panel</a><button type="button" class="cart-text-button" id="demo-new-purchase">Preparar otro pedido de prueba</button></div></section></div>
       <button class="cart-text-button checkout-back" type="button" data-back="cart">Editar los libros</button>
     </section>
     <div class="order-legal"><a href="condiciones-de-venta.html" target="_blank" rel="noopener">Condiciones de venta</a><a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></div>
@@ -1838,7 +1881,7 @@ async function api(path,{action,body}={}){
  const options={method:action?'POST':'GET',headers,credentials:'omit',cache:'no-store',...(body?{body:JSON.stringify(body)}:{})};let response;
  if(demo){if(path!=='/api/returns/case'||!session?.ready())throw new Error('Inicia una demostración desde la barra o usa un enlace compartido.');const id=currentCase?.orderId||$('demo-order').value.trim();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id))throw new Error('Indica un número de pedido de prueba válido.');response=await session.request('/api/demo/returns/'+encodeURIComponent(id),options);}else response=await fetch(path,options);
  let data;try{data=await response.json();}catch{throw new Error('No se ha podido cargar la información. Inténtalo de nuevo o escribe a Aleix.');}
- if(!response.ok)throw new Error(data.error||'No se ha podido completar la solicitud. Inténtalo de nuevo o pide un enlace nuevo.');return data;
+ if(!response.ok)throw Object.assign(new Error(data.error||'No se ha podido completar la solicitud. Inténtalo de nuevo o pide un enlace nuevo.'),{status:response.status});return data;
 }
 function render(value){
  currentCase=value;$('access-panel').hidden=true;$('case-panel').hidden=false;$('case-order').textContent=value.orderId;$('case-status').textContent=statusLabels[value.status]||'En revisión';
@@ -1860,7 +1903,11 @@ function reasonState(){const optional=$('return-kind').value==='withdrawal';$('r
 function stopPoll(){if(pollTimer!==null)clearTimeout(pollTimer);pollTimer=null;}
 function hasDraft(){return!$('request-form').hidden&&($('return-reason').value.trim()||$('return-kind').value!=='withdrawal');}
 function schedulePoll(){stopPoll();if(!demo||document.hidden||!currentCase||!session?.ready())return;pollTimer=setTimeout(async()=>{pollTimer=null;if(!document.hidden&&!busy&&!hasDraft())await refresh({silent:true});schedulePoll();},5000);}
-async function refresh({silent=false}={}){if(busy||!currentCase)return;const version=viewRequest;if(!silent){lock(true);$('request-message').textContent='Actualizando…';}else busy=true;try{const value=(await api('/api/returns/case')).case;if(version===viewRequest&&(!silent||value.version!==currentCase?.version))render(value);}catch(error){if(version===viewRequest)$('request-message').textContent=error.message;}finally{if(version===viewRequest){if(!silent)lock(false);else busy=false;}}}
+function demoAccessLost(error){
+ if(!demo||![403,404].includes(error.status))return false;
+ currentCase=null;receiptText='';stopPoll();$('case-panel').hidden=true;$('receipt').hidden=true;$('page-message').hidden=false;$('page-message').textContent=error.message+' Puedes consultar otro pedido de la misma demostración.';return true;
+}
+async function refresh({silent=false}={}){if(busy||!currentCase)return;const version=viewRequest;if(!silent){lock(true);$('request-message').textContent='Actualizando…';}else busy=true;try{const value=(await api('/api/returns/case')).case;if(version===viewRequest&&(!silent||value.version!==currentCase?.version))render(value);}catch(error){if(version===viewRequest&&!demoAccessLost(error))$('request-message').textContent=error.message;}finally{if(version===viewRequest){if(!silent)lock(false);else busy=false;}}}
 $('return-kind').addEventListener('change',reasonState);
 $('access-form').addEventListener('submit',async event=>{
  event.preventDefault();if(busy)return;const orderId=$('access-order').value.trim(),email=$('access-email').value.trim();if(!orderId||!email){$('access-message').textContent='Indica el número de pedido y el correo de compra.';(!orderId?$('access-order'):$('access-email')).focus();return;}
@@ -1875,7 +1922,7 @@ $('request-form').addEventListener('submit',async event=>{
   const value=(await api('/api/returns/case',{action:'request',body:{kind,reason,expectedVersion:currentCase.version}})).case;
   if(version!==viewRequest)return;
   render(value);showReceipt(value,kind,reason);$('request-message').textContent=demo?'Solicitud de prueba guardada en la demostración compartida. Puedes gestionarla desde el panel.':'Solicitud registrada. Descarga el justificante para conservarla.';$('receipt-title').focus();
- }catch(error){if(version===viewRequest)$('request-message').textContent=error.message+' Los detalles siguen en el formulario. Puedes reintentarlo.';}finally{if(version===viewRequest)lock(false);}
+ }catch(error){if(version===viewRequest&&!demoAccessLost(error))$('request-message').textContent=error.message+' Los detalles siguen en el formulario. Puedes reintentarlo.';}finally{if(version===viewRequest)lock(false);}
 });
 $('case-refresh').addEventListener('click',()=>refresh());
 $('receipt-download').addEventListener('click',()=>{if(receiptText)download(new Blob([receiptText],{type:'text/plain;charset=utf-8'}),'justificante-devolucion.txt');});
@@ -1886,7 +1933,7 @@ $('label-download').addEventListener('click',async()=>{
   $('label-message').textContent=demo?'Ejemplo descargado; no es válido para envíos.':'Etiqueta descargada.';
  }catch(error){if(version===viewRequest)$('label-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}
 });
-$('demo-order-form').addEventListener('submit',async event=>{event.preventDefault();if(busy||!demo||!session?.ready())return;const id=$('demo-order').value.trim();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id)){$('demo-order-help').textContent='Indica un número de pedido de prueba válido.';$('demo-order').focus();return;}session.selectOrder(id);return start();});
+$('demo-order-form').addEventListener('submit',async event=>{event.preventDefault();if(busy||!demo||!session?.ready())return;const id=$('demo-order').value.trim().toUpperCase();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id)){$('demo-order-help').textContent='Indica un número de pedido de prueba válido.';$('demo-order').focus();return;}session.selectOrder(id);return start();});
 async function start(){
  const version=++viewRequest;stopPoll();currentCase=null;receiptText='';$('case-panel').hidden=true;$('access-panel').hidden=demo;$('page-message').hidden=true;
  for(const id of ['case-order','case-reply','case-reason','case-code','case-carrier','receipt-text','access-message','request-message','label-message'])$(id).textContent='';
@@ -1894,7 +1941,7 @@ async function start(){
  $('receipt').hidden=true;$('demo-note').hidden=!demo;$('demo-order-panel').hidden=!demo;$('demo-panel-link').hidden=!demo;reasonState();lock(false);
  if(demo){const help=$('case-access-help');if(help)help.textContent='La demostración guarda el acceso en esta pestaña, si el navegador lo permite. Para continuar en otro dispositivo o volver a la sesión, usa el enlace compartido de la barra. La sesión caduca 7 días después de crearse. Comparte solo datos ficticios.';token='';const connected=session?.ready();$('demo-order-fields').disabled=!connected;$('demo-order-help').textContent=connected?'Consulta el número de tu compra de prueba o un pedido de ejemplo como DEMO-001.':'Inicia una demostración desde la barra o pega un enlace compartido para consultar pedidos de prueba.';if(!connected)return;$('demo-order').value=session.orderId()||'';if(!$('demo-order').value)return;}
  if(!demo&&!token){if(fragment){$('page-message').hidden=false;$('page-message').textContent='El enlace no es válido. Solicita un enlace nuevo o escribe a Aleix.';}return;}
- lock(true);$('page-message').hidden=false;$('page-message').textContent='Consultando tu devolución…';try{const value=(await api('/api/returns/case')).case;if(version!==viewRequest)return;render(value);$('page-message').hidden=true;}catch(error){if(version===viewRequest)$('page-message').textContent=error.message+' Abre de nuevo el enlace del correo o solicita uno nuevo.';}finally{if(version===viewRequest)lock(false);}
+ lock(true);$('page-message').hidden=false;$('page-message').textContent='Consultando tu devolución…';try{const value=(await api('/api/returns/case')).case;if(version!==viewRequest)return;render(value);$('page-message').hidden=true;}catch(error){if(version===viewRequest)$('page-message').textContent=error.message+(demo?' Comprueba el número y que estés usando el enlace de la misma demostración.':' Abre de nuevo el enlace del correo o solicita uno nuevo.');}finally{if(version===viewRequest)lock(false);}
 }
 window.addEventListener('hashchange',()=>{if(!location.hash||demo)return;consumeFragment();return start();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPoll();else schedulePoll();});
@@ -5803,7 +5850,7 @@ import {readFileSync,existsSync} from 'node:fs';
 import vm from 'node:vm';
 const source=existsSync('dist/returns.js')?readFileSync('dist/returns.js','utf8'):'';
 function harness({demo=false,demoReady=true,token='',failSave=false,caseOverrides={},deferFirst=false}={}){
- assert.ok(source,'returns script exists');const elements=new Map(),calls=[],downloads=[],timeline=[];let resolveFirst;
+ assert.ok(source,'returns script exists');const elements=new Map(),calls=[],downloads=[],timeline=[];let resolveFirst,responseError;
  const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,events:{},children:[],addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},replaceChildren(...nodes){this.children=nodes;},focus(){},append(...nodes){this.children.push(...nodes);},remove(){},click(){downloads.push({name:this.download,href:this.href});},checkValidity(){return true;}});return elements.get(id);};
  element('return-kind').value='withdrawal';const document={getElementById:element,body:element('body'),createElement:()=>element('download'+Math.random())};
  let value={orderId:demo?'DEMO-001':'PEDIDO-1',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:4,paymentStatus:'paid',...caseOverrides};let selectedOrder=demo?'DEMO-001':'';const timers=new Map();let timerId=0;
@@ -5811,13 +5858,14 @@ function harness({demo=false,demoReady=true,token='',failSave=false,caseOverride
  document.addEventListener=(name,fn)=>{listeners[name]=fn;};document.hidden=false;
  const transport=async(path,options={})=>{
   timeline.push('fetch');calls.push({path,options});if(path.endsWith('/access'))return new Response('{}',{status:202});
+  if(responseError)return new Response(JSON.stringify({error:responseError.message}),{status:responseError.status});
   if(deferFirst&&calls.length===1)return new Promise(resolve=>{resolveFirst=resolve;});
   if(options.method==='POST'&&(path.endsWith('/case')||path.startsWith('/api/demo/returns/'))){if(failSave)return new Response(JSON.stringify({error:'No se pudo guardar'}),{status:503});const body=JSON.parse(options.body);value={...value,status:'requested',kind:body.kind,reason:body.reason,version:5};}
   return new Response(JSON.stringify({case:value}));
  };
  const session={enabled:demo,ready:()=>demoReady,orderId:()=>selectedOrder,selectOrder(id){selectedOrder=id;},subscribe(){return()=>{};},link:(path,{orderId=selectedOrder}={})=>'https://book.example'+path+'#session=DEMO&order='+orderId,request:(path,options={})=>transport(path,{...options,headers:{...options.headers,'X-Demo-Session':'demo-test'}})};
  const context=vm.createContext({document,URLSearchParams,URL:{createObjectURL:()=> 'blob:local',revokeObjectURL(){}},Blob,Intl,Date,console,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},window:{DemoSession:session,addEventListener(name,fn){listeners[name]=fn;}},location,history:{replaceState(_s,_t,path){timeline.push('clear');this.path=path;location.hash='';}},fetch:transport});vm.runInContext(source.replace(/start\(\);\s*$/,'globalThis.started=start();'),context);
- return {element,calls,downloads,timeline,ready:context.started,serverUpdate(update){value={...value,...update};},async poll(){const timer=[...timers.values()].find(value=>value.ms===5000);assert.ok(timer,'poll is scheduled');await timer.fn();},completeFirst(){resolveFirst(new Response(JSON.stringify({case:{...value,orderId:'PEDIDO-ANTERIOR'}})));},async openHash(value){location.hash='#token='+value;await listeners.hashchange?.();},get hash(){return location.hash;}};
+ return {element,calls,downloads,timeline,ready:context.started,error(status,message){responseError={status,message};},serverUpdate(update){value={...value,...update};},async poll(){const timer=[...timers.values()].find(value=>value.ms===5000);assert.ok(timer,'poll is scheduled');await timer.fn();},completeFirst(){resolveFirst(new Response(JSON.stringify({case:{...value,orderId:'PEDIDO-ANTERIOR'}})));},async openHash(value){location.hash='#token='+value;await listeners.hashchange?.();},get hash(){return location.hash;}};
 }
 const submit=(ui,id)=>ui.element(id).events.submit({preventDefault(){}});
 test('private token is removed before fetch and travels only in header',async()=>{
@@ -5851,6 +5899,20 @@ test('demo without a connected session asks to start the bar and makes no API ca
 test('demo access help describes shared tab storage and the bar instead of a nonexistent email',async()=>{const ui=harness({demo:true});await ui.ready;assert.match(ui.element('case-access-help').textContent,/pestaña/);assert.match(ui.element('case-access-help').textContent,/barra/);assert.doesNotMatch(ui.element('case-access-help').textContent,/correo|No guardamos/);});
 test('shared demo polling updates response but does not poll over a form draft',async()=>{
  const ui=harness({demo:true});await ui.ready;ui.element('return-reason').value='Borrador';const before=ui.calls.length;await ui.poll();assert.equal(ui.calls.length,before);assert.equal(ui.element('return-reason').value,'Borrador');ui.element('return-reason').value='';ui.serverUpdate({version:9,status:'approved',reply:'Respuesta compartida'});await ui.poll();assert.equal(ui.element('case-reply').textContent,'Respuesta compartida');
+});
+
+test('revoked demo buyer access hides the stale case and leaves order lookup available',async()=>{
+ const ui=harness({demo:true,caseOverrides:{status:'approved',label:{type:'application/pdf',size:120}}});await ui.ready;
+ ui.error(403,'El acceso ficticio se ha revocado. Genera otro enlace desde el panel.');await ui.element('case-refresh').events.click();
+ assert.equal(ui.element('case-panel').hidden,true);assert.equal(ui.element('receipt').hidden,true);assert.equal(ui.element('demo-order-fields').disabled,false);assert.equal(ui.element('page-message').hidden,false);assert.match(ui.element('page-message').textContent,/revocado/);assert.doesNotMatch(ui.element('page-message').textContent,/correo/);
+});
+
+test('manual demo lookup normalizes lowercase order numbers without changing real order IDs',async()=>{
+ const ui=harness({demo:true});await ui.ready;ui.element('demo-order').value=' demo-001 ';await submit(ui,'demo-order-form');assert.equal(ui.calls.at(-1).path,'/api/demo/returns/DEMO-001');
+});
+
+test('a nonexistent demonstration order gives relevant recovery instructions',async()=>{
+ const ui=harness({demo:true});await ui.ready;ui.error(404,'Pedido ficticio no encontrado.');ui.element('demo-order').value='DEMO-999';await submit(ui,'demo-order-form');assert.match(ui.element('page-message').textContent,/no encontrado/);assert.doesNotMatch(ui.element('page-message').textContent,/correo/);assert.match(ui.element('page-message').textContent,/misma demostración/);
 });
 
 
@@ -6116,6 +6178,17 @@ test('real storefront is untouched and a disconnected or empty demo cannot creat
  const real=harness({enabled:false});assert.equal(real.element('customer-email').value,'PERSONAL DATA MUST NOT LEAVE THIS PAGE');assert.equal(real.element('demo-purchase').events.click,undefined);assert.equal(real.requests.length,0);
  const disconnected=harness({connected:false});disconnected.review({paperback:1});await disconnected.click();assert.equal(disconnected.requests.length,0);assert.equal(disconnected.element('demo-purchase').disabled,true);
  const empty=harness();empty.review({paperback:11,hardcover:-1});await empty.click();assert.equal(empty.requests.length,0);
+});
+
+test('completed purchase cannot be confirmed twice, but a deliberate second purchase gets a new ID',async()=>{
+ const ui=harness();ui.review({paperback:1});await ui.click();const first=JSON.parse(ui.requests[0].options.body).requestId;
+ assert.equal(ui.element('demo-purchase').disabled,true);await ui.click();assert.equal(ui.requests.length,1);
+ await ui.element('demo-new-purchase').events.click();assert.equal(ui.element('demo-order-confirmation').hidden,true);assert.equal(ui.element('demo-purchase').disabled,false);await ui.click();assert.notEqual(JSON.parse(ui.requests[1].options.body).requestId,first);
+});
+
+test('a late purchase response never confirms a newly edited basket',async()=>{
+ const ui=harness({deferred:true});ui.review({paperback:1});const pending=ui.click();ui.review({hardcover:2});ui.resolve();await pending;
+ assert.equal(ui.element('demo-order-confirmation').hidden,true);assert.deepEqual(ui.selected,[]);assert.match(ui.element('demo-purchase-status').textContent,/pedido anterior/i);assert.match(ui.element('demo-purchase-status').textContent,/DEMO-old123456789/);assert.equal(ui.element('demo-purchase').disabled,false);
 });
 
 
@@ -6453,6 +6526,12 @@ test('unavailable service shows its useful error without claiming that a session
  const ui=harness();ui.response({error:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},503);assert.equal(await ui.session.create(),false);assert.match(ui.element('demo-session-message').textContent,/No se puede abrir la demostración ahora/);assert.equal(ui.session.ready(),false);assert.equal(ui.element('demo-session-start').disabled,false);
 });
 
+test('denied buyer access keeps the shared room while an expired session clears it',async()=>{
+ const ui=harness();await ui.session.create();const link=ui.session.link('/demo');
+ ui.response({error:'Acceso revocado'},403);assert.equal((await ui.session.request('/api/demo/returns/DEMO-001')).status,403);assert.equal(ui.session.ready(),true);assert.equal(ui.session.link('/demo'),link);
+ ui.response({error:'Sesión caducada'},401);await ui.session.request('/api/demo/admin/orders');assert.equal(ui.session.ready(),false);
+});
+
 
 
 ========================================================================
@@ -6547,7 +6626,8 @@ test('buyer request, owner response, delivery and fake label stay synchronized b
   const current=await customer(token,order.id);assert.equal(current.reply,'Instrucciones simuladas');assert.equal(current.code,'FICTICIO-123');assert.deepEqual(current.label,{type:'application/pdf',size:100});assert.ok(current.submittedAt>0);assert.equal(current.version,4);assert.equal(current.paymentStatus,'paid');assert.ok(!JSON.stringify(current).includes('email'));
   assert.equal((await action(token,order.id,'return-label-remove',{expectedVersion:4})).status,200);assert.equal((await customer(token,order.id)).label,null);
   const link=await(await action(token,order.id,'portal-link',{expectedVersion:5})).json();assert.equal(link.path,'/devoluciones?demo=1#session='+token+'&order='+order.id);
-  assert.equal((await action(token,order.id,'portal-revoke',{expectedVersion:6})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,401);
+  assert.equal((await action(token,order.id,'portal-revoke',{expectedVersion:6})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,403);
+  assert.equal((await read(token)).status,200,'revoking one buyer does not revoke the shared room');
   assert.equal((await action(token,order.id,'portal-link',{expectedVersion:7})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,200);
 });
 
@@ -6769,7 +6849,7 @@ async function demoMutateSession(env,hash,apply){
 }
 function demoFindOrder(state,id){const order=state.orders.find(o=>o.id===id);if(!order)demoFail(404,'Pedido ficticio no encontrado.');return order;}
 function demoCase(order){return {orderId:order.id,status:order.return_status,kind:order.return_kind,reason:order.return_reason,reply:order.customer_reply,carrier:order.return_carrier,code:order.return_code,label:demoLabelAllowed(order)&&order.return_label_key?{type:order.return_label_type,size:order.return_label_size}:null,version:order.management_version,paymentStatus:order.payment_status,submittedAt:order.return_submitted_at};}
-function demoCustomerAllowed(order){if(order.demo_portal_revoked)demoFail(401,'El acceso ficticio se ha revocado. Genera otro enlace desde el panel.');if(!demoSettled(order))demoFail(409,'El pedido ficticio no admite devoluciones en su estado actual.');}
+function demoCustomerAllowed(order){if(order.demo_portal_revoked)demoFail(403,'El acceso ficticio se ha revocado. Genera otro enlace desde el panel.');if(!demoSettled(order))demoFail(409,'El pedido ficticio no admite devoluciones en su estado actual.');}
 function demoResetCase(order,now){Object.assign(order,{customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:now});}
 function demoCheckVersion(order,body){if(!demoVersion(body.expectedVersion))demoFail(400,'Indica una versión válida del pedido ficticio.');if(body.expectedVersion!==order.management_version)demoFail(409,'El pedido ficticio ha cambiado. Actualízalo antes de guardar.');}
 function demoPurchase(state,body){

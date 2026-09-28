@@ -47,3 +47,14 @@ test('real storefront is untouched and a disconnected or empty demo cannot creat
  const disconnected=harness({connected:false});disconnected.review({paperback:1});await disconnected.click();assert.equal(disconnected.requests.length,0);assert.equal(disconnected.element('demo-purchase').disabled,true);
  const empty=harness();empty.review({paperback:11,hardcover:-1});await empty.click();assert.equal(empty.requests.length,0);
 });
+
+test('completed purchase cannot be confirmed twice, but a deliberate second purchase gets a new ID',async()=>{
+ const ui=harness();ui.review({paperback:1});await ui.click();const first=JSON.parse(ui.requests[0].options.body).requestId;
+ assert.equal(ui.element('demo-purchase').disabled,true);await ui.click();assert.equal(ui.requests.length,1);
+ await ui.element('demo-new-purchase').events.click();assert.equal(ui.element('demo-order-confirmation').hidden,true);assert.equal(ui.element('demo-purchase').disabled,false);await ui.click();assert.notEqual(JSON.parse(ui.requests[1].options.body).requestId,first);
+});
+
+test('a late purchase response never confirms a newly edited basket',async()=>{
+ const ui=harness({deferred:true});ui.review({paperback:1});const pending=ui.click();ui.review({hardcover:2});ui.resolve();await pending;
+ assert.equal(ui.element('demo-order-confirmation').hidden,true);assert.deepEqual(ui.selected,[]);assert.match(ui.element('demo-purchase-status').textContent,/pedido anterior/i);assert.match(ui.element('demo-purchase-status').textContent,/DEMO-old123456789/);assert.equal(ui.element('demo-purchase').disabled,false);
+});

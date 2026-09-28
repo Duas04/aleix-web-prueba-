@@ -86,7 +86,8 @@ test('buyer request, owner response, delivery and fake label stay synchronized b
   const current=await customer(token,order.id);assert.equal(current.reply,'Instrucciones simuladas');assert.equal(current.code,'FICTICIO-123');assert.deepEqual(current.label,{type:'application/pdf',size:100});assert.ok(current.submittedAt>0);assert.equal(current.version,4);assert.equal(current.paymentStatus,'paid');assert.ok(!JSON.stringify(current).includes('email'));
   assert.equal((await action(token,order.id,'return-label-remove',{expectedVersion:4})).status,200);assert.equal((await customer(token,order.id)).label,null);
   const link=await(await action(token,order.id,'portal-link',{expectedVersion:5})).json();assert.equal(link.path,'/devoluciones?demo=1#session='+token+'&order='+order.id);
-  assert.equal((await action(token,order.id,'portal-revoke',{expectedVersion:6})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,401);
+  assert.equal((await action(token,order.id,'portal-revoke',{expectedVersion:6})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,403);
+  assert.equal((await read(token)).status,200,'revoking one buyer does not revoke the shared room');
   assert.equal((await action(token,order.id,'portal-link',{expectedVersion:7})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,200);
 });
 

@@ -47,3 +47,9 @@ test('rate limit explains the wait, prevents repeated creation and preserves a c
 test('unavailable service shows its useful error without claiming that a session exists',async()=>{
  const ui=harness();ui.response({error:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},503);assert.equal(await ui.session.create(),false);assert.match(ui.element('demo-session-message').textContent,/No se puede abrir la demostración ahora/);assert.equal(ui.session.ready(),false);assert.equal(ui.element('demo-session-start').disabled,false);
 });
+
+test('denied buyer access keeps the shared room while an expired session clears it',async()=>{
+ const ui=harness();await ui.session.create();const link=ui.session.link('/demo');
+ ui.response({error:'Acceso revocado'},403);assert.equal((await ui.session.request('/api/demo/returns/DEMO-001')).status,403);assert.equal(ui.session.ready(),true);assert.equal(ui.session.link('/demo'),link);
+ ui.response({error:'Sesión caducada'},401);await ui.session.request('/api/demo/admin/orders');assert.equal(ui.session.ready(),false);
+});

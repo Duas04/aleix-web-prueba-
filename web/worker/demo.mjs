@@ -70,7 +70,7 @@ async function demoMutateSession(env,hash,apply){
 }
 function demoFindOrder(state,id){const order=state.orders.find(o=>o.id===id);if(!order)demoFail(404,'Pedido ficticio no encontrado.');return order;}
 function demoCase(order){return {orderId:order.id,status:order.return_status,kind:order.return_kind,reason:order.return_reason,reply:order.customer_reply,carrier:order.return_carrier,code:order.return_code,label:demoLabelAllowed(order)&&order.return_label_key?{type:order.return_label_type,size:order.return_label_size}:null,version:order.management_version,paymentStatus:order.payment_status,submittedAt:order.return_submitted_at};}
-function demoCustomerAllowed(order){if(order.demo_portal_revoked)demoFail(401,'El acceso ficticio se ha revocado. Genera otro enlace desde el panel.');if(!demoSettled(order))demoFail(409,'El pedido ficticio no admite devoluciones en su estado actual.');}
+function demoCustomerAllowed(order){if(order.demo_portal_revoked)demoFail(403,'El acceso ficticio se ha revocado. Genera otro enlace desde el panel.');if(!demoSettled(order))demoFail(409,'El pedido ficticio no admite devoluciones en su estado actual.');}
 function demoResetCase(order,now){Object.assign(order,{customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:now});}
 function demoCheckVersion(order,body){if(!demoVersion(body.expectedVersion))demoFail(400,'Indica una versión válida del pedido ficticio.');if(body.expectedVersion!==order.management_version)demoFail(409,'El pedido ficticio ha cambiado. Actualízalo antes de guardar.');}
 function demoPurchase(state,body){

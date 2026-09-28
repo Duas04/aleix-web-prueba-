@@ -1,6 +1,6 @@
 # Fumada XXL · Aleix
 
-Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `98373dceeec5f1866f31cc8a86aeef661dc11288`.
+Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `1d233289c2d4c7e57bce6bbe263cd47fba604f40`.
 
 | Carpeta | Contenido | Inicio local |
 | --- | --- | --- |
@@ -20,7 +20,7 @@ Tapa blanda 15 EUR, tapa dura 20 EUR, envío 7 EUR por pedido. Los cobros están
 - Compra ficticia: https://prueba-aleix.com/?demo=1
 - Devoluciones ficticias: https://prueba-aleix.com/devoluciones?demo=1
 
-Para mostrar los mismos pedidos en móvil y ordenador, inicia una demostración y usa **Copiar enlace para otro dispositivo**. Abrir sesiones nuevas crea ejemplos separados. Consulta [las instrucciones y cambios](DEMO-CONECTADA-2026-09-28.md).
+Para mostrar los mismos pedidos en móvil y ordenador, inicia una demostración y usa **Copiar enlace para otro dispositivo**. Abrir sesiones nuevas crea ejemplos separados. Consulta [las instrucciones y cambios](DEMO-CONECTADA-2026-09-28.md) y [la revisión de las demostraciones](DEMO-REVISION-2026-09-28.md).
 
 Esta organización para GitHub no cambia automáticamente la web publicada. El alojamiento actual mantiene ambas rutas; esta copia las separa para trabajar de forma independiente. No hay despliegue automático desde este repositorio.
 
