@@ -12,6 +12,7 @@ createServer(async (req, res) => {
   try {
     let pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
     if (pathname === '/') pathname = '/index.html';
+    if (pathname === '/devoluciones' || pathname === '/devoluciones/') pathname = '/devoluciones.html';
     if (pathname === '/demo' || pathname === '/demo/') pathname = '/demo/index.html';
     const target = resolve(root, '.' + pathname);
     if (!target.startsWith(resolve(root) + sep) || pathname.split(/[\\/]/).some(p => p.startsWith('.'))) throw new Error('Not found');

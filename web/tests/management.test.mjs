@@ -119,7 +119,7 @@ test('lists expose management fields and count delivery and active returns acros
   seed('prepare');seed('hold');seed('sent','paid','shipped');seed('received','paid','shipped');seed('failed','failed');seed('refund','refunded');seed('partial','partially_refunded');
   DB.sqlite.exec("UPDATE orders SET return_status='requested' WHERE id='hold'; UPDATE orders SET delivered_at=10 WHERE id='received'");
   const list=async(filter='all',q='')=>(await(await request('/api/admin/orders?'+new URLSearchParams({filter,q}))).json());
-  const all=await list();assert.deepEqual(all.stats,{total:7,pending:1,shipped:2,incidents:3,returns:1,delivered:1});
+  const all=await list();assert.deepEqual(all.stats,{total:7,pending:1,shipped:2,incidents:3,returns:1,delivered:1,accessRequests:0});
   assert.equal((await list('pending')).count,1);assert.equal((await list('returns')).count,1);assert.equal((await list('delivered')).count,1);assert.equal((await list('shipped')).count,2);assert.equal((await list('incidents')).count,4);assert.equal((await list('attention')).count,3);
   assert.equal((await list('returns','not-present')).count,0);
   const row=all.orders.find(o=>o.id==='hold');assert.equal(row.return_status,'requested');assert.equal(row.management_version,0);assert.ok(Object.hasOwn(row,'carrier'));assert.ok(Object.hasOwn(row,'tracking'));assert.ok(Object.hasOwn(row,'delivered_at'));assert.ok(Array.isArray(row.items));assert.equal(row.private_note,undefined);

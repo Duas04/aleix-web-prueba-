@@ -38,6 +38,7 @@ async function load() {
     loadedPage=page;
     $('stat-total').textContent=data.stats.total;$('stat-pending').textContent=data.stats.pending;$('stat-shipped').textContent=data.stats.shipped;
     for(const key of ['pending','returns','incidents'])$('task-'+key+'-count').textContent=String(data.stats[key]??0);
+    $('task-access-count').textContent=String(data.stats.accessRequests??0);$('task-access').setAttribute('aria-pressed',String($('filter').value==='access_requests'));
     for(const key of ['pending','returns','incidents'])$('task-'+key).setAttribute('aria-pressed',String($('filter').value===(key==='incidents'?'attention':key)));
     $('result-count').textContent=total===1?'1 pedido':`${total} pedidos`;
     $('rows').replaceChildren();
@@ -65,7 +66,8 @@ async function load() {
 const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
-function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields'])$(id).disabled=saving;}
+function clearPortalLink(){$('portal-url').value='';$('portal-link-output').hidden=true;$('portal-mail').removeAttribute('href');$('portal-expiry').textContent='';}
+function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields','portal-fields','portal-reply-fields','return-label-fields'])$(id).disabled=saving;}
 function renderDetail(order){
   currentOrder=order;
   $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
@@ -89,11 +91,17 @@ function renderDetail(order){
   $('return-reason').value=order.return_reason||'';$('return-resolution').value=order.return_resolution||'';
   $('return-current').textContent='Estado de devolución: '+(returnLabels[status]||'Revisar');
   $('return-date').textContent=order.return_updated_at?'Última actualización: '+date(order.return_updated_at):'';
+  $('portal-request-status').textContent=order.portal_requested_at?'El comprador pidió acceso el '+date(order.portal_requested_at)+'. Prepara el enlace y envíaselo manualmente.':'No hay una petición de acceso pendiente.';
+  $('customer-reply').value=order.customer_reply||'';$('return-carrier').value=order.return_carrier||'';$('return-code').value=order.return_code||'';
+  const canLabel=['approved','received','closed'].includes(status);
+  $('portal-label-data').hidden=!canLabel;$('return-label-form').hidden=!canLabel;
+  $('return-label-current').textContent=order.return_label_key?'Etiqueta disponible para el comprador'+(order.return_label_size?' · '+Math.ceil(order.return_label_size/1024)+' KB':'')+'.':'No hay una etiqueta adjunta.';
+  $('return-label-remove').hidden=!order.return_label_key;
   lockActions();$('detail-feedback').textContent='';$('detail-body').hidden=false;
 }
 async function openDetail(id){
   const restoreRetryFocus=document.activeElement===$('retry-detail');
-  detailId=id;$('retry-detail').hidden=true;
+  detailId=id;$('retry-detail').hidden=true;clearPortalLink();$('return-label-file').value='';
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
     const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;renderDetail(order);
@@ -102,27 +110,29 @@ async function openDetail(id){
 }
 $('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
 for(const key of ['pending','returns','incidents'])$('task-'+key).addEventListener('click',()=>{$('filter').value=key==='incidents'?'attention':key;$('search').value='';page=1;return load();});
+$('task-access').addEventListener('click',()=>{$('filter').value='access_requests';$('search').value='';page=1;return load();});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
-$('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
+$('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;clearPortalLink();$('return-label-file').value='';if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;const version=detailRequest;try{await navigator.clipboard.writeText(address(currentOrder));if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Dirección copiada.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-async function saveManagement(action,data,message,focusId){
+async function saveManagement(action,data,message,focusId,{raw=false,afterSave}={}){
   if(saving||!currentOrder)return;
   const id=currentOrder.id,version=detailRequest,expectedVersion=currentOrder.management_version||0;
   const previousFocus=document.activeElement,drafts=[];
-  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution']};
-  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||''};
+  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution'],'portal-reply':['customer-reply','return-carrier','return-code']};
+  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||'','customer-reply':currentOrder.customer_reply||'','return-carrier':currentOrder.return_carrier||'','return-code':currentOrder.return_code||''};
   for(const [section,ids]of Object.entries(sections))if(section!==action)for(const fieldId of ids){const field=$(fieldId),check=fieldId.endsWith('-confirm');if(check?field.checked:field.value!==initial[fieldId])drafts.push({fieldId,value:field.value,checked:field.checked});}
   let saved=false;
   saving=true;lockActions();$('detail-message').textContent='Guardando…';
   const stillCurrent=()=>version===detailRequest&&$('detail').open&&currentOrder?.id===id;
   try{
-    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':action},body:JSON.stringify({...data,expectedVersion})});
+    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:raw?{'Content-Type':data.type,'X-Admin-Action':action,'X-Order-Version':String(expectedVersion)}:{'Content-Type':'application/json','X-Admin-Action':action},body:raw?data:JSON.stringify({...data,expectedVersion})});
     if(!stillCurrent())return;
     const updated=result.order||(await api('/api/admin/orders/'+encodeURIComponent(id))).order;
     if(!stillCurrent())return;
     renderDetail(updated);
     for(const draft of drafts){$(draft.fieldId).value=draft.value;$(draft.fieldId).checked=draft.checked;}
+    if(afterSave)afterSave(result);
     saved=true;$('detail-message').textContent=message;await load();
   }catch(error){if(stillCurrent())$('detail-message').textContent=error.message+' Tus cambios siguen en los campos. Revisa el dato e intenta guardar otra vez; si el pedido cambió en otra pestaña, cierra y vuelve a abrir el detalle.';}
   finally{saving=false;lockActions();if(stillCurrent()){if(saved&&focusId)$(focusId).focus();else if(previousFocus?.isConnected)previousFocus.focus();}}
@@ -139,4 +149,15 @@ $('return-form').addEventListener('submit',event=>{
   if(['closed','rejected'].includes(status)&&!resolution){$('detail-message').textContent='Escribe la resolución antes de cerrar o rechazar la devolución.';$('return-resolution').focus();return;}
   return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
 });
+$('portal-link-create').addEventListener('click',()=>saveManagement('portal-link',{},'Enlace preparado. Aún debes enviarlo al comprador.',undefined,{afterSave:result=>{
+  clearPortalLink();const demoLink=result.path==='/devoluciones?demo=1'&&document.body?.classList?.contains('demo-page');if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
+  const url=location.origin+result.path;$('portal-url').value=url;$('portal-link-output').hidden=false;
+  $('portal-expiry').textContent='Caduca el '+date(result.expiresAt)+'. Al generar otro enlace, el anterior deja de funcionar.';
+  $('portal-mail').href='mailto:'+encodeURIComponent(currentOrder.email)+'?subject='+encodeURIComponent('Tu enlace privado de devolución · Fumada XXL')+'&body='+encodeURIComponent('Hola,\n\nPuedes consultar tu devolución del pedido '+currentOrder.id+' en este enlace privado:\n'+url+'\n\nGuárdalo en privado. Caduca en 30 días.\n\nAleix');
+}}));
+$('portal-revoke').addEventListener('click',()=>{if(!$('portal-revoke-confirm').checked){$('detail-message').textContent='Confirma que quieres invalidar el enlace del comprador.';$('portal-revoke-confirm').focus();return;}return saveManagement('portal-revoke',{},'Enlace del comprador invalidado.',undefined,{afterSave:()=>{clearPortalLink();$('portal-revoke-confirm').checked=false;}});});
+$('portal-copy').addEventListener('click',async()=>{const url=$('portal-url').value,version=detailRequest;if(!url)return;try{await navigator.clipboard.writeText(url);if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Enlace copiado. Todavía debes enviarlo al comprador.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Selecciona el enlace y cópialo manualmente.';}});
+$('portal-reply-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder)return;const canLabel=['approved','received','closed'].includes(currentOrder.return_status);return saveManagement('portal-reply',{reply:$('customer-reply').value.trim(),carrier:canLabel?$('return-carrier').value.trim():(currentOrder.return_carrier||''),code:canLabel?$('return-code').value.trim():(currentOrder.return_code||'')},'Respuesta visible al comprador guardada. No se ha enviado ningún correo.');});
+$('return-label-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!['approved','received','closed'].includes(currentOrder.return_status))return;const file=$('return-label-file').files?.[0];if(!file){$('detail-message').textContent='Selecciona una etiqueta para adjuntar.';$('return-label-file').focus();return;}if(!['application/pdf','image/png','image/jpeg'].includes(file.type)||file.size>2*1024*1024||file.size<=0){$('detail-message').textContent='Usa un PDF, PNG o JPEG de hasta 2 MiB.';$('return-label-file').focus();return;}return saveManagement('return-label',file,'Etiqueta adjunta. El comprador puede descargarla desde su enlace.',undefined,{raw:true,afterSave:()=>{$('return-label-file').value='';}});});
+$('return-label-remove').addEventListener('click',()=>{if(!$('return-label-remove-confirm').checked){$('detail-message').textContent='Confirma que quieres retirar la etiqueta.';$('return-label-remove-confirm').focus();return;}return saveManagement('return-label-remove',{},'Etiqueta retirada.',undefined,{afterSave:()=>{$('return-label-remove-confirm').checked=false;}});});
 load();

@@ -15,6 +15,9 @@ async function walk(dir,prefix='') {
   }
 }
 await walk('dist');
+assets['@returns']=assets['/devoluciones.html'];
+if(!assets['@returns'])throw new Error('Customer returns portal missing');
+assets['@returns'].noIndex=true;
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
 const database=await readFile('worker/database.mjs','utf8');
 // Hash once at build time; unchanged public files can revalidate without downloading again.
@@ -25,9 +28,10 @@ for(const [key,asset] of Object.entries(assets)) {
 const originalCover=Object.keys(assets).find(key=>/^\/assets\/fumada-xxl-1536-[a-f0-9]{12}\.webp$/.test(key));
 if(!originalCover)throw new Error('Optimized cover missing');
 assets['/assets/fumada-xxl-aleix.png']={redirect:originalCover};
-const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .*database\.mjs';\s*/,'');
+const returns=(await readFile('worker/returns.mjs','utf8')).replace(/^import .* from ['"]\.\/database\.mjs['"];?\s*$/gm,'');
+const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .* from ['"]\.\/(?:database|returns)\.mjs['"];?\s*$/gm,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
-await writeFile('dist/server/index.js',`${database}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
+await writeFile('dist/server/index.js',`${database}\n${returns}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
 await cp('.openai/hosting.json','dist/.openai/hosting.json');
 console.log(`Built Worker with ${Object.keys(assets).length} preserved resources.`);

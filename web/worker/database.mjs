@@ -37,14 +37,14 @@ export async function listOrders(env, url) {
   const filter = url.searchParams.get('filter') || 'all';
   const page = Math.max(1, Math.min(1000000, Number.parseInt(url.searchParams.get('page'),10) || 1));
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
-  const filters = { all:'1=1', pending:pendingSql, shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:`(payment_status IN ('failed','refunded','partially_refunded') OR ${activeReturnSql})`, attention:`(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql})`, returns:activeReturnSql, delivered:"delivered_at IS NOT NULL" };
+  const filters = { all:'1=1', pending:pendingSql, shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:`(payment_status IN ('failed','refunded','partially_refunded') OR ${activeReturnSql})`, attention:`(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql})`, returns:activeReturnSql, delivered:"delivered_at IS NOT NULL", access_requests:"portal_requested_at IS NOT NULL" };
   if (!Object.hasOwn(filters,filter)) return null;
   const matches = query ? ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ') : '';
   const where = matches ? `${filters[filter]} AND (${matches})` : filters[filter];
   const params = query ? [query,query,query] : [];
   const statements = [
-    db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
-    db.prepare(`SELECT count(*) AS total, coalesce(sum(${pendingSql}),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped, coalesce(sum(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql}),0) AS incidents, coalesce(sum(${activeReturnSql}),0) AS returns, coalesce(sum(delivered_at IS NOT NULL),0) AS delivered FROM orders`),
+    db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version,portal_requested_at FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
+    db.prepare(`SELECT count(*) AS total, coalesce(sum(${pendingSql}),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped, coalesce(sum(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql}),0) AS incidents, coalesce(sum(${activeReturnSql}),0) AS returns, coalesce(sum(delivered_at IS NOT NULL),0) AS delivered, coalesce(sum(portal_requested_at IS NOT NULL),0) AS accessRequests FROM orders`),
   ];
   // The unfiltered list already gets its total from statistics in this same batch.
   if(query||filter!=='all')statements.push(db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params));
@@ -94,6 +94,18 @@ const returnTransitions = {
   approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested'],
 };
 export async function updateReturn(env,id,{status,reason,resolution,expectedVersion}) {
+  const db=database(env);
+  const previous=status==='requested'?await db.prepare('SELECT return_status,return_label_key FROM orders WHERE id=? AND management_version=?').bind(id,expectedVersion).first():null;
+  if(status==='requested'&&!previous)return null;
+  const reopening=status==='requested'&&previous.return_status!=='requested';
   const from=Object.keys(returnTransitions).filter(previous=>previous===status||returnTransitions[previous].includes(status));
-  return database(env).prepare(`UPDATE orders SET return_status = ?, return_reason = ?, return_resolution = ?, return_updated_at = ?, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND payment_status IN ('paid','refunded','partially_refunded') AND return_status IN (${from.map(()=>'?').join(',')}) RETURNING id`).bind(status,reason,resolution,Date.now(),id,expectedVersion,...from).first();
+  const now=Date.now(),values=[status,reason,resolution,now];
+  const reset=reopening?", customer_reply='',return_kind='',return_code='',return_carrier='',return_label_key=NULL,return_label_type=NULL,return_label_size=NULL,return_submitted_at=?":'';
+  if(reopening)values.push(now);
+  values.push(id,expectedVersion,...from);
+  const changed=await db.prepare(`UPDATE orders SET return_status = ?, return_reason = ?, return_resolution = ?, return_updated_at = ?${reset}, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND payment_status IN ('paid','refunded','partially_refunded') AND return_status IN (${from.map(()=>'?').join(',')}) RETURNING id`).bind(...values).first();
+  if(changed&&reopening&&previous.return_label_key&&env.FILES){
+    try{await env.FILES.delete(previous.return_label_key);}catch{/* Optional cleanup cannot turn a committed reopening into a reported failure. */}
+  }
+  return changed;
 }

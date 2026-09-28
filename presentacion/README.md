@@ -13,3 +13,5 @@ Desde la raíz del repositorio: `node presentacion/serve.mjs`. Abre http://127.0
 Los cuatro ejemplos muestran pedido pagado por preparar, enviado, pago pendiente y reembolso total simulado de 27 EUR por libro recibido en mal estado. «Reiniciar demo» restaura los ejemplos. No hay compras, reembolsos, envíos ni clientes reales.
 
 Para alojar esta versión en un servidor estático, utiliza public como raíz, resuelve /demo con demo/index.html y configura 404.html como página de error. Esta carpeta no contiene el panel privado.
+
+También incluye `/devoluciones`, resuelta con `devoluciones.html`: portal del comprador forzado a demostración, sin peticiones a la API. Permite simular un libro dañado, consultar una respuesta y descargar un ejemplo claramente marcado como no válido para envíos. El servidor incluido resuelve ambas rutas.

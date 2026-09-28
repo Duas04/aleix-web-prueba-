@@ -17,6 +17,11 @@ export const orders = sqliteTable('orders', {
   returnStatus: text('return_status').notNull().default('none'),
   returnReason: text('return_reason').default(''), returnResolution: text('return_resolution').default(''),
   returnUpdatedAt: integer('return_updated_at'), managementVersion: integer('management_version').notNull().default(0),
+  portalRequestedAt: integer('portal_requested_at'), customerReply: text('customer_reply').notNull().default(''),
+  returnKind: text('return_kind').notNull().default(''), returnCode: text('return_code').notNull().default(''),
+  returnCarrier: text('return_carrier').notNull().default(''), returnLabelKey: text('return_label_key'),
+  returnLabelType: text('return_label_type'), returnLabelSize: integer('return_label_size'),
+  returnSubmittedAt: integer('return_submitted_at'),
 }, t => [index('orders_created').on(t.createdAt,t.id),
 index('orders_payment_fulfillment_created').on(t.paymentStatus,t.fulfillmentStatus,t.createdAt,t.id),
 index('orders_fulfillment_created').on(t.fulfillmentStatus,t.createdAt,t.id),
@@ -34,3 +39,10 @@ export const orderItems = sqliteTable('order_items', {
   check('item_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
   check('item_unit_price',sql`${t.unitPrice} >= 0`),
 ]);
+export const returnAccess = sqliteTable('return_access', {
+  orderId: text('order_id').primaryKey().references(()=>orders.id,{onDelete:'cascade'}),
+  tokenHash: text('token_hash').notNull().unique(), expiresAt: integer('expires_at').notNull(),
+});
+export const returnRateLimits = sqliteTable('return_rate_limits', {
+  key: text('key').primaryKey(), windowStart: integer('window_start').notNull(), count: integer('count').notNull(),
+},t=>[index('return_rate_window').on(t.windowStart)]);

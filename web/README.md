@@ -29,6 +29,12 @@ El alojamiento Sites aporta la identidad de usuario confiable. ADMIN_OWNER_EMAIL
 
 La compilación genera dist/server/index.js, ignorado por Git. scripts/package.mjs recibe una ruta absoluta de archivo tar.gz y empaqueta el Worker y las migraciones. Publicar esta carpeta sería una operación aparte: GitHub no cambia automáticamente prueba-aleix.com.
 
+## Portal de devoluciones
+
+`/devoluciones` ofrece acceso por enlace privado, solicitudes con justificante, respuesta del vendedor y descarga de etiquetas. El panel muestra las peticiones de enlace y prepara un correo manual al email del pedido. El vendedor debe enviarlo: no hay emails automáticos. Adjuntar una etiqueta requiere haberla obtenido del transportista; el portal no genera un QR de transporte. Los archivos se guardan en el binding privado R2 `FILES`. La migración 0003 es aditiva.
+
+Consulta `../DEVOLUCIONES-2026-09-28.md` para el flujo completo y sus límites. El cobro y los reembolsos de dinero siguen pendientes.
+
 ## Pendientes
 
 Los pagos siguen desactivados. No hay checkout, webhooks ni creación de pedidos reales desde esta interfaz. Consultar LEGAL-READINESS.md antes de abrir la venta. REVIEW-2026-09-28.md conserva el historial de revisiones de la web original, incluida la demo que ahora se conserva en la otra carpeta.

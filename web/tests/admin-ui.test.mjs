@@ -5,25 +5,28 @@ import vm from 'node:vm';
 const source=readFileSync('admin/app.js','utf8').replace(/\nload\(\);\s*$/,'\n');
 const order=id=>({id,created_at:1,customer_name:'Prueba',email:'fixture@example.invalid',recipient:'Prueba',address1:'Calle ficticia',postal_code:'00000',city:'Ciudad',country:'ES',edition:'paperback',quantity:1,subtotal:1500,shipping:700,total:2200,payment_status:'paid',fulfillment_status:'pending'});
 function harness(overrides={},responseUpdates={}){
- const elements=new Map();let resolveShip,resolveCopy,deferredCopy=false,failDetail=false;const requests=[],savedOrders=new Map();
- const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
+ const elements=new Map();let resolveShip,resolveCopy,resolvePortal,deferredPortal=false,deferredCopy=false,failDetail=false;const requests=[],savedOrders=new Map();
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},removeAttribute(name){delete this[name];},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
  const document={getElementById:element,activeElement:element('opener'),createElement:()=>({...element('node'),dataset:{}})};
- const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
+ const context=vm.createContext({document,Intl,URLSearchParams,console,location:{origin:'https://book.example'},window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
   requests.push({path,options});
   if(options.method==='POST'){
    if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
-   const id=path.split('/').at(-2),action=path.split('/').at(-1),body=JSON.parse(options.body),updated={...order(id),...overrides,...savedOrders.get(id),management_version:(body.expectedVersion||0)+1};
+   if(path.endsWith('/portal-link')&&deferredPortal)return new Promise(resolve=>{resolvePortal=resolve;});
+   const id=path.split('/').at(-2),action=path.split('/').at(-1),body=typeof options.body==='string'?JSON.parse(options.body):{expectedVersion:Number(options.headers['X-Order-Version'])},updated={...order(id),...overrides,...savedOrders.get(id),management_version:(body.expectedVersion||0)+1};
    if(action==='notes')updated.private_note=body.note;
    if(action==='tracking')Object.assign(updated,{carrier:body.carrier,tracking:body.tracking});
    if(action==='deliver')updated.delivered_at=123;
    if(action==='return')Object.assign(updated,{return_status:body.status,return_reason:body.reason,return_resolution:body.resolution});
-   Object.assign(updated,responseUpdates);savedOrders.set(id,updated);return new Response(JSON.stringify({order:updated}));
+   if(action==='portal-reply')Object.assign(updated,{customer_reply:body.reply,return_carrier:body.carrier,return_code:body.code});
+   if(action==='return-label')Object.assign(updated,{return_label_key:'private-object',return_label_type:options.body.type,return_label_size:options.body.size});
+   Object.assign(updated,responseUpdates);savedOrders.set(id,updated);return new Response(JSON.stringify({order:updated,...(action==='portal-link'?{path:'/devoluciones#token='+'a'.repeat(43),expiresAt:Date.now()+86400000}: {})}));
   }
-  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:4,pending:2,shipped:1,returns:1,incidents:2,delivered:0}}));
+  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:4,pending:2,shipped:1,returns:1,incidents:2,delivered:0,accessRequests:2}}));
   const id=path.split('/').pop();return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:{...order(id),...overrides,...savedOrders.get(id)}}),{status:failDetail?503:200});
  }});
  vm.runInContext(source,context);
- return {element,requests,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
+ return {element,requests,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferPortal(){deferredPortal=true;},completePortal(){resolvePortal(new Response(JSON.stringify({order:{...order('A'),management_version:1},path:'/devoluciones#token='+'b'.repeat(43),expiresAt:Date.now()+86400000})));},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
 }
 test('a delayed shipping error never changes another open order',async()=>{
  const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;
@@ -96,4 +99,27 @@ test('saving tracking preserves unsaved note and return drafts',async()=>{
 test('saving one section shows server changes to other fields that were not edited',async()=>{
  const ui=harness({fulfillment_status:'shipped',private_note:'Nota previa'},{private_note:'Nota actualizada en servidor'});await ui.open('P');
  ui.element('tracking-code').value='ABC';await submit(ui,'tracking-form');assert.equal(ui.element('private-note').value,'Nota actualizada en servidor');
+});
+test('buyer access link stays private, offers manual mail and clears on close',async()=>{
+ const ui=harness();await ui.open('A');await ui.element('portal-link-create').events.click();assert.match(ui.element('portal-url').value,/^https:\/\/book.example\/devoluciones#token=/);assert.match(ui.element('portal-mail').href,/^mailto:/);assert.match(decodeURIComponent(ui.element('portal-mail').href),/devoluciones#token=/);
+ ui.element('detail').close();assert.equal(ui.element('portal-url').value,'');assert.equal(ui.element('portal-mail').href,undefined);
+});
+test('delayed link generation never exposes token after same order reopened',async()=>{
+ const ui=harness();await ui.open('A');ui.deferPortal();const pending=ui.element('portal-link-create').events.click();ui.element('detail').close();await ui.open('A');ui.completePortal();await pending;assert.equal(ui.element('portal-url').value,'');assert.equal(ui.element('portal-link-output').hidden,true);
+});
+test('portal reply is separate from resolution and preserves private drafts',async()=>{
+ const ui=harness({return_status:'approved',return_resolution:'Resolución interna',management_version:9});await ui.open('A');assert.equal(ui.element('customer-reply').value,'');
+ ui.element('private-note').value='Nota sin guardar';ui.element('return-reason').value='Motivo sin guardar';ui.element('customer-reply').value='Puedes devolver el libro';ui.element('return-carrier').value='Correos';ui.element('return-code').value='Código visible';await submit(ui,'portal-reply-form');
+ assert.deepEqual(JSON.parse(ui.requests.find(r=>r.path.endsWith('/portal-reply')).options.body),{reply:'Puedes devolver el libro',carrier:'Correos',code:'Código visible',expectedVersion:9});assert.equal(ui.element('private-note').value,'Nota sin guardar');assert.equal(ui.element('return-reason').value,'Motivo sin guardar');assert.equal(ui.element('return-resolution').value,'Resolución interna');
+});
+test('access notification filters pending manual link requests',async()=>{
+ const ui=harness();await ui.load();assert.equal(ui.element('task-access-count').textContent,'2');await ui.element('task-access').events.click();assert.match(ui.requests.at(-1).path,/filter=access_requests/);
+});
+test('oversized or unsupported label never makes a mutation request',async()=>{
+ const ui=harness({return_status:'approved'});await ui.open('A');ui.element('return-label-file').files=[{type:'application/pdf',size:2097153}];await submit(ui,'return-label-form');assert.equal(ui.requests.filter(r=>r.options.method==='POST').length,0);
+ ui.element('return-label-file').files=[{type:'text/html',size:100}];await submit(ui,'return-label-form');assert.equal(ui.requests.filter(r=>r.options.method==='POST').length,0);
+});
+test('raw label upload sends bytes with version and preserves buyer reply draft',async()=>{
+ const ui=harness({return_status:'approved',management_version:12});await ui.open('A');const file={type:'application/pdf',size:2048};ui.element('return-label-file').files=[file];ui.element('customer-reply').value='Borrador visible';ui.element('private-note').value='Borrador privado';await submit(ui,'return-label-form');
+ const request=ui.requests.find(r=>r.path.endsWith('/return-label'));assert.equal(request.options.body,file);assert.equal(request.options.headers['X-Order-Version'],'12');assert.equal(request.options.headers['Content-Type'],'application/pdf');assert.equal(ui.element('customer-reply').value,'Borrador visible');assert.equal(ui.element('private-note').value,'Borrador privado');assert.match(ui.element('return-label-current').textContent,/Etiqueta disponible/);
 });

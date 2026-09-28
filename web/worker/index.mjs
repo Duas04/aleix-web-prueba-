@@ -1,4 +1,5 @@
 import { authorizeOwner, listOrders, getOrder, shipOrder, updateNote, updateTracking, deliverOrder, updateReturn } from './database.mjs';
+import { handlePublicReturns, handleAdminReturns } from './returns.mjs';
 
 const privateHeaders = {'Cache-Control':'private, no-store, max-age=0','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:{...privateHeaders,'Content-Type':'application/json; charset=utf-8'}});
@@ -39,6 +40,11 @@ export function createWorker(assets) {
     const api = p.startsWith('/api/admin/');
     const adminPage = p === '/admin' || p === '/admin/';
     try {
+      if(p.startsWith('/api/returns/')||p==='/api/returns')return await handlePublicReturns(request,env);
+      if(p==='/devoluciones'||p==='/devoluciones/'||p==='/devoluciones.html'){
+        if(!['GET','HEAD'].includes(request.method))return json({error:'Método no permitido.'},405);
+        return assetResponse(assets['@returns'],request,true);
+      }
       if (adminPage || api) {
         const auth = await authorizeOwner(request,env);
         if (auth !== 200) {
@@ -51,6 +57,8 @@ export function createWorker(assets) {
             const data=await listOrders(env,url);
             return data ? json(data) : json({error:'Filtro no válido.'},400);
           }
+          const returnMatch=/^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})\/(portal-link|portal-revoke|portal-reply|return-label|return-label-remove)$/.exec(p);
+          if(returnMatch)return await handleAdminReturns(request,env,returnMatch[1],returnMatch[2]);
           const match = /^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})(?:\/(ship|notes|tracking|deliver|return))?$/.exec(p);
           if (match && request.method === 'GET' && !match[2]) {
             const order=await getOrder(env,match[1]);

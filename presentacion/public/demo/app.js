@@ -4,12 +4,13 @@ const demoOrders = [
   {id:'DEMO-002',customer_name:'Persona de ejemplo B',email:'ejemplo-b@example.invalid',edition:'hardcover',quantity:2,subtotal:3500,total:4200,payment_status:'paid',fulfillment_status:'shipped',
     items:[{edition:'paperback',quantity:1,unit_price:1500,subtotal:1500},{edition:'hardcover',quantity:1,unit_price:2000,subtotal:2000}],
     return_status:'requested',return_reason:'El libro de tapa dura ha llegado con la cubierta doblada. Solicito una devolución.',return_updated_at:1790590000000,
-    private_note:'Ejemplo: revisar el embalaje antes de resolver la solicitud.'},
+    private_note:'Ejemplo: revisar el embalaje antes de resolver la solicitud.',portal_requested_at:1790590000000,return_kind:'damaged',return_submitted_at:1790590000000},
   {id:'DEMO-003',customer_name:'Persona de ejemplo C',email:'ejemplo-c@example.invalid',edition:'hardcover',quantity:1,subtotal:2000,total:2700,payment_status:'pending',fulfillment_status:'pending'},
   {id:'DEMO-004',customer_name:'Persona de ejemplo D',email:'ejemplo-d@example.invalid',edition:'hardcover',quantity:1,subtotal:2000,total:2700,payment_status:'refunded',fulfillment_status:'shipped',paid_at:1790586000000,
     delivered_at:1790589000000,return_status:'closed',return_reason:'El libro ha llegado con la tapa doblada y varias páginas dañadas.',
     return_resolution:'Ejemplo de reembolso completo ya confirmado: 27 € con envío. No se ha devuelto dinero real.',return_updated_at:1790590000000},
 ].map((order,i)=>({created_at:1790586000000-i*3600000,recipient:order.customer_name,address1:'Calle de ejemplo, sin dirección real',address2:'Datos ficticios · No realizar envíos',city:'Ciudad de ejemplo',postal_code:'00000',region:'Provincia de ejemplo',country:'ES',phone:null,shipping:700,paid_at:order.payment_status==='paid'?1790586000000:null,shipped_at:order.fulfillment_status==='shipped'?1790587000000:null,tracking:order.fulfillment_status==='shipped'?'SEGUIMIENTO-FICTICIO':null,carrier:order.fulfillment_status==='shipped'?'Transportista de ejemplo':'',delivered_at:null,private_note:'',note_updated_at:null,return_status:'none',return_reason:'',return_resolution:'',return_updated_at:null,management_version:0,items:[{edition:order.edition,quantity:order.quantity,unit_price:order.subtotal/order.quantity,subtotal:order.subtotal}],...order}));
+for(const order of demoOrders)Object.assign(order,{portal_requested_at:null,customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:null,...order});
 const demoActiveReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
 const demoTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
 function demoText(value,max,multiline=false){
@@ -21,21 +22,40 @@ async function demoApi(path,options={}) {
   if(url.pathname==='/api/admin/orders'){
     const fold=value=>value.normalize('NFD').replace(/[\u0301\u0308\u0303]/g,'').toLowerCase();
     const filter=url.searchParams.get('filter')||'all',q=fold((url.searchParams.get('q')||'').trim());
-    const checks={all:()=>true,pending:o=>o.payment_status==='paid'&&o.fulfillment_status==='pending'&&!demoActiveReturn(o),shipped:o=>o.fulfillment_status==='shipped',unpaid:o=>o.payment_status==='pending',incidents:o=>['failed','refunded','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o),attention:o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o),returns:demoActiveReturn,delivered:o=>!!o.delivered_at};
+    const checks={all:()=>true,pending:o=>o.payment_status==='paid'&&o.fulfillment_status==='pending'&&!demoActiveReturn(o),shipped:o=>o.fulfillment_status==='shipped',unpaid:o=>o.payment_status==='pending',incidents:o=>['failed','refunded','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o),attention:o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o),returns:demoActiveReturn,access_requests:o=>!!o.portal_requested_at,delivered:o=>!!o.delivered_at};
     if(!Object.hasOwn(checks,filter))throw new Error('Filtro no válido.');
     const orders=demoOrders.filter(o=>checks[filter](o)&&[o.customer_name,o.email,o.id].some(v=>fold(v).includes(q)));
-    return {orders:structuredClone(orders),count:orders.length,page:1,paymentConnected:false,stats:{total:demoOrders.length,pending:demoOrders.filter(checks.pending).length,shipped:demoOrders.filter(checks.shipped).length,returns:demoOrders.filter(checks.returns).length,incidents:demoOrders.filter(o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o)).length,delivered:demoOrders.filter(checks.delivered).length}};
+    return {orders:structuredClone(orders),count:orders.length,page:1,paymentConnected:false,stats:{accessRequests:demoOrders.filter(checks.access_requests).length,total:demoOrders.length,pending:demoOrders.filter(checks.pending).length,shipped:demoOrders.filter(checks.shipped).length,returns:demoOrders.filter(checks.returns).length,incidents:demoOrders.filter(o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o)).length,delivered:demoOrders.filter(checks.delivered).length}};
   }
-  const match=/^\/api\/admin\/orders\/(DEMO-\d+)(?:\/(ship|notes|tracking|deliver|return))?$/.exec(url.pathname);
+  const match=/^\/api\/admin\/orders\/(DEMO-\d+)(?:\/(ship|notes|tracking|deliver|return|portal-link|portal-revoke|portal-reply|return-label|return-label-remove))?$/.exec(url.pathname);
   const order=match&&demoOrders.find(o=>o.id===match[1]);
   if(!order)throw new Error('Ejemplo no encontrado.');
   const action=match[2];
   if(!action)return {order:structuredClone(order)};
   if(options.method!=='POST')throw new Error('Acción no permitida.');
-  const body=JSON.parse(options.body);
+  const body=action==='return-label'?{expectedVersion:Number(options.headers?.['X-Order-Version'])}:JSON.parse(options.body);
   if(!body||typeof body!=='object'||Array.isArray(body))throw new Error('Datos no válidos.');
   if((action!=='ship'||body.expectedVersion!==undefined)&&(!Number.isInteger(body.expectedVersion)||body.expectedVersion!==order.management_version))throw new Error('El pedido ha cambiado. Actualízalo antes de guardar.');
-  if(action==='ship'){
+  if(action.startsWith('portal-')||action.startsWith('return-label')){
+    if(!['paid','refunded','partially_refunded'].includes(order.payment_status))throw new Error('Este pedido no admite devoluciones.');
+    if(action==='portal-link'){
+      order.portal_requested_at=null;order.management_version++;
+      return {ok:true,path:'/devoluciones?demo=1',expiresAt:Date.now()+30*86400000,order:structuredClone(order)};
+    }
+    if(action==='portal-revoke'){order.portal_requested_at=null;}
+    if(action==='portal-reply'){
+      const reply=demoText(body.reply,2000,true),code=demoText(body.code,200),carrier=demoText(body.carrier,80);
+      if((code||carrier)&&!['approved','received','closed'].includes(order.return_status))throw new Error('Aprueba la devolución antes de adjuntar instrucciones de transporte.');
+      Object.assign(order,{customer_reply:reply,return_code:code,return_carrier:carrier});
+    }
+    if(action==='return-label'){
+      if(!['approved','received','closed'].includes(order.return_status))throw new Error('Aprueba la devolución antes de adjuntar una etiqueta.');
+      const file=options.body;
+      if(!file||file.size>2*1024*1024||!['application/pdf','image/png','image/jpeg'].includes(file.type))throw new Error('Usa un PDF, PNG o JPEG de hasta 2 MB.');
+      Object.assign(order,{return_label_key:'DEMO-NO-VALIDA-PARA-ENVIOS',return_label_type:file.type,return_label_size:file.size});
+    }
+    if(action==='return-label-remove')Object.assign(order,{return_label_key:null,return_label_type:null,return_label_size:null});
+  }else if(action==='ship'){
     if(order.payment_status!=='paid'||order.fulfillment_status!=='pending'||demoActiveReturn(order))throw new Error('Este ejemplo no se puede marcar como enviado.');
     const tracking=demoText(body.tracking,120),carrier=demoText(body.carrier??'',80);
     Object.assign(order,{fulfillment_status:'shipped',shipped_at:Date.now(),tracking,carrier});
@@ -54,12 +74,12 @@ async function demoApi(path,options={}) {
     const reason=demoText(body.reason,1000,true),resolution=demoText(body.resolution,1000,true),status=body.status;
     if(!Object.hasOwn(demoTransitions,status)||status==='none'||!reason||(['closed','rejected'].includes(status)&&!resolution))throw new Error('Indica el motivo y la resolución cuando cierres la solicitud.');
     if(status!==order.return_status&&!demoTransitions[order.return_status].includes(status))throw new Error('El cambio de estado no está permitido.');
+    if(status==='requested'&&order.return_status!=='requested')Object.assign(order,{customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:Date.now()});
     Object.assign(order,{return_status:status,return_reason:reason,return_resolution:resolution,return_updated_at:Date.now()});
   }
   order.management_version++;
   return {ok:true,order:structuredClone(order)};
 }
-
 
 const $=id=>document.getElementById(id);
 const moneyFormat=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'});
@@ -96,6 +116,7 @@ async function load() {
     loadedPage=page;
     $('stat-total').textContent=data.stats.total;$('stat-pending').textContent=data.stats.pending;$('stat-shipped').textContent=data.stats.shipped;
     for(const key of ['pending','returns','incidents'])$('task-'+key+'-count').textContent=String(data.stats[key]??0);
+    $('task-access-count').textContent=String(data.stats.accessRequests??0);$('task-access').setAttribute('aria-pressed',String($('filter').value==='access_requests'));
     for(const key of ['pending','returns','incidents'])$('task-'+key).setAttribute('aria-pressed',String($('filter').value===(key==='incidents'?'attention':key)));
     $('result-count').textContent=total===1?'1 pedido':`${total} pedidos`;
     $('rows').replaceChildren();
@@ -123,7 +144,8 @@ async function load() {
 const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
-function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields'])$(id).disabled=saving;}
+function clearPortalLink(){$('portal-url').value='';$('portal-link-output').hidden=true;$('portal-mail').removeAttribute('href');$('portal-expiry').textContent='';}
+function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields','portal-fields','portal-reply-fields','return-label-fields'])$(id).disabled=saving;}
 function renderDetail(order){
   currentOrder=order;
   $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
@@ -147,11 +169,17 @@ function renderDetail(order){
   $('return-reason').value=order.return_reason||'';$('return-resolution').value=order.return_resolution||'';
   $('return-current').textContent='Estado de devolución: '+(returnLabels[status]||'Revisar');
   $('return-date').textContent=order.return_updated_at?'Última actualización: '+date(order.return_updated_at):'';
+  $('portal-request-status').textContent=order.portal_requested_at?'El comprador pidió acceso el '+date(order.portal_requested_at)+'. Prepara el enlace y envíaselo manualmente.':'No hay una petición de acceso pendiente.';
+  $('customer-reply').value=order.customer_reply||'';$('return-carrier').value=order.return_carrier||'';$('return-code').value=order.return_code||'';
+  const canLabel=['approved','received','closed'].includes(status);
+  $('portal-label-data').hidden=!canLabel;$('return-label-form').hidden=!canLabel;
+  $('return-label-current').textContent=order.return_label_key?'Etiqueta disponible para el comprador'+(order.return_label_size?' · '+Math.ceil(order.return_label_size/1024)+' KB':'')+'.':'No hay una etiqueta adjunta.';
+  $('return-label-remove').hidden=!order.return_label_key;
   lockActions();$('detail-feedback').textContent='';$('detail-body').hidden=false;
 }
 async function openDetail(id){
   const restoreRetryFocus=document.activeElement===$('retry-detail');
-  detailId=id;$('retry-detail').hidden=true;
+  detailId=id;$('retry-detail').hidden=true;clearPortalLink();$('return-label-file').value='';
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
     const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;renderDetail(order);
@@ -160,27 +188,29 @@ async function openDetail(id){
 }
 $('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
 for(const key of ['pending','returns','incidents'])$('task-'+key).addEventListener('click',()=>{$('filter').value=key==='incidents'?'attention':key;$('search').value='';page=1;return load();});
+$('task-access').addEventListener('click',()=>{$('filter').value='access_requests';$('search').value='';page=1;return load();});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
-$('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
+$('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;clearPortalLink();$('return-label-file').value='';if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;const version=detailRequest;try{await navigator.clipboard.writeText(address(currentOrder));if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Dirección copiada.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-async function saveManagement(action,data,message,focusId){
+async function saveManagement(action,data,message,focusId,{raw=false,afterSave}={}){
   if(saving||!currentOrder)return;
   const id=currentOrder.id,version=detailRequest,expectedVersion=currentOrder.management_version||0;
   const previousFocus=document.activeElement,drafts=[];
-  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution']};
-  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||''};
+  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution'],'portal-reply':['customer-reply','return-carrier','return-code']};
+  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||'','customer-reply':currentOrder.customer_reply||'','return-carrier':currentOrder.return_carrier||'','return-code':currentOrder.return_code||''};
   for(const [section,ids]of Object.entries(sections))if(section!==action)for(const fieldId of ids){const field=$(fieldId),check=fieldId.endsWith('-confirm');if(check?field.checked:field.value!==initial[fieldId])drafts.push({fieldId,value:field.value,checked:field.checked});}
   let saved=false;
   saving=true;lockActions();$('detail-message').textContent='Guardando…';
   const stillCurrent=()=>version===detailRequest&&$('detail').open&&currentOrder?.id===id;
   try{
-    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':action},body:JSON.stringify({...data,expectedVersion})});
+    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:raw?{'Content-Type':data.type,'X-Admin-Action':action,'X-Order-Version':String(expectedVersion)}:{'Content-Type':'application/json','X-Admin-Action':action},body:raw?data:JSON.stringify({...data,expectedVersion})});
     if(!stillCurrent())return;
     const updated=result.order||(await api('/api/admin/orders/'+encodeURIComponent(id))).order;
     if(!stillCurrent())return;
     renderDetail(updated);
     for(const draft of drafts){$(draft.fieldId).value=draft.value;$(draft.fieldId).checked=draft.checked;}
+    if(afterSave)afterSave(result);
     saved=true;$('detail-message').textContent=message;await load();
   }catch(error){if(stillCurrent())$('detail-message').textContent=error.message+' Tus cambios siguen en los campos. Revisa el dato e intenta guardar otra vez; si el pedido cambió en otra pestaña, cierra y vuelve a abrir el detalle.';}
   finally{saving=false;lockActions();if(stillCurrent()){if(saved&&focusId)$(focusId).focus();else if(previousFocus?.isConnected)previousFocus.focus();}}
@@ -197,6 +227,17 @@ $('return-form').addEventListener('submit',event=>{
   if(['closed','rejected'].includes(status)&&!resolution){$('detail-message').textContent='Escribe la resolución antes de cerrar o rechazar la devolución.';$('return-resolution').focus();return;}
   return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
 });
+$('portal-link-create').addEventListener('click',()=>saveManagement('portal-link',{},'Enlace preparado. Aún debes enviarlo al comprador.',undefined,{afterSave:result=>{
+  clearPortalLink();const demoLink=result.path==='/devoluciones?demo=1'&&document.body?.classList?.contains('demo-page');if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
+  const url=location.origin+result.path;$('portal-url').value=url;$('portal-link-output').hidden=false;
+  $('portal-expiry').textContent='Caduca el '+date(result.expiresAt)+'. Al generar otro enlace, el anterior deja de funcionar.';
+  $('portal-mail').href='mailto:'+encodeURIComponent(currentOrder.email)+'?subject='+encodeURIComponent('Tu enlace privado de devolución · Fumada XXL')+'&body='+encodeURIComponent('Hola,\n\nPuedes consultar tu devolución del pedido '+currentOrder.id+' en este enlace privado:\n'+url+'\n\nGuárdalo en privado. Caduca en 30 días.\n\nAleix');
+}}));
+$('portal-revoke').addEventListener('click',()=>{if(!$('portal-revoke-confirm').checked){$('detail-message').textContent='Confirma que quieres invalidar el enlace del comprador.';$('portal-revoke-confirm').focus();return;}return saveManagement('portal-revoke',{},'Enlace del comprador invalidado.',undefined,{afterSave:()=>{clearPortalLink();$('portal-revoke-confirm').checked=false;}});});
+$('portal-copy').addEventListener('click',async()=>{const url=$('portal-url').value,version=detailRequest;if(!url)return;try{await navigator.clipboard.writeText(url);if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Enlace copiado. Todavía debes enviarlo al comprador.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Selecciona el enlace y cópialo manualmente.';}});
+$('portal-reply-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder)return;const canLabel=['approved','received','closed'].includes(currentOrder.return_status);return saveManagement('portal-reply',{reply:$('customer-reply').value.trim(),carrier:canLabel?$('return-carrier').value.trim():(currentOrder.return_carrier||''),code:canLabel?$('return-code').value.trim():(currentOrder.return_code||'')},'Respuesta visible al comprador guardada. No se ha enviado ningún correo.');});
+$('return-label-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!['approved','received','closed'].includes(currentOrder.return_status))return;const file=$('return-label-file').files?.[0];if(!file){$('detail-message').textContent='Selecciona una etiqueta para adjuntar.';$('return-label-file').focus();return;}if(!['application/pdf','image/png','image/jpeg'].includes(file.type)||file.size>2*1024*1024||file.size<=0){$('detail-message').textContent='Usa un PDF, PNG o JPEG de hasta 2 MiB.';$('return-label-file').focus();return;}return saveManagement('return-label',file,'Etiqueta adjunta. El comprador puede descargarla desde su enlace.',undefined,{raw:true,afterSave:()=>{$('return-label-file').value='';}});});
+$('return-label-remove').addEventListener('click',()=>{if(!$('return-label-remove-confirm').checked){$('detail-message').textContent='Confirma que quieres retirar la etiqueta.';$('return-label-remove-confirm').focus();return;}return saveManagement('return-label-remove',{},'Etiqueta retirada.',undefined,{afterSave:()=>{$('return-label-remove-confirm').checked=false;}});});
 load();
 
 // Included only in the fictional demo bundle; never served with the private panel.

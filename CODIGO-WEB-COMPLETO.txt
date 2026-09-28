@@ -1,8 +1,8 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 601d237d6382e5e529fe7800be04862cfee1e050
-Incluye el panel ampliado con tareas, seguimiento, notas y devoluciones, junto al carrito de prueba y las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
+Revisión Git de base: 662d16cb607e5f66c10c8104b7be07b474f76737
+Incluye el portal privado de devoluciones, enlaces manuales, respuestas y etiquetas; el panel ampliado con tareas, seguimiento y notas, junto al carrito de prueba y las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
 
@@ -25,42 +25,50 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 16. web/dist/cart.js
 17. web/dist/condiciones-de-venta.html
 18. web/dist/cookies.html
-19. web/dist/fonts.css
-20. web/dist/index.html
-21. web/dist/legal.css
-22. web/dist/privacidad.html
-23. web/dist/robots.txt
-24. web/dist/shop.css
-25. web/dist/shop.js
-26. web/dist/sitemap.xml
-27. web/dist/styles.css
-28. web/drizzle.config.ts
-29. web/drizzle/0000_cultured_mathemanic.sql
-30. web/drizzle/0001_lonely_black_bolt.sql
-31. web/drizzle/0002_cute_blazing_skull.sql
-32. web/drizzle/meta/0000_snapshot.json
-33. web/drizzle/meta/0001_snapshot.json
-34. web/drizzle/meta/0002_snapshot.json
-35. web/drizzle/meta/_journal.json
-36. web/package.json
-37. web/pnpm-lock.yaml
-38. web/pnpm-workspace.yaml
-39. web/scripts/build.mjs
-40. web/scripts/package.mjs
-41. web/scripts/preview-admin.mjs
-42. web/serve.mjs
-43. web/tests/admin-ui.test.mjs
-44. web/tests/admin.test.mjs
-45. web/tests/breathing.test.mjs
-46. web/tests/cache.test.mjs
-47. web/tests/cart.test.mjs
-48. web/tests/database.mjs
-49. web/tests/management.test.mjs
-50. web/tests/search.test.mjs
-51. web/tests/seo.test.mjs
-52. web/tests/separation.test.mjs
-53. web/worker/database.mjs
-54. web/worker/index.mjs
+19. web/dist/devoluciones.html
+20. web/dist/fonts.css
+21. web/dist/index.html
+22. web/dist/legal.css
+23. web/dist/privacidad.html
+24. web/dist/returns.css
+25. web/dist/returns.js
+26. web/dist/robots.txt
+27. web/dist/shop.css
+28. web/dist/shop.js
+29. web/dist/sitemap.xml
+30. web/dist/styles.css
+31. web/drizzle.config.ts
+32. web/drizzle/0000_cultured_mathemanic.sql
+33. web/drizzle/0001_lonely_black_bolt.sql
+34. web/drizzle/0002_cute_blazing_skull.sql
+35. web/drizzle/0003_colossal_nehzno.sql
+36. web/drizzle/meta/0000_snapshot.json
+37. web/drizzle/meta/0001_snapshot.json
+38. web/drizzle/meta/0002_snapshot.json
+39. web/drizzle/meta/0003_snapshot.json
+40. web/drizzle/meta/_journal.json
+41. web/package.json
+42. web/pnpm-lock.yaml
+43. web/pnpm-workspace.yaml
+44. web/scripts/build.mjs
+45. web/scripts/package.mjs
+46. web/scripts/preview-admin.mjs
+47. web/serve.mjs
+48. web/tests/admin-ui.test.mjs
+49. web/tests/admin.test.mjs
+50. web/tests/breathing.test.mjs
+51. web/tests/cache.test.mjs
+52. web/tests/cart.test.mjs
+53. web/tests/customer-returns-ui.test.mjs
+54. web/tests/customer-returns.test.mjs
+55. web/tests/database.mjs
+56. web/tests/management.test.mjs
+57. web/tests/search.test.mjs
+58. web/tests/seo.test.mjs
+59. web/tests/separation.test.mjs
+60. web/worker/database.mjs
+61. web/worker/index.mjs
+62. web/worker/returns.mjs
 
 
 ========================================================================
@@ -84,7 +92,7 @@ ARCHIVO: web/.openai/hosting.json
 
 {
   "d1": "DB",
-  "r2": null,
+  "r2": "FILES",
   "project_id": "appgprj_6ab99652f80c819198f376d30176183d"
 }
 
@@ -176,6 +184,12 @@ Para generar migraciones: pnpm install, luego pnpm db:generate. No reescribir la
 El alojamiento Sites aporta la identidad de usuario confiable. ADMIN_OWNER_EMAIL se configura como secreto en el alojamiento y fija el propietario por ID estable después del primer acceso válido. No contiene credenciales ni datos de compradores. La configuración y los permisos de D1 se gestionan en el alojamiento.
 
 La compilación genera dist/server/index.js, ignorado por Git. scripts/package.mjs recibe una ruta absoluta de archivo tar.gz y empaqueta el Worker y las migraciones. Publicar esta carpeta sería una operación aparte: GitHub no cambia automáticamente prueba-aleix.com.
+
+## Portal de devoluciones
+
+`/devoluciones` ofrece acceso por enlace privado, solicitudes con justificante, respuesta del vendedor y descarga de etiquetas. El panel muestra las peticiones de enlace y prepara un correo manual al email del pedido. El vendedor debe enviarlo: no hay emails automáticos. Adjuntar una etiqueta requiere haberla obtenido del transportista; el portal no genera un QR de transporte. Los archivos se guardan en el binding privado R2 `FILES`. La migración 0003 es aditiva.
+
+Consulta `../DEVOLUCIONES-2026-09-28.md` para el flujo completo y sus límites. El cobro y los reembolsos de dinero siguen pendientes.
 
 ## Pendientes
 
@@ -294,6 +308,7 @@ async function load() {
     loadedPage=page;
     $('stat-total').textContent=data.stats.total;$('stat-pending').textContent=data.stats.pending;$('stat-shipped').textContent=data.stats.shipped;
     for(const key of ['pending','returns','incidents'])$('task-'+key+'-count').textContent=String(data.stats[key]??0);
+    $('task-access-count').textContent=String(data.stats.accessRequests??0);$('task-access').setAttribute('aria-pressed',String($('filter').value==='access_requests'));
     for(const key of ['pending','returns','incidents'])$('task-'+key).setAttribute('aria-pressed',String($('filter').value===(key==='incidents'?'attention':key)));
     $('result-count').textContent=total===1?'1 pedido':`${total} pedidos`;
     $('rows').replaceChildren();
@@ -321,7 +336,8 @@ async function load() {
 const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
-function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields'])$(id).disabled=saving;}
+function clearPortalLink(){$('portal-url').value='';$('portal-link-output').hidden=true;$('portal-mail').removeAttribute('href');$('portal-expiry').textContent='';}
+function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields','portal-fields','portal-reply-fields','return-label-fields'])$(id).disabled=saving;}
 function renderDetail(order){
   currentOrder=order;
   $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
@@ -345,11 +361,17 @@ function renderDetail(order){
   $('return-reason').value=order.return_reason||'';$('return-resolution').value=order.return_resolution||'';
   $('return-current').textContent='Estado de devolución: '+(returnLabels[status]||'Revisar');
   $('return-date').textContent=order.return_updated_at?'Última actualización: '+date(order.return_updated_at):'';
+  $('portal-request-status').textContent=order.portal_requested_at?'El comprador pidió acceso el '+date(order.portal_requested_at)+'. Prepara el enlace y envíaselo manualmente.':'No hay una petición de acceso pendiente.';
+  $('customer-reply').value=order.customer_reply||'';$('return-carrier').value=order.return_carrier||'';$('return-code').value=order.return_code||'';
+  const canLabel=['approved','received','closed'].includes(status);
+  $('portal-label-data').hidden=!canLabel;$('return-label-form').hidden=!canLabel;
+  $('return-label-current').textContent=order.return_label_key?'Etiqueta disponible para el comprador'+(order.return_label_size?' · '+Math.ceil(order.return_label_size/1024)+' KB':'')+'.':'No hay una etiqueta adjunta.';
+  $('return-label-remove').hidden=!order.return_label_key;
   lockActions();$('detail-feedback').textContent='';$('detail-body').hidden=false;
 }
 async function openDetail(id){
   const restoreRetryFocus=document.activeElement===$('retry-detail');
-  detailId=id;$('retry-detail').hidden=true;
+  detailId=id;$('retry-detail').hidden=true;clearPortalLink();$('return-label-file').value='';
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
     const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;renderDetail(order);
@@ -358,27 +380,29 @@ async function openDetail(id){
 }
 $('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
 for(const key of ['pending','returns','incidents'])$('task-'+key).addEventListener('click',()=>{$('filter').value=key==='incidents'?'attention':key;$('search').value='';page=1;return load();});
+$('task-access').addEventListener('click',()=>{$('filter').value='access_requests';$('search').value='';page=1;return load();});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
-$('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
+$('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;clearPortalLink();$('return-label-file').value='';if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;const version=detailRequest;try{await navigator.clipboard.writeText(address(currentOrder));if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Dirección copiada.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-async function saveManagement(action,data,message,focusId){
+async function saveManagement(action,data,message,focusId,{raw=false,afterSave}={}){
   if(saving||!currentOrder)return;
   const id=currentOrder.id,version=detailRequest,expectedVersion=currentOrder.management_version||0;
   const previousFocus=document.activeElement,drafts=[];
-  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution']};
-  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||''};
+  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution'],'portal-reply':['customer-reply','return-carrier','return-code']};
+  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||'','customer-reply':currentOrder.customer_reply||'','return-carrier':currentOrder.return_carrier||'','return-code':currentOrder.return_code||''};
   for(const [section,ids]of Object.entries(sections))if(section!==action)for(const fieldId of ids){const field=$(fieldId),check=fieldId.endsWith('-confirm');if(check?field.checked:field.value!==initial[fieldId])drafts.push({fieldId,value:field.value,checked:field.checked});}
   let saved=false;
   saving=true;lockActions();$('detail-message').textContent='Guardando…';
   const stillCurrent=()=>version===detailRequest&&$('detail').open&&currentOrder?.id===id;
   try{
-    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':action},body:JSON.stringify({...data,expectedVersion})});
+    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:raw?{'Content-Type':data.type,'X-Admin-Action':action,'X-Order-Version':String(expectedVersion)}:{'Content-Type':'application/json','X-Admin-Action':action},body:raw?data:JSON.stringify({...data,expectedVersion})});
     if(!stillCurrent())return;
     const updated=result.order||(await api('/api/admin/orders/'+encodeURIComponent(id))).order;
     if(!stillCurrent())return;
     renderDetail(updated);
     for(const draft of drafts){$(draft.fieldId).value=draft.value;$(draft.fieldId).checked=draft.checked;}
+    if(afterSave)afterSave(result);
     saved=true;$('detail-message').textContent=message;await load();
   }catch(error){if(stillCurrent())$('detail-message').textContent=error.message+' Tus cambios siguen en los campos. Revisa el dato e intenta guardar otra vez; si el pedido cambió en otra pestaña, cierra y vuelve a abrir el detalle.';}
   finally{saving=false;lockActions();if(stillCurrent()){if(saved&&focusId)$(focusId).focus();else if(previousFocus?.isConnected)previousFocus.focus();}}
@@ -395,6 +419,17 @@ $('return-form').addEventListener('submit',event=>{
   if(['closed','rejected'].includes(status)&&!resolution){$('detail-message').textContent='Escribe la resolución antes de cerrar o rechazar la devolución.';$('return-resolution').focus();return;}
   return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
 });
+$('portal-link-create').addEventListener('click',()=>saveManagement('portal-link',{},'Enlace preparado. Aún debes enviarlo al comprador.',undefined,{afterSave:result=>{
+  clearPortalLink();const demoLink=result.path==='/devoluciones?demo=1'&&document.body?.classList?.contains('demo-page');if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
+  const url=location.origin+result.path;$('portal-url').value=url;$('portal-link-output').hidden=false;
+  $('portal-expiry').textContent='Caduca el '+date(result.expiresAt)+'. Al generar otro enlace, el anterior deja de funcionar.';
+  $('portal-mail').href='mailto:'+encodeURIComponent(currentOrder.email)+'?subject='+encodeURIComponent('Tu enlace privado de devolución · Fumada XXL')+'&body='+encodeURIComponent('Hola,\n\nPuedes consultar tu devolución del pedido '+currentOrder.id+' en este enlace privado:\n'+url+'\n\nGuárdalo en privado. Caduca en 30 días.\n\nAleix');
+}}));
+$('portal-revoke').addEventListener('click',()=>{if(!$('portal-revoke-confirm').checked){$('detail-message').textContent='Confirma que quieres invalidar el enlace del comprador.';$('portal-revoke-confirm').focus();return;}return saveManagement('portal-revoke',{},'Enlace del comprador invalidado.',undefined,{afterSave:()=>{clearPortalLink();$('portal-revoke-confirm').checked=false;}});});
+$('portal-copy').addEventListener('click',async()=>{const url=$('portal-url').value,version=detailRequest;if(!url)return;try{await navigator.clipboard.writeText(url);if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Enlace copiado. Todavía debes enviarlo al comprador.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Selecciona el enlace y cópialo manualmente.';}});
+$('portal-reply-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder)return;const canLabel=['approved','received','closed'].includes(currentOrder.return_status);return saveManagement('portal-reply',{reply:$('customer-reply').value.trim(),carrier:canLabel?$('return-carrier').value.trim():(currentOrder.return_carrier||''),code:canLabel?$('return-code').value.trim():(currentOrder.return_code||'')},'Respuesta visible al comprador guardada. No se ha enviado ningún correo.');});
+$('return-label-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!['approved','received','closed'].includes(currentOrder.return_status))return;const file=$('return-label-file').files?.[0];if(!file){$('detail-message').textContent='Selecciona una etiqueta para adjuntar.';$('return-label-file').focus();return;}if(!['application/pdf','image/png','image/jpeg'].includes(file.type)||file.size>2*1024*1024||file.size<=0){$('detail-message').textContent='Usa un PDF, PNG o JPEG de hasta 2 MiB.';$('return-label-file').focus();return;}return saveManagement('return-label',file,'Etiqueta adjunta. El comprador puede descargarla desde su enlace.',undefined,{raw:true,afterSave:()=>{$('return-label-file').value='';}});});
+$('return-label-remove').addEventListener('click',()=>{if(!$('return-label-remove-confirm').checked){$('detail-message').textContent='Confirma que quieres retirar la etiqueta.';$('return-label-remove-confirm').focus();return;}return saveManagement('return-label-remove',{},'Etiqueta retirada.',undefined,{afterSave:()=>{$('return-label-remove-confirm').checked=false;}});});
 load();
 
 
@@ -411,7 +446,8 @@ ARCHIVO: web/admin/index.html
 <section class="setup-note" aria-labelledby="setup-title"><div class="note-icon" aria-hidden="true">i</div><div><h2 id="setup-title">El cobro todavía no está conectado</h2><p>Este es tu espacio privado para gestionar las ventas. Cuando activemos el pago, aquí aparecerán los pedidos y los datos de envío. Ahora la web no acepta compras.</p></div><span class="badge neutral">Pendiente de Stripe</span></section>
 <section class="stats" aria-label="Resumen de pedidos"><article><p>Pedidos recibidos</p><strong id="stat-total">—</strong><span>Todos los pedidos registrados</span></article><article><p>Por preparar</p><strong id="stat-pending">—</strong><span>Pagados y pendientes de envío</span></article><article><p>Enviados</p><strong id="stat-shipped">—</strong><span>Marcados como enviados por ti</span></article></section>
 <section class="task-strip" aria-label="Gestiones pendientes"><button type="button" id="task-pending" aria-pressed="false"><span>Por preparar</span><strong id="task-pending-count">—</strong><small>Revisar envíos pendientes</small></button><button type="button" id="task-returns" aria-pressed="false"><span>Devoluciones activas</span><strong id="task-returns-count">—</strong><small>Revisar solicitudes y recepción</small></button><button type="button" id="task-incidents" aria-pressed="false"><span>Incidencias por revisar</span><strong id="task-incidents-count">—</strong><small>Revisar pagos y devoluciones</small></button></section>
-<section class="orders-section" aria-labelledby="orders-title"><div class="section-heading"><h2 id="orders-title">Tus pedidos</h2><span class="caption" id="result-count" role="status" aria-live="polite">Cargando…</span></div><form id="search-form" class="tools"><div class="search"><label class="sr-only" for="search">Buscar por cliente, correo o número de pedido</label><input id="search" name="q" autocomplete="off" type="search" maxlength="120" placeholder="Cliente, correo o número de pedido…"><button type="submit">Buscar</button></div><label class="filter"><span class="sr-only">Filtrar pedidos</span><select id="filter" name="filter"><option value="all">Todos los pedidos</option><option value="pending">Por preparar</option><option value="shipped">Enviados</option><option value="delivered">Entregados</option><option value="returns">Devoluciones activas</option><option value="unpaid">Pago pendiente</option><option value="attention">Incidencias por revisar</option><option value="incidents">Incidencias y reembolsos</option></select></label></form>
+<section class="access-task" aria-label="Enlaces de comprador pendientes"><button class="secondary" type="button" id="task-access" aria-pressed="false"><strong id="task-access-count">—</strong><span>Solicitudes de enlace del comprador</span><span class="caption">Preparar y enviar manualmente</span></button></section>
+<section class="orders-section" aria-labelledby="orders-title"><div class="section-heading"><h2 id="orders-title">Tus pedidos</h2><span class="caption" id="result-count" role="status" aria-live="polite">Cargando…</span></div><form id="search-form" class="tools"><div class="search"><label class="sr-only" for="search">Buscar por cliente, correo o número de pedido</label><input id="search" name="q" autocomplete="off" type="search" maxlength="120" placeholder="Cliente, correo o número de pedido…"><button type="submit">Buscar</button></div><label class="filter"><span class="sr-only">Filtrar pedidos</span><select id="filter" name="filter"><option value="all">Todos los pedidos</option><option value="pending">Por preparar</option><option value="shipped">Enviados</option><option value="delivered">Entregados</option><option value="returns">Devoluciones activas</option><option value="access_requests">Enlaces de comprador pendientes</option><option value="unpaid">Pago pendiente</option><option value="attention">Incidencias por revisar</option><option value="incidents">Incidencias y reembolsos</option></select></label></form>
 <div id="feedback" role="status" aria-live="polite" class="feedback">Cargando tus pedidos…</div><div id="table-wrap" class="table-wrap" tabindex="0" role="region" aria-label="Lista de pedidos" hidden><table role="table" aria-label="Tus pedidos"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Pedido / cliente</th><th scope="col" role="columnheader">Libro</th><th scope="col" role="columnheader">Total</th><th scope="col" role="columnheader">Pago</th><th scope="col" role="columnheader">Envío</th><th scope="col" role="columnheader"><span class="sr-only">Detalles</span></th></tr></thead><tbody id="rows" role="rowgroup"></tbody></table></div>
 <div id="empty" class="empty" hidden><div class="empty-icon" aria-hidden="true">▤</div><h3 id="empty-title">Tu primer pedido tendrá su lugar aquí</h3><p id="empty-text">Podrás ver quién ha comprado, a qué dirección enviar el libro y si el pago está confirmado.</p><a href="/#comprar" class="text-link">Ver cómo queda la tienda <span aria-hidden="true">↗</span></a></div><div class="pagination" id="pagination" hidden><button class="secondary" id="previous">← Anterior</button><span id="page-label" tabindex="-1" role="status" aria-live="polite"></span><button class="secondary" id="next">Siguiente →</button></div></section>
 <footer class="dashboard-footer"><span><span aria-hidden="true">◈</span> Solo tu cuenta puede ver los datos de los compradores.</span><a href="/privacidad.html">Privacidad</a></footer></main></div>
@@ -424,7 +460,10 @@ ARCHIVO: web/admin/index.html
 <form id="tracking-form" class="management-form" hidden><fieldset id="tracking-fields"><legend>Seguimiento del envío</legend><label for="tracking-carrier">Transportista <span class="caption">(opcional)</span></label><input id="tracking-carrier" name="carrier" maxlength="80" autocomplete="off" placeholder="Nombre del transportista…"><label for="tracking-code">Número de seguimiento <span class="caption">(opcional)</span></label><input id="tracking-code" name="tracking" maxlength="120" spellcheck="false" autocomplete="off" placeholder="Código del transportista…"><button class="button" type="submit">Guardar seguimiento</button></fieldset></form>
 <form id="deliver-form" class="management-form" hidden><fieldset id="deliver-fields"><legend>Confirmar entrega</legend><p class="management-help">Marca la entrega cuando hayas comprobado que el destinatario ha recibido el pedido.</p><label class="confirmation"><input type="checkbox" id="deliver-confirm" required> <span>Confirmo que el pedido ha sido entregado al destinatario.</span></label><button class="button" type="submit">Marcar como entregado</button></fieldset></form>
 <form id="note-form" class="management-form private-management"><fieldset id="note-fields"><legend>Nota privada</legend><label for="private-note">Indicaciones para gestionar este pedido</label><textarea id="private-note" name="note" maxlength="2000" rows="4" aria-describedby="note-date" placeholder="Anota lo que necesitas recordar…"></textarea><p id="note-date" class="management-help">Solo visible en este panel. No se incluye al imprimir.</p><button class="button" type="submit">Guardar nota privada</button></fieldset></form>
-<form id="return-form" class="management-form private-management" hidden><fieldset id="return-fields"><legend>Gestión de devolución</legend><p id="return-current" class="management-help"></p><p class="management-help" id="return-payment-help"><strong>Guardar esta gestión no devuelve dinero.</strong> El estado del pago solo lo actualiza la pasarela.</p><label for="return-status">Estado de la devolución</label><select id="return-status" name="status" aria-describedby="return-payment-help"></select><label for="return-reason">Motivo de la devolución</label><textarea id="return-reason" name="reason" maxlength="1000" rows="3" required placeholder="Describe el motivo…"></textarea><label for="return-resolution">Resolución <span class="caption">(obligatoria al cerrar o rechazar)</span></label><textarea id="return-resolution" name="resolution" maxlength="1000" rows="3" placeholder="Describe cómo se ha resuelto…"></textarea><p id="return-date" class="management-help"></p><button class="button" type="submit">Guardar gestión de devolución</button></fieldset></form>
+<form id="return-form" class="management-form private-management" hidden><fieldset id="return-fields"><legend>Gestión de devolución</legend><p id="return-current" class="management-help"></p><p class="management-help" id="return-payment-help"><strong>Guardar esta gestión no devuelve dinero.</strong> El estado del pago solo lo actualiza la pasarela.</p><label for="return-status">Estado de la devolución</label><select id="return-status" name="status" aria-describedby="return-payment-help"></select><label for="return-reason">Motivo de la devolución (visible al comprador)</label><textarea id="return-reason" name="reason" maxlength="1000" rows="3" required placeholder="Describe el motivo…"></textarea><label for="return-resolution">Resolución interna <span class="caption">(obligatoria al cerrar o rechazar)</span></label><textarea id="return-resolution" name="resolution" maxlength="1000" rows="3" placeholder="Describe cómo se ha resuelto…"></textarea><p id="return-date" class="management-help"></p><button class="button" type="submit">Guardar gestión de devolución</button></fieldset></form>
+<section class="management-form private-management" id="portal-management"><fieldset id="portal-fields"><legend>Acceso del comprador</legend><p id="portal-request-status" class="management-help"></p><p class="management-help"><strong>El enlace se envía manualmente.</strong> Prepararlo no envía un correo. Caduca en 30 días y generar uno nuevo invalida el anterior. Compártelo solo con el correo de compra de este pedido.</p><button class="button" id="portal-link-create" type="button">Preparar enlace privado</button><div id="portal-link-output" hidden><label for="portal-url">Enlace privado del comprador</label><input id="portal-url" type="url" readonly autocomplete="off" spellcheck="false"><p id="portal-expiry" class="management-help"></p><div class="portal-actions"><button class="secondary" id="portal-copy" type="button">Copiar enlace</button><a class="button" id="portal-mail">Preparar correo al comprador</a></div><p class="management-help">Se abrirá tu aplicación de correo. Revisa el destinatario y confirma el envío allí.</p></div><label class="confirmation"><input type="checkbox" id="portal-revoke-confirm"><span>Quiero invalidar el enlace de este comprador.</span></label><button class="secondary" id="portal-revoke" type="button">Invalidar enlace</button></fieldset></section>
+<form class="management-form private-management" id="portal-reply-form"><fieldset id="portal-reply-fields"><legend>Respuesta visible al comprador</legend><p class="management-help">Esta respuesta aparece en el enlace privado. La nota privada y la resolución interna no se muestran al comprador. Guardarla no envía ningún correo.</p><label for="customer-reply">Indicaciones para el comprador</label><textarea id="customer-reply" name="reply" maxlength="2000" rows="4" placeholder="Explica los próximos pasos…"></textarea><div id="portal-label-data"><label for="return-carrier">Transportista de la devolución</label><input id="return-carrier" name="carrier" maxlength="80" autocomplete="off" placeholder="Nombre del transportista…"><label for="return-code">Código de devolución o instrucciones de la etiqueta</label><input id="return-code" name="code" maxlength="200" autocomplete="off" spellcheck="false" placeholder="Código facilitado por el transportista…"></div><button class="button" type="submit">Guardar respuesta al comprador</button></fieldset></form>
+<form class="management-form private-management" id="return-label-form" hidden><fieldset id="return-label-fields"><legend>Etiqueta de devolución</legend><p class="management-help">Adjunta la etiqueta que hayas preparado con el transportista. Este panel no genera etiquetas ni códigos QR. Se admite PDF, PNG o JPEG de hasta 2 MiB.</p><p id="return-label-current" class="management-help"></p><label for="return-label-file">Archivo para el comprador</label><input id="return-label-file" name="label" type="file" accept="application/pdf,image/png,image/jpeg"><button class="button" type="submit">Adjuntar etiqueta</button><label class="confirmation"><input type="checkbox" id="return-label-remove-confirm"><span>Quiero retirar la etiqueta disponible para el comprador.</span></label><button class="secondary" id="return-label-remove" type="button" hidden>Retirar etiqueta</button></fieldset></form>
 </div><p id="detail-message" role="status" aria-live="polite" aria-atomic="true"></p></dialog>
 </body></html>
 
@@ -493,6 +532,9 @@ main{min-width:0}
 @media(max-width:720px){.task-strip{grid-template-columns:1fr;gap:10px;margin-bottom:24px}.task-strip button{min-height:92px;padding:16px 18px}.task-strip strong{font-size:29px}dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px);padding:22px 18px}.management-form .button{display:block;width:100%;white-space:normal;line-height:1.6}.management-form legend{font-size:23px}.address-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.address-actions button{min-height:48px;border:1px solid #b7c0ab;border-radius:4px;padding:10px;font-size:14px;background:var(--paper)}.table-wrap td:last-child{grid-column:1/-1;justify-self:stretch}.table-wrap td:last-child button{width:100%;min-height:48px;font-size:14px}.table-wrap tr{padding:18px 16px;gap:18px}.table-wrap tbody{padding-inline:10px;gap:12px}.table-wrap td:nth-child(2){line-height:1.7}.stats{grid-template-columns:1fr}.stats article{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.stats p{min-height:0;margin:0;font-size:14px}.stats strong{grid-column:2;grid-row:1/3;align-self:center;font-size:32px}.stats span{margin:0;min-height:0}.search{min-height:48px}.search button{min-width:76px}.section-heading{gap:12px;flex-wrap:wrap}.filter select{height:48px}.heading{flex-wrap:wrap}.heading p:last-child{max-width:none}}
 @media print{.task-strip,.management-form,.private-management{display:none!important}.order-items li{font-size:11pt;break-inside:avoid}}
 .address-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.access-task{margin:-10px 0 28px}.access-task button{display:flex;align-items:center;gap:16px;text-align:left;white-space:normal;width:100%;font-size:14px;min-height:64px;background:#eeeee2;padding:15px 18px}.access-task button:hover,.access-task button[aria-pressed=true]{background:#e1e7d6;border-color:var(--olive)}.access-task strong{font:25px/1.4 'Playfair Display',serif;font-variant-numeric:tabular-nums}.access-task .caption{margin-left:auto;line-height:1.7}
+.portal-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.portal-actions .button{text-decoration:none}#portal-link-output{border:1px solid var(--line);background:var(--paper);padding:18px;margin-block:22px;border-radius:5px}#portal-url{font-size:14px;overflow-wrap:anywhere}.management-form input[type=file]{white-space:normal;overflow:hidden}.management-form input[type=file]::file-selector-button{font:inherit;padding:8px;border:1px solid #b5c0a5;border-radius:3px;background:#e9eddf;color:var(--ink);margin-right:10px}#portal-management .confirmation,#return-label-form .confirmation{margin-top:22px}.management-form fieldset> .button{margin-bottom:6px}
+@media(max-width:720px){.access-task button{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px}.access-task .caption{grid-column:2;margin-left:0}.portal-actions{display:grid;grid-template-columns:1fr}.portal-actions .secondary,.portal-actions .button{width:100%;min-height:48px;text-align:center;justify-content:center}#portal-link-output{padding:15px}#portal-management .secondary,#return-label-remove{width:100%;min-height:48px;font-size:14px;white-space:normal}}
 [aria-disabled=true]{opacity:.6;cursor:wait}
 .print-only{display:none}
 .demo-page .setup-note{display:grid;grid-template-columns:21px minmax(0,1fr);gap:12px 16px}
@@ -580,6 +622,11 @@ export const orders = sqliteTable('orders', {
   returnStatus: text('return_status').notNull().default('none'),
   returnReason: text('return_reason').default(''), returnResolution: text('return_resolution').default(''),
   returnUpdatedAt: integer('return_updated_at'), managementVersion: integer('management_version').notNull().default(0),
+  portalRequestedAt: integer('portal_requested_at'), customerReply: text('customer_reply').notNull().default(''),
+  returnKind: text('return_kind').notNull().default(''), returnCode: text('return_code').notNull().default(''),
+  returnCarrier: text('return_carrier').notNull().default(''), returnLabelKey: text('return_label_key'),
+  returnLabelType: text('return_label_type'), returnLabelSize: integer('return_label_size'),
+  returnSubmittedAt: integer('return_submitted_at'),
 }, t => [index('orders_created').on(t.createdAt,t.id),
 index('orders_payment_fulfillment_created').on(t.paymentStatus,t.fulfillmentStatus,t.createdAt,t.id),
 index('orders_fulfillment_created').on(t.fulfillmentStatus,t.createdAt,t.id),
@@ -597,6 +644,13 @@ export const orderItems = sqliteTable('order_items', {
   check('item_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
   check('item_unit_price',sql`${t.unitPrice} >= 0`),
 ]);
+export const returnAccess = sqliteTable('return_access', {
+  orderId: text('order_id').primaryKey().references(()=>orders.id,{onDelete:'cascade'}),
+  tokenHash: text('token_hash').notNull().unique(), expiresAt: integer('expires_at').notNull(),
+});
+export const returnRateLimits = sqliteTable('return_rate_limits', {
+  key: text('key').primaryKey(), windowStart: integer('window_start').notNull(), count: integer('count').notNull(),
+},t=>[index('return_rate_window').on(t.windowStart)]);
 
 
 
@@ -1083,7 +1137,7 @@ ARCHIVO: web/dist/aviso-legal.html
 <section id="propiedad"><h2>3. Contenidos y propiedad intelectual</h2><p>El libro, los textos, la composición y demás elementos están sujetos a los derechos de sus respectivos titulares y a las licencias que les sean aplicables. El acceso a la web no concede una licencia general de explotación comercial. Se respetan los usos permitidos por la legislación, incluidos sus límites y excepciones.</p><p>La portada mostrada es una propuesta visual creada para esta web. Las características definitivas de las ediciones físicas deben confirmarse antes de habilitar la compra. Las tipografías se distribuyen con sus licencias de código abierto.</p></section>
 <section><h2>4. Información sobre bienestar</h2><p>Los contenidos de meditación y la pausa de respiración tienen carácter divulgativo. No constituyen atención sanitaria individual ni prometen resultados clínicos. Puedes detener la práctica cuando lo desees y respirar a tu ritmo.</p></section>
 <section><h2>5. Enlaces y disponibilidad</h2><p>Los enlaces a fuentes oficiales y a servicios externos permiten consultar información adicional. Al abrirlos se aplican las condiciones y políticas de esos servicios. Se procurará mantener la web disponible y corregir errores, sin limitar los derechos que la ley reconoce a las personas consumidoras.</p></section>
-<section id="contacto"><h2>6. Consultas y reclamaciones</h2><p>Puedes contactar con el titular en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal en el domicilio anterior. Las comunicaciones relacionadas con un pedido deberán incluir los datos necesarios para identificarlo, evitando enviar datos de tarjeta o información de salud.</p><p>Se aplica la normativa española que corresponda, sin privar a una persona consumidora de las disposiciones imperativas que la protejan ni imponer una jurisdicción distinta de la legalmente competente.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html" aria-current="page">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="contacto"><h2>6. Consultas y reclamaciones</h2><p>Puedes contactar con el titular en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal en el domicilio anterior. Las comunicaciones relacionadas con un pedido deberán incluir los datos necesarios para identificarlo, evitando enviar datos de tarjeta o información de salud.</p><p>Se aplica la normativa española que corresponda, sin privar a una persona consumidora de las disposiciones imperativas que la protejan ni imponer una jurisdicción distinta de la legalmente competente.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html" aria-current="page">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
 
 
 
@@ -1153,10 +1207,10 @@ ARCHIVO: web/dist/condiciones-de-venta.html
 <section id="precios"><h2>2. Ediciones y precios</h2><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Edición</th><th scope="col">Un ejemplar</th><th scope="col">Envío por pedido</th><th scope="col">Libro + envío</th></tr></thead><tbody><tr><td>Tapa blanda</td><td>15,00 €</td><td>7,00 €</td><td>22,00 €</td></tr><tr><td>Tapa dura</td><td>20,00 €</td><td>7,00 €</td><td>27,00 €</td></tr></tbody></table></div><p>Importes en euros e impuestos incluidos. El envío indicado es de 7,00 € por pedido a Europa, no por ejemplar. Con varios ejemplares, se suma su precio y una vez el envío. Los posibles costes de importación de un destino fuera del territorio aduanero de la UE deberán determinarse e informarse antes de aceptar el pedido.</p><p>Antes de la apertura se confirmarán las características definitivas de cada edición, la disponibilidad y los datos editoriales aplicables. La imagen actual es una propuesta de portada. No se ofrecen descuentos ni promociones.</p></section>
 <section id="pedido"><h2>3. Cómo se realizará la compra</h2><p>El carrito permite combinar formatos, cambiar cantidades, eliminar libros y revisar una selección con datos ficticios de envío. Los campos no se transmiten al vendedor ni crean un pedido. No se exige una cuenta de comprador. Cuando se abra la venta, el comprador podrá corregir su selección antes del pago. El proceso deberá mostrar identidad del vendedor, características del libro, destino, plazo, precio total, envío y condiciones aplicables antes de solicitar la confirmación con obligación de pago.</p><p>El pago seguro está pendiente de conexión y pruebas. La web actual no solicita tarjetas, no envía una orden a una pasarela y no considera pagado ningún pedido. Tampoco envía correos automáticos de confirmación.</p><p>Cuando se active la contratación, se enviará al comprador una confirmación en un soporte que pueda conservar, con el pedido y sus condiciones. Las condiciones de una compra aceptada no se cambiarán retroactivamente por una actualización de la web. La venta se preparará en español y sin suscripción.</p></section>
 <section id="envios"><h2>4. Envíos y plazos</h2><p>Se ha previsto el envío a Europa por 7,00 € por pedido. La lista de destinos efectivamente admitidos, el transportista y las restricciones se confirmarán antes de habilitar la contratación, teniendo en cuenta también territorios especiales y destinos extracomunitarios.</p><p><strong>No hay todavía una estimación de entrega confirmada.</strong> El plazo concreto o intervalo para la dirección de destino se comunicará antes de pagar. No se mostrará una fecha ficticia ni se sustituirá un plazo acordado por la indicación indefinida «depende del destino».</p><p>Salvo que las partes acuerden otra cosa, la normativa prevé la entrega sin demora indebida y, como máximo, en 30 días naturales desde la celebración del contrato. En caso de incumplimiento se aplicarán los derechos previstos legalmente, incluida la resolución cuando proceda. La pérdida o el daño durante el transporte se atenderá según el régimen legal de transmisión del riesgo.</p></section>
-<section id="devoluciones"><h2>5. Derecho de desistimiento</h2><p>En una compra a distancia de estos libros físicos ordinarios, la persona consumidora podrá comunicar que desiste sin necesidad de justificar su decisión durante los <strong>14 días naturales</strong> siguientes a su recepción. Si los libros de un mismo pedido se entregan por separado, el plazo comienza con la recepción del último. La diferencia entre tapa blanda y tapa dura no elimina este derecho.</p><p>La comunicación podrá dirigirse al correo <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal al vendedor. Debe identificar el pedido y expresar claramente la voluntad de desistir; no es obligatorio usar el modelo de esta página. Antes de activar contratos online deberá estar operativa la función de desistimiento electrónica que resulte exigible, con su confirmación. Este texto no sustituye su implementación.</p><p>El libro deberá devolverse sin demora y, como máximo, dentro de los 14 días naturales siguientes a la comunicación. Las devoluciones se recibirán en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. El comprador asumirá el coste directo de devolver un libro por desistimiento cuando se le haya informado de ello antes de contratar. Esta regla no se aplica a errores de envío o falta de conformidad imputables al vendedor.</p><p>Si desistes de todo el pedido, se devolverá el importe de los libros y el coste de la entrega ordinaria inicial dentro de los 14 días naturales desde la comunicación. No se devolverá el suplemento de una modalidad de entrega más costosa que hayas elegido expresamente. El vendedor podrá retener el reembolso hasta recibir los bienes o una prueba de devolución, según qué suceda primero, salvo que se haya ofrecido a recogerlos. El reembolso se realizará por el mismo medio de pago, salvo acuerdo expreso sin costes para el consumidor.</p><p>Solo podrá exigirse la disminución de valor causada por una manipulación distinta de la necesaria para comprobar la naturaleza, características y funcionamiento del producto, en los términos legales. No se impone conservar el embalaje original como requisito absoluto para desistir.</p></section>
-<section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin coste para ti, incluidos los gastos de transporte necesarios para resolver la falta de conformidad. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
+<section id="devoluciones"><h2>5. Derecho de desistimiento</h2><p>En una compra a distancia de estos libros físicos ordinarios, la persona consumidora podrá comunicar que desiste sin necesidad de justificar su decisión durante los <strong>14 días naturales</strong> siguientes a su recepción. Si los libros de un mismo pedido se entregan por separado, el plazo comienza con la recepción del último. La diferencia entre tapa blanda y tapa dura no elimina este derecho.</p><p>La comunicación podrá dirigirse al correo <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal al vendedor. Debe identificar el pedido y expresar claramente la voluntad de desistir; no es obligatorio usar el modelo de esta página. También puedes utilizar el <a href="/devoluciones">apartado de devoluciones</a> con el enlace privado facilitado por el vendedor. Solicitar un enlace de acceso no comunica por sí solo un desistimiento: si no lo tienes o está pendiente, envía directamente tu declaración al correo indicado para no demorarla. El desistimiento no necesita autorización del vendedor ni que expliques un motivo. Antes de abrir la contratación se verificará que la función electrónica y su confirmación cumplen todos los requisitos aplicables.</p><p>El libro deberá devolverse sin demora y, como máximo, dentro de los 14 días naturales siguientes a la comunicación. Las devoluciones se recibirán en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. El comprador asumirá el coste directo de devolver un libro por desistimiento cuando se le haya informado de ello antes de contratar. Esta regla no se aplica a errores de envío o falta de conformidad imputables al vendedor.</p><p>Si desistes de todo el pedido, se devolverá el importe de los libros y el coste de la entrega ordinaria inicial dentro de los 14 días naturales desde la comunicación. No se devolverá el suplemento de una modalidad de entrega más costosa que hayas elegido expresamente. El vendedor podrá retener el reembolso hasta recibir los bienes o una prueba de devolución, según qué suceda primero, salvo que se haya ofrecido a recogerlos. El reembolso se realizará por el mismo medio de pago, salvo acuerdo expreso sin costes para el consumidor.</p><p>Solo podrá exigirse la disminución de valor causada por una manipulación distinta de la necesaria para comprobar la naturaleza, características y funcionamiento del producto, en los términos legales. No se impone conservar el embalaje original como requisito absoluto para desistir.</p></section>
+<section><h2>Cómo funciona el apartado de devoluciones</h2><p>Para un pedido existente, puedes solicitar acceso con su referencia y correo de compra. El vendedor revisa la solicitud y envía manualmente un enlace privado al correo que consta en el pedido. La web no envía correos automáticos. Conserva el enlace: permite consultar el expediente durante 30 días, salvo que el vendedor lo sustituya o revoque antes.</p><p>Desde ese enlace puedes comunicar un desistimiento, un libro dañado, un envío equivocado u otra incidencia. Tras registrar la solicitud se muestra una confirmación y puedes descargar un justificante para conservarlo. La respuesta del vendedor aparece en ese mismo apartado; consulta de nuevo el enlace para verla.</p><p>Cuando proceda, el vendedor facilita las instrucciones y adjunta una etiqueta o código real obtenido del transportista. La web no contrata recogidas ni genera por sí sola etiquetas de transporte. Sigue las instrucciones del transportista y no utilices documentos de demostración. Aprobar o cerrar una devolución no confirma un reembolso de dinero: la devolución del importe debe tramitarse por el medio de pago correspondiente.</p><p>La demostración pública utiliza solo datos ficticios. Ninguna acción en ella crea una devolución o un reembolso real.</p></section><section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin coste para ti, incluidos los gastos de transporte necesarios para resolver la falta de conformidad. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
 <section><h2>7. Atención y reclamaciones</h2><p>Escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> indicando el número de pedido, si existe, y el motivo. No envíes datos completos de tarjeta. Se facilitarán las vías de reclamación que correspondan al establecimiento y al consumidor, sin limitar el acceso a las autoridades o tribunales competentes.</p><p>También puedes llamar al <a href="tel:+34684339309">+34 684 339 309</a>. No se afirma adhesión a un sistema arbitral o entidad de resolución alternativa que no haya sido confirmada.</p></section>
-<section id="formulario"><h2>8. Modelo de comunicación de desistimiento</h2><p>Cuando existan pedidos, puedes utilizar este modelo, sin que sea obligatorio. Es una plantilla para copiar y enviar; esta página no transmite una solicitud automáticamente.</p><div class="legal-template"><p><strong>Destinatario:</strong> Alex Rivera Mosquera · <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a><br>Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España</p><p>Por la presente comunico que desisto de mi contrato de compraventa del siguiente bien:</p><p>Libro, formato y cantidad: ____________________<br>Número de pedido: ____________________<br>Fecha de pedido y de recepción: ____________________<br>Nombre de la persona consumidora: ____________________<br>Domicilio y correo de contacto: ____________________<br>Fecha: ____________________<br>Firma, solo si se presenta en papel: ____________________</p></div><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Desistimiento%20de%20compra%20-%20Fumada%20XXL">Abrir un correo al vendedor <span aria-hidden="true">↗</span></a></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html" aria-current="page">Condiciones de venta</a></nav></footer></body></html>
+<section id="formulario"><h2>8. Modelo de comunicación de desistimiento</h2><p>Cuando existan pedidos, puedes utilizar este modelo, sin que sea obligatorio. Es una plantilla para copiar y enviar; esta página no transmite una solicitud automáticamente.</p><div class="legal-template"><p><strong>Destinatario:</strong> Alex Rivera Mosquera · <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a><br>Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España</p><p>Por la presente comunico que desisto de mi contrato de compraventa del siguiente bien:</p><p>Libro, formato y cantidad: ____________________<br>Número de pedido: ____________________<br>Fecha de pedido y de recepción: ____________________<br>Nombre de la persona consumidora: ____________________<br>Domicilio y correo de contacto: ____________________<br>Fecha: ____________________<br>Firma, solo si se presenta en papel: ____________________</p></div><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Desistimiento%20de%20compra%20-%20Fumada%20XXL">Abrir un correo al vendedor <span aria-hidden="true">↗</span></a></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html" aria-current="page">Condiciones de venta</a></nav></footer></body></html>
 
 
 ========================================================================
@@ -1176,9 +1230,35 @@ ARCHIVO: web/dist/cookies.html
     </nav>
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de cookies</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#alcance">Qué utiliza la web</a><a href="#plataforma">Alojamiento</a><a href="#preferencias">Preferencias</a></nav>
-<section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>El código del libro no incorpora cookies publicitarias ni analítica de visitas. Al añadir un libro, el carrito utiliza almacenamiento local para recordar exclusivamente las ediciones y cantidades elegidas en este navegador. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Carrito: <code>fumada-cart-v1</code></td><td>Almacenamiento local propio con ediciones, cantidades y fecha de caducidad. Solo sirve para conservar la selección solicitada; no crea pedidos ni guarda nombre, correo o dirección.</td><td>7 días desde el último cambio. La web descarta el contenido caducado al volver a cargarlo. Se elimina al vaciar el carrito o borrar los datos del sitio.</td></tr><tr><td>Formulario de prueba</td><td>Campos y resumen en memoria; el código no los envía ni los guarda en almacenamiento local.</td><td>Hasta cerrar el carrito o recargar la página.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
+<section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>El código del libro no incorpora cookies publicitarias ni analítica de visitas. Al añadir un libro, el carrito utiliza almacenamiento local para recordar exclusivamente las ediciones y cantidades elegidas en este navegador. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Carrito: <code>fumada-cart-v1</code></td><td>Almacenamiento local propio con ediciones, cantidades y fecha de caducidad. Solo sirve para conservar la selección solicitada; no crea pedidos ni guarda nombre, correo o dirección.</td><td>7 días desde el último cambio. La web descarta el contenido caducado al volver a cargarlo. Se elimina al vaciar el carrito o borrar los datos del sitio.</td></tr><tr><td>Formulario de prueba</td><td>Campos y resumen en memoria; el código no los envía ni los guarda en almacenamiento local.</td><td>Hasta cerrar el carrito o recargar la página.</td></tr><tr><td>Portal de devoluciones</td><td>El enlace privado se usa solo en memoria y su código se retira de la barra de direcciones. No se guarda en cookies ni en almacenamiento local por el código del portal. Las solicitudes y etiquetas se conservan en el servidor según la política de privacidad.</td><td>La sesión en memoria termina al recargar o cerrar. El enlace original caduca a los 30 días o antes si se sustituye o revoca.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
 <section id="plataforma"><h2>2. Seguridad del alojamiento y acceso privado</h2><p>La web del libro y la demostración del panel son públicas. La demo utiliza exclusivamente pedidos ficticios. Solo el área de gestión del titular requiere iniciar sesión mediante ChatGPT y superar una autorización adicional.</p><p>En las respuestas del dominio público se ha observado la siguiente cookie de seguridad, incluida en el inventario el 28 de septiembre de 2026:</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Cookies observadas; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Nombre</th><th scope="col">Proveedor y finalidad</th><th scope="col">Duración</th></tr></thead><tbody><tr><td><code>__cf_bm</code></td><td>Cloudflare, infraestructura de seguridad: distinguir tráfico automatizado y proteger el servicio frente a abusos. Se establece en el dominio prueba-aleix.com.</td><td>30 minutos de inactividad continuada, según el proveedor.</td></tr></tbody></table></div><p>Cloudflare identifica esta cookie como necesaria para su protección frente a bots. No se utiliza en el código de esta tienda para publicidad ni analítica comercial. Consulta la <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">documentación de cookies de Cloudflare</a>.</p><p>Este inventario corresponde a las respuestas públicas comprobadas; no sustituye una revisión de todas las variantes de autenticación o de las cookies que puedan emitir desafíos de seguridad. El inicio de sesión del titular se gestiona en la plataforma y debe revisarse por separado conforme a su configuración.</p><p>Stripe aún no está integrado. Antes de conectar pagos, estadísticas o publicidad se actualizará el inventario y, cuando sea necesario, se habilitará el consentimiento previo.</p></section>
-<section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La cookie de seguridad descrita presta una función técnica necesaria. Cualquier tecnología opcional que se incorpore deberá tener su propia información y mecanismo de consentimiento.</p><p>Puedes eliminar la selección con «Vaciar carrito». También puedes consultar, eliminar o bloquear las cookies y el almacenamiento local desde los ajustes de privacidad del navegador. Si bloqueas el almacenamiento, el carrito funciona en memoria, pero se pierde al recargar. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La cookie de seguridad descrita presta una función técnica necesaria. Cualquier tecnología opcional que se incorpore deberá tener su propia información y mecanismo de consentimiento.</p><p>Puedes eliminar la selección con «Vaciar carrito». También puedes consultar, eliminar o bloquear las cookies y el almacenamiento local desde los ajustes de privacidad del navegador. Si bloqueas el almacenamiento, el carrito funciona en memoria, pero se pierde al recargar. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+
+
+========================================================================
+ARCHIVO: web/dist/devoluciones.html
+========================================================================
+
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Devoluciones y ayuda · Fumada XXL</title><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/returns.css"><script src="/returns.js" defer></script></head>
+<body><a class="skip" href="#contenido">Saltar al contenido</a><header class="portal-header"><a class="brand" href="/">Fumada XXL <span>Un libro de Aleix</span></a><a href="/" class="back-link">Volver al libro</a></header>
+<main id="contenido"><div class="page-intro"><p class="eyebrow">Para cuidar cada lectura</p><h1>Devoluciones<br><em>y ayuda.</em></h1><p>Consulta tu solicitud, escribe a Aleix y encuentra las indicaciones para devolver tu libro.</p></div>
+<p id="demo-note" class="notice" hidden><strong>Demostración con un pedido ficticio.</strong> Los cambios se simulan en esta página y se pierden al recargar. No se envían solicitudes ni correos. La etiqueta de ejemplo no sirve para enviar un paquete.</p>
+<p id="page-message" class="notice" role="status" aria-live="polite" hidden></p>
+<noscript><p class="notice">Necesitas activar JavaScript para solicitar un enlace o consultar una devolución. También puedes <a href="mailto:theshoz@gmail.com">escribir a Aleix</a>.</p></noscript>
+<section id="access-panel" class="paper-panel" aria-labelledby="access-title"><h2 id="access-title">Pide tu enlace privado.</h2><p>Indica el número de pedido y el correo que usaste al comprar. Si los datos coinciden, Aleix preparará tu enlace y te lo enviará manualmente. El correo no se envía automáticamente.</p>
+<form id="access-form"><fieldset id="access-fields" disabled><legend class="sr-only">Datos del pedido</legend><label for="access-order">Número de pedido</label><input id="access-order" name="orderId" autocomplete="off" maxlength="120" spellcheck="false" required placeholder="El número de tu confirmación…"><label for="access-email">Correo de compra</label><input id="access-email" name="email" type="email" autocomplete="email" maxlength="254" spellcheck="false" required placeholder="nombre@dominio.com"><p class="help" id="access-privacy">Responsable: Alex Rivera Mosquera (Aleix). Usará el pedido y el correo para verificar la compra y gestionar tu acceso a las devoluciones. Más información y derechos en la <a href="/privacidad.html">política de privacidad</a>.</p><button class="button" type="submit" aria-describedby="access-privacy">Solicitar enlace privado</button></fieldset></form>
+<p class="help"><strong>Pedir el enlace no registra un desistimiento.</strong> Si quieres comunicar tu decisión ahora, <a href="mailto:theshoz@gmail.com?subject=Desistimiento%20de%20mi%20pedido%20Fumada%20XXL">escribe a Aleix</a> indicando tu pedido y que quieres desistir. No necesitas esperar al enlace. Consulta los plazos y las condiciones en las <a href="/condiciones-de-venta.html#envios">condiciones de devolución</a>.</p>
+<p id="access-message" class="feedback" role="status" aria-live="polite"></p><p class="help">Si ya tienes un enlace, ábrelo desde el correo para consultar tu solicitud. Si necesitas ayuda, <a href="mailto:theshoz@gmail.com?subject=Ayuda%20con%20una%20devoluci%C3%B3n">escribe a Aleix</a>.</p></section>
+<section id="case-panel" class="paper-panel" hidden aria-labelledby="case-title"><div class="case-heading"><div><h2 id="case-title" tabindex="-1">Tu devolución.</h2><p class="help">Pedido <strong id="case-order"></strong></p></div><span id="case-status" class="status-badge"></span></div><p class="help" id="case-reason"></p><p class="notice">Registrar una solicitud no devuelve dinero. Aleix revisará el caso y el estado del pago se actualizará cuando corresponda.</p>
+<section id="seller-response" class="seller-response" hidden aria-labelledby="seller-title"><h3 id="seller-title">Respuesta de Aleix</h3><p id="case-reply"></p><dl id="label-information"><div><dt>Transportista</dt><dd id="case-carrier"></dd></div><div><dt>Código de devolución</dt><dd id="case-code"></dd></div></dl><button id="label-download" type="button" class="button secondary" hidden>Descargar etiqueta</button><p class="help" id="label-help"></p><p id="label-message" class="feedback" role="status" aria-live="polite"></p></section>
+<form id="request-form"><fieldset id="request-fields" disabled><legend>Cuéntanos qué necesitas.</legend><label for="return-kind">Tipo de solicitud</label><select id="return-kind" name="kind"><option value="withdrawal">Quiero desistir de la compra</option><option value="damaged">El libro ha llegado dañado</option><option value="wrong">He recibido un libro equivocado</option><option value="other">Otra consulta sobre la devolución</option></select><label for="return-reason">Detalles <span id="reason-caption">(opcionales para desistimiento)</span></label><textarea id="return-reason" name="reason" rows="4" maxlength="1000" placeholder="Cuéntanos qué ha pasado…" aria-describedby="request-help"></textarea><p id="request-help" class="help">Para desistir no necesitas explicar el motivo. En los demás casos, añade detalles para que Aleix pueda ayudarte. Consulta las <a href="/condiciones-de-venta.html#envios">condiciones de devolución</a>.</p><p class="help" id="request-privacy">Responsable: Alex Rivera Mosquera (Aleix). Los detalles se usarán para atender y gestionar esta devolución. Más información y derechos en la <a href="/privacidad.html">política de privacidad</a>.</p><button class="button" type="submit" aria-describedby="request-privacy">Registrar solicitud</button></fieldset></form>
+<p id="request-message" class="feedback" role="status" aria-live="polite"></p><button class="text-button" type="button" id="case-refresh">Actualizar estado</button><button class="text-button" type="button" id="demo-approved" hidden>Ver ejemplo aprobado</button>
+<section id="receipt" class="receipt" hidden aria-labelledby="receipt-title"><h3 id="receipt-title" tabindex="-1">Solicitud registrada.</h3><p>Guarda este justificante para conservar los detalles y la fecha. No se envía una confirmación automática por correo.</p><pre id="receipt-text"></pre><button id="receipt-download" class="button secondary" type="button">Descargar justificante</button></section>
+<p class="help">Tu enlace da acceso a esta información: guárdalo en privado. Para volver después de recargar, abre de nuevo el enlace del correo. No guardamos el acceso en este navegador.</p></section>
+<footer class="portal-footer"><p>Si prefieres hablarlo, <a href="mailto:theshoz@gmail.com?subject=Ayuda%20con%20una%20devoluci%C3%B3n">escribe a Aleix</a>.</p><nav aria-label="Ayuda y privacidad"><a href="/devoluciones?demo=1">Probar con un pedido ficticio</a><a href="/privacidad.html">Privacidad</a><a href="/condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
+</main></body></html>
+
 
 
 ========================================================================
@@ -1325,7 +1405,7 @@ ARCHIVO: web/dist/index.html
           <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover" disabled>Añadir tapa dura <span aria-hidden="true">+</span></button></article>
         </div>
         <p class="shipping-highlight">Envío a Europa · <strong>7,00 € por pedido</strong></p><p class="shop-availability">La venta online está en preparación. Puedes consultar tu importe, pero todavía no se admiten pedidos ni se realizan cobros. La disponibilidad y el plazo para tu destino se confirmarán antes del pago.</p>
-        <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
+        <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="/devoluciones">Gestionar una devolución</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
       </div>
     </section>
 
@@ -1354,7 +1434,7 @@ ARCHIVO: web/dist/index.html
     <section class="closing wrap" aria-label="Una última idea"><span class="closing-star" aria-hidden="true">✳</span><p>No hace falta ir más lejos.<br><em>Hace falta volver a ti.</em></p><a href="#inicio" class="underlined-link">Volver al principio <span aria-hidden="true">↑</span></a></section>
   </main>
 
-  <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
+  <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
 
   <dialog id="order-dialog" class="order-dialog" aria-labelledby="order-title" aria-describedby="order-notice">
     <div class="order-top"><span class="cart-brand">Fumada XXL · Aleix</span><button class="dialog-close" type="button" aria-label="Cerrar carrito" data-close-cart>×</button></div>
@@ -1433,10 +1513,100 @@ ARCHIVO: web/dist/privacidad.html
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#responsable">Responsable</a><a href="#tratamientos">Datos y finalidades</a><a href="#proveedores">Proveedores</a><a href="#derechos">Tus derechos</a></nav>
 <section id="responsable"><h2>1. Responsable del tratamiento</h2><p>El titular de la web es Alex Rivera Mosquera, con domicilio en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Puedes contactar en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Los datos de identificación fiscal figuran en el <a href="aviso-legal.html">aviso legal</a>.</p><p>Esta política describe la versión actual, sin pago ni recogida de pedidos. Antes de activar la tienda se actualizará para identificar los proveedores y las operaciones de compra efectivamente implantadas.</p></section>
-<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración funciona en memoria. El carrito recuerda las ediciones y cantidades en este navegador durante 7 días desde el último cambio, para conservar la selección solicitada; no se vincula a una cuenta ni se envía al titular. Puedes eliminarlo con «Vaciar carrito».</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Carrito y formulario de prueba</h3><p>Puedes probar el recorrido como invitado con datos ficticios: nombre, correo y dirección de envío. El código los utiliza únicamente en la memoria de la página para mostrarte el resumen solicitado. No los envía al vendedor, a una pasarela ni a la base de datos; tampoco los guarda en el carrito persistente. Se borran al cerrar el carrito o recargar. No se crea una cuenta ni se mandan confirmaciones por correo.</p><p>El navegador puede ofrecer su propio autocompletado; puedes gestionarlo desde sus ajustes. No introduzcas datos de tarjeta ni documentos de identidad en esta prueba.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; el formulario actual es solo una prueba local, sin envío ni contratación.</p></section>
-<section><h2>3. Conservación</h2><p>El estado del ejercicio desaparece al recargar o cerrar la página. El nombre, el correo y la dirección de la prueba se borran al cerrar el carrito o recargar. Las ediciones y cantidades se conservan localmente un máximo de 7 días desde el último cambio y se descartan al volver a cargar un carrito caducado; puedes eliminarlas antes con «Vaciar carrito» o borrando los datos del sitio. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>El identificador de la cuenta propietaria permanece vinculado mientras se mantenga el área privada; el titular debe gestionar su supresión cuando retire esa autorización. La aplicación no dispone de borrado automático programado. Los registros técnicos que mantengan los proveedores siguen sus condiciones y configuración; sus plazos concretos no se han verificado para esta cuenta. Los plazos de futuros pedidos, facturas y datos de pago se concretarán antes de recogerlos.</p></section>
-<section id="proveedores"><h2>4. Servicios y comunicaciones de datos</h2><p>La web se publica mediante Sites de OpenAI y utiliza infraestructura de seguridad de Cloudflare. El correo de contacto utiliza Gmail, de Google. Estos proveedores intervienen en el alojamiento, seguridad, autenticación o correo según el servicio utilizado. Puedes consultar la <a href="https://openai.com/policies/eu-privacy-policy/">política europea de OpenAI</a>, la <a href="https://www.cloudflare.com/privacypolicy/">política de Cloudflare</a> y la <a href="https://policies.google.com/privacy?hl=es">política de Google</a>. Las fuentes tipográficas y la imagen se sirven desde el propio sitio, sin solicitar Google Fonts al navegar.</p><p>La integración de pagos con Stripe se encuentra pendiente: en esta versión no se carga su formulario ni se le envían datos de compra. Tampoco hay un transportista conectado. Antes de activar estos servicios se revisarán sus roles, contratos, destinatarios y posibles transferencias internacionales y se actualizará esta política.</p><p>Las transferencias fuera del Espacio Económico Europeo, si se realizan, deberán contar con el mecanismo legal aplicable, como una decisión de adecuación o garantías contractuales apropiadas. La ubicación del servidor y las garantías de cada proveedor requieren confirmación; no se afirma que todos los datos permanezcan en España.</p></section>
-<section id="derechos"><h2>5. Cómo ejercer tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación o portabilidad cuando sean aplicables escribiendo a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o al domicilio del titular. Si un tratamiento se basa en tu consentimiento, puedes retirarlo sin afectar a la licitud del tratamiento anterior.</p><p>Se pedirá únicamente la información necesaria para verificar la identidad cuando existan dudas razonables. Las solicitudes se atenderán en los plazos previstos por el RGPD, normalmente un mes, con las ampliaciones justificadas que permita la normativa.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>, sin perjuicio de otras autoridades competentes. El código actual no realiza perfiles comerciales ni decisiones automatizadas con efectos jurídicos.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html" aria-current="page">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración funciona en memoria. El carrito recuerda las ediciones y cantidades en este navegador durante 7 días desde el último cambio, para conservar la selección solicitada; no se vincula a una cuenta ni se envía al titular. Puedes eliminarlo con «Vaciar carrito».</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Carrito y formulario de prueba</h3><p>Puedes probar el recorrido como invitado con datos ficticios: nombre, correo y dirección de envío. El código los utiliza únicamente en la memoria de la página para mostrarte el resumen solicitado. No los envía al vendedor, a una pasarela ni a la base de datos; tampoco los guarda en el carrito persistente. Se borran al cerrar el carrito o recargar. No se crea una cuenta ni se mandan confirmaciones por correo.</p><p>El navegador puede ofrecer su propio autocompletado; puedes gestionarlo desde sus ajustes. No introduzcas datos de tarjeta ni documentos de identidad en esta prueba.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Solicitudes y portal de devoluciones</h3><p>El formulario de acceso utiliza la referencia y el correo facilitados para comprobar su coincidencia con un pedido existente y avisar al titular de la solicitud. No revela públicamente si un pedido existe. El titular envía manualmente el enlace privado al correo ya asociado a ese pedido. No hay envío automático de correos.</p><p>Al tramitar una devolución se registran el tipo de solicitud, tu explicación si procede, la fecha, su estado, la respuesta del vendedor y, cuando corresponda, las instrucciones y la etiqueta de transporte. Se utilizan para ejecutar el contrato, atender incidencias y cumplir las obligaciones legales aplicables. No incluyas datos de salud, documentos de identidad ni datos bancarios. El comprador no puede consultar notas internas ni datos de otros pedidos.</p><p>El enlace es confidencial, tiene una vigencia máxima de 30 días y se puede sustituir o revocar. No lo compartas: quien lo tenga podrá acceder a ese expediente. El navegador lo utiliza solo en memoria y retira el código de la barra de direcciones; el servidor conserva únicamente su huella. Para limitar solicitudes abusivas se guardan temporalmente huellas de la dirección IP facilitada por la infraestructura y de la referencia, con contadores, sobre la base del interés legítimo en proteger el servicio.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; el formulario actual es solo una prueba local, sin envío ni contratación.</p></section>
+<section><h2>3. Conservación</h2><p>Las solicitudes de devolución y sus documentos se conservan para resolver el expediente y atender las responsabilidades legales que resulten aplicables. El titular debe revisar y eliminar los documentos que dejen de ser necesarios; no hay un borrado general automático de expedientes. Los enlaces caducados ya no permiten acceder. Los contadores de protección dejan de limitar solicitudes al terminar su ventana de 15 minutos y se depuran durante nuevas solicitudes, con borrado por lotes, por lo que no se promete una eliminación inmediata al caducar.</p><p>El estado del ejercicio desaparece al recargar o cerrar la página. El nombre, el correo y la dirección de la prueba se borran al cerrar el carrito o recargar. Las ediciones y cantidades se conservan localmente un máximo de 7 días desde el último cambio y se descartan al volver a cargar un carrito caducado; puedes eliminarlas antes con «Vaciar carrito» o borrando los datos del sitio. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>El identificador de la cuenta propietaria permanece vinculado mientras se mantenga el área privada; el titular debe gestionar su supresión cuando retire esa autorización. La aplicación no dispone de borrado automático general programado de pedidos o expedientes. Los registros técnicos que mantengan los proveedores siguen sus condiciones y configuración; sus plazos concretos no se han verificado para esta cuenta. Los plazos de futuros pedidos, facturas y datos de pago se concretarán antes de recogerlos.</p></section>
+<section id="proveedores"><h2>4. Servicios y comunicaciones de datos</h2><p>La web se publica mediante Sites de OpenAI y utiliza infraestructura de seguridad de Cloudflare. Las etiquetas aportadas por el vendedor se alojan de forma privada en Cloudflare R2 y se entregan solo mediante el acceso autorizado al expediente. El correo de contacto utiliza Gmail, de Google. Estos proveedores intervienen en el alojamiento, seguridad, autenticación o correo según el servicio utilizado. Puedes consultar la <a href="https://openai.com/policies/eu-privacy-policy/">política europea de OpenAI</a>, la <a href="https://www.cloudflare.com/privacypolicy/">política de Cloudflare</a> y la <a href="https://policies.google.com/privacy?hl=es">política de Google</a>. Las fuentes tipográficas y la imagen se sirven desde el propio sitio, sin solicitar Google Fonts al navegar.</p><p>La integración de pagos con Stripe se encuentra pendiente: en esta versión no se carga su formulario ni se le envían datos de compra. Tampoco hay un transportista conectado. Antes de activar estos servicios se revisarán sus roles, contratos, destinatarios y posibles transferencias internacionales y se actualizará esta política.</p><p>Las transferencias fuera del Espacio Económico Europeo, si se realizan, deberán contar con el mecanismo legal aplicable, como una decisión de adecuación o garantías contractuales apropiadas. La ubicación del servidor y las garantías de cada proveedor requieren confirmación; no se afirma que todos los datos permanezcan en España.</p></section>
+<section id="derechos"><h2>5. Cómo ejercer tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación o portabilidad cuando sean aplicables escribiendo a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o al domicilio del titular. Si un tratamiento se basa en tu consentimiento, puedes retirarlo sin afectar a la licitud del tratamiento anterior.</p><p>Se pedirá únicamente la información necesaria para verificar la identidad cuando existan dudas razonables. Las solicitudes se atenderán en los plazos previstos por el RGPD, normalmente un mes, con las ampliaciones justificadas que permita la normativa.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>, sin perjuicio de otras autoridades competentes. El código actual no realiza perfiles comerciales ni decisiones automatizadas con efectos jurídicos.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html" aria-current="page">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+
+
+========================================================================
+ARCHIVO: web/dist/returns.css
+========================================================================
+
+:root{color-scheme:light;--paper:#f7f6f0;--ink:#303b2c;--olive:#49563a;--muted:#626959;--line:#d9dfcf;font-family:'DM Sans',Arial,sans-serif;color:var(--ink);background:var(--paper)}*{box-sizing:border-box}body{margin:0}a{color:inherit;text-underline-offset:4px}button,input,textarea,select{font:inherit}button,a{touch-action:manipulation}button{cursor:pointer}button:disabled,fieldset:disabled button{cursor:wait;opacity:.6}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.skip{position:fixed;left:20px;top:-100px;z-index:10;background:white;padding:16px}.skip:focus{top:10px}:focus-visible{outline:3px solid #aa793e;outline-offset:4px}.portal-header{width:min(1160px,calc(100% - 80px));margin:auto;padding-block:30px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.brand{font:24px/1.5 'Playfair Display',Georgia,serif;text-decoration:none}.brand span{display:block;font:12px/1.7 'DM Sans',sans-serif;color:var(--muted)}.back-link{font-size:14px;min-height:44px;display:flex;align-items:center}main{width:min(740px,calc(100% - 48px));margin:55px auto}.eyebrow{color:var(--muted);font-size:14px;margin-bottom:18px}.page-intro h1{font:400 clamp(45px,7vw,66px)/1.17 'Playfair Display',Georgia,serif;letter-spacing:-.045em;margin:0 0 24px}.page-intro h1 em{color:#6c7b55}.page-intro>p:last-child{max-width:560px;color:var(--muted);line-height:1.85;font-size:17px;margin-bottom:36px}h1,h2,h3{text-wrap:balance}.paper-panel{background:#fffefa;border:1px solid var(--line);border-radius:7px;padding:32px}.paper-panel h2{font:400 30px/1.4 'Playfair Display',Georgia,serif;margin:0 0 14px}.paper-panel>p,.receipt>p{font-size:15px;line-height:1.85;color:var(--muted)}fieldset{min-width:0;border:0;padding:0;margin:25px 0 0}legend{font:400 24px/1.4 'Playfair Display',Georgia,serif;margin-bottom:20px}label{display:block;font-size:15px;line-height:1.7;margin:0 0 7px}label span{color:var(--muted);font-size:14px}input,select,textarea{display:block;width:100%;min-height:48px;border:1px solid #a9b698;border-radius:4px;background:var(--paper);padding:12px;font-size:16px;line-height:1.6;color:var(--ink);margin-bottom:20px}textarea{resize:vertical}.button{display:inline-flex;align-items:center;justify-content:center;min-height:50px;background:var(--olive);border:1px solid var(--olive);color:#fff;border-radius:4px;padding:12px 20px;font-size:15px;line-height:1.6}.button:hover{background:#35412a}.button.secondary{background:transparent;color:var(--olive)}.button.secondary:hover{background:#edf0e6}.help{font-size:14px;line-height:1.85;color:var(--muted)}.feedback{font-size:15px;line-height:1.85;overflow-wrap:anywhere}.feedback:empty{display:none}.notice{background:#e9eddf;border:1px solid #d6deca;border-radius:4px;padding:17px 20px;font-size:15px;line-height:1.8;margin:0 0 24px}.case-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.status-badge{display:inline-block;background:#e8eddf;border-radius:4px;padding:9px 12px;font-size:14px;line-height:1.6}.seller-response{border-block:1px solid var(--line);padding:24px 0;margin-block:26px}.seller-response h3,.receipt h3{font:400 25px/1.4 'Playfair Display',Georgia,serif;margin:0 0 16px}.seller-response p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.8}dl{font-size:14px;line-height:1.8}dl div{margin-bottom:12px}dt{color:var(--muted)}dd{margin:0;overflow-wrap:anywhere}.text-button{border:0;background:transparent;text-decoration:underline;text-underline-offset:4px;font-size:14px;color:var(--olive);padding:12px 0;margin:8px 20px 0 0;min-height:44px}.receipt{margin-top:26px;border-top:1px solid var(--line);padding-top:26px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.9 'DM Sans',sans-serif;background:var(--paper);border:1px solid var(--line);padding:18px;border-radius:4px}.portal-footer{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;line-height:1.85;color:var(--muted)}.portal-footer nav{display:flex;flex-wrap:wrap;gap:12px 24px}.portal-footer a{display:inline-flex;align-items:center;min-height:44px}#request-form{margin-bottom:14px}
+@media(max-width:580px){.portal-header{width:calc(100% - 36px);padding-block:22px;gap:14px;align-items:flex-start}.brand{font-size:22px}.back-link{font-size:13px}main{width:calc(100% - 32px);margin-block:34px}.paper-panel{padding:24px 18px}.page-intro>p:last-child{font-size:16px}.paper-panel h2{font-size:28px}.case-heading{flex-direction:column;gap:6px}.status-badge{margin-bottom:18px}.button{width:100%}.notice{padding:15px 17px}.portal-footer nav{flex-direction:column;gap:4px}pre{padding:15px}}
+@media print{.portal-header,.portal-footer,form,.button,.text-button,.notice,.help{display:none!important}main{width:100%;margin:0}.paper-panel{border:0;padding:0}#receipt{display:block!important}}
+
+
+
+========================================================================
+ARCHIVO: web/dist/returns.js
+========================================================================
+
+'use strict';
+const $=id=>document.getElementById(id);
+let fragment='',token='';
+function consumeFragment(){fragment=location.hash;if(fragment)history.replaceState(null,'',location.pathname+location.search);token=new URLSearchParams(fragment.slice(1)).get('token')||'';if(!/^[A-Za-z0-9_-]{43}$/.test(token))token='';}
+consumeFragment();
+const demo=new URLSearchParams(location.search).get('demo')==='1';
+let currentCase=null,busy=false,receiptText='',viewRequest=0;
+const statusLabels={none:'Sin solicitud',requested:'Solicitud registrada',reviewing:'En revisión',approved:'Devolución aprobada',received:'Libro recibido',closed:'Gestión cerrada',rejected:'Solicitud rechazada'};
+const kindLabels={withdrawal:'Desistimiento',damaged:'Libro dañado',wrong:'Libro equivocado',other:'Otra consulta'};
+const canRequest=()=>currentCase&&['none','closed','rejected'].includes(currentCase.status);
+function lock(value){busy=value;$('access-fields').disabled=value;$('request-fields').disabled=value;$('label-download').disabled=value;$('case-refresh').disabled=value;$('demo-approved').disabled=value;}
+function download(blob,name){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+async function api(path,{action,body}={}){
+ const headers={...(token?{'X-Return-Token':token}:{}),...(action?{'X-Return-Action':action}:{})};
+ if(body)headers['Content-Type']='application/json';
+ const response=await fetch(path,{method:action?'POST':'GET',headers,credentials:'omit',cache:'no-store',...(body?{body:JSON.stringify(body)}:{})});
+ let data;try{data=await response.json();}catch{throw new Error('No se ha podido cargar la información. Inténtalo de nuevo o escribe a Aleix.');}
+ if(!response.ok)throw new Error(data.error||'No se ha podido completar la solicitud. Inténtalo de nuevo o pide un enlace nuevo.');return data;
+}
+function render(value){
+ currentCase=value;$('access-panel').hidden=true;$('case-panel').hidden=false;$('case-order').textContent=value.orderId;$('case-status').textContent=statusLabels[value.status]||'En revisión';
+ $('case-reason').textContent=value.reason?'Tu solicitud: '+value.reason:'';
+ $('case-reply').textContent=value.reply||'';$('case-carrier').textContent=value.carrier||'Pendiente de indicar';$('case-code').textContent=value.code||'Pendiente de indicar';
+ $('seller-response').hidden=!(value.reply||value.carrier||value.code||value.label);$('label-information').hidden=!(value.carrier||value.code||value.label);
+ $('label-download').hidden=!value.label;$('label-help').textContent=value.label?(demo?'Archivo de demostración: no es válido para envíos.':'Sigue las indicaciones de Aleix antes de entregar el paquete. La etiqueta no implica un reembolso.'):'Todavía no hay una etiqueta disponible.';
+ $('request-form').hidden=!canRequest();
+ $('request-message').textContent=canRequest()?'':'La solicitud está registrada. Puedes actualizar el estado y consultar la respuesta de Aleix.';
+ if(value.submittedAt!=null&&value.status!=='none'&&Object.hasOwn(kindLabels,value.kind))showReceipt(value);
+}
+function showReceipt(value,kind=value.kind,reason=value.reason){
+ const timestamp=new Intl.DateTimeFormat('es-ES',{dateStyle:'long',timeStyle:'short'}).format(new Date(value.submittedAt??Date.now()));
+ receiptText=`${demo?'DEMOSTRACIÓN — SIN SOLICITUD REAL\n':''}Fumada XXL · Justificante de solicitud\nPedido: ${value.orderId}\nFecha de registro${value.submittedAt!=null?'':' en este navegador'}: ${timestamp}\nTipo: ${kindLabels[kind]}\nDetalles: ${reason||'Desistimiento sin motivo indicado'}\nEstado: ${statusLabels[value.status]}\n\nEsta solicitud no devuelve dinero. No se ha enviado un correo automático.\nContacto: theshoz@gmail.com`;
+ $('receipt-text').textContent=receiptText;$('receipt').hidden=false;
+}
+function reasonState(){const optional=$('return-kind').value==='withdrawal';$('return-reason').required=!optional;$('reason-caption').textContent=optional?'(opcional para desistimiento)':'(necesarios para revisar este caso)';}
+async function refresh(){if(busy||!currentCase)return;const version=viewRequest;lock(true);$('request-message').textContent='Actualizando…';try{const value=demo?currentCase:(await api('/api/returns/case')).case;if(version===viewRequest)render(value);}catch(error){if(version===viewRequest)$('request-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}}
+$('return-kind').addEventListener('change',reasonState);
+$('access-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(busy)return;const orderId=$('access-order').value.trim(),email=$('access-email').value.trim();if(!orderId||!email){$('access-message').textContent='Indica el número de pedido y el correo de compra.';(!orderId?$('access-order'):$('access-email')).focus();return;}
+ if(demo){$('access-message').textContent='Petición de acceso simulada. No se ha enviado ningún correo ni registrado datos.';return;}
+ const version=viewRequest;lock(true);$('access-message').textContent='Registrando petición…';try{await api('/api/returns/access',{action:'access',body:{orderId,email}});if(version===viewRequest)$('access-message').textContent='Si coincide con un pedido, el vendedor enviará el enlace al correo de compra. El envío no es automático; puedes escribir a Aleix si necesitas ayuda.';}catch(error){if(version===viewRequest)$('access-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}
+});
+$('request-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(busy||!canRequest())return;const kind=$('return-kind').value,reason=$('return-reason').value.trim();if(!Object.hasOwn(kindLabels,kind))return;
+ if(kind!=='withdrawal'&&!reason){$('request-message').textContent='Añade detalles para que Aleix pueda revisar el caso.';$('return-reason').focus();return;}
+ if(reason.length>1000){$('request-message').textContent='Los detalles pueden tener hasta 1000 caracteres.';$('return-reason').focus();return;}
+ const version=viewRequest;lock(true);$('request-message').textContent='Registrando solicitud…';try{
+  const value=demo?{...currentCase,status:'requested',kind,reason,version:currentCase.version+1}:(await api('/api/returns/case',{action:'request',body:{kind,reason,expectedVersion:currentCase.version}})).case;
+  if(version!==viewRequest)return;
+  render(value);showReceipt(value,kind,reason);$('request-message').textContent=demo?'Solicitud simulada. No se ha enviado al vendedor.':'Solicitud registrada. Descarga el justificante para conservarla.';$('receipt-title').focus();
+ }catch(error){if(version===viewRequest)$('request-message').textContent=error.message+' Los detalles siguen en el formulario. Puedes reintentarlo.';}finally{if(version===viewRequest)lock(false);}
+});
+$('case-refresh').addEventListener('click',refresh);
+$('receipt-download').addEventListener('click',()=>{if(receiptText)download(new Blob([receiptText],{type:'text/plain;charset=utf-8'}),'justificante-devolucion.txt');});
+$('label-download').addEventListener('click',async()=>{
+ if(busy||!currentCase?.label)return;const version=viewRequest;lock(true);$('label-message').textContent='Preparando descarga…';try{
+  if(demo){download(new Blob(['EJEMPLO NO VÁLIDO PARA ENVÍOS\nEsta demostración no es una etiqueta de transporte.'],{type:'text/plain;charset=utf-8'}),'etiqueta-ejemplo-no-valida.txt');}
+  else{const response=await fetch('/api/returns/label',{method:'POST',headers:{'X-Return-Token':token,'X-Return-Action':'download'},credentials:'omit',cache:'no-store'});if(!response.ok)throw new Error('No se ha podido descargar la etiqueta. Actualiza el estado o escribe a Aleix.');const blob=await response.blob();if(version!==viewRequest)return;const ext={'application/pdf':'pdf','image/png':'png','image/jpeg':'jpg'}[blob.type];if(!ext)throw new Error('El archivo no tiene un formato admitido. Escribe a Aleix.');download(blob,'etiqueta-devolucion.'+ext);}
+  $('label-message').textContent=demo?'Ejemplo descargado; no es válido para envíos.':'Etiqueta descargada.';
+ }catch(error){if(version===viewRequest)$('label-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}
+});
+$('demo-approved').addEventListener('click',()=>{if(!demo||busy)return;render({...currentCase,status:'approved',reply:'Ejemplo de respuesta: protege el libro y espera las indicaciones de Aleix antes de enviarlo.',carrier:'Transportista ficticio',code:'EJEMPLO SIN VALIDEZ',label:{type:'text/plain',size:90}});$('request-message').textContent='Estado aprobado simulado. No corresponde a una solicitud real.';});
+async function start(){
+ const version=++viewRequest;currentCase=null;receiptText='';$('case-panel').hidden=true;$('access-panel').hidden=false;$('page-message').hidden=true;
+ for(const id of ['case-order','case-reply','case-reason','case-code','case-carrier','receipt-text','access-message','request-message','label-message'])$(id).textContent='';
+ $('return-reason').value='';$('return-kind').value='withdrawal';
+ $('receipt').hidden=true;$('demo-note').hidden=!demo;$('demo-approved').hidden=!demo;reasonState();lock(false);
+ if(demo){token='';render({orderId:'DEMO-DEVOLUCION',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:0,paymentStatus:'paid'});return;}
+ if(!token){if(fragment){$('page-message').hidden=false;$('page-message').textContent='El enlace no es válido. Solicita un enlace nuevo o escribe a Aleix.';}return;}
+ lock(true);$('page-message').hidden=false;$('page-message').textContent='Consultando tu devolución…';try{const value=(await api('/api/returns/case')).case;if(version!==viewRequest)return;render(value);$('page-message').hidden=true;}catch(error){if(version===viewRequest)$('page-message').textContent=error.message+' Abre de nuevo el enlace del correo o solicita uno nuevo.';}finally{if(version===viewRequest)lock(false);}
+}
+window.addEventListener('hashchange',()=>{if(!location.hash)return;consumeFragment();return start();});
+start();
+
 
 
 ========================================================================
@@ -1814,6 +1984,36 @@ ALTER TABLE `orders` ADD `return_reason` text DEFAULT '';--> statement-breakpoin
 ALTER TABLE `orders` ADD `return_resolution` text DEFAULT '';--> statement-breakpoint
 ALTER TABLE `orders` ADD `return_updated_at` integer;--> statement-breakpoint
 ALTER TABLE `orders` ADD `management_version` integer DEFAULT 0 NOT NULL;
+
+
+========================================================================
+ARCHIVO: web/drizzle/0003_colossal_nehzno.sql
+========================================================================
+
+CREATE TABLE `return_access` (
+	`order_id` text PRIMARY KEY NOT NULL,
+	`token_hash` text NOT NULL,
+	`expires_at` integer NOT NULL,
+	FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `return_access_token_hash_unique` ON `return_access` (`token_hash`);--> statement-breakpoint
+CREATE TABLE `return_rate_limits` (
+	`key` text PRIMARY KEY NOT NULL,
+	`window_start` integer NOT NULL,
+	`count` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE INDEX `return_rate_window` ON `return_rate_limits` (`window_start`);--> statement-breakpoint
+ALTER TABLE `orders` ADD `portal_requested_at` integer;--> statement-breakpoint
+ALTER TABLE `orders` ADD `customer_reply` text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_kind` text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_code` text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_carrier` text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_label_key` text;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_label_type` text;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_label_size` integer;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_submitted_at` integer;
 
 
 ========================================================================
@@ -2740,6 +2940,573 @@ ARCHIVO: web/drizzle/meta/0002_snapshot.json
 
 
 ========================================================================
+ARCHIVO: web/drizzle/meta/0003_snapshot.json
+========================================================================
+
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "f59aac57-ade2-4d67-b191-6099e66ef676",
+  "prevId": "400217b6-75ed-4b8f-ba13-0853398b4a55",
+  "tables": {
+    "order_items": {
+      "name": "order_items",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "order_items_order_id_edition_pk": {
+          "columns": [
+            "order_id",
+            "edition"
+          ],
+          "name": "order_items_order_id_edition_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "item_edition": {
+          "name": "item_edition",
+          "value": "\"order_items\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "item_quantity": {
+          "name": "item_quantity",
+          "value": "\"order_items\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "item_unit_price": {
+          "name": "item_unit_price",
+          "value": "\"order_items\".\"unit_price\" >= 0"
+        }
+      }
+    },
+    "orders": {
+      "name": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_name": {
+          "name": "customer_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address1": {
+          "name": "address1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address2": {
+          "name": "address2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shipping": {
+          "name": "shipping",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total": {
+          "name": "total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fulfillment_status": {
+          "name": "fulfillment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shipped_at": {
+          "name": "shipped_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tracking": {
+          "name": "tracking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "carrier": {
+          "name": "carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "private_note": {
+          "name": "private_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "note_updated_at": {
+          "name": "note_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_status": {
+          "name": "return_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "return_reason": {
+          "name": "return_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_resolution": {
+          "name": "return_resolution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_updated_at": {
+          "name": "return_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "management_version": {
+          "name": "management_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "portal_requested_at": {
+          "name": "portal_requested_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "customer_reply": {
+          "name": "customer_reply",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_kind": {
+          "name": "return_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_code": {
+          "name": "return_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_carrier": {
+          "name": "return_carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_label_key": {
+          "name": "return_label_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_type": {
+          "name": "return_label_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_size": {
+          "name": "return_label_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_submitted_at": {
+          "name": "return_submitted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "orders_created": {
+          "name": "orders_created",
+          "columns": [
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_payment_fulfillment_created": {
+          "name": "orders_payment_fulfillment_created",
+          "columns": [
+            "payment_status",
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_fulfillment_created": {
+          "name": "orders_fulfillment_created",
+          "columns": [
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "order_edition": {
+          "name": "order_edition",
+          "value": "\"orders\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "order_quantity": {
+          "name": "order_quantity",
+          "value": "\"orders\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "order_payment": {
+          "name": "order_payment",
+          "value": "\"orders\".\"payment_status\" IN ('pending','paid','failed','refunded','partially_refunded')"
+        },
+        "order_fulfillment": {
+          "name": "order_fulfillment",
+          "value": "\"orders\".\"fulfillment_status\" IN ('pending','shipped')"
+        },
+        "order_total": {
+          "name": "order_total",
+          "value": "\"orders\".\"total\" = \"orders\".\"subtotal\" + \"orders\".\"shipping\" AND \"orders\".\"shipping\" >= 0 AND \"orders\".\"subtotal\" >= 0"
+        }
+      }
+    },
+    "admin_owner": {
+      "name": "admin_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "one_owner": {
+          "name": "one_owner",
+          "value": "\"admin_owner\".\"slot\" = 1"
+        }
+      }
+    },
+    "return_access": {
+      "name": "return_access",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_access_token_hash_unique": {
+          "name": "return_access_token_hash_unique",
+          "columns": [
+            "token_hash"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "return_access_order_id_orders_id_fk": {
+          "name": "return_access_order_id_orders_id_fk",
+          "tableFrom": "return_access",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "return_rate_limits": {
+      "name": "return_rate_limits",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "window_start": {
+          "name": "window_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_rate_window": {
+          "name": "return_rate_window",
+          "columns": [
+            "window_start"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+========================================================================
 ARCHIVO: web/drizzle/meta/_journal.json
 ========================================================================
 
@@ -2766,6 +3533,13 @@ ARCHIVO: web/drizzle/meta/_journal.json
       "version": "6",
       "when": 1790597047930,
       "tag": "0002_cute_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790599297160,
+      "tag": "0003_colossal_nehzno",
       "breakpoints": true
     }
   ]
@@ -3524,6 +4298,9 @@ async function walk(dir,prefix='') {
   }
 }
 await walk('dist');
+assets['@returns']=assets['/devoluciones.html'];
+if(!assets['@returns'])throw new Error('Customer returns portal missing');
+assets['@returns'].noIndex=true;
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
 const database=await readFile('worker/database.mjs','utf8');
 // Hash once at build time; unchanged public files can revalidate without downloading again.
@@ -3534,10 +4311,11 @@ for(const [key,asset] of Object.entries(assets)) {
 const originalCover=Object.keys(assets).find(key=>/^\/assets\/fumada-xxl-1536-[a-f0-9]{12}\.webp$/.test(key));
 if(!originalCover)throw new Error('Optimized cover missing');
 assets['/assets/fumada-xxl-aleix.png']={redirect:originalCover};
-const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .*database\.mjs';\s*/,'');
+const returns=(await readFile('worker/returns.mjs','utf8')).replace(/^import .* from ['"]\.\/database\.mjs['"];?\s*$/gm,'');
+const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .* from ['"]\.\/(?:database|returns)\.mjs['"];?\s*$/gm,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
-await writeFile('dist/server/index.js',`${database}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
+await writeFile('dist/server/index.js',`${database}\n${returns}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
 await cp('.openai/hosting.json','dist/.openai/hosting.json');
 console.log(`Built Worker with ${Object.keys(assets).length} preserved resources.`);
 
@@ -3632,25 +4410,28 @@ import vm from 'node:vm';
 const source=readFileSync('admin/app.js','utf8').replace(/\nload\(\);\s*$/,'\n');
 const order=id=>({id,created_at:1,customer_name:'Prueba',email:'fixture@example.invalid',recipient:'Prueba',address1:'Calle ficticia',postal_code:'00000',city:'Ciudad',country:'ES',edition:'paperback',quantity:1,subtotal:1500,shipping:700,total:2200,payment_status:'paid',fulfillment_status:'pending'});
 function harness(overrides={},responseUpdates={}){
- const elements=new Map();let resolveShip,resolveCopy,deferredCopy=false,failDetail=false;const requests=[],savedOrders=new Map();
- const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
+ const elements=new Map();let resolveShip,resolveCopy,resolvePortal,deferredPortal=false,deferredCopy=false,failDetail=false;const requests=[],savedOrders=new Map();
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},removeAttribute(name){delete this[name];},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
  const document={getElementById:element,activeElement:element('opener'),createElement:()=>({...element('node'),dataset:{}})};
- const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
+ const context=vm.createContext({document,Intl,URLSearchParams,console,location:{origin:'https://book.example'},window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
   requests.push({path,options});
   if(options.method==='POST'){
    if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
-   const id=path.split('/').at(-2),action=path.split('/').at(-1),body=JSON.parse(options.body),updated={...order(id),...overrides,...savedOrders.get(id),management_version:(body.expectedVersion||0)+1};
+   if(path.endsWith('/portal-link')&&deferredPortal)return new Promise(resolve=>{resolvePortal=resolve;});
+   const id=path.split('/').at(-2),action=path.split('/').at(-1),body=typeof options.body==='string'?JSON.parse(options.body):{expectedVersion:Number(options.headers['X-Order-Version'])},updated={...order(id),...overrides,...savedOrders.get(id),management_version:(body.expectedVersion||0)+1};
    if(action==='notes')updated.private_note=body.note;
    if(action==='tracking')Object.assign(updated,{carrier:body.carrier,tracking:body.tracking});
    if(action==='deliver')updated.delivered_at=123;
    if(action==='return')Object.assign(updated,{return_status:body.status,return_reason:body.reason,return_resolution:body.resolution});
-   Object.assign(updated,responseUpdates);savedOrders.set(id,updated);return new Response(JSON.stringify({order:updated}));
+   if(action==='portal-reply')Object.assign(updated,{customer_reply:body.reply,return_carrier:body.carrier,return_code:body.code});
+   if(action==='return-label')Object.assign(updated,{return_label_key:'private-object',return_label_type:options.body.type,return_label_size:options.body.size});
+   Object.assign(updated,responseUpdates);savedOrders.set(id,updated);return new Response(JSON.stringify({order:updated,...(action==='portal-link'?{path:'/devoluciones#token='+'a'.repeat(43),expiresAt:Date.now()+86400000}: {})}));
   }
-  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:4,pending:2,shipped:1,returns:1,incidents:2,delivered:0}}));
+  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:4,pending:2,shipped:1,returns:1,incidents:2,delivered:0,accessRequests:2}}));
   const id=path.split('/').pop();return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:{...order(id),...overrides,...savedOrders.get(id)}}),{status:failDetail?503:200});
  }});
  vm.runInContext(source,context);
- return {element,requests,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
+ return {element,requests,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferPortal(){deferredPortal=true;},completePortal(){resolvePortal(new Response(JSON.stringify({order:{...order('A'),management_version:1},path:'/devoluciones#token='+'b'.repeat(43),expiresAt:Date.now()+86400000})));},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
 }
 test('a delayed shipping error never changes another open order',async()=>{
  const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;
@@ -3723,6 +4504,29 @@ test('saving tracking preserves unsaved note and return drafts',async()=>{
 test('saving one section shows server changes to other fields that were not edited',async()=>{
  const ui=harness({fulfillment_status:'shipped',private_note:'Nota previa'},{private_note:'Nota actualizada en servidor'});await ui.open('P');
  ui.element('tracking-code').value='ABC';await submit(ui,'tracking-form');assert.equal(ui.element('private-note').value,'Nota actualizada en servidor');
+});
+test('buyer access link stays private, offers manual mail and clears on close',async()=>{
+ const ui=harness();await ui.open('A');await ui.element('portal-link-create').events.click();assert.match(ui.element('portal-url').value,/^https:\/\/book.example\/devoluciones#token=/);assert.match(ui.element('portal-mail').href,/^mailto:/);assert.match(decodeURIComponent(ui.element('portal-mail').href),/devoluciones#token=/);
+ ui.element('detail').close();assert.equal(ui.element('portal-url').value,'');assert.equal(ui.element('portal-mail').href,undefined);
+});
+test('delayed link generation never exposes token after same order reopened',async()=>{
+ const ui=harness();await ui.open('A');ui.deferPortal();const pending=ui.element('portal-link-create').events.click();ui.element('detail').close();await ui.open('A');ui.completePortal();await pending;assert.equal(ui.element('portal-url').value,'');assert.equal(ui.element('portal-link-output').hidden,true);
+});
+test('portal reply is separate from resolution and preserves private drafts',async()=>{
+ const ui=harness({return_status:'approved',return_resolution:'Resolución interna',management_version:9});await ui.open('A');assert.equal(ui.element('customer-reply').value,'');
+ ui.element('private-note').value='Nota sin guardar';ui.element('return-reason').value='Motivo sin guardar';ui.element('customer-reply').value='Puedes devolver el libro';ui.element('return-carrier').value='Correos';ui.element('return-code').value='Código visible';await submit(ui,'portal-reply-form');
+ assert.deepEqual(JSON.parse(ui.requests.find(r=>r.path.endsWith('/portal-reply')).options.body),{reply:'Puedes devolver el libro',carrier:'Correos',code:'Código visible',expectedVersion:9});assert.equal(ui.element('private-note').value,'Nota sin guardar');assert.equal(ui.element('return-reason').value,'Motivo sin guardar');assert.equal(ui.element('return-resolution').value,'Resolución interna');
+});
+test('access notification filters pending manual link requests',async()=>{
+ const ui=harness();await ui.load();assert.equal(ui.element('task-access-count').textContent,'2');await ui.element('task-access').events.click();assert.match(ui.requests.at(-1).path,/filter=access_requests/);
+});
+test('oversized or unsupported label never makes a mutation request',async()=>{
+ const ui=harness({return_status:'approved'});await ui.open('A');ui.element('return-label-file').files=[{type:'application/pdf',size:2097153}];await submit(ui,'return-label-form');assert.equal(ui.requests.filter(r=>r.options.method==='POST').length,0);
+ ui.element('return-label-file').files=[{type:'text/html',size:100}];await submit(ui,'return-label-form');assert.equal(ui.requests.filter(r=>r.options.method==='POST').length,0);
+});
+test('raw label upload sends bytes with version and preserves buyer reply draft',async()=>{
+ const ui=harness({return_status:'approved',management_version:12});await ui.open('A');const file={type:'application/pdf',size:2048};ui.element('return-label-file').files=[file];ui.element('customer-reply').value='Borrador visible';ui.element('private-note').value='Borrador privado';await submit(ui,'return-label-form');
+ const request=ui.requests.find(r=>r.path.endsWith('/return-label'));assert.equal(request.options.body,file);assert.equal(request.options.headers['X-Order-Version'],'12');assert.equal(request.options.headers['Content-Type'],'application/pdf');assert.equal(ui.element('customer-reply').value,'Borrador visible');assert.equal(ui.element('private-note').value,'Borrador privado');assert.match(ui.element('return-label-current').textContent,/Etiqueta disponible/);
 });
 
 
@@ -3993,6 +4797,250 @@ test('corrupt, oversized, future, or unavailable storage fails safely',()=>{
 
 
 ========================================================================
+ARCHIVO: web/tests/customer-returns-ui.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import vm from 'node:vm';
+const source=existsSync('dist/returns.js')?readFileSync('dist/returns.js','utf8'):'';
+function harness({demo=false,token='',failSave=false,caseOverrides={},deferFirst=false}={}){
+ assert.ok(source,'returns script exists');const elements=new Map(),calls=[],downloads=[],timeline=[];let resolveFirst;
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,events:{},children:[],addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},replaceChildren(...nodes){this.children=nodes;},focus(){},append(...nodes){this.children.push(...nodes);},remove(){},click(){downloads.push({name:this.download,href:this.href});},checkValidity(){return true;}});return elements.get(id);};
+ element('return-kind').value='withdrawal';const document={getElementById:element,body:element('body'),createElement:()=>element('download'+Math.random())};
+ let value={orderId:'PEDIDO-1',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:4,paymentStatus:'paid',...caseOverrides};
+ const listeners={},location={hash:token?'#token='+token:'',search:demo?'?demo=1':'',pathname:'/devoluciones'};
+ const context=vm.createContext({document,URLSearchParams,URL:{createObjectURL:()=> 'blob:local',revokeObjectURL(){}},Blob,Intl,Date,console,setTimeout,window:{addEventListener(name,fn){listeners[name]=fn;}},location,history:{replaceState(_s,_t,path){timeline.push('clear');this.path=path;location.hash='';}},fetch:async(path,options={})=>{
+  timeline.push('fetch');calls.push({path,options});if(path.endsWith('/access'))return new Response('{}',{status:202});
+  if(deferFirst&&calls.length===1)return new Promise(resolve=>{resolveFirst=resolve;});
+  if(options.method==='POST'&&path.endsWith('/case')){if(failSave)return new Response(JSON.stringify({error:'No se pudo guardar'}),{status:503});const body=JSON.parse(options.body);value={...value,status:'requested',kind:body.kind,reason:body.reason,version:5};}
+  return new Response(JSON.stringify({case:value}));
+ }});vm.runInContext(source.replace(/start\(\);\s*$/,'globalThis.started=start();'),context);
+ return {element,calls,downloads,timeline,ready:context.started,completeFirst(){resolveFirst(new Response(JSON.stringify({case:{...value,orderId:'PEDIDO-ANTERIOR'}})));},async openHash(value){location.hash='#token='+value;await listeners.hashchange?.();},get hash(){return location.hash;}};
+}
+const submit=(ui,id)=>ui.element(id).events.submit({preventDefault(){}});
+test('private token is removed before fetch and travels only in header',async()=>{
+ const token='a'.repeat(43),ui=harness({token});await ui.ready;assert.deepEqual(ui.timeline.slice(0,2),['clear','fetch']);assert.equal(ui.calls[0].path,'/api/returns/case');assert.equal(ui.calls[0].options.headers['X-Return-Token'],token);assert.equal(ui.element('case-order').textContent,'PEDIDO-1');
+ assert.doesNotMatch(source,/localStorage|sessionStorage/);
+});
+test('access result stays generic and never claims mail was sent',async()=>{
+ const ui=harness();await ui.ready;ui.element('access-order').value='PEDIDO-1';ui.element('access-email').value='buyer@example.invalid';await submit(ui,'access-form');
+ assert.equal(ui.calls[0].options.headers['X-Return-Action'],'access');assert.match(ui.element('access-message').textContent,/Si coincide/);assert.match(ui.element('access-message').textContent,/no es automático/i);assert.doesNotMatch(ui.element('access-message').textContent,/correo enviado|te hemos enviado/i);
+});
+test('request confirms only a successful save and creates a token-free receipt',async()=>{
+ const ui=harness({token:'b'.repeat(43)});await ui.ready;ui.element('return-kind').value='damaged';ui.element('return-reason').value='Cubierta dañada';await submit(ui,'request-form');
+ const save=ui.calls.find(call=>call.options.method==='POST');assert.deepEqual(JSON.parse(save.options.body),{kind:'damaged',reason:'Cubierta dañada',expectedVersion:4});assert.equal(ui.element('receipt').hidden,false);assert.match(ui.element('receipt-text').textContent,/Cubierta dañada/);assert.doesNotMatch(ui.element('receipt-text').textContent,/bbbbbbbb/);
+});
+test('failed saves preserve text and do not display receipt',async()=>{
+ const ui=harness({token:'c'.repeat(43),failSave:true});await ui.ready;ui.element('return-kind').value='other';ui.element('return-reason').value='Mi motivo';await submit(ui,'request-form');assert.equal(ui.element('return-reason').value,'Mi motivo');assert.equal(ui.element('receipt').hidden,true);assert.match(ui.element('request-message').textContent,/No se pudo guardar/);
+});
+test('demo request and approved example make no network calls',async()=>{
+ const ui=harness({demo:true});await ui.ready;await submit(ui,'request-form');await ui.element('demo-approved').events.click();await ui.element('label-download').events.click();assert.equal(ui.calls.length,0);assert.equal(ui.element('demo-note').hidden,false);assert.match(ui.downloads.at(-1).name,/ejemplo/);
+});
+test('reopening a saved request offers receipt with its original server date',async()=>{
+ const ui=harness({token:'d'.repeat(43),caseOverrides:{status:'requested',kind:'damaged',reason:'Cubierta dañada',submittedAt:86400000}});await ui.ready;assert.equal(ui.element('receipt').hidden,false);assert.match(ui.element('receipt-text').textContent,/1970/);assert.match(ui.element('receipt-text').textContent,/Cubierta dañada/);
+});
+test('hash-only navigation on an already open page loads new private access safely',async()=>{
+ const ui=harness();await ui.ready;assert.equal(ui.calls.length,0);await ui.openHash('e'.repeat(43));assert.equal(ui.hash,'');assert.deepEqual(ui.timeline.slice(-2),['clear','fetch']);assert.equal(ui.calls.at(-1).options.headers['X-Return-Token'],'e'.repeat(43));assert.equal(ui.element('case-panel').hidden,false);assert.equal(ui.element('access-panel').hidden,true);
+});
+test('a late response from an older fragment cannot replace the new case',async()=>{
+ const ui=harness({token:'f'.repeat(43),deferFirst:true});await ui.openHash('g'.repeat(43));assert.equal(ui.element('case-order').textContent,'PEDIDO-1');ui.completeFirst();await ui.ready;assert.equal(ui.element('case-order').textContent,'PEDIDO-1');assert.equal(ui.calls.at(-1).options.headers['X-Return-Token'],'g'.repeat(43));
+});
+
+
+
+========================================================================
+ARCHIVO: web/tests/customer-returns.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createWorker } from '../worker/index.mjs';
+import { localDatabase } from './database.mjs';
+
+const owner={'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'owner@example.test'};
+const pdf=Buffer.from('%PDF-1.7\nfixture\n%%EOF');
+function setup(t){
+  const DB=localDatabase();t.after(()=>DB.sqlite.close());const objects=new Map(),deleted=[];
+  const FILES={async put(key,bytes,options){objects.set(key,{bytes:Buffer.from(bytes),options});},async get(key){const item=objects.get(key);return item?{body:new Response(item.bytes).body,size:item.bytes.length,httpMetadata:item.options?.httpMetadata}:null;},async delete(key){deleted.push(key);objects.delete(key);}};
+  const env={DB,FILES,ADMIN_OWNER_EMAIL:'owner@example.test'};
+  const assets={'@returns':{type:'text/html',data:Buffer.from('RETURNS PAGE').toString('base64')}};
+  const app=createWorker(assets);
+  const call=(path,method='GET',headers={},body)=>app.fetch(new Request('https://book.example'+path,{method,headers,body}),env);
+  const seed=(id='one',payment='paid')=>DB.sqlite.prepare(`INSERT INTO orders(id,created_at,customer_name,email,recipient,address1,city,postal_code,country,edition,quantity,subtotal,shipping,total,payment_status,private_note) VALUES(?,10,'Cliente secreto','buyer@example.test','Recipiente secreto','Dirección secreta','Ciudad','00000','ES','paperback',1,1500,700,2200,?,'Nota secreta')`).run(id,payment);
+  const admin=(action,body,id='one',extra={})=>call('/api/admin/orders/'+id+'/'+action,'POST',{...owner,origin:'https://book.example','content-type':'application/json','x-admin-action':action,...extra},JSON.stringify(body));
+  const access=(body={orderId:'one',email:'buyer@example.test'},ip='192.0.2.1',extra={})=>call('/api/returns/access','POST',{origin:'https://book.example','content-type':'application/json','x-return-action':'access',...(ip?{'cf-connecting-ip':ip}:{}),...extra},JSON.stringify(body));
+  const issue=async(version=0,id='one')=>{const response=await admin('portal-link',{expectedVersion:version},id);assert.equal(response.status,200);const data=await response.json();return {...data,token:new URLSearchParams(data.path.split('#')[1]).get('token')};};
+  const read=(token,query='')=>call('/api/returns/case'+query,'GET',token?{'x-return-token':token}:{});
+  const requestCase=(token,body,extra={})=>call('/api/returns/case','POST',{origin:'https://book.example','content-type':'application/json','x-return-action':'request','x-return-token':token,...extra},JSON.stringify(body));
+  const upload=(version,bytes=pdf,type='application/pdf',id='one',extra={})=>call('/api/admin/orders/'+id+'/return-label','POST',{...owner,origin:'https://book.example','content-type':type,'x-admin-action':'return-label','x-order-version':String(version),...extra},bytes);
+  const download=(token,extra={})=>call('/api/returns/label','POST',{origin:'https://book.example','x-return-action':'download','x-return-token':token,...extra});
+  const row=(id='one')=>DB.sqlite.prepare('SELECT * FROM orders WHERE id=?').get(id);
+  return {DB,FILES,env,app,call,seed,admin,access,issue,read,requestCase,upload,download,row,objects,deleted};
+}
+
+test('access requests are uniform, persisted only on settled matching orders, and do not open a return',async t=>{
+  const {seed,access,row,call}=setup(t);seed();seed('unpaid','pending');
+  const matching=await access({orderId:' one ',email:' BUYER@EXAMPLE.TEST '});assert.equal(matching.status,202);const reply=await matching.text();
+  for(const body of [{orderId:'missing',email:'buyer@example.test'},{orderId:'one',email:'other@example.test'},{orderId:'unpaid',email:'buyer@example.test'}]){const response=await access(body);assert.equal(response.status,202);assert.equal(await response.text(),reply);}
+  assert.ok(row().portal_requested_at>0);assert.equal(row().return_status,'none');assert.equal(row().management_version,0);assert.equal(row().payment_status,'paid');assert.equal(row('unpaid').portal_requested_at,null);
+  const stamp=row().portal_requested_at;await access();assert.equal(row().portal_requested_at,stamp);
+  const list=await(await call('/api/admin/orders?filter=access_requests','GET',owner)).json();assert.equal(list.count,1);assert.equal(list.stats.accessRequests,1);assert.equal(list.orders[0].portal_requested_at,stamp);
+});
+
+test('access throttles hashed IP and order buckets without existence signals or raw IP persistence',async t=>{
+  const {seed,access,row,DB}=setup(t);seed();
+  for(let i=0;i<5;i++)assert.equal((await access({orderId:'missing_'+i,email:'other@example.test'})).status,202);
+  const before=DB.sqlite.prepare('SELECT count(*) AS n FROM return_rate_limits').get().n;
+  assert.equal((await access()).status,202);assert.equal(row().portal_requested_at,null);
+  for(let i=0;i<15;i++)await access({orderId:'abuse_'+i,email:'bad@example.test'});
+  assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM return_rate_limits').get().n,before);
+  const limits=DB.sqlite.prepare('SELECT * FROM return_rate_limits').all();assert.ok(limits.every(r=>/^[a-f0-9]{64}$/.test(r.key)));assert.ok(!JSON.stringify(limits).includes('192.0.2.1'));
+  DB.sqlite.exec('DELETE FROM return_rate_limits');
+  for(let i=0;i<5;i++)await access({orderId:'one',email:'bad@example.test'},'198.51.100.'+i);
+  await access(undefined,'203.0.113.1');assert.equal(row().portal_requested_at,null);
+  DB.sqlite.exec('DELETE FROM return_rate_limits');for(let i=0;i<5;i++)await access({orderId:'unknown_'+i,email:'bad@example.test'},null);
+  await access(undefined,null);assert.equal(row().portal_requested_at,null);
+  DB.sqlite.exec('UPDATE return_rate_limits SET window_start=1');await access(undefined,null);assert.ok(row().portal_requested_at>0);
+});
+
+test('portal link rotates 256-bit secrets stored only as hashes and expiry/revoke invalidate prior tokens',async t=>{
+  const {seed,access,issue,admin,read,row,DB}=setup(t);seed();await access();
+  const first=await issue();assert.match(first.token,/^[A-Za-z0-9_-]{43}$/);assert.equal(first.order.management_version,1);assert.equal(row().portal_requested_at,null);assert.ok(first.expiresAt>Date.now()+29*86400000);
+  const stored=DB.sqlite.prepare('SELECT * FROM return_access').get();assert.match(stored.token_hash,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(stored).includes(first.token));assert.equal((await read(first.token)).status,200);
+  assert.equal((await admin('portal-link',{expectedVersion:0})).status,409);assert.equal((await read(first.token)).status,200);
+  const second=await issue(1);assert.notEqual(second.token,first.token);assert.equal((await read(first.token)).status,401);assert.equal((await read(second.token)).status,200);
+  DB.sqlite.exec('UPDATE return_access SET expires_at=1');assert.equal((await read(second.token)).status,401);
+  const third=await issue(2);assert.equal((await admin('portal-revoke',{expectedVersion:3})).status,200);assert.equal((await read(third.token)).status,401);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM return_access').get().n,0);
+});
+
+test('customer case uses an explicit projection and requires header token rather than URL or identity',async t=>{
+  const {seed,issue,read,call}=setup(t);seed();const {token}=await issue();
+  const response=await read(token);assert.equal(response.status,200);const data=await response.json();
+  assert.deepEqual(Object.keys(data.case).sort(),['orderId','status','kind','reason','reply','carrier','code','label','version','paymentStatus','submittedAt'].sort());
+  assert.equal(data.case.orderId,'one');assert.equal(data.case.status,'none');assert.equal(data.case.paymentStatus,'paid');assert.equal(data.case.label,null);
+  const raw=JSON.stringify(data);for(const secret of ['buyer@example.test','Dirección secreta','Nota secreta','token_hash','return_label_key'])assert.ok(!raw.includes(secret));
+  assert.equal((await read(null,'?token='+token)).status,401);assert.equal((await call('/api/returns/case','GET',owner)).status,401);assert.equal((await read('A'.repeat(43))).status,401);
+  for(const key of ['cache-control','x-robots-tag','x-content-type-options','referrer-policy'])assert.ok(response.headers.has(key));assert.match(response.headers.get('cache-control'),/no-store/);
+});
+
+test('customer requests reopen only eligible states, preserve payment, and block obsolete versions',async t=>{
+  const {seed,issue,requestCase,row,DB}=setup(t);seed();const {token}=await issue();
+  assert.equal((await requestCase(token,{kind:'withdrawal',reason:'',expectedVersion:1})).status,200);
+  const submitted=row().return_submitted_at;assert.ok(submitted>Date.now()-10000);
+  assert.equal(row().return_reason,'Desistimiento sin motivo indicado.');assert.equal(row().return_kind,'withdrawal');assert.equal(row().return_status,'requested');assert.equal(row().payment_status,'paid');assert.equal(row().total,2200);assert.equal(row().management_version,2);
+  assert.equal((await requestCase(token,{kind:'damaged',reason:'Roto',expectedVersion:1})).status,409);
+  assert.equal((await requestCase(token,{kind:'damaged',reason:'Roto',expectedVersion:2})).status,409);
+  DB.sqlite.exec("UPDATE orders SET return_status='rejected',customer_reply='Respuesta antigua',return_code='ANTIGUO',return_carrier='Antiguo',return_label_key='old' WHERE id='one'");
+  assert.equal((await requestCase(token,{kind:'damaged',reason:'Tapa dañada\nAdjunto por correo',expectedVersion:2})).status,200);
+  assert.ok(row().return_submitted_at>=submitted);
+  assert.equal(row().customer_reply,'');assert.equal(row().return_code,'');assert.equal(row().return_carrier,'');assert.equal(row().return_label_key,null);
+});
+
+test('public writes enforce CSRF, bounded validation and generic database failures',async t=>{
+  const {seed,issue,requestCase,access,env,row,download}=setup(t);seed();const {token}=await issue();
+  assert.equal((await access(undefined,undefined,{origin:'https://evil.example'})).status,403);
+  assert.equal((await access({orderId:'../one',email:'buyer@example.test'})).status,400);
+  assert.equal((await access({orderId:'one',email:'bad'})).status,400);
+  assert.equal((await access({orderId:'one',email:'x'.repeat(4096)})).status,413);
+  const valid={kind:'damaged',reason:'Tapa dañada',expectedVersion:1};
+  for(const headers of [{origin:'https://evil.example'},{'x-return-action':'access'},{'content-type':'text/plain'}])assert.equal((await requestCase(token,valid,headers)).status,403);
+  for(const body of [{...valid,reason:''},{...valid,reason:'x'.repeat(1001)},{...valid,reason:'bad\u0000'},{...valid,kind:'free-refund'},{...valid,expectedVersion:'1'}])assert.equal((await requestCase(token,body)).status,400);
+  assert.equal((await download(token,{origin:'https://evil.example'})).status,403);assert.equal(row().return_status,'none');
+  env.DB.prepare=()=>{throw new Error('outage');};const unavailable=await access();assert.equal(unavailable.status,202);assert.ok(!(await unavailable.text()).includes('outage'));
+});
+
+test('all admin portal and label operations retain owner protection and CAS versions',async t=>{
+  const {seed,admin,upload,row}=setup(t);seed();
+  for(const action of ['portal-link','portal-revoke','portal-reply','return-label-remove']){
+    const body={expectedVersion:0,reply:'Respuesta',code:'',carrier:''};
+    assert.equal((await admin(action,body,'one',{'oai-authenticated-user-id':''})).status,401);
+    assert.equal((await admin(action,body,'one',{'oai-authenticated-user-id':'visitor','oai-authenticated-user-email':'visitor@example.test'})).status,403);
+    assert.equal((await admin(action,body,'one',{origin:'https://evil.example'})).status,403);
+    assert.equal((await admin(action,body,'one',{'x-admin-action':'wrong'})).status,403);
+    assert.equal((await admin(action,{...body,expectedVersion:'0'})).status,400);
+  }
+  assert.equal((await upload(0,pdf,'application/pdf','one',{'oai-authenticated-user-id':''})).status,401);
+  assert.equal((await upload(0,pdf,'application/pdf','one',{origin:'https://evil.example'})).status,403);
+  assert.equal(row().management_version,0);
+});
+
+test('owner reply is customer-visible without exposing private notes or changing payment',async t=>{
+  const {seed,issue,admin,read,row,DB}=setup(t);seed();const {token}=await issue();
+  DB.sqlite.exec('UPDATE orders SET return_submitted_at=12345');
+  assert.equal((await admin('portal-reply',{reply:'Consulta recibida.\nLa revisaremos.',code:'',carrier:'',expectedVersion:1})).status,200);
+  assert.equal((await admin('portal-reply',{reply:'Viejo',code:'',carrier:'',expectedVersion:1})).status,409);
+  assert.equal((await admin('portal-reply',{reply:'x'.repeat(2001),code:'',carrier:'',expectedVersion:2})).status,400);
+  assert.equal((await admin('portal-reply',{reply:'x',code:'RET-1',carrier:'Correos',expectedVersion:2})).status,409);
+  DB.sqlite.exec("UPDATE orders SET return_status='approved' WHERE id='one'");
+  assert.equal((await admin('portal-reply',{reply:'Devuelve el libro con esta referencia.',code:' RET-1 ',carrier:' Correos ',expectedVersion:2})).status,200);
+  const data=await(await read(token)).json();assert.equal(data.case.reply,'Devuelve el libro con esta referencia.');assert.equal(data.case.code,'RET-1');assert.equal(data.case.carrier,'Correos');assert.equal(data.case.version,3);assert.equal(data.case.submittedAt,12345);assert.equal(row().return_submitted_at,12345);assert.equal(row().payment_status,'paid');assert.equal(row().private_note,'Nota secreta');
+});
+
+test('private label verifies magic and size before storage, then streams an authenticated attachment',async t=>{
+  const {seed,issue,upload,download,call,DB,row,objects}=setup(t);seed();const {token}=await issue();
+  assert.equal((await upload(1)).status,409);DB.sqlite.exec("UPDATE orders SET return_status='approved' WHERE id='one'");
+  assert.equal((await upload(1,Buffer.from('<script>bad</script>'))).status,400);
+  assert.equal((await upload(1,pdf,'image/png')).status,400);
+  assert.equal((await upload(1,pdf,'image/svg+xml')).status,400);
+  assert.equal((await upload(1,Buffer.alloc(2*1024*1024+1))).status,413);assert.equal(objects.size,0);
+  const saved=await upload(1);assert.equal(saved.status,200);assert.equal((await saved.json()).order.management_version,2);assert.equal(row().return_label_type,'application/pdf');assert.equal(row().return_label_size,pdf.length);assert.match(row().return_label_key,/^return-labels\/[A-Za-z0-9_-]{43}$/);
+  assert.equal((await call('/api/returns/label','GET',{'x-return-token':token})).status,404);assert.equal((await download('B'.repeat(43))).status,401);
+  const response=await download(token);assert.equal(response.status,200);assert.deepEqual(Buffer.from(await response.arrayBuffer()),pdf);assert.match(response.headers.get('content-disposition'),/^attachment;/);assert.match(response.headers.get('content-security-policy'),/sandbox/);assert.match(response.headers.get('cache-control'),/no-store/);assert.equal(response.headers.get('referrer-policy'),'no-referrer');
+});
+
+test('replacement and removal clean old labels, while a losing upload deletes only its own new object',async t=>{
+  const {seed,issue,upload,admin,DB,row,objects,deleted,FILES}=setup(t);seed();await issue();DB.sqlite.exec("UPDATE orders SET return_status='approved' WHERE id='one'");
+  assert.equal((await upload(1)).status,200);const originalKey=row().return_label_key;
+  assert.equal((await upload(2,Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]),'image/png')).status,200);assert.ok(deleted.includes(originalKey));assert.equal(objects.size,1);const currentKey=row().return_label_key;
+  const put=FILES.put;FILES.put=async(...args)=>{await put(...args);DB.sqlite.exec('UPDATE orders SET management_version=management_version+1');};
+  assert.equal((await upload(3)).status,409);assert.equal(row().return_label_key,currentKey);assert.ok(objects.has(currentKey));assert.equal(objects.size,1);
+  assert.equal((await admin('return-label-remove',{expectedVersion:3})).status,409);
+  assert.equal((await admin('return-label-remove',{expectedVersion:4})).status,200);assert.equal(row().return_label_key,null);assert.equal(objects.size,0);
+});
+
+test('cleanup failure does not misreport a committed label or reopened request; storage failure commits nothing',async t=>{
+  const {seed,issue,upload,requestCase,FILES,DB,row,objects}=setup(t);seed();const {token}=await issue();DB.sqlite.exec("UPDATE orders SET return_status='approved' WHERE id='one'");
+  assert.equal((await upload(1)).status,200);FILES.delete=async()=>{throw new Error('cleanup outage');};
+  assert.equal((await upload(2)).status,200);assert.equal(row().management_version,3);
+  DB.sqlite.exec("UPDATE orders SET return_status='closed' WHERE id='one'");
+  assert.equal((await requestCase(token,{kind:'other',reason:'Consulta nueva',expectedVersion:3})).status,200);assert.equal(row().return_label_key,null);assert.equal(row().return_status,'requested');
+  DB.sqlite.exec("UPDATE orders SET return_status='approved' WHERE id='one'");FILES.put=async()=>{throw new Error('put outage');};
+  const before=row().management_version;assert.equal((await upload(before)).status,503);assert.equal(row().management_version,before);assert.equal(row().return_label_key,null);assert.ok(objects.size>0);
+});
+
+test('return portal HTML is served privately with strict policy for anonymous GET and HEAD',async t=>{
+  const {call}=setup(t);
+  for(const path of ['/devoluciones','/devoluciones/','/devoluciones.html'])for(const method of ['GET','HEAD']){
+    const response=await call(path,method);assert.equal(response.status,200);assert.match(response.headers.get('cache-control'),/no-store/);assert.match(response.headers.get('x-robots-tag'),/noindex/);assert.match(response.headers.get('content-security-policy'),/script-src 'self'/);assert.equal(await response.text(),method==='HEAD'?'':'RETURNS PAGE');
+  }
+});
+
+test('owner reopening clears previous customer instructions and label only after a winning update',async t=>{
+  const {seed,issue,admin,upload,DB,row,objects,deleted,FILES,read}=setup(t);seed();const {token}=await issue();
+  const change=(status,expectedVersion)=>admin('return',{status,reason:'Revisar el libro',resolution:status==='closed'?'Caso resuelto':'',expectedVersion});
+  assert.equal((await change('requested',1)).status,200);
+  assert.equal((await change('approved',2)).status,200);
+  assert.equal((await admin('portal-reply',{reply:'Respuesta antigua',code:'OLD',carrier:'Correos',expectedVersion:3})).status,200);
+  assert.equal((await upload(4)).status,200);const label=row().return_label_key;
+  DB.sqlite.exec("UPDATE orders SET return_kind='damaged',return_submitted_at=12345");
+  assert.equal((await change('closed',5)).status,200);
+  assert.equal((await change('requested',5)).status,409);assert.equal(row().return_label_key,label);assert.ok(objects.has(label));assert.ok(!deleted.includes(label));
+  assert.equal((await change('requested',6)).status,200);
+  assert.equal(row().customer_reply,'');assert.equal(row().return_code,'');assert.equal(row().return_carrier,'');assert.equal(row().return_kind,'');assert.equal(row().return_label_key,null);assert.equal(row().return_label_type,null);assert.equal(row().return_label_size,null);assert.ok(row().return_submitted_at>12345);assert.ok(deleted.includes(label));assert.equal(row().payment_status,'paid');
+  assert.equal((await admin('portal-reply',{reply:'Nueva respuesta',code:'',carrier:'',expectedVersion:7})).status,200);
+  const submitted=row().return_submitted_at;
+  assert.equal((await change('requested',8)).status,200);assert.equal(row().customer_reply,'Nueva respuesta');assert.equal(row().return_submitted_at,submitted);
+  assert.equal((await change('approved',9)).status,200);assert.equal((await(await read(token)).json()).case.label,null);
+  assert.equal((await upload(10)).status,200);
+  assert.equal((await change('closed',11)).status,200);FILES.delete=async()=>{throw new Error('cleanup outage');};
+  assert.equal((await change('requested',12)).status,200);assert.equal(row().return_label_key,null);assert.equal(row().management_version,13);
+});
+
+
+
+========================================================================
 ARCHIVO: web/tests/database.mjs
 ========================================================================
 
@@ -4136,7 +5184,7 @@ test('lists expose management fields and count delivery and active returns acros
   seed('prepare');seed('hold');seed('sent','paid','shipped');seed('received','paid','shipped');seed('failed','failed');seed('refund','refunded');seed('partial','partially_refunded');
   DB.sqlite.exec("UPDATE orders SET return_status='requested' WHERE id='hold'; UPDATE orders SET delivered_at=10 WHERE id='received'");
   const list=async(filter='all',q='')=>(await(await request('/api/admin/orders?'+new URLSearchParams({filter,q}))).json());
-  const all=await list();assert.deepEqual(all.stats,{total:7,pending:1,shipped:2,incidents:3,returns:1,delivered:1});
+  const all=await list();assert.deepEqual(all.stats,{total:7,pending:1,shipped:2,incidents:3,returns:1,delivered:1,accessRequests:0});
   assert.equal((await list('pending')).count,1);assert.equal((await list('returns')).count,1);assert.equal((await list('delivered')).count,1);assert.equal((await list('shipped')).count,2);assert.equal((await list('incidents')).count,4);assert.equal((await list('attention')).count,3);
   assert.equal((await list('returns','not-present')).count,0);
   const row=all.orders.find(o=>o.id==='hold');assert.equal(row.return_status,'requested');assert.equal(row.management_version,0);assert.ok(Object.hasOwn(row,'carrier'));assert.ok(Object.hasOwn(row,'tracking'));assert.ok(Object.hasOwn(row,'delivered_at'));assert.ok(Array.isArray(row.items));assert.equal(row.private_note,undefined);
@@ -4315,14 +5363,14 @@ export async function listOrders(env, url) {
   const filter = url.searchParams.get('filter') || 'all';
   const page = Math.max(1, Math.min(1000000, Number.parseInt(url.searchParams.get('page'),10) || 1));
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
-  const filters = { all:'1=1', pending:pendingSql, shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:`(payment_status IN ('failed','refunded','partially_refunded') OR ${activeReturnSql})`, attention:`(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql})`, returns:activeReturnSql, delivered:"delivered_at IS NOT NULL" };
+  const filters = { all:'1=1', pending:pendingSql, shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:`(payment_status IN ('failed','refunded','partially_refunded') OR ${activeReturnSql})`, attention:`(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql})`, returns:activeReturnSql, delivered:"delivered_at IS NOT NULL", access_requests:"portal_requested_at IS NOT NULL" };
   if (!Object.hasOwn(filters,filter)) return null;
   const matches = query ? ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ') : '';
   const where = matches ? `${filters[filter]} AND (${matches})` : filters[filter];
   const params = query ? [query,query,query] : [];
   const statements = [
-    db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
-    db.prepare(`SELECT count(*) AS total, coalesce(sum(${pendingSql}),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped, coalesce(sum(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql}),0) AS incidents, coalesce(sum(${activeReturnSql}),0) AS returns, coalesce(sum(delivered_at IS NOT NULL),0) AS delivered FROM orders`),
+    db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version,portal_requested_at FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
+    db.prepare(`SELECT count(*) AS total, coalesce(sum(${pendingSql}),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped, coalesce(sum(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql}),0) AS incidents, coalesce(sum(${activeReturnSql}),0) AS returns, coalesce(sum(delivered_at IS NOT NULL),0) AS delivered, coalesce(sum(portal_requested_at IS NOT NULL),0) AS accessRequests FROM orders`),
   ];
   // The unfiltered list already gets its total from statistics in this same batch.
   if(query||filter!=='all')statements.push(db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params));
@@ -4372,8 +5420,20 @@ const returnTransitions = {
   approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested'],
 };
 export async function updateReturn(env,id,{status,reason,resolution,expectedVersion}) {
+  const db=database(env);
+  const previous=status==='requested'?await db.prepare('SELECT return_status,return_label_key FROM orders WHERE id=? AND management_version=?').bind(id,expectedVersion).first():null;
+  if(status==='requested'&&!previous)return null;
+  const reopening=status==='requested'&&previous.return_status!=='requested';
   const from=Object.keys(returnTransitions).filter(previous=>previous===status||returnTransitions[previous].includes(status));
-  return database(env).prepare(`UPDATE orders SET return_status = ?, return_reason = ?, return_resolution = ?, return_updated_at = ?, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND payment_status IN ('paid','refunded','partially_refunded') AND return_status IN (${from.map(()=>'?').join(',')}) RETURNING id`).bind(status,reason,resolution,Date.now(),id,expectedVersion,...from).first();
+  const now=Date.now(),values=[status,reason,resolution,now];
+  const reset=reopening?", customer_reply='',return_kind='',return_code='',return_carrier='',return_label_key=NULL,return_label_type=NULL,return_label_size=NULL,return_submitted_at=?":'';
+  if(reopening)values.push(now);
+  values.push(id,expectedVersion,...from);
+  const changed=await db.prepare(`UPDATE orders SET return_status = ?, return_reason = ?, return_resolution = ?, return_updated_at = ?${reset}, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND payment_status IN ('paid','refunded','partially_refunded') AND return_status IN (${from.map(()=>'?').join(',')}) RETURNING id`).bind(...values).first();
+  if(changed&&reopening&&previous.return_label_key&&env.FILES){
+    try{await env.FILES.delete(previous.return_label_key);}catch{/* Optional cleanup cannot turn a committed reopening into a reported failure. */}
+  }
+  return changed;
 }
 
 
@@ -4383,6 +5443,7 @@ ARCHIVO: web/worker/index.mjs
 ========================================================================
 
 import { authorizeOwner, listOrders, getOrder, shipOrder, updateNote, updateTracking, deliverOrder, updateReturn } from './database.mjs';
+import { handlePublicReturns, handleAdminReturns } from './returns.mjs';
 
 const privateHeaders = {'Cache-Control':'private, no-store, max-age=0','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:{...privateHeaders,'Content-Type':'application/json; charset=utf-8'}});
@@ -4423,6 +5484,11 @@ export function createWorker(assets) {
     const api = p.startsWith('/api/admin/');
     const adminPage = p === '/admin' || p === '/admin/';
     try {
+      if(p.startsWith('/api/returns/')||p==='/api/returns')return await handlePublicReturns(request,env);
+      if(p==='/devoluciones'||p==='/devoluciones/'||p==='/devoluciones.html'){
+        if(!['GET','HEAD'].includes(request.method))return json({error:'Método no permitido.'},405);
+        return assetResponse(assets['@returns'],request,true);
+      }
       if (adminPage || api) {
         const auth = await authorizeOwner(request,env);
         if (auth !== 200) {
@@ -4435,6 +5501,8 @@ export function createWorker(assets) {
             const data=await listOrders(env,url);
             return data ? json(data) : json({error:'Filtro no válido.'},400);
           }
+          const returnMatch=/^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})\/(portal-link|portal-revoke|portal-reply|return-label|return-label-remove)$/.exec(p);
+          if(returnMatch)return await handleAdminReturns(request,env,returnMatch[1],returnMatch[2]);
           const match = /^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})(?:\/(ship|notes|tracking|deliver|return))?$/.exec(p);
           if (match && request.method === 'GET' && !match[2]) {
             const order=await getOrder(env,match[1]);
@@ -4485,6 +5553,205 @@ function assetResponse(asset,request,isPrivate,status=200) {
   if(status===404){headers['Cache-Control']='no-store';headers['X-Robots-Tag']='noindex, nofollow';}
   if(isPrivate) headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";
   return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.data),c=>c.charCodeAt(0)),{status,headers});
+}
+
+
+
+========================================================================
+ARCHIVO: web/worker/returns.mjs
+========================================================================
+
+import { database, getOrder } from './database.mjs';
+
+const returnPrivateHeaders={'Cache-Control':'private, no-store, max-age=0','Vary':'X-Return-Token, Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
+const returnJson=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{...returnPrivateHeaders,'Content-Type':'application/json; charset=utf-8'}});
+const returnConflict=()=>returnJson({error:'El pedido ha cambiado o esta acción no está permitida. Actualiza la información.'},409);
+const returnInvalid=()=>returnJson({error:'Los datos no son válidos.'},400);
+const returnUnavailable=()=>returnJson({error:'No se puede completar la operación ahora. Vuelve a intentarlo.'},503);
+const returnUnauthorized=()=>returnJson({error:'El enlace no está disponible. Solicita un nuevo acceso a la tienda.'},401);
+const returnSettledSql="payment_status IN ('paid','refunded','partially_refunded')";
+const returnLabelStatesSql="return_status IN ('approved','received','closed')";
+const returnVersion=n=>Number.isSafeInteger(n)&&n>=0;
+const returnText=(value,max,multiline=false)=>typeof value==='string'&&value.length<=max&&!(multiline?/[\x00-\x09\x0b-\x1f\x7f]/:/[\x00-\x1f\x7f]/).test(value);
+const returnSameOrigin=(request,action,admin=false)=>request.headers.get('origin')===new URL(request.url).origin&&request.headers.get(admin?'x-admin-action':'x-return-action')===action;
+const returnIsJson=request=>/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||'');
+const returnAccessAcknowledgement=()=>returnJson({ok:true,message:'Si los datos coinciden, la tienda revisará la solicitud y podrá facilitarte un enlace de acceso. No se ha enviado un correo automáticamente.'},202);
+const returnLabelLimit=2*1024*1024;
+
+async function returnReadBytes(request,limit){
+  if(Number(request.headers.get('content-length'))>limit)return {error:returnJson({error:'Solicitud demasiado grande.'},413)};
+  const reader=request.body?.getReader();let size=0;const chunks=[];
+  if(reader){try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>limit){await reader.cancel();return {error:returnJson({error:'Solicitud demasiado grande.'},413)};}chunks.push(value);}}finally{reader.releaseLock();}}
+  const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}return {bytes};
+}
+async function returnReadJson(request,limit=8192){
+  if(!returnIsJson(request))return {error:returnJson({error:'Solicitud no permitida.'},403)};
+  const result=await returnReadBytes(request,limit);if(result.error)return result;
+  let body;try{body=JSON.parse(new TextDecoder().decode(result.bytes));}catch{return {error:returnInvalid()};}
+  if(!body||typeof body!=='object'||Array.isArray(body))return {error:returnInvalid()};return {body};
+}
+async function returnDigest(value){
+  const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)));
+  return Array.from(digest,b=>b.toString(16).padStart(2,'0')).join('');
+}
+function returnSecret(){
+  const bytes=crypto.getRandomValues(new Uint8Array(32));
+  return btoa(String.fromCharCode(...bytes)).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
+}
+async function returnCleanup(env,key){
+  if(!key||!env.FILES)return;
+  try{await env.FILES.delete(key);}catch{/* A committed database change must not be reported as failed by optional cleanup. */}
+}
+function returnBatchSucceeded(results){if(results.some(r=>!r.success))throw new Error('Return storage unavailable');return results;}
+
+async function returnRateAllowed(db,request,orderId){
+  const now=Date.now(),start=now-15*60*1000;
+  // Cloudflare overwrites this header at the ingress. No raw IP or order ID is persisted in quotas.
+  const ipKey=await returnDigest('ip:'+(request.headers.get('cf-connecting-ip')||'unknown'));
+  const rate=key=>db.prepare('INSERT INTO return_rate_limits (key,window_start,count) VALUES (?, ?, 1) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN window_start <= ? THEN 1 ELSE count + 1 END, window_start=CASE WHEN window_start <= ? THEN ? ELSE window_start END RETURNING count').bind(key,now,start,start,now);
+  const results=returnBatchSucceeded(await db.batch([
+    db.prepare('DELETE FROM return_rate_limits WHERE key IN (SELECT key FROM return_rate_limits WHERE window_start < ? LIMIT 20)').bind(start),
+    rate(ipKey),
+  ]));
+  // A denied IP cannot grow the table by submitting arbitrary new order IDs.
+  if(results[1].results[0].count>5)return false;
+  const orderQuota=await rate(await returnDigest('order:'+orderId)).first();
+  return orderQuota.count<=5;
+}
+async function returnRequestAccess(request,env){
+  if(request.method!=='POST')return returnJson({error:'Ruta o método no disponible.'},404);
+  if(!returnSameOrigin(request,'access'))return returnJson({error:'Solicitud no permitida.'},403);
+  const parsed=await returnReadJson(request,4096);if(parsed.error)return parsed.error;
+  const {orderId,email}=parsed.body;
+  if(!returnText(orderId,200)||!returnText(email,254))return returnInvalid();
+  const id=orderId.trim(),normalizedEmail=email.trim().toLowerCase();
+  if(!/^[a-zA-Z0-9_-]{1,200}$/.test(id)||!/^\S+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail))return returnInvalid();
+  // Valid inputs always receive exactly the same acknowledgement, including quota and storage failures.
+  try{
+    const db=database(env);
+    if(await returnRateAllowed(db,request,id))await db.prepare(`UPDATE orders SET portal_requested_at=coalesce(portal_requested_at,?) WHERE id=? AND lower(trim(email))=? AND ${returnSettledSql}`).bind(Date.now(),id,normalizedEmail).run();
+  }catch{/* No existence, quota or database details are disclosed by the public access request. */}
+  return returnAccessAcknowledgement();
+}
+async function returnTokenCase(request,env){
+  const token=request.headers.get('x-return-token')||'';
+  if(!/^[A-Za-z0-9_-]{43}$/.test(token))return null;
+  const tokenHash=await returnDigest(token);
+  const row=await database(env).prepare(`SELECT o.id,o.return_status,o.return_kind,o.return_reason,o.customer_reply,o.return_carrier,o.return_code,o.return_label_key,o.return_label_type,o.return_label_size,o.management_version,o.payment_status,o.return_submitted_at FROM orders o JOIN return_access a ON a.order_id=o.id WHERE a.token_hash=? AND a.expires_at>? AND o.${returnSettledSql}`).bind(tokenHash,Date.now()).first();
+  return row?{row,tokenHash}:null;
+}
+function returnCaseProjection(row){
+  const showLabel=['approved','received','closed'].includes(row.return_status)&&row.return_label_key;
+  return {orderId:row.id,status:row.return_status,kind:row.return_kind||'',reason:row.return_reason||'',reply:row.customer_reply||'',carrier:row.return_carrier||'',code:row.return_code||'',label:showLabel?{type:row.return_label_type,size:row.return_label_size}:null,version:row.management_version,paymentStatus:row.payment_status,submittedAt:row.return_submitted_at};
+}
+async function returnCustomerRequest(request,env,authenticated){
+  if(!returnSameOrigin(request,'request'))return returnJson({error:'Solicitud no permitida.'},403);
+  const parsed=await returnReadJson(request);if(parsed.error)return parsed.error;
+  const {kind,reason='',expectedVersion}=parsed.body;
+  if(!['withdrawal','damaged','wrong','other'].includes(kind)||!returnText(reason,1000,true)||!returnVersion(expectedVersion)||kind!=='withdrawal'&&!reason.trim())return returnInvalid();
+  const {row,tokenHash}=authenticated;
+  const submittedAt=Date.now();
+  const changed=await database(env).prepare(`UPDATE orders SET return_status='requested',return_kind=?,return_reason=?,return_resolution='',customer_reply='',return_code='',return_carrier='',return_label_key=NULL,return_label_type=NULL,return_label_size=NULL,return_updated_at=?,return_submitted_at=?,management_version=management_version+1 WHERE id=? AND management_version=? AND ${returnSettledSql} AND return_status IN ('none','closed','rejected') AND EXISTS(SELECT 1 FROM return_access WHERE order_id=orders.id AND token_hash=? AND expires_at>?) RETURNING id`).bind(kind,reason.trim()||'Desistimiento sin motivo indicado.',submittedAt,submittedAt,row.id,expectedVersion,tokenHash,Date.now()).first();
+  if(!changed)return returnConflict();
+  await returnCleanup(env,row.return_label_key);
+  const updated=await returnTokenCase(request,env);return updated?returnJson({ok:true,case:returnCaseProjection(updated.row)}):returnUnauthorized();
+}
+async function returnCustomerLabel(request,env,authenticated){
+  if(!returnSameOrigin(request,'download'))return returnJson({error:'Solicitud no permitida.'},403);
+  const row=authenticated.row;
+  if(!['approved','received','closed'].includes(row.return_status)||!row.return_label_key)return returnJson({error:'La etiqueta no está disponible.'},404);
+  if(!env.FILES)return returnUnavailable();
+  const object=await env.FILES.get(row.return_label_key);if(!object)return returnJson({error:'La etiqueta no está disponible.'},404);
+  const ext={'application/pdf':'pdf','image/png':'png','image/jpeg':'jpg'}[row.return_label_type];
+  if(!ext||object.size>returnLabelLimit||object.size!==row.return_label_size)return returnUnavailable();
+  return new Response(object.body,{headers:{...returnPrivateHeaders,'Content-Type':row.return_label_type,'Content-Length':String(object.size),'Content-Disposition':`attachment; filename="etiqueta-devolucion.${ext}"`,'Content-Security-Policy':"sandbox; default-src 'none'; frame-ancestors 'none'"}});
+}
+export async function handlePublicReturns(request,env){
+  const path=new URL(request.url).pathname;
+  if(!path.startsWith('/api/returns/')&&path!=='/api/returns')return null;
+  try{
+    if(path==='/api/returns/access')return await returnRequestAccess(request,env);
+    if(path==='/api/returns/case'&&['GET','POST'].includes(request.method)||path==='/api/returns/label'&&request.method==='POST'){
+      const authenticated=await returnTokenCase(request,env);if(!authenticated)return returnUnauthorized();
+      if(path==='/api/returns/label')return await returnCustomerLabel(request,env,authenticated);
+      return request.method==='GET'?returnJson({case:returnCaseProjection(authenticated.row)}):await returnCustomerRequest(request,env,authenticated);
+    }
+    return returnJson({error:'Ruta o método no disponible.'},404);
+  }catch{return returnUnavailable();}
+}
+
+async function returnIssueLink(env,id,expectedVersion){
+  const db=database(env),token=returnSecret(),tokenHash=await returnDigest(token),expiresAt=Date.now()+30*24*60*60*1000;
+  // One transaction: the token rotation and order version can only both commit for the expected version.
+  const results=returnBatchSucceeded(await db.batch([
+    db.prepare(`INSERT INTO return_access(order_id,token_hash,expires_at) SELECT id,?,? FROM orders WHERE id=? AND management_version=? AND ${returnSettledSql} ON CONFLICT(order_id) DO UPDATE SET token_hash=excluded.token_hash,expires_at=excluded.expires_at RETURNING order_id`).bind(tokenHash,expiresAt,id,expectedVersion),
+    db.prepare(`UPDATE orders SET portal_requested_at=NULL,management_version=management_version+1 WHERE id=? AND management_version=? AND ${returnSettledSql} RETURNING id`).bind(id,expectedVersion),
+  ]));
+  if(!results[1].results.length)return returnConflict();
+  return returnJson({ok:true,path:'/devoluciones#token='+token,expiresAt,order:await getOrder(env,id)});
+}
+async function returnRevokeLink(env,id,expectedVersion){
+  const db=database(env);
+  const results=returnBatchSucceeded(await db.batch([
+    db.prepare(`DELETE FROM return_access WHERE order_id IN (SELECT id FROM orders WHERE id=? AND management_version=? AND ${returnSettledSql})`).bind(id,expectedVersion),
+    db.prepare(`UPDATE orders SET management_version=management_version+1 WHERE id=? AND management_version=? AND ${returnSettledSql} RETURNING id`).bind(id,expectedVersion),
+  ]));
+  return results[1].results.length?returnJson({ok:true,order:await getOrder(env,id)}):returnConflict();
+}
+async function returnOwnerReply(env,id,body){
+  const {reply,code='',carrier='',expectedVersion}=body;
+  if(!returnText(reply,2000,true)||!returnText(code,200)||!returnText(carrier,80))return returnInvalid();
+  const changed=await database(env).prepare(`UPDATE orders SET customer_reply=?,return_code=?,return_carrier=?,return_updated_at=?,management_version=management_version+1 WHERE id=? AND management_version=? AND ${returnSettledSql} AND (?='' AND ?='' OR ${returnLabelStatesSql}) RETURNING id`).bind(reply,code.trim(),carrier.trim(),Date.now(),id,expectedVersion,code.trim(),carrier.trim()).first();
+  return changed?returnJson({ok:true,order:await getOrder(env,id)}):returnConflict();
+}
+function returnLabelMagic(bytes,type){
+  if(type==='application/pdf')return bytes.length>=5&&bytes[0]===0x25&&bytes[1]===0x50&&bytes[2]===0x44&&bytes[3]===0x46&&bytes[4]===0x2d;
+  if(type==='image/png')return bytes.length>=8&&[0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a].every((b,i)=>bytes[i]===b);
+  if(type==='image/jpeg')return bytes.length>=3&&bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff;
+  return false;
+}
+async function returnUploadLabel(request,env,id){
+  const rawVersion=request.headers.get('x-order-version')||'';
+  if(!/^\d{1,16}$/.test(rawVersion)||!returnVersion(Number(rawVersion)))return returnInvalid();
+  const expectedVersion=Number(rawVersion),type=(request.headers.get('content-type')||'').trim().toLowerCase();
+  if(!['application/pdf','image/png','image/jpeg'].includes(type))return returnInvalid();
+  const parsed=await returnReadBytes(request,returnLabelLimit);if(parsed.error)return parsed.error;
+  if(!returnLabelMagic(parsed.bytes,type))return returnInvalid();
+  const db=database(env);
+  const old=await db.prepare(`SELECT return_label_key FROM orders WHERE id=? AND management_version=? AND ${returnSettledSql} AND ${returnLabelStatesSql}`).bind(id,expectedVersion).first();
+  if(!old)return returnConflict();
+  if(!env.FILES)return returnUnavailable();
+  const key='return-labels/'+returnSecret();
+  await env.FILES.put(key,parsed.bytes,{httpMetadata:{contentType:type}});
+  let changed;
+  try{changed=await db.prepare(`UPDATE orders SET return_label_key=?,return_label_type=?,return_label_size=?,return_updated_at=?,management_version=management_version+1 WHERE id=? AND management_version=? AND ${returnSettledSql} AND ${returnLabelStatesSql} RETURNING id`).bind(key,type,parsed.bytes.byteLength,Date.now(),id,expectedVersion).first();}
+  catch(error){await returnCleanup(env,key);throw error;}
+  if(!changed){await returnCleanup(env,key);return returnConflict();}
+  await returnCleanup(env,old.return_label_key);
+  return returnJson({ok:true,order:await getOrder(env,id)});
+}
+async function returnRemoveLabel(env,id,expectedVersion){
+  const db=database(env);
+  const old=await db.prepare(`SELECT return_label_key FROM orders WHERE id=? AND management_version=? AND ${returnSettledSql} AND ${returnLabelStatesSql}`).bind(id,expectedVersion).first();
+  if(!old)return returnConflict();
+  const changed=await db.prepare(`UPDATE orders SET return_label_key=NULL,return_label_type=NULL,return_label_size=NULL,return_updated_at=?,management_version=management_version+1 WHERE id=? AND management_version=? AND ${returnSettledSql} AND ${returnLabelStatesSql} RETURNING id`).bind(Date.now(),id,expectedVersion).first();
+  if(!changed)return returnConflict();await returnCleanup(env,old.return_label_key);
+  return returnJson({ok:true,order:await getOrder(env,id)});
+}
+// This handler is called only after index.mjs authorizes the owner on the server.
+export async function handleAdminReturns(request,env,id,action){
+  if(!['portal-link','portal-revoke','portal-reply','return-label','return-label-remove'].includes(action))return null;
+  if(request.method!=='POST')return returnJson({error:'Ruta o método no disponible.'},404);
+  if(!returnSameOrigin(request,action,true))return returnJson({error:'Solicitud no permitida.'},403);
+  try{
+    if(action==='return-label')return await returnUploadLabel(request,env,id);
+    const parsed=await returnReadJson(request);if(parsed.error)return parsed.error;
+    if(!returnVersion(parsed.body.expectedVersion))return returnInvalid();
+    if(action==='portal-link')return await returnIssueLink(env,id,parsed.body.expectedVersion);
+    if(action==='portal-revoke')return await returnRevokeLink(env,id,parsed.body.expectedVersion);
+    if(action==='portal-reply')return await returnOwnerReply(env,id,parsed.body);
+    return await returnRemoveLabel(env,id,parsed.body.expectedVersion);
+  }catch{return returnUnavailable();}
 }
 
 
