@@ -31,8 +31,9 @@ test('shared demo creates expiring hashed bearer sessions with four fictional ex
 test('session creation throttles its own IP quota and respects atomic active-session cap and bounded cleanup',async t=>{
   const {create,DB}=setup(t);
   for(let i=0;i<5;i++)assert.equal((await create()).status,200);
-  assert.equal((await create()).status,429);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
+  const limited=await create();assert.equal(limited.status,429);assert.ok(Number(limited.headers.get('retry-after'))>0&&Number(limited.headers.get('retry-after'))<=900);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
   const quota=DB.sqlite.prepare('SELECT * FROM return_rate_limits').get();assert.match(quota.key,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(quota).includes('192.0.2.1'));
+  DB.sqlite.prepare('UPDATE return_rate_limits SET window_start=? WHERE key=?').run(Date.now()-870000,quota.key);const later=await create();assert.equal(later.status,429);assert.ok(Number(later.headers.get('retry-after'))<=30);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
   DB.sqlite.exec('DELETE FROM demo_sessions');
   const insert=DB.sqlite.prepare('INSERT INTO demo_sessions(token_hash,expires_at,data,revision) VALUES(?,?,?,0)');for(let i=0;i<250;i++)insert.run(createHash('sha256').update('active_'+i).digest('hex'),Date.now()+86400000,'{"orders":[],"purchases":{}}');
   assert.equal((await create('198.51.100.1')).status,429);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,250);

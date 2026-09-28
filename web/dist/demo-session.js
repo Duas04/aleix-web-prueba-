@@ -3,7 +3,7 @@
  'use strict';
  const enabled=new URLSearchParams(location.search).get('demo')==='1'||['/demo','/demo/'].includes(location.pathname);
  const KEY='fumada-shared-demo-v1',TTL=7*24*60*60*1000,validToken=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{43}$/.test(value),validOrder=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,100}$/.test(value);
- let token='',expiresAt=0,expiryKnown=false,selectedOrder='',storage,expiryTimer=null,creating=false,stateVersion=0,bar=null;
+ let token='',expiresAt=0,expiryKnown=false,selectedOrder='',storage,expiryTimer=null,creating=false,stateVersion=0,bar=null,blockedUntil=0,cooldownTimer=null;
  const listeners=new Set(),controls={};
  try{storage=window.sessionStorage;}catch{}
  function persist(){try{if(token)storage?.setItem(KEY,JSON.stringify({token,expiresAt,expiryKnown,orderId:selectedOrder}));else storage?.removeItem(KEY);}catch{}}
@@ -31,13 +31,16 @@
   const response=await fetch(url.pathname+url.search,{...options,headers,cache:'no-store',credentials:'omit'});
   if([401,410].includes(response.status)&&currentToken===token)clear();return response;
  }
- function busy(value){creating=value;for(const key of ['start','importButton'])if(controls[key])controls[key].disabled=value;}
+ function busy(value){creating=value;if(controls.start)controls.start.disabled=value||blockedUntil>Date.now();if(controls.importButton)controls.importButton.disabled=value;}
+ function cooldown(seconds,version,message){blockedUntil=Date.now()+seconds*1000;if(cooldownTimer!==null)clearTimeout(cooldownTimer);cooldownTimer=setTimeout(()=>{cooldownTimer=null;blockedUntil=0;busy(creating);if(version===stateVersion&&controls.message?.textContent===message)controls.message.textContent='Ya puedes iniciar una demostración o usar un enlace compartido.';},seconds*1000);}
  async function create(){
-  if(!enabled||creating)return false;const version=stateVersion;busy(true);if(controls.message)controls.message.textContent='Preparando demostración…';
+  if(!enabled||creating||blockedUntil>Date.now())return false;const version=stateVersion;busy(true);if(controls.message)controls.message.textContent='Preparando demostración…';
   try{const response=await fetch('/api/demo/session',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Action':'session'},body:'{}',cache:'no-store',credentials:'omit'});let data;try{data=await response.json();}catch{throw new Error('No se ha podido iniciar. Inténtalo de nuevo.');}
-   if(!response.ok||!validToken(data.token)||!Number.isFinite(data.expiresAt)||data.expiresAt<=Date.now()||data.expiresAt>Date.now()+TTL+60000)throw new Error('No se ha podido iniciar la demostración. Inténtalo de nuevo.');
+   if(version!==stateVersion)return false;
+   if(!response.ok){let message=typeof data.error==='string'&&data.error.length<=300?data.error:'No se ha podido iniciar la demostración. Inténtalo de nuevo.';if(response.status===429){const retry=Number(response.headers.get('Retry-After')),seconds=Number.isInteger(retry)&&retry>0&&retry<=900?retry:60;message+=' Espera '+(seconds<60?seconds+' segundos':Math.ceil(seconds/60)+' min')+' antes de crear otra. Puedes abrir el enlace de una demostración existente.';cooldown(seconds,version,message);}throw new Error(message);}
+   if(!validToken(data.token)||!Number.isFinite(data.expiresAt)||data.expiresAt<=Date.now()||data.expiresAt>Date.now()+TTL+60000)throw new Error('No se ha podido iniciar la demostración. Inténtalo de nuevo.');
    if(version!==stateVersion)return false;accept(data.token,data.expiresAt,'',true);if(controls.message)controls.message.textContent='Demostración conectada. Puedes compartir el enlace con otro dispositivo.';return true;
-  }catch(error){if(controls.message)controls.message.textContent=error.message;return false;}finally{busy(false);updateBar();}
+  }catch(error){if(version===stateVersion&&controls.message)controls.message.textContent=error.message;return false;}finally{busy(false);updateBar();}
  }
  function node(tag,text,id){const value=document.createElement(tag);if(text)value.textContent=text;if(id)value.id=id;return value;}
  function connectPageLinks(){for(const anchor of document.querySelectorAll?.('a[href]')||[]){try{const url=new URL(anchor.getAttribute('href'),location.href);if(url.origin===location.origin&&['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname)&&(!url.hash||url.hash.startsWith('#session=')))anchor.href=link(url.pathname);}catch{}}}

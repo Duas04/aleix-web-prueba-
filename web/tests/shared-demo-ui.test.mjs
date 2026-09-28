@@ -4,14 +4,14 @@ import {readFileSync,existsSync} from 'node:fs';
 import vm from 'node:vm';
 const source=existsSync('dist/demo-session.js')?readFileSync('dist/demo-session.js','utf8'):'';
 function harness({enabled=true,hash='',storageWorks=true}={}){
- assert.ok(source,'shared session script exists');let now=1000000;const nodes=[],calls=[],events={},storage=new Map(),timers=new Map();let timerId=0;
+ assert.ok(source,'shared session script exists');let now=1000000,responseOverride=null;const nodes=[],calls=[],events={},storage=new Map(),timers=new Map();let timerId=0;
  const node=()=>{const n={children:[],events:{},value:'',hidden:false,disabled:false,textContent:'',append(...children){this.children.push(...children);},prepend(...children){this.children.unshift(...children);},addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},focus(){},removeAttribute(name){delete this[name];}};nodes.push(n);return n;};
  const document={body:node(),createElement:node,addEventListener(name,fn){events[name]=fn;}};
  const location={origin:'https://book.example',pathname:enabled?'/demo':'/devoluciones',search:'',hash};
  const window={addEventListener(name,fn){events[name]=fn;},sessionStorage:{getItem(key){if(!storageWorks)throw Error('blocked');return storage.get(key)||null;},setItem(key,value){if(!storageWorks)throw Error('blocked');storage.set(key,value);},removeItem(key){storage.delete(key);}}};
  class ClockDate extends Date{static now(){return now;}}
- const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{}}},fetch:async(path,options={})=>{calls.push({path,options});return new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
- vm.runInContext(source,context);return {session:window.DemoSession,calls,storage,location,element:id=>nodes.find(n=>n.id===id),async hash(value){location.hash=value;await events.hashchange?.();},expire(){now+=604800001;},timers};
+ const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{}}},fetch:async(path,options={})=>{calls.push({path,options});return responseOverride?new Response(JSON.stringify(responseOverride.data),responseOverride.options):new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
+ vm.runInContext(source,context);return {session:window.DemoSession,calls,storage,location,element:id=>nodes.find(n=>n.id===id),response(data,status,headers={}){responseOverride={data,options:{status,headers}};},resetResponse(){responseOverride=null;},advance(ms){now+=ms;for(const [id,timer]of [...timers])if(timer.ms<=ms){timers.delete(id);timer.fn();}},async hash(value){location.hash=value;await events.hashchange?.();},expire(){now+=604800001;},timers};
 }
 test('real token links are untouched and no room is auto-created',()=>{
  const real=harness({enabled:false,hash:'#token='+'r'.repeat(43)});assert.equal(real.location.hash,'#token='+'r'.repeat(43));assert.equal(real.session.enabled,false);assert.equal(real.calls.length,0);
@@ -35,4 +35,15 @@ test('expiry clears storage and notifies the connected page',async()=>{
 });
 test('pasting a shared link accepts only this site and refuses real private tokens',async()=>{
  const ui=harness(),form=ui.element('demo-session-import-form'),input=ui.element('demo-session-import');input.value='https://evil.example/?demo=1#session='+'a'.repeat(43);await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),false);input.value='https://book.example/devoluciones#token='+'a'.repeat(43);await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),false);input.value='https://book.example/devoluciones?demo=1#session='+'d'.repeat(43)+'&order=DEMO-004';await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),true);assert.equal(ui.session.orderId(),'DEMO-004');assert.equal(input.value,'');assert.equal(ui.calls.length,0);
+});
+
+test('rate limit explains the wait, prevents repeated creation and preserves a connected session',async()=>{
+ const ui=harness();await ui.session.create();const originalLink=ui.session.link('/demo');let changes=0;ui.session.subscribe(()=>changes++);
+ ui.response({error:'Has iniciado varias demostraciones en poco tiempo.'},429,{'Retry-After':'45'});
+ assert.equal(await ui.session.create(),false);assert.match(ui.element('demo-session-message').textContent,/45 segundos/);assert.equal(ui.element('demo-session-start').disabled,true);assert.equal(ui.element('demo-session-import-form').children.at(-1).disabled,false);
+ await ui.session.create();assert.equal(ui.calls.length,2);assert.equal(ui.session.link('/demo'),originalLink);assert.equal(changes,0);
+ ui.advance(45000);assert.equal(ui.element('demo-session-start').disabled,false);ui.resetResponse();assert.equal(await ui.session.create(),true);
+});
+test('unavailable service shows its useful error without claiming that a session exists',async()=>{
+ const ui=harness();ui.response({error:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},503);assert.equal(await ui.session.create(),false);assert.match(ui.element('demo-session-message').textContent,/No se puede abrir la demostración ahora/);assert.equal(ui.session.ready(),false);assert.equal(ui.element('demo-session-start').disabled,false);
 });

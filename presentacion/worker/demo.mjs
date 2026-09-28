@@ -1,8 +1,8 @@
 import { database } from './database.mjs';
 
 const demoHeaders={'Cache-Control':'private, no-store, max-age=0','Vary':'X-Demo-Session','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
-const demoJson=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{...demoHeaders,'Content-Type':'application/json; charset=utf-8'}});
-function demoFail(status,message){const error=new Error(message);error.demoStatus=status;throw error;}
+const demoJson=(body,status=200,extraHeaders={})=>new Response(JSON.stringify(body),{status,headers:{...demoHeaders,'Content-Type':'application/json; charset=utf-8',...extraHeaders}});
+function demoFail(status,message,retryAfter){const error=new Error(message);error.demoStatus=status;if(Number.isInteger(retryAfter)&&retryAfter>0)error.demoRetryAfter=retryAfter;throw error;}
 const demoVersion=n=>Number.isSafeInteger(n)&&n>=0;
 const demoActiveCase=order=>['requested','reviewing','approved','received'].includes(order.return_status);
 const demoSettled=order=>['paid','refunded','partially_refunded'].includes(order.payment_status);
@@ -43,8 +43,8 @@ async function demoCreateSession(request,env){
   const db=database(env),now=Date.now(),start=now-15*60*1000;
   const key=await demoHash('demo-session:ip:'+(request.headers.get('cf-connecting-ip')||'unknown'));
   await db.prepare('DELETE FROM return_rate_limits WHERE key IN (SELECT key FROM return_rate_limits WHERE window_start < ? LIMIT 20)').bind(start).run();
-  const rate=await db.prepare('INSERT INTO return_rate_limits(key,window_start,count) VALUES(?,?,1) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN window_start<=? THEN 1 ELSE count+1 END,window_start=CASE WHEN window_start<=? THEN ? ELSE window_start END RETURNING count').bind(key,now,start,start,now).first();
-  if(rate.count>5)demoFail(429,'Has creado varias demostraciones. Vuelve a intentarlo en quince minutos.');
+  const rate=await db.prepare('INSERT INTO return_rate_limits(key,window_start,count) VALUES(?,?,1) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN window_start<=? THEN 1 ELSE count+1 END,window_start=CASE WHEN window_start<=? THEN ? ELSE window_start END RETURNING count,window_start').bind(key,now,start,start,now).first();
+  if(rate.count>5)demoFail(429,'Has iniciado varias demostraciones en poco tiempo.',Math.max(1,Math.ceil((rate.window_start+15*60*1000-now)/1000)));
   await db.prepare('DELETE FROM demo_sessions WHERE token_hash IN (SELECT token_hash FROM demo_sessions WHERE expires_at<=? LIMIT 20)').bind(now).run();
   const token=demoNewSecret(),hash=await demoHash(token),expiresAt=now+7*86400000;
   // The capacity check and insertion execute in one atomic SQLite statement.
@@ -158,5 +158,5 @@ export async function handleDemo(request,env){
       if(admin){demoRequireMutation(request,admin[2]);const body=await demoReadBody(request);return await demoMutateSession(env,hash,(state,expiresAt)=>demoAdminMutation(state,admin[1],admin[2],body,token,expiresAt));}
     }
     demoFail(404,'Ruta o método no disponible.');
-  }catch(error){return demoJson({error:error.demoStatus?error.message:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},error.demoStatus||503);}
+  }catch(error){return demoJson({error:error.demoStatus?error.message:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},error.demoStatus||503,error.demoRetryAfter?{'Retry-After':String(error.demoRetryAfter)}:{});}
 }

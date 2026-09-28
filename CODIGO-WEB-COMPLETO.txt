@@ -1,7 +1,7 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 1d0e1f9585d0b1468463325ef9dd10231ea95824
+Revisión Git de base: bf814c0426fba3204bc86c6c6be9f29dd4a16c89
 Incluye el portal privado de devoluciones, enlaces manuales, respuestas y etiquetas; el panel ampliado con tareas, seguimiento y notas, junto al carrito de prueba y las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
@@ -1451,7 +1451,7 @@ ARCHIVO: web/dist/demo-session.js
  'use strict';
  const enabled=new URLSearchParams(location.search).get('demo')==='1'||['/demo','/demo/'].includes(location.pathname);
  const KEY='fumada-shared-demo-v1',TTL=7*24*60*60*1000,validToken=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{43}$/.test(value),validOrder=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,100}$/.test(value);
- let token='',expiresAt=0,expiryKnown=false,selectedOrder='',storage,expiryTimer=null,creating=false,stateVersion=0,bar=null;
+ let token='',expiresAt=0,expiryKnown=false,selectedOrder='',storage,expiryTimer=null,creating=false,stateVersion=0,bar=null,blockedUntil=0,cooldownTimer=null;
  const listeners=new Set(),controls={};
  try{storage=window.sessionStorage;}catch{}
  function persist(){try{if(token)storage?.setItem(KEY,JSON.stringify({token,expiresAt,expiryKnown,orderId:selectedOrder}));else storage?.removeItem(KEY);}catch{}}
@@ -1479,13 +1479,16 @@ ARCHIVO: web/dist/demo-session.js
   const response=await fetch(url.pathname+url.search,{...options,headers,cache:'no-store',credentials:'omit'});
   if([401,410].includes(response.status)&&currentToken===token)clear();return response;
  }
- function busy(value){creating=value;for(const key of ['start','importButton'])if(controls[key])controls[key].disabled=value;}
+ function busy(value){creating=value;if(controls.start)controls.start.disabled=value||blockedUntil>Date.now();if(controls.importButton)controls.importButton.disabled=value;}
+ function cooldown(seconds,version,message){blockedUntil=Date.now()+seconds*1000;if(cooldownTimer!==null)clearTimeout(cooldownTimer);cooldownTimer=setTimeout(()=>{cooldownTimer=null;blockedUntil=0;busy(creating);if(version===stateVersion&&controls.message?.textContent===message)controls.message.textContent='Ya puedes iniciar una demostración o usar un enlace compartido.';},seconds*1000);}
  async function create(){
-  if(!enabled||creating)return false;const version=stateVersion;busy(true);if(controls.message)controls.message.textContent='Preparando demostración…';
+  if(!enabled||creating||blockedUntil>Date.now())return false;const version=stateVersion;busy(true);if(controls.message)controls.message.textContent='Preparando demostración…';
   try{const response=await fetch('/api/demo/session',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Action':'session'},body:'{}',cache:'no-store',credentials:'omit'});let data;try{data=await response.json();}catch{throw new Error('No se ha podido iniciar. Inténtalo de nuevo.');}
-   if(!response.ok||!validToken(data.token)||!Number.isFinite(data.expiresAt)||data.expiresAt<=Date.now()||data.expiresAt>Date.now()+TTL+60000)throw new Error('No se ha podido iniciar la demostración. Inténtalo de nuevo.');
+   if(version!==stateVersion)return false;
+   if(!response.ok){let message=typeof data.error==='string'&&data.error.length<=300?data.error:'No se ha podido iniciar la demostración. Inténtalo de nuevo.';if(response.status===429){const retry=Number(response.headers.get('Retry-After')),seconds=Number.isInteger(retry)&&retry>0&&retry<=900?retry:60;message+=' Espera '+(seconds<60?seconds+' segundos':Math.ceil(seconds/60)+' min')+' antes de crear otra. Puedes abrir el enlace de una demostración existente.';cooldown(seconds,version,message);}throw new Error(message);}
+   if(!validToken(data.token)||!Number.isFinite(data.expiresAt)||data.expiresAt<=Date.now()||data.expiresAt>Date.now()+TTL+60000)throw new Error('No se ha podido iniciar la demostración. Inténtalo de nuevo.');
    if(version!==stateVersion)return false;accept(data.token,data.expiresAt,'',true);if(controls.message)controls.message.textContent='Demostración conectada. Puedes compartir el enlace con otro dispositivo.';return true;
-  }catch(error){if(controls.message)controls.message.textContent=error.message;return false;}finally{busy(false);updateBar();}
+  }catch(error){if(version===stateVersion&&controls.message)controls.message.textContent=error.message;return false;}finally{busy(false);updateBar();}
  }
  function node(tag,text,id){const value=document.createElement(tag);if(text)value.textContent=text;if(id)value.id=id;return value;}
  function connectPageLinks(){for(const anchor of document.querySelectorAll?.('a[href]')||[]){try{const url=new URL(anchor.getAttribute('href'),location.href);if(url.origin===location.origin&&['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname)&&(!url.hash||url.hash.startsWith('#session=')))anchor.href=link(url.pathname);}catch{}}}
@@ -6406,14 +6409,14 @@ import {readFileSync,existsSync} from 'node:fs';
 import vm from 'node:vm';
 const source=existsSync('dist/demo-session.js')?readFileSync('dist/demo-session.js','utf8'):'';
 function harness({enabled=true,hash='',storageWorks=true}={}){
- assert.ok(source,'shared session script exists');let now=1000000;const nodes=[],calls=[],events={},storage=new Map(),timers=new Map();let timerId=0;
+ assert.ok(source,'shared session script exists');let now=1000000,responseOverride=null;const nodes=[],calls=[],events={},storage=new Map(),timers=new Map();let timerId=0;
  const node=()=>{const n={children:[],events:{},value:'',hidden:false,disabled:false,textContent:'',append(...children){this.children.push(...children);},prepend(...children){this.children.unshift(...children);},addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},focus(){},removeAttribute(name){delete this[name];}};nodes.push(n);return n;};
  const document={body:node(),createElement:node,addEventListener(name,fn){events[name]=fn;}};
  const location={origin:'https://book.example',pathname:enabled?'/demo':'/devoluciones',search:'',hash};
  const window={addEventListener(name,fn){events[name]=fn;},sessionStorage:{getItem(key){if(!storageWorks)throw Error('blocked');return storage.get(key)||null;},setItem(key,value){if(!storageWorks)throw Error('blocked');storage.set(key,value);},removeItem(key){storage.delete(key);}}};
  class ClockDate extends Date{static now(){return now;}}
- const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{}}},fetch:async(path,options={})=>{calls.push({path,options});return new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
- vm.runInContext(source,context);return {session:window.DemoSession,calls,storage,location,element:id=>nodes.find(n=>n.id===id),async hash(value){location.hash=value;await events.hashchange?.();},expire(){now+=604800001;},timers};
+ const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{}}},fetch:async(path,options={})=>{calls.push({path,options});return responseOverride?new Response(JSON.stringify(responseOverride.data),responseOverride.options):new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
+ vm.runInContext(source,context);return {session:window.DemoSession,calls,storage,location,element:id=>nodes.find(n=>n.id===id),response(data,status,headers={}){responseOverride={data,options:{status,headers}};},resetResponse(){responseOverride=null;},advance(ms){now+=ms;for(const [id,timer]of [...timers])if(timer.ms<=ms){timers.delete(id);timer.fn();}},async hash(value){location.hash=value;await events.hashchange?.();},expire(){now+=604800001;},timers};
 }
 test('real token links are untouched and no room is auto-created',()=>{
  const real=harness({enabled:false,hash:'#token='+'r'.repeat(43)});assert.equal(real.location.hash,'#token='+'r'.repeat(43));assert.equal(real.session.enabled,false);assert.equal(real.calls.length,0);
@@ -6437,6 +6440,17 @@ test('expiry clears storage and notifies the connected page',async()=>{
 });
 test('pasting a shared link accepts only this site and refuses real private tokens',async()=>{
  const ui=harness(),form=ui.element('demo-session-import-form'),input=ui.element('demo-session-import');input.value='https://evil.example/?demo=1#session='+'a'.repeat(43);await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),false);input.value='https://book.example/devoluciones#token='+'a'.repeat(43);await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),false);input.value='https://book.example/devoluciones?demo=1#session='+'d'.repeat(43)+'&order=DEMO-004';await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),true);assert.equal(ui.session.orderId(),'DEMO-004');assert.equal(input.value,'');assert.equal(ui.calls.length,0);
+});
+
+test('rate limit explains the wait, prevents repeated creation and preserves a connected session',async()=>{
+ const ui=harness();await ui.session.create();const originalLink=ui.session.link('/demo');let changes=0;ui.session.subscribe(()=>changes++);
+ ui.response({error:'Has iniciado varias demostraciones en poco tiempo.'},429,{'Retry-After':'45'});
+ assert.equal(await ui.session.create(),false);assert.match(ui.element('demo-session-message').textContent,/45 segundos/);assert.equal(ui.element('demo-session-start').disabled,true);assert.equal(ui.element('demo-session-import-form').children.at(-1).disabled,false);
+ await ui.session.create();assert.equal(ui.calls.length,2);assert.equal(ui.session.link('/demo'),originalLink);assert.equal(changes,0);
+ ui.advance(45000);assert.equal(ui.element('demo-session-start').disabled,false);ui.resetResponse();assert.equal(await ui.session.create(),true);
+});
+test('unavailable service shows its useful error without claiming that a session exists',async()=>{
+ const ui=harness();ui.response({error:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},503);assert.equal(await ui.session.create(),false);assert.match(ui.element('demo-session-message').textContent,/No se puede abrir la demostración ahora/);assert.equal(ui.session.ready(),false);assert.equal(ui.element('demo-session-start').disabled,false);
 });
 
 
@@ -6478,8 +6492,9 @@ test('shared demo creates expiring hashed bearer sessions with four fictional ex
 test('session creation throttles its own IP quota and respects atomic active-session cap and bounded cleanup',async t=>{
   const {create,DB}=setup(t);
   for(let i=0;i<5;i++)assert.equal((await create()).status,200);
-  assert.equal((await create()).status,429);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
+  const limited=await create();assert.equal(limited.status,429);assert.ok(Number(limited.headers.get('retry-after'))>0&&Number(limited.headers.get('retry-after'))<=900);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
   const quota=DB.sqlite.prepare('SELECT * FROM return_rate_limits').get();assert.match(quota.key,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(quota).includes('192.0.2.1'));
+  DB.sqlite.prepare('UPDATE return_rate_limits SET window_start=? WHERE key=?').run(Date.now()-870000,quota.key);const later=await create();assert.equal(later.status,429);assert.ok(Number(later.headers.get('retry-after'))<=30);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
   DB.sqlite.exec('DELETE FROM demo_sessions');
   const insert=DB.sqlite.prepare('INSERT INTO demo_sessions(token_hash,expires_at,data,revision) VALUES(?,?,?,0)');for(let i=0;i<250;i++)insert.run(createHash('sha256').update('active_'+i).digest('hex'),Date.now()+86400000,'{"orders":[],"purchases":{}}');
   assert.equal((await create('198.51.100.1')).status,429);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,250);
@@ -6685,8 +6700,8 @@ ARCHIVO: web/worker/demo.mjs
 import { database } from './database.mjs';
 
 const demoHeaders={'Cache-Control':'private, no-store, max-age=0','Vary':'X-Demo-Session','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
-const demoJson=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{...demoHeaders,'Content-Type':'application/json; charset=utf-8'}});
-function demoFail(status,message){const error=new Error(message);error.demoStatus=status;throw error;}
+const demoJson=(body,status=200,extraHeaders={})=>new Response(JSON.stringify(body),{status,headers:{...demoHeaders,'Content-Type':'application/json; charset=utf-8',...extraHeaders}});
+function demoFail(status,message,retryAfter){const error=new Error(message);error.demoStatus=status;if(Number.isInteger(retryAfter)&&retryAfter>0)error.demoRetryAfter=retryAfter;throw error;}
 const demoVersion=n=>Number.isSafeInteger(n)&&n>=0;
 const demoActiveCase=order=>['requested','reviewing','approved','received'].includes(order.return_status);
 const demoSettled=order=>['paid','refunded','partially_refunded'].includes(order.payment_status);
@@ -6727,8 +6742,8 @@ async function demoCreateSession(request,env){
   const db=database(env),now=Date.now(),start=now-15*60*1000;
   const key=await demoHash('demo-session:ip:'+(request.headers.get('cf-connecting-ip')||'unknown'));
   await db.prepare('DELETE FROM return_rate_limits WHERE key IN (SELECT key FROM return_rate_limits WHERE window_start < ? LIMIT 20)').bind(start).run();
-  const rate=await db.prepare('INSERT INTO return_rate_limits(key,window_start,count) VALUES(?,?,1) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN window_start<=? THEN 1 ELSE count+1 END,window_start=CASE WHEN window_start<=? THEN ? ELSE window_start END RETURNING count').bind(key,now,start,start,now).first();
-  if(rate.count>5)demoFail(429,'Has creado varias demostraciones. Vuelve a intentarlo en quince minutos.');
+  const rate=await db.prepare('INSERT INTO return_rate_limits(key,window_start,count) VALUES(?,?,1) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN window_start<=? THEN 1 ELSE count+1 END,window_start=CASE WHEN window_start<=? THEN ? ELSE window_start END RETURNING count,window_start').bind(key,now,start,start,now).first();
+  if(rate.count>5)demoFail(429,'Has iniciado varias demostraciones en poco tiempo.',Math.max(1,Math.ceil((rate.window_start+15*60*1000-now)/1000)));
   await db.prepare('DELETE FROM demo_sessions WHERE token_hash IN (SELECT token_hash FROM demo_sessions WHERE expires_at<=? LIMIT 20)').bind(now).run();
   const token=demoNewSecret(),hash=await demoHash(token),expiresAt=now+7*86400000;
   // The capacity check and insertion execute in one atomic SQLite statement.
@@ -6842,7 +6857,7 @@ export async function handleDemo(request,env){
       if(admin){demoRequireMutation(request,admin[2]);const body=await demoReadBody(request);return await demoMutateSession(env,hash,(state,expiresAt)=>demoAdminMutation(state,admin[1],admin[2],body,token,expiresAt));}
     }
     demoFail(404,'Ruta o método no disponible.');
-  }catch(error){return demoJson({error:error.demoStatus?error.message:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},error.demoStatus||503);}
+  }catch(error){return demoJson({error:error.demoStatus?error.message:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},error.demoStatus||503,error.demoRetryAfter?{'Retry-After':String(error.demoRetryAfter)}:{});}
 }
 
 
