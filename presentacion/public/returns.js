@@ -8,6 +8,14 @@ const session=window.DemoSession;
 let currentCase=null,busy=false,receiptText='',viewRequest=0,pollTimer=null;
 const statusLabels={none:'Sin solicitud',requested:'Solicitud registrada',reviewing:'En revisión',approved:'Devolución aprobada',received:'Libro recibido',closed:'Gestión cerrada',rejected:'Solicitud rechazada'};
 const kindLabels={withdrawal:'Desistimiento',damaged:'Libro dañado',wrong:'Libro equivocado',other:'Otra consulta'};
+function renderProgress(status){
+ const stages=['requested','reviewing','approved','received','closed'],active=status==='rejected'?'closed':status;
+ $('case-progress').hidden=!stages.includes(active);
+ for(const stage of stages){const item=$('stage-'+stage);if(stage===active)item.setAttribute('aria-current','step');else item.removeAttribute('aria-current');}
+ $('stage-closed').textContent=status==='rejected'?'Rechazada':'Cierre';
+ const next={none:'Completa el formulario para registrar tu solicitud.',requested:'Tu solicitud está registrada. El siguiente paso es que Aleix revise el caso.',reviewing:'Aleix está revisando tu solicitud. Consulta su respuesta antes de preparar el paquete.',approved:'Devolución aprobada. Sigue la respuesta de Aleix y las indicaciones de envío que aparezcan aquí.',received:'La recepción del libro está registrada. Consulta la respuesta de Aleix para conocer la resolución.',closed:'La gestión está cerrada. Consulta la respuesta de Aleix; este estado no confirma por sí solo un reembolso.',rejected:'Consulta el motivo en la respuesta de Aleix. Puedes escribirle si necesitas aclaraciones.'};
+ $('case-next').textContent=next[status]||'Consulta la respuesta de Aleix para conocer el siguiente paso.';
+}
 const canRequest=()=>currentCase&&['none','closed','rejected'].includes(currentCase.status);
 function lock(value){busy=value;$('access-fields').disabled=value;$('request-fields').disabled=value;$('label-download').disabled=value;$('case-refresh').disabled=value;$('demo-order-fields').disabled=value||(demo&&!session?.ready());}
 function download(blob,name){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
@@ -21,6 +29,7 @@ async function api(path,{action,body}={}){
 }
 function render(value){
  currentCase=value;$('access-panel').hidden=true;$('case-panel').hidden=false;$('case-order').textContent=value.orderId;$('case-status').textContent=statusLabels[value.status]||'En revisión';
+ renderProgress(value.status);
  $('case-reason').textContent=value.reason?'Tu solicitud: '+value.reason:'';
  $('case-reply').textContent=value.reply||'';$('case-carrier').textContent=value.carrier||'Pendiente de indicar';$('case-code').textContent=value.code||'Pendiente de indicar';
  $('seller-response').hidden=!(value.reply||value.carrier||value.code||value.label);$('label-information').hidden=!(value.carrier||value.code||value.label);

@@ -1,6 +1,6 @@
 # Fumada XXL · Aleix
 
-Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `1d233289c2d4c7e57bce6bbe263cd47fba604f40`.
+Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `1a7570863565da1ea4453126587de00ae6d8dcb9`.
 
 | Carpeta | Contenido | Inicio local |
 | --- | --- | --- |

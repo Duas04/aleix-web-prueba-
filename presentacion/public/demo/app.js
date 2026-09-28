@@ -82,6 +82,7 @@ function clearPortalLink(){$('portal-url').value='';$('portal-link-output').hidd
 function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields','portal-fields','portal-reply-fields','return-label-fields'])$(id).disabled=saving;}
 function renderDetail(order){
   currentOrder=order;
+  if(document.body?.classList?.contains('demo-page'))window.DemoSession?.selectOrder(order.id);
   $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
   $('detail-payment').textContent=payments[order.payment_status]||'Pago sin confirmar';$('detail-payment').className='badge '+order.payment_status;
   $('detail-shipping').textContent=shippingLabel(order);$('detail-shipping').className='badge '+shippingTone(order);

@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const source=existsSync('dist/returns.js')?readFileSync('dist/returns.js','utf8'):'';
 function harness({demo=false,demoReady=true,token='',failSave=false,caseOverrides={},deferFirst=false}={}){
  assert.ok(source,'returns script exists');const elements=new Map(),calls=[],downloads=[],timeline=[];let resolveFirst,responseError;
- const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,events:{},children:[],addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},replaceChildren(...nodes){this.children=nodes;},focus(){},append(...nodes){this.children.push(...nodes);},remove(){},click(){downloads.push({name:this.download,href:this.href});},checkValidity(){return true;}});return elements.get(id);};
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,events:{},children:[],addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},removeAttribute(name){delete this[name];},replaceChildren(...nodes){this.children=nodes;},focus(){},append(...nodes){this.children.push(...nodes);},remove(){},click(){downloads.push({name:this.download,href:this.href});},checkValidity(){return true;}});return elements.get(id);};
  element('return-kind').value='withdrawal';const document={getElementById:element,body:element('body'),createElement:()=>element('download'+Math.random())};
  let value={orderId:demo?'DEMO-001':'PEDIDO-1',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:4,paymentStatus:'paid',...caseOverrides};let selectedOrder=demo?'DEMO-001':'';const timers=new Map();let timerId=0;
  const listeners={},location={hash:token?'#token='+token:'',search:demo?'?demo=1':'',pathname:'/devoluciones'};
@@ -67,4 +67,14 @@ test('manual demo lookup normalizes lowercase order numbers without changing rea
 
 test('a nonexistent demonstration order gives relevant recovery instructions',async()=>{
  const ui=harness({demo:true});await ui.ready;ui.error(404,'Pedido ficticio no encontrado.');ui.element('demo-order').value='DEMO-999';await submit(ui,'demo-order-form');assert.match(ui.element('page-message').textContent,/no encontrado/);assert.doesNotMatch(ui.element('page-message').textContent,/correo/);assert.match(ui.element('page-message').textContent,/misma demostración/);
+});
+
+test('return stages highlight only the confirmed current stage and never imply a refund',async()=>{
+ for(const [status,stage]of Object.entries({none:null,requested:'requested',reviewing:'reviewing',approved:'approved',received:'received',closed:'closed',rejected:'closed'})){
+  const ui=harness({demo:true,caseOverrides:{status,paymentStatus:'paid'}});await ui.ready;
+  assert.equal(ui.element('case-progress').hidden,status==='none');
+  const active=['requested','reviewing','approved','received','closed'].filter(key=>ui.element('stage-'+key)['aria-current']==='step');assert.deepEqual(active,stage?[stage]:[]);
+  assert.doesNotMatch(ui.element('case-next').textContent,/dinero devuelto|reembolso confirmado/i);
+  if(status==='rejected')assert.match(ui.element('stage-closed').textContent,/Rechazada/);
+ }
 });

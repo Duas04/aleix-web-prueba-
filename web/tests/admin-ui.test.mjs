@@ -4,11 +4,11 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source=readFileSync('admin/app.js','utf8').replace(/\nload\(\);\s*$/,'\n');
 const order=id=>({id,created_at:1,customer_name:'Prueba',email:'fixture@example.invalid',recipient:'Prueba',address1:'Calle ficticia',postal_code:'00000',city:'Ciudad',country:'ES',edition:'paperback',quantity:1,subtotal:1500,shipping:700,total:2200,payment_status:'paid',fulfillment_status:'pending'});
-function harness(overrides={},responseUpdates={}){
+function harness(overrides={},responseUpdates={},demo=false){
  const elements=new Map();let resolveShip,resolveCopy,resolvePortal,deferredPortal=false,deferredCopy=false,failDetail=false;const requests=[],savedOrders=new Map();
  const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},removeAttribute(name){delete this[name];},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
- const document={getElementById:element,activeElement:element('opener'),createElement:()=>({...element('node'),dataset:{}})};
- const context=vm.createContext({document,Intl,URLSearchParams,console,location:{origin:'https://book.example'},window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
+ const selected=[];const document={getElementById:element,activeElement:element('opener'),body:{classList:{contains:()=>demo}},createElement:()=>({...element('node'),dataset:{}})};
+ const context=vm.createContext({document,Intl,URLSearchParams,console,location:{origin:'https://book.example'},window:{print(){},DemoSession:{selectOrder(id){selected.push(id);}}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
   requests.push({path,options});
   if(options.method==='POST'){
    if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
@@ -26,8 +26,13 @@ function harness(overrides={},responseUpdates={}){
   const id=path.split('/').pop();return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:{...order(id),...overrides,...savedOrders.get(id)}}),{status:failDetail?503:200});
  }});
  vm.runInContext(source,context);
- return {element,requests,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferPortal(){deferredPortal=true;},completePortal(){resolvePortal(new Response(JSON.stringify({order:{...order('A'),management_version:1},path:'/devoluciones#token='+'b'.repeat(43),expiresAt:Date.now()+86400000})));},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
+ return {element,requests,selected,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferPortal(){deferredPortal=true;},completePortal(){resolvePortal(new Response(JSON.stringify({order:{...order('A'),management_version:1},path:'/devoluciones#token='+'b'.repeat(43),expiresAt:Date.now()+86400000})));},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
 }
+
+test('opening a demo order updates cross-page links only after the detail is loaded',async()=>{
+ const ui=harness({},{},true);await ui.open('DEMO-002');assert.deepEqual(ui.selected,['DEMO-002']);ui.failDetails(true);await ui.open('DEMO-999');assert.deepEqual(ui.selected,['DEMO-002']);
+ const real=harness();await real.open('REAL-001');assert.deepEqual(real.selected,[]);
+});
 test('a delayed shipping error never changes another open order',async()=>{
  const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;
  const pending=ui.element('ship-form').events.submit({preventDefault(){}});

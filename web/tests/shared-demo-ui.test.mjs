@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import vm from 'node:vm';
 const source=existsSync('dist/demo-session.js')?readFileSync('dist/demo-session.js','utf8'):'';
-function harness({enabled=true,hash='',storageWorks=true}={}){
+function harness({enabled=true,hash='',storageWorks=true,path='/demo',clipboardWorks=true}={}){
  assert.ok(source,'shared session script exists');let now=1000000,responseOverride=null;const nodes=[],calls=[],events={},storage=new Map(),timers=new Map();let timerId=0;
  const node=()=>{const n={children:[],events:{},value:'',hidden:false,disabled:false,textContent:'',append(...children){this.children.push(...children);},prepend(...children){this.children.unshift(...children);},addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},focus(){},removeAttribute(name){delete this[name];}};nodes.push(n);return n;};
  const document={body:node(),createElement:node,addEventListener(name,fn){events[name]=fn;}};
- const location={origin:'https://book.example',pathname:enabled?'/demo':'/devoluciones',search:'',hash};
+ const location={origin:'https://book.example',pathname:enabled?path:'/devoluciones',search:enabled?'?demo=1':'',hash};
  const window={addEventListener(name,fn){events[name]=fn;},sessionStorage:{getItem(key){if(!storageWorks)throw Error('blocked');return storage.get(key)||null;},setItem(key,value){if(!storageWorks)throw Error('blocked');storage.set(key,value);},removeItem(key){storage.delete(key);}}};
  class ClockDate extends Date{static now(){return now;}}
- const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{}}},fetch:async(path,options={})=>{calls.push({path,options});return responseOverride?new Response(JSON.stringify(responseOverride.data),responseOverride.options):new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
+ const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{if(!clipboardWorks)throw Error('blocked');}}},fetch:async(path,options={})=>{calls.push({path,options});return responseOverride?new Response(JSON.stringify(responseOverride.data),responseOverride.options):new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
  vm.runInContext(source,context);return {session:window.DemoSession,calls,storage,location,element:id=>nodes.find(n=>n.id===id),response(data,status,headers={}){responseOverride={data,options:{status,headers}};},resetResponse(){responseOverride=null;},advance(ms){now+=ms;for(const [id,timer]of [...timers])if(timer.ms<=ms){timers.delete(id);timer.fn();}},async hash(value){location.hash=value;await events.hashchange?.();},expire(){now+=604800001;},timers};
 }
 test('real token links are untouched and no room is auto-created',()=>{
@@ -52,4 +52,14 @@ test('denied buyer access keeps the shared room while an expired session clears 
  const ui=harness();await ui.session.create();const link=ui.session.link('/demo');
  ui.response({error:'Acceso revocado'},403);assert.equal((await ui.session.request('/api/demo/returns/DEMO-001')).status,403);assert.equal(ui.session.ready(),true);assert.equal(ui.session.link('/demo'),link);
  ui.response({error:'Sesión caducada'},401);await ui.session.request('/api/demo/admin/orders');assert.equal(ui.session.ready(),false);
+});
+
+test('guided navigation marks the current page and keeps sharing controls collapsed',async()=>{
+ const ui=harness({path:'/devoluciones'});assert.equal(ui.element('demo-tools').open,false);assert.equal(ui.element('demo-nav-1')['aria-current'],'page');assert.match(ui.element('demo-guide').textContent,/Inicia/);
+ await ui.session.create();assert.match(ui.element('demo-guide').textContent,/pedido/);ui.session.selectOrder('DEMO-002');assert.match(ui.element('demo-nav-2').href,/order=DEMO-002/);
+});
+
+test('clipboard denial offers a selectable same-session link and clears it on session change',async()=>{
+ const ui=harness({clipboardWorks:false});await ui.session.create();await ui.element('demo-session-copy').events.click();assert.equal(ui.element('demo-share-fallback').hidden,false);assert.match(ui.element('demo-share-link').value,/#session=a{43}/);assert.match(ui.element('demo-session-message').textContent,/selecciona/i);
+ ui.response({error:'expired'},401);await ui.session.request('/api/demo/admin/orders');assert.equal(ui.element('demo-share-link').value,'');assert.equal(ui.element('demo-share-fallback').hidden,true);
 });
