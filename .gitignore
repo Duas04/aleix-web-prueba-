@@ -1,0 +1,15 @@
+**/node_modules/
+**/.env
+**/.env.*
+!**/.env.example
+**/.sites-runtime/
+**/dist/server/
+**/dist/.openai/
+**/*.tar.gz
+**/*.zip
+**/*.sqlite*
+**/*.db
+**/test-results/
+**/playwright-report/
+.DS_Store
+Thumbs.db
