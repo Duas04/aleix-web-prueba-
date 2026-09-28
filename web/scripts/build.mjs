@@ -19,7 +19,12 @@ assets['@returns']=assets['/devoluciones.html'];
 if(!assets['@returns'])throw new Error('Customer returns portal missing');
 assets['@returns'].noIndex=true;
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
+const liveUpdates=await readFile('admin/live-updates.js','utf8');
+assets['/admin/app.js'].data=Buffer.from((await readFile('admin/app.js','utf8'))+'\n'+liveUpdates).toString('base64');
 const database=await readFile('worker/database.mjs','utf8');
+for(const key of ['/index.html','@returns']){let html=Buffer.from(assets[key].data,'base64').toString('utf8');html=html.replace(/<script src="\/demo-(?:session|checkout)\.js" defer><\/script>/g,'').replace('<link rel="stylesheet" href="/demo-session.css">','').replace('<a href="/demo" rel="nofollow">Demo del panel</a>','');assets[key].data=Buffer.from(html).toString('base64');}
+assets['/returns.js'].data=Buffer.from(Buffer.from(assets['/returns.js'].data,'base64').toString('utf8').replace("const demo=new URLSearchParams(location.search).get('demo')==='1';","const demo=false;")).toString('base64');
+for(const key of ['/demo-session.js','/demo-session.css','/demo-checkout.js'])delete assets[key];
 // Hash once at build time; unchanged public files can revalidate without downloading again.
 for(const [key,asset] of Object.entries(assets)) {
   asset.etag=`W/"${createHash('sha256').update(Buffer.from(asset.data,'base64')).digest('hex')}"`;
@@ -29,9 +34,10 @@ const originalCover=Object.keys(assets).find(key=>/^\/assets\/fumada-xxl-1536-[a
 if(!originalCover)throw new Error('Optimized cover missing');
 assets['/assets/fumada-xxl-aleix.png']={redirect:originalCover};
 const returns=(await readFile('worker/returns.mjs','utf8')).replace(/^import .* from ['"]\.\/database\.mjs['"];?\s*$/gm,'');
-const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .* from ['"]\.\/(?:database|returns)\.mjs['"];?\s*$/gm,'');
+const demo=(await readFile('worker/demo.mjs','utf8')).replace(/^import .* from ['"]\.\/database\.mjs['"];?\s*$/gm,'');
+const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .* from ['"]\.\/(?:database|returns|demo)\.mjs['"];?\s*$/gm,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
-await writeFile('dist/server/index.js',`${database}\n${returns}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
+await writeFile('dist/server/index.js',`${database}\n${returns}\n${demo}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
 await cp('.openai/hosting.json','dist/.openai/hosting.json');
 console.log(`Built Worker with ${Object.keys(assets).length} preserved resources.`);

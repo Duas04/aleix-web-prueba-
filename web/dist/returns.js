@@ -4,16 +4,18 @@ let fragment='',token='';
 function consumeFragment(){fragment=location.hash;if(fragment)history.replaceState(null,'',location.pathname+location.search);token=new URLSearchParams(fragment.slice(1)).get('token')||'';if(!/^[A-Za-z0-9_-]{43}$/.test(token))token='';}
 consumeFragment();
 const demo=new URLSearchParams(location.search).get('demo')==='1';
-let currentCase=null,busy=false,receiptText='',viewRequest=0;
+const session=window.DemoSession;
+let currentCase=null,busy=false,receiptText='',viewRequest=0,pollTimer=null;
 const statusLabels={none:'Sin solicitud',requested:'Solicitud registrada',reviewing:'En revisión',approved:'Devolución aprobada',received:'Libro recibido',closed:'Gestión cerrada',rejected:'Solicitud rechazada'};
 const kindLabels={withdrawal:'Desistimiento',damaged:'Libro dañado',wrong:'Libro equivocado',other:'Otra consulta'};
 const canRequest=()=>currentCase&&['none','closed','rejected'].includes(currentCase.status);
-function lock(value){busy=value;$('access-fields').disabled=value;$('request-fields').disabled=value;$('label-download').disabled=value;$('case-refresh').disabled=value;$('demo-approved').disabled=value;}
+function lock(value){busy=value;$('access-fields').disabled=value;$('request-fields').disabled=value;$('label-download').disabled=value;$('case-refresh').disabled=value;$('demo-order-fields').disabled=value||(demo&&!session?.ready());}
 function download(blob,name){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 async function api(path,{action,body}={}){
- const headers={...(token?{'X-Return-Token':token}:{}),...(action?{'X-Return-Action':action}:{})};
+ const headers=demo?{...(action?{'X-Demo-Action':action}:{})}:{...(token?{'X-Return-Token':token}:{}),...(action?{'X-Return-Action':action}:{})};
  if(body)headers['Content-Type']='application/json';
- const response=await fetch(path,{method:action?'POST':'GET',headers,credentials:'omit',cache:'no-store',...(body?{body:JSON.stringify(body)}:{})});
+ const options={method:action?'POST':'GET',headers,credentials:'omit',cache:'no-store',...(body?{body:JSON.stringify(body)}:{})};let response;
+ if(demo){if(path!=='/api/returns/case'||!session?.ready())throw new Error('Inicia una demostración desde la barra o usa un enlace compartido.');const id=currentCase?.orderId||$('demo-order').value.trim();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id))throw new Error('Indica un número de pedido de prueba válido.');response=await session.request('/api/demo/returns/'+encodeURIComponent(id),options);}else response=await fetch(path,options);
  let data;try{data=await response.json();}catch{throw new Error('No se ha podido cargar la información. Inténtalo de nuevo o escribe a Aleix.');}
  if(!response.ok)throw new Error(data.error||'No se ha podido completar la solicitud. Inténtalo de nuevo o pide un enlace nuevo.');return data;
 }
@@ -26,6 +28,7 @@ function render(value){
  $('request-form').hidden=!canRequest();
  $('request-message').textContent=canRequest()?'':'La solicitud está registrada. Puedes actualizar el estado y consultar la respuesta de Aleix.';
  if(value.submittedAt!=null&&value.status!=='none'&&Object.hasOwn(kindLabels,value.kind))showReceipt(value);
+ if(demo){$('demo-panel-link').href=session.link('/demo',{orderId:value.orderId});schedulePoll();}
 }
 function showReceipt(value,kind=value.kind,reason=value.reason){
  const timestamp=new Intl.DateTimeFormat('es-ES',{dateStyle:'long',timeStyle:'short'}).format(new Date(value.submittedAt??Date.now()));
@@ -33,7 +36,10 @@ function showReceipt(value,kind=value.kind,reason=value.reason){
  $('receipt-text').textContent=receiptText;$('receipt').hidden=false;
 }
 function reasonState(){const optional=$('return-kind').value==='withdrawal';$('return-reason').required=!optional;$('reason-caption').textContent=optional?'(opcional para desistimiento)':'(necesarios para revisar este caso)';}
-async function refresh(){if(busy||!currentCase)return;const version=viewRequest;lock(true);$('request-message').textContent='Actualizando…';try{const value=demo?currentCase:(await api('/api/returns/case')).case;if(version===viewRequest)render(value);}catch(error){if(version===viewRequest)$('request-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}}
+function stopPoll(){if(pollTimer!==null)clearTimeout(pollTimer);pollTimer=null;}
+function hasDraft(){return!$('request-form').hidden&&($('return-reason').value.trim()||$('return-kind').value!=='withdrawal');}
+function schedulePoll(){stopPoll();if(!demo||document.hidden||!currentCase||!session?.ready())return;pollTimer=setTimeout(async()=>{pollTimer=null;if(!document.hidden&&!busy&&!hasDraft())await refresh({silent:true});schedulePoll();},5000);}
+async function refresh({silent=false}={}){if(busy||!currentCase)return;const version=viewRequest;if(!silent){lock(true);$('request-message').textContent='Actualizando…';}else busy=true;try{const value=(await api('/api/returns/case')).case;if(version===viewRequest&&(!silent||value.version!==currentCase?.version))render(value);}catch(error){if(version===viewRequest)$('request-message').textContent=error.message;}finally{if(version===viewRequest){if(!silent)lock(false);else busy=false;}}}
 $('return-kind').addEventListener('change',reasonState);
 $('access-form').addEventListener('submit',async event=>{
  event.preventDefault();if(busy)return;const orderId=$('access-order').value.trim(),email=$('access-email').value.trim();if(!orderId||!email){$('access-message').textContent='Indica el número de pedido y el correo de compra.';(!orderId?$('access-order'):$('access-email')).focus();return;}
@@ -45,12 +51,12 @@ $('request-form').addEventListener('submit',async event=>{
  if(kind!=='withdrawal'&&!reason){$('request-message').textContent='Añade detalles para que Aleix pueda revisar el caso.';$('return-reason').focus();return;}
  if(reason.length>1000){$('request-message').textContent='Los detalles pueden tener hasta 1000 caracteres.';$('return-reason').focus();return;}
  const version=viewRequest;lock(true);$('request-message').textContent='Registrando solicitud…';try{
-  const value=demo?{...currentCase,status:'requested',kind,reason,version:currentCase.version+1}:(await api('/api/returns/case',{action:'request',body:{kind,reason,expectedVersion:currentCase.version}})).case;
+  const value=(await api('/api/returns/case',{action:'request',body:{kind,reason,expectedVersion:currentCase.version}})).case;
   if(version!==viewRequest)return;
-  render(value);showReceipt(value,kind,reason);$('request-message').textContent=demo?'Solicitud simulada. No se ha enviado al vendedor.':'Solicitud registrada. Descarga el justificante para conservarla.';$('receipt-title').focus();
+  render(value);showReceipt(value,kind,reason);$('request-message').textContent=demo?'Solicitud de prueba guardada en la demostración compartida. Puedes gestionarla desde el panel.':'Solicitud registrada. Descarga el justificante para conservarla.';$('receipt-title').focus();
  }catch(error){if(version===viewRequest)$('request-message').textContent=error.message+' Los detalles siguen en el formulario. Puedes reintentarlo.';}finally{if(version===viewRequest)lock(false);}
 });
-$('case-refresh').addEventListener('click',refresh);
+$('case-refresh').addEventListener('click',()=>refresh());
 $('receipt-download').addEventListener('click',()=>{if(receiptText)download(new Blob([receiptText],{type:'text/plain;charset=utf-8'}),'justificante-devolucion.txt');});
 $('label-download').addEventListener('click',async()=>{
  if(busy||!currentCase?.label)return;const version=viewRequest;lock(true);$('label-message').textContent='Preparando descarga…';try{
@@ -59,15 +65,17 @@ $('label-download').addEventListener('click',async()=>{
   $('label-message').textContent=demo?'Ejemplo descargado; no es válido para envíos.':'Etiqueta descargada.';
  }catch(error){if(version===viewRequest)$('label-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}
 });
-$('demo-approved').addEventListener('click',()=>{if(!demo||busy)return;render({...currentCase,status:'approved',reply:'Ejemplo de respuesta: protege el libro y espera las indicaciones de Aleix antes de enviarlo.',carrier:'Transportista ficticio',code:'EJEMPLO SIN VALIDEZ',label:{type:'text/plain',size:90}});$('request-message').textContent='Estado aprobado simulado. No corresponde a una solicitud real.';});
+$('demo-order-form').addEventListener('submit',async event=>{event.preventDefault();if(busy||!demo||!session?.ready())return;const id=$('demo-order').value.trim();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id)){$('demo-order-help').textContent='Indica un número de pedido de prueba válido.';$('demo-order').focus();return;}session.selectOrder(id);return start();});
 async function start(){
- const version=++viewRequest;currentCase=null;receiptText='';$('case-panel').hidden=true;$('access-panel').hidden=false;$('page-message').hidden=true;
+ const version=++viewRequest;stopPoll();currentCase=null;receiptText='';$('case-panel').hidden=true;$('access-panel').hidden=demo;$('page-message').hidden=true;
  for(const id of ['case-order','case-reply','case-reason','case-code','case-carrier','receipt-text','access-message','request-message','label-message'])$(id).textContent='';
  $('return-reason').value='';$('return-kind').value='withdrawal';
- $('receipt').hidden=true;$('demo-note').hidden=!demo;$('demo-approved').hidden=!demo;reasonState();lock(false);
- if(demo){token='';render({orderId:'DEMO-DEVOLUCION',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:0,paymentStatus:'paid'});return;}
- if(!token){if(fragment){$('page-message').hidden=false;$('page-message').textContent='El enlace no es válido. Solicita un enlace nuevo o escribe a Aleix.';}return;}
+ $('receipt').hidden=true;$('demo-note').hidden=!demo;$('demo-order-panel').hidden=!demo;$('demo-panel-link').hidden=!demo;reasonState();lock(false);
+ if(demo){const help=$('case-access-help');if(help)help.textContent='La demostración guarda el acceso en esta pestaña, si el navegador lo permite. Para continuar en otro dispositivo o volver a la sesión, usa el enlace compartido de la barra. La sesión caduca 7 días después de crearse. Comparte solo datos ficticios.';token='';const connected=session?.ready();$('demo-order-fields').disabled=!connected;$('demo-order-help').textContent=connected?'Consulta el número de tu compra de prueba o un pedido de ejemplo como DEMO-001.':'Inicia una demostración desde la barra o pega un enlace compartido para consultar pedidos de prueba.';if(!connected)return;$('demo-order').value=session.orderId()||'';if(!$('demo-order').value)return;}
+ if(!demo&&!token){if(fragment){$('page-message').hidden=false;$('page-message').textContent='El enlace no es válido. Solicita un enlace nuevo o escribe a Aleix.';}return;}
  lock(true);$('page-message').hidden=false;$('page-message').textContent='Consultando tu devolución…';try{const value=(await api('/api/returns/case')).case;if(version!==viewRequest)return;render(value);$('page-message').hidden=true;}catch(error){if(version===viewRequest)$('page-message').textContent=error.message+' Abre de nuevo el enlace del correo o solicita uno nuevo.';}finally{if(version===viewRequest)lock(false);}
 }
-window.addEventListener('hashchange',()=>{if(!location.hash)return;consumeFragment();return start();});
+window.addEventListener('hashchange',()=>{if(!location.hash||demo)return;consumeFragment();return start();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPoll();else schedulePoll();});
+if(demo&&session)session.subscribe(()=>start());
 start();

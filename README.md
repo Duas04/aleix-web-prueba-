@@ -1,10 +1,10 @@
 # Fumada XXL · Aleix
 
-Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `0f66b35a6e3fa27f2e5635735b1b56fa56bd11d6`.
+Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `8c0ee3aa78949322a1ca88534e959c3025181830`.
 
 | Carpeta | Contenido | Inicio local |
 | --- | --- | --- |
-| [presentacion](presentacion/) | Web del libro y panel público con cuatro pedidos ficticios, envío simulado, impresión y ejemplo de reembolso por libro dañado. Sin backend ni base de datos. | `node presentacion/serve.mjs` → http://127.0.0.1:4180 |
+| [presentacion](presentacion/) | Compra ficticia con número de pedido, devoluciones y panel sincronizados. Servidor Node con SQLite, cuatro ejemplos iniciales y sesiones de siete días. | `node presentacion/serve.mjs` → http://127.0.0.1:4180 |
 | [web](web/) | Web de la tienda y panel privado, Worker, base D1, migraciones y pruebas. Excluye la demo pública. | `cd web`, `node scripts/build.mjs`, `node scripts/preview-admin.mjs` → http://127.0.0.1:4181 |
 
 Necesitas Node.js 24 o superior. La presentación no necesita instalar dependencias. Para tareas con Drizzle en web: `pnpm install` (versión indicada en package.json).
@@ -17,6 +17,10 @@ Tapa blanda 15 EUR, tapa dura 20 EUR, envío 7 EUR por pedido. Los cobros están
 
 - Web: https://prueba-aleix.com/
 - Demo: https://prueba-aleix.com/demo
+- Compra ficticia: https://prueba-aleix.com/?demo=1
+- Devoluciones ficticias: https://prueba-aleix.com/devoluciones?demo=1
+
+Para mostrar los mismos pedidos en móvil y ordenador, inicia una demostración y usa **Copiar enlace para otro dispositivo**. Abrir sesiones nuevas crea ejemplos separados. Consulta [las instrucciones y cambios](DEMO-CONECTADA-2026-09-28.md).
 
 Esta organización para GitHub no cambia automáticamente la web publicada. El alojamiento actual mantiene ambas rutas; esta copia las separa para trabajar de forma independiente. No hay despliegue automático desde este repositorio.
 

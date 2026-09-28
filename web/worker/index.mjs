@@ -1,5 +1,6 @@
 import { authorizeOwner, listOrders, getOrder, shipOrder, updateNote, updateTracking, deliverOrder, updateReturn } from './database.mjs';
 import { handlePublicReturns, handleAdminReturns } from './returns.mjs';
+import { handleDemo } from './demo.mjs';
 
 const privateHeaders = {'Cache-Control':'private, no-store, max-age=0','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:{...privateHeaders,'Content-Type':'application/json; charset=utf-8'}});
@@ -40,6 +41,7 @@ export function createWorker(assets) {
     const api = p.startsWith('/api/admin/');
     const adminPage = p === '/admin' || p === '/admin/';
     try {
+      if(p.startsWith('/api/demo/')||p==='/api/demo')return json({error:'No encontrado.'},404);
       if(p.startsWith('/api/returns/')||p==='/api/returns')return await handlePublicReturns(request,env);
       if(p==='/devoluciones'||p==='/devoluciones/'||p==='/devoluciones.html'){
         if(!['GET','HEAD'].includes(request.method))return json({error:'Método no permitido.'},405);
@@ -86,7 +88,7 @@ export function createWorker(assets) {
       if(p==='/index.html')return new Response(null,{status:301,headers:{Location:'/'+url.search,'Cache-Control':'public, max-age=3600'}});
       const asset=assets[p === '/'?'/index.html':p];
       if(asset?.redirect)return new Response(null,{status:301,headers:{Location:asset.redirect+url.search,'Cache-Control':'public, max-age=3600'}});
-      if(asset) return assetResponse(asset,request,p.startsWith('/admin/'));
+      if(asset){const demonstration=p==='/demo'||p==='/demo/'||url.searchParams.get('demo')==='1';return assetResponse(demonstration?{...asset,noIndex:true}:asset,request,p.startsWith('/admin/')||demonstration);}
       return assets['/404.html'] ? assetResponse(assets['/404.html'],request,false,404) : new Response('No encontrado',{status:404});
     } catch {
       // Never log addresses, identity headers, request bodies, or customer data.

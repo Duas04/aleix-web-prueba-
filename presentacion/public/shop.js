@@ -13,6 +13,7 @@ if(dialog){
  const format=cents=>money.format(cents/100);
  const announce=text=>{$('#order-announcement').textContent=text;};
  function go(next,{focus=true}={}){
+  if(next==='details')window.dispatchEvent(new CustomEvent('fumada-cart-details'));
   step=next;
   dialog.querySelectorAll('[data-step]').forEach(panel=>{panel.hidden=panel.dataset.step!==next;});
   $('#order-title').textContent=titles[next];
@@ -98,6 +99,7 @@ if(dialog){
    name.textContent=`${qty} × ${CATALOG[key].name}`;price.textContent=format(qty*CATALOG[key].cents);li.append(name,price);return li;
   }));
   const cost=totals(items);$('#review-total').textContent=format(cost.total);$('#review-shipping').textContent=format(cost.shipping);go('review');
+  window.dispatchEvent(new CustomEvent('fumada-cart-reviewed',{detail:{items:{...items}}}));
  });
  // No payment integration: no address, email or order leaves this page.
  dialog.querySelectorAll('[data-close-cart]').forEach(button=>button.addEventListener('click',()=>dialog.close()));

@@ -9,7 +9,7 @@ const shippingLabel=order=>order.delivered_at?'Entregado':order.fulfillment_stat
 const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':activeReturn(order)?'return-state':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
 let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
-let saving=false;
+let saving=false,lastListSignature='';
 const returnLabels={none:'Sin devolución',requested:'Solicitada',reviewing:'En revisión',approved:'Aprobada',received:'Recibida',closed:'Cerrada',rejected:'Rechazada'};
 const returnTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
 const activeReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
@@ -22,17 +22,20 @@ async function api(path,options={}) {
 }
 function cell(text,label){const e=document.createElement('td');e.setAttribute('role','cell');e.textContent=text;if(label)e.dataset.label=label;return e;}
 function badge(status,text){const e=document.createElement('span');e.className='badge '+status;e.textContent=text;return e;}
-async function load() {
+async function load({quiet=false}={}) {
   const version=++listRequest;
   const paginationFocus=['previous','next'].includes(document.activeElement?.id)?document.activeElement:null;
   const hadRows=$('rows').children.length>0;
   loading=true;$('table-wrap').setAttribute('aria-busy','true');
   for(const id of ['refresh','previous','next'])$(id).setAttribute('aria-disabled','true');
-  $('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Cargando tus pedidos…';$('empty').hidden=true;
+  if(!quiet){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Cargando tus pedidos…';$('empty').hidden=true;}
   try {
     const params=new URLSearchParams({page:String(page),filter:$('filter').value,q:$('search').value.trim()});
     const data=await api('/api/admin/orders?'+params);
     if(version!==listRequest)return;
+    const signature=String(params)+JSON.stringify(data);
+    if(quiet&&lastListSignature===signature)return;
+    lastListSignature=signature;
     total=data.count;
     if(page>1&&data.orders.length===0){page=1;return load();}
     loadedPage=page;
@@ -150,10 +153,11 @@ $('return-form').addEventListener('submit',event=>{
   return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
 });
 $('portal-link-create').addEventListener('click',()=>saveManagement('portal-link',{},'Enlace preparado. Aún debes enviarlo al comprador.',undefined,{afterSave:result=>{
-  clearPortalLink();const demoLink=result.path==='/devoluciones?demo=1'&&document.body?.classList?.contains('demo-page');if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
+  clearPortalLink();const demoLink=document.body?.classList?.contains('demo-page')&&(result.path==='/devoluciones?demo=1'||/^\/devoluciones\?demo=1#session=[A-Za-z0-9_-]{43}&order=DEMO-[A-Za-z0-9]+$/.test(result.path||''));if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
   const url=location.origin+result.path;$('portal-url').value=url;$('portal-link-output').hidden=false;
   $('portal-expiry').textContent='Caduca el '+date(result.expiresAt)+'. Al generar otro enlace, el anterior deja de funcionar.';
   $('portal-mail').href='mailto:'+encodeURIComponent(currentOrder.email)+'?subject='+encodeURIComponent('Tu enlace privado de devolución · Fumada XXL')+'&body='+encodeURIComponent('Hola,\n\nPuedes consultar tu devolución del pedido '+currentOrder.id+' en este enlace privado:\n'+url+'\n\nGuárdalo en privado. Caduca en 30 días.\n\nAleix');
+  if(demoLink){$('portal-expiry').textContent='Demostración compartida hasta el '+date(result.expiresAt)+'. Solo contiene datos de prueba.';$('portal-mail').href=url;$('portal-mail').textContent='Abrir devolución de prueba';}
 }}));
 $('portal-revoke').addEventListener('click',()=>{if(!$('portal-revoke-confirm').checked){$('detail-message').textContent='Confirma que quieres invalidar el enlace del comprador.';$('portal-revoke-confirm').focus();return;}return saveManagement('portal-revoke',{},'Enlace del comprador invalidado.',undefined,{afterSave:()=>{clearPortalLink();$('portal-revoke-confirm').checked=false;}});});
 $('portal-copy').addEventListener('click',async()=>{const url=$('portal-url').value,version=detailRequest;if(!url)return;try{await navigator.clipboard.writeText(url);if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Enlace copiado. Todavía debes enviarlo al comprador.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Selecciona el enlace y cópialo manualmente.';}});

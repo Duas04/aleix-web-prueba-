@@ -1,7 +1,7 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 662d16cb607e5f66c10c8104b7be07b474f76737
+Revisión Git de base: 1d0e1f9585d0b1468463325ef9dd10231ea95824
 Incluye el portal privado de devoluciones, enlaces manuales, respuestas y etiquetas; el panel ampliado con tareas, seguimiento y notas, junto al carrito de prueba y las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
@@ -9,66 +9,81 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 ÍNDICE
 1. web/.gitignore
 2. web/.openai/hosting.json
-3. web/LEGAL-READINESS.md
-4. web/README.md
-5. web/REVIEW-2026-09-28.md
-6. web/admin/app.js
-7. web/admin/index.html
-8. web/admin/styles.css
-9. web/db/schema.ts
-10. web/dist/404.html
-11. web/dist/app.js
-12. web/dist/assets/fonts/dmsans-OFL.txt
-13. web/dist/assets/fonts/manrope-OFL.txt
-14. web/dist/assets/fonts/playfairdisplay-OFL.txt
-15. web/dist/aviso-legal.html
-16. web/dist/cart.js
-17. web/dist/condiciones-de-venta.html
-18. web/dist/cookies.html
-19. web/dist/devoluciones.html
-20. web/dist/fonts.css
-21. web/dist/index.html
-22. web/dist/legal.css
-23. web/dist/privacidad.html
-24. web/dist/returns.css
-25. web/dist/returns.js
-26. web/dist/robots.txt
-27. web/dist/shop.css
-28. web/dist/shop.js
-29. web/dist/sitemap.xml
-30. web/dist/styles.css
-31. web/drizzle.config.ts
-32. web/drizzle/0000_cultured_mathemanic.sql
-33. web/drizzle/0001_lonely_black_bolt.sql
-34. web/drizzle/0002_cute_blazing_skull.sql
-35. web/drizzle/0003_colossal_nehzno.sql
-36. web/drizzle/meta/0000_snapshot.json
-37. web/drizzle/meta/0001_snapshot.json
-38. web/drizzle/meta/0002_snapshot.json
-39. web/drizzle/meta/0003_snapshot.json
-40. web/drizzle/meta/_journal.json
-41. web/package.json
-42. web/pnpm-lock.yaml
-43. web/pnpm-workspace.yaml
-44. web/scripts/build.mjs
-45. web/scripts/package.mjs
-46. web/scripts/preview-admin.mjs
-47. web/serve.mjs
-48. web/tests/admin-ui.test.mjs
-49. web/tests/admin.test.mjs
-50. web/tests/breathing.test.mjs
-51. web/tests/cache.test.mjs
-52. web/tests/cart.test.mjs
-53. web/tests/customer-returns-ui.test.mjs
-54. web/tests/customer-returns.test.mjs
-55. web/tests/database.mjs
-56. web/tests/management.test.mjs
-57. web/tests/search.test.mjs
-58. web/tests/seo.test.mjs
-59. web/tests/separation.test.mjs
-60. web/worker/database.mjs
-61. web/worker/index.mjs
-62. web/worker/returns.mjs
+3. web/DEMO-CONECTADA-2026-09-28.md
+4. web/LEGAL-READINESS.md
+5. web/README.md
+6. web/REVIEW-2026-09-28.md
+7. web/admin/app.js
+8. web/admin/demo-shared-controls.js
+9. web/admin/demo-shared.js
+10. web/admin/index.html
+11. web/admin/live-updates.js
+12. web/admin/styles.css
+13. web/db/schema.ts
+14. web/dist/404.html
+15. web/dist/app.js
+16. web/dist/assets/fonts/dmsans-OFL.txt
+17. web/dist/assets/fonts/manrope-OFL.txt
+18. web/dist/assets/fonts/playfairdisplay-OFL.txt
+19. web/dist/aviso-legal.html
+20. web/dist/cart.js
+21. web/dist/condiciones-de-venta.html
+22. web/dist/cookies.html
+23. web/dist/demo-checkout.js
+24. web/dist/demo-session.css
+25. web/dist/demo-session.js
+26. web/dist/devoluciones.html
+27. web/dist/fonts.css
+28. web/dist/index.html
+29. web/dist/legal.css
+30. web/dist/privacidad.html
+31. web/dist/returns.css
+32. web/dist/returns.js
+33. web/dist/robots.txt
+34. web/dist/shop.css
+35. web/dist/shop.js
+36. web/dist/sitemap.xml
+37. web/dist/styles.css
+38. web/drizzle.config.ts
+39. web/drizzle/0000_cultured_mathemanic.sql
+40. web/drizzle/0001_lonely_black_bolt.sql
+41. web/drizzle/0002_cute_blazing_skull.sql
+42. web/drizzle/0003_colossal_nehzno.sql
+43. web/drizzle/0004_chunky_microchip.sql
+44. web/drizzle/meta/0000_snapshot.json
+45. web/drizzle/meta/0001_snapshot.json
+46. web/drizzle/meta/0002_snapshot.json
+47. web/drizzle/meta/0003_snapshot.json
+48. web/drizzle/meta/0004_snapshot.json
+49. web/drizzle/meta/_journal.json
+50. web/package.json
+51. web/pnpm-lock.yaml
+52. web/pnpm-workspace.yaml
+53. web/scripts/build.mjs
+54. web/scripts/package.mjs
+55. web/scripts/preview-admin.mjs
+56. web/serve.mjs
+57. web/tests/admin-live.test.mjs
+58. web/tests/admin-ui.test.mjs
+59. web/tests/admin.test.mjs
+60. web/tests/breathing.test.mjs
+61. web/tests/cache.test.mjs
+62. web/tests/cart.test.mjs
+63. web/tests/customer-returns-ui.test.mjs
+64. web/tests/customer-returns.test.mjs
+65. web/tests/database.mjs
+66. web/tests/demo-checkout.test.mjs
+67. web/tests/export-isolation.test.mjs
+68. web/tests/management.test.mjs
+69. web/tests/search.test.mjs
+70. web/tests/seo.test.mjs
+71. web/tests/separation.test.mjs
+72. web/tests/shared-demo-ui.test.mjs
+73. web/tests/shared-demo.test.mjs
+74. web/worker/database.mjs
+75. web/worker/demo.mjs
+76. web/worker/index.mjs
+77. web/worker/returns.mjs
 
 
 ========================================================================
@@ -95,6 +110,46 @@ ARCHIVO: web/.openai/hosting.json
   "r2": "FILES",
   "project_id": "appgprj_6ab99652f80c819198f376d30176183d"
 }
+
+
+
+========================================================================
+ARCHIVO: web/DEMO-CONECTADA-2026-09-28.md
+========================================================================
+
+# Presentación conectada · 28 de septiembre de 2026
+
+La tienda de prueba, las devoluciones y el panel comparten ahora una sesión guardada en el servidor. Se abre en móvil y ordenador con el mismo enlace; las sesiones diferentes no se mezclan.
+
+La página del libro incluye un botón destacado **Devoluciones y reembolsos**, debajo de las ediciones. En modo demostración conserva la sesión y el pedido seleccionado; en la tienda ordinaria abre el portal real de atención.
+
+## Cómo enseñarla
+
+1. Abre `https://prueba-aleix.com/?demo=1` y pulsa **Iniciar demostración**.
+2. Añade libros al carrito y crea el pedido de prueba. Se muestran el número propio, importe y justificante; no se cobra dinero.
+3. Usa **Copiar enlace para otro dispositivo** y abre ese enlace en el móvil u ordenador. No crees otra demostración si quieres ver los mismos pedidos.
+4. Desde la confirmación abre **Solicitar devolución de este pedido**. También puedes escribir su número en el apartado Devoluciones.
+5. Registra un caso, por ejemplo libro dañado. Aparece en el Panel de la misma sesión; con la página visible se consulta cada cinco segundos.
+6. Aprueba la devolución, escribe una respuesta y añade la etiqueta ficticia. El comprador puede ver los cambios y descargar el ejemplo, que no sirve para enviar un paquete real.
+
+El panel conserva borradores y avisa si otra persona cambia el pedido. El guardado rechaza versiones antiguas para evitar sobrescrituras. La vista deja de consultar cuando está oculta. La sesión caduca a los siete días desde su creación, aunque se importe después. Una nueva sesión no elimina inmediatamente la anterior.
+
+## Separación y límites
+
+- Datos ficticios fijados en servidor. La compra solo acepta ediciones, cantidades y una referencia de reintento; calcula 15/20 euros por ejemplar y siete de envío una sola vez.
+- Cuatro pedidos de muestra y hasta dieciséis compras nuevas por sesión. Creación limitada por origen de conexión y capacidad global.
+- Clave aleatoria de 256 bits, solo huella en base de datos, sin indexación ni caché de las vistas de demo. El enlace permite gestionar toda esa sesión ficticia: se avisa antes de compartirlo.
+- No accede a pedidos reales, no recibe archivos personales y no usa el almacenamiento de etiquetas reales. No introduzcas datos personales en las notas de prueba.
+- Privacidad, cookies y condiciones describen el almacenamiento de la demo y su caducidad.
+- La tienda ordinaria sigue sin contratar ni cobrar. La compra real, confirmación por correo y reembolso automático requieren conectar la pasarela y completar la operativa pendiente. Las devoluciones reales existentes mantienen su acceso privado independiente.
+
+## Verificación
+
+118 pruebas automatizadas del sitio pasan. Prueba manual local en tres pestañas: compra mixta de 42 euros, número generado, devolución por daños, actualización automática en panel, aprobación, respuesta y etiqueta visibles en comprador. Comprobada anchura móvil de 390 píxeles sin desbordamiento horizontal. Revisiones independientes de frontend, backend y seguridad.
+
+En GitHub, `presentacion` incluye servidor Node y SQLite para la demo ficticia; `web` mantiene el panel privado y deshabilita las rutas de demo pública en su compilación. El alojamiento publicado combina ambas partes con separación de datos. La copia de GitHub no despliega automáticamente por sí sola.
+
+Referencia informativa de almacenamiento técnico y transparencia: [Guía sobre cookies de la AEPD](https://www.aepd.es/guias/guia-cookies.pdf). Los cambios de esta entrega describen el funcionamiento técnico; no certifican el cumplimiento integral de una tienda aún pendiente de activación.
 
 
 
@@ -279,7 +334,7 @@ const shippingLabel=order=>order.delivered_at?'Entregado':order.fulfillment_stat
 const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':activeReturn(order)?'return-state':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
 let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
-let saving=false;
+let saving=false,lastListSignature='';
 const returnLabels={none:'Sin devolución',requested:'Solicitada',reviewing:'En revisión',approved:'Aprobada',received:'Recibida',closed:'Cerrada',rejected:'Rechazada'};
 const returnTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
 const activeReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
@@ -292,17 +347,20 @@ async function api(path,options={}) {
 }
 function cell(text,label){const e=document.createElement('td');e.setAttribute('role','cell');e.textContent=text;if(label)e.dataset.label=label;return e;}
 function badge(status,text){const e=document.createElement('span');e.className='badge '+status;e.textContent=text;return e;}
-async function load() {
+async function load({quiet=false}={}) {
   const version=++listRequest;
   const paginationFocus=['previous','next'].includes(document.activeElement?.id)?document.activeElement:null;
   const hadRows=$('rows').children.length>0;
   loading=true;$('table-wrap').setAttribute('aria-busy','true');
   for(const id of ['refresh','previous','next'])$(id).setAttribute('aria-disabled','true');
-  $('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Cargando tus pedidos…';$('empty').hidden=true;
+  if(!quiet){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Cargando tus pedidos…';$('empty').hidden=true;}
   try {
     const params=new URLSearchParams({page:String(page),filter:$('filter').value,q:$('search').value.trim()});
     const data=await api('/api/admin/orders?'+params);
     if(version!==listRequest)return;
+    const signature=String(params)+JSON.stringify(data);
+    if(quiet&&lastListSignature===signature)return;
+    lastListSignature=signature;
     total=data.count;
     if(page>1&&data.orders.length===0){page=1;return load();}
     loadedPage=page;
@@ -420,10 +478,11 @@ $('return-form').addEventListener('submit',event=>{
   return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
 });
 $('portal-link-create').addEventListener('click',()=>saveManagement('portal-link',{},'Enlace preparado. Aún debes enviarlo al comprador.',undefined,{afterSave:result=>{
-  clearPortalLink();const demoLink=result.path==='/devoluciones?demo=1'&&document.body?.classList?.contains('demo-page');if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
+  clearPortalLink();const demoLink=document.body?.classList?.contains('demo-page')&&(result.path==='/devoluciones?demo=1'||/^\/devoluciones\?demo=1#session=[A-Za-z0-9_-]{43}&order=DEMO-[A-Za-z0-9]+$/.test(result.path||''));if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
   const url=location.origin+result.path;$('portal-url').value=url;$('portal-link-output').hidden=false;
   $('portal-expiry').textContent='Caduca el '+date(result.expiresAt)+'. Al generar otro enlace, el anterior deja de funcionar.';
   $('portal-mail').href='mailto:'+encodeURIComponent(currentOrder.email)+'?subject='+encodeURIComponent('Tu enlace privado de devolución · Fumada XXL')+'&body='+encodeURIComponent('Hola,\n\nPuedes consultar tu devolución del pedido '+currentOrder.id+' en este enlace privado:\n'+url+'\n\nGuárdalo en privado. Caduca en 30 días.\n\nAleix');
+  if(demoLink){$('portal-expiry').textContent='Demostración compartida hasta el '+date(result.expiresAt)+'. Solo contiene datos de prueba.';$('portal-mail').href=url;$('portal-mail').textContent='Abrir devolución de prueba';}
 }}));
 $('portal-revoke').addEventListener('click',()=>{if(!$('portal-revoke-confirm').checked){$('detail-message').textContent='Confirma que quieres invalidar el enlace del comprador.';$('portal-revoke-confirm').focus();return;}return saveManagement('portal-revoke',{},'Enlace del comprador invalidado.',undefined,{afterSave:()=>{clearPortalLink();$('portal-revoke-confirm').checked=false;}});});
 $('portal-copy').addEventListener('click',async()=>{const url=$('portal-url').value,version=detailRequest;if(!url)return;try{await navigator.clipboard.writeText(url);if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Enlace copiado. Todavía debes enviarlo al comprador.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Selecciona el enlace y cópialo manualmente.';}});
@@ -431,6 +490,44 @@ $('portal-reply-form').addEventListener('submit',event=>{event.preventDefault();
 $('return-label-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!['approved','received','closed'].includes(currentOrder.return_status))return;const file=$('return-label-file').files?.[0];if(!file){$('detail-message').textContent='Selecciona una etiqueta para adjuntar.';$('return-label-file').focus();return;}if(!['application/pdf','image/png','image/jpeg'].includes(file.type)||file.size>2*1024*1024||file.size<=0){$('detail-message').textContent='Usa un PDF, PNG o JPEG de hasta 2 MiB.';$('return-label-file').focus();return;}return saveManagement('return-label',file,'Etiqueta adjunta. El comprador puede descargarla desde su enlace.',undefined,{raw:true,afterSave:()=>{$('return-label-file').value='';}});});
 $('return-label-remove').addEventListener('click',()=>{if(!$('return-label-remove-confirm').checked){$('detail-message').textContent='Confirma que quieres retirar la etiqueta.';$('return-label-remove-confirm').focus();return;}return saveManagement('return-label-remove',{},'Etiqueta retirada.',undefined,{afterSave:()=>{$('return-label-remove-confirm').checked=false;}});});
 load();
+
+
+
+========================================================================
+ARCHIVO: web/admin/demo-shared-controls.js
+========================================================================
+
+$('demo-start').addEventListener('click',()=>openDetail('DEMO-001'));
+$('demo-refund').addEventListener('click',()=>openDetail('DEMO-004'));
+$('demo-return').addEventListener('click',()=>openDetail('DEMO-002'));
+$('demo-reset').addEventListener('click',()=>window.DemoSession.create());
+$('demo-label').addEventListener('click',()=>saveManagement('return-label',{type:'application/pdf',size:120},'Etiqueta de ejemplo disponible en el portal del comprador. No es válida para envíos.'));
+window.DemoSession.subscribe(()=>{
+  listRequest++;detailRequest++;if($('detail').open)$('detail').close();
+  currentOrder=null;page=1;$('search').value='';$('filter').value='all';load();
+});
+const sharedSelected=window.DemoSession.orderId();
+if(window.DemoSession.ready()&&sharedSelected)openDetail(sharedSelected);
+
+
+
+========================================================================
+ARCHIVO: web/admin/demo-shared.js
+========================================================================
+
+// The presentation uses its own short-lived server session, never real order APIs.
+async function demoApi(path,options={}){
+  const session=window.DemoSession;
+  if(!session?.ready())throw new Error('Inicia una demostración o abre el enlace compartido de tu otro dispositivo.');
+  if(!path.startsWith('/api/admin/orders'))throw new Error('Ruta de demostración no válida.');
+  const action=options.headers?.['X-Admin-Action'];
+  let body=options.body;
+  if(action==='return-label'&&typeof body!=='string')body=JSON.stringify({type:body.type,size:body.size,expectedVersion:Number(options.headers['X-Order-Version'])});
+  const response=await session.request(path.replace('/api/admin/','/api/demo/admin/'),{method:options.method||'GET',...(body?{body}:{}),headers:{...(action?{'X-Demo-Action':action,'Content-Type':'application/json'}:{})}});
+  let result;try{result=await response.json();}catch{throw new Error('No se puede cargar la demostración. Vuelve a intentarlo.');}
+  if(!response.ok)throw new Error(result.error||'No se puede actualizar la demostración.');
+  return result;
+}
 
 
 
@@ -466,6 +563,43 @@ ARCHIVO: web/admin/index.html
 <form class="management-form private-management" id="return-label-form" hidden><fieldset id="return-label-fields"><legend>Etiqueta de devolución</legend><p class="management-help">Adjunta la etiqueta que hayas preparado con el transportista. Este panel no genera etiquetas ni códigos QR. Se admite PDF, PNG o JPEG de hasta 2 MiB.</p><p id="return-label-current" class="management-help"></p><label for="return-label-file">Archivo para el comprador</label><input id="return-label-file" name="label" type="file" accept="application/pdf,image/png,image/jpeg"><button class="button" type="submit">Adjuntar etiqueta</button><label class="confirmation"><input type="checkbox" id="return-label-remove-confirm"><span>Quiero retirar la etiqueta disponible para el comprador.</span></label><button class="secondary" id="return-label-remove" type="button" hidden>Retirar etiqueta</button></fieldset></form>
 </div><p id="detail-message" role="status" aria-live="polite" aria-atomic="true"></p></dialog>
 </body></html>
+
+
+
+========================================================================
+ARCHIVO: web/admin/live-updates.js
+========================================================================
+
+// Refresh only visible pages and preserve all unsaved management fields.
+(()=>{
+ let timer=null,checking=false;
+ const dirty=()=>{
+  if(!currentOrder)return false;
+  const initial={'private-note':currentOrder.private_note||'','carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','return-status':currentOrder.return_status==='none'||!currentOrder.return_status?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||'','customer-reply':currentOrder.customer_reply||'','return-carrier':currentOrder.return_carrier||'','return-code':currentOrder.return_code||''};
+  return Object.entries(initial).some(([id,value])=>$(id).value!==value)||['ship-confirm','deliver-confirm','portal-revoke-confirm','return-label-remove-confirm'].some(id=>$(id).checked)||!!$('return-label-file').files?.length;
+ };
+ const schedule=()=>{clearTimeout(timer);if(!document.hidden)timer=setTimeout(poll,5000);};
+ async function poll(){
+  if(checking||document.hidden||saving||loading){schedule();return;}
+  if(document.body.classList.contains('demo-page')&&!window.DemoSession?.ready()){schedule();return;}
+  checking=true;
+  try{
+   if($('detail').open&&currentOrder){
+    const version=detailRequest,id=currentOrder.id;
+    const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));
+    if(version!==detailRequest||!$('detail').open||saving||currentOrder?.id!==id)return;
+    if(order.management_version!==currentOrder.management_version){
+      clearPortalLink();
+      if(dirty()){$('detail-message').textContent='Este pedido cambió en otro dispositivo. Se conservan tus campos; cierra y vuelve a abrir el detalle antes de guardar.';}
+      else{renderDetail(order);$('detail-message').textContent='Pedido actualizado desde otro dispositivo.';}
+    }
+   }else if(!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!document.activeElement?.closest?.('#table-wrap'))await load({quiet:true});
+  }catch{/* Retain the current view; manual refresh exposes persistent errors. */}
+  finally{checking=false;schedule();}
+ }
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else poll();});
+ schedule();
+})();
 
 
 
@@ -651,6 +785,10 @@ export const returnAccess = sqliteTable('return_access', {
 export const returnRateLimits = sqliteTable('return_rate_limits', {
   key: text('key').primaryKey(), windowStart: integer('window_start').notNull(), count: integer('count').notNull(),
 },t=>[index('return_rate_window').on(t.windowStart)]);
+export const demoSessions = sqliteTable('demo_sessions', {
+  tokenHash: text('token_hash').primaryKey(), expiresAt: integer('expires_at').notNull(),
+  data: text('data').notNull(), revision: integer('revision').notNull().default(0),
+},t=>[index('demo_sessions_expiry').on(t.expiresAt)]);
 
 
 
@@ -1208,7 +1346,7 @@ ARCHIVO: web/dist/condiciones-de-venta.html
 <section id="pedido"><h2>3. Cómo se realizará la compra</h2><p>El carrito permite combinar formatos, cambiar cantidades, eliminar libros y revisar una selección con datos ficticios de envío. Los campos no se transmiten al vendedor ni crean un pedido. No se exige una cuenta de comprador. Cuando se abra la venta, el comprador podrá corregir su selección antes del pago. El proceso deberá mostrar identidad del vendedor, características del libro, destino, plazo, precio total, envío y condiciones aplicables antes de solicitar la confirmación con obligación de pago.</p><p>El pago seguro está pendiente de conexión y pruebas. La web actual no solicita tarjetas, no envía una orden a una pasarela y no considera pagado ningún pedido. Tampoco envía correos automáticos de confirmación.</p><p>Cuando se active la contratación, se enviará al comprador una confirmación en un soporte que pueda conservar, con el pedido y sus condiciones. Las condiciones de una compra aceptada no se cambiarán retroactivamente por una actualización de la web. La venta se preparará en español y sin suscripción.</p></section>
 <section id="envios"><h2>4. Envíos y plazos</h2><p>Se ha previsto el envío a Europa por 7,00 € por pedido. La lista de destinos efectivamente admitidos, el transportista y las restricciones se confirmarán antes de habilitar la contratación, teniendo en cuenta también territorios especiales y destinos extracomunitarios.</p><p><strong>No hay todavía una estimación de entrega confirmada.</strong> El plazo concreto o intervalo para la dirección de destino se comunicará antes de pagar. No se mostrará una fecha ficticia ni se sustituirá un plazo acordado por la indicación indefinida «depende del destino».</p><p>Salvo que las partes acuerden otra cosa, la normativa prevé la entrega sin demora indebida y, como máximo, en 30 días naturales desde la celebración del contrato. En caso de incumplimiento se aplicarán los derechos previstos legalmente, incluida la resolución cuando proceda. La pérdida o el daño durante el transporte se atenderá según el régimen legal de transmisión del riesgo.</p></section>
 <section id="devoluciones"><h2>5. Derecho de desistimiento</h2><p>En una compra a distancia de estos libros físicos ordinarios, la persona consumidora podrá comunicar que desiste sin necesidad de justificar su decisión durante los <strong>14 días naturales</strong> siguientes a su recepción. Si los libros de un mismo pedido se entregan por separado, el plazo comienza con la recepción del último. La diferencia entre tapa blanda y tapa dura no elimina este derecho.</p><p>La comunicación podrá dirigirse al correo <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o por correo postal al vendedor. Debe identificar el pedido y expresar claramente la voluntad de desistir; no es obligatorio usar el modelo de esta página. También puedes utilizar el <a href="/devoluciones">apartado de devoluciones</a> con el enlace privado facilitado por el vendedor. Solicitar un enlace de acceso no comunica por sí solo un desistimiento: si no lo tienes o está pendiente, envía directamente tu declaración al correo indicado para no demorarla. El desistimiento no necesita autorización del vendedor ni que expliques un motivo. Antes de abrir la contratación se verificará que la función electrónica y su confirmación cumplen todos los requisitos aplicables.</p><p>El libro deberá devolverse sin demora y, como máximo, dentro de los 14 días naturales siguientes a la comunicación. Las devoluciones se recibirán en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. El comprador asumirá el coste directo de devolver un libro por desistimiento cuando se le haya informado de ello antes de contratar. Esta regla no se aplica a errores de envío o falta de conformidad imputables al vendedor.</p><p>Si desistes de todo el pedido, se devolverá el importe de los libros y el coste de la entrega ordinaria inicial dentro de los 14 días naturales desde la comunicación. No se devolverá el suplemento de una modalidad de entrega más costosa que hayas elegido expresamente. El vendedor podrá retener el reembolso hasta recibir los bienes o una prueba de devolución, según qué suceda primero, salvo que se haya ofrecido a recogerlos. El reembolso se realizará por el mismo medio de pago, salvo acuerdo expreso sin costes para el consumidor.</p><p>Solo podrá exigirse la disminución de valor causada por una manipulación distinta de la necesaria para comprobar la naturaleza, características y funcionamiento del producto, en los términos legales. No se impone conservar el embalaje original como requisito absoluto para desistir.</p></section>
-<section><h2>Cómo funciona el apartado de devoluciones</h2><p>Para un pedido existente, puedes solicitar acceso con su referencia y correo de compra. El vendedor revisa la solicitud y envía manualmente un enlace privado al correo que consta en el pedido. La web no envía correos automáticos. Conserva el enlace: permite consultar el expediente durante 30 días, salvo que el vendedor lo sustituya o revoque antes.</p><p>Desde ese enlace puedes comunicar un desistimiento, un libro dañado, un envío equivocado u otra incidencia. Tras registrar la solicitud se muestra una confirmación y puedes descargar un justificante para conservarlo. La respuesta del vendedor aparece en ese mismo apartado; consulta de nuevo el enlace para verla.</p><p>Cuando proceda, el vendedor facilita las instrucciones y adjunta una etiqueta o código real obtenido del transportista. La web no contrata recogidas ni genera por sí sola etiquetas de transporte. Sigue las instrucciones del transportista y no utilices documentos de demostración. Aprobar o cerrar una devolución no confirma un reembolso de dinero: la devolución del importe debe tramitarse por el medio de pago correspondiente.</p><p>La demostración pública utiliza solo datos ficticios. Ninguna acción en ella crea una devolución o un reembolso real.</p></section><section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin coste para ti, incluidos los gastos de transporte necesarios para resolver la falta de conformidad. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
+<section><h2>Cómo funciona el apartado de devoluciones</h2><p>Para un pedido existente, puedes solicitar acceso con su referencia y correo de compra. El vendedor revisa la solicitud y envía manualmente un enlace privado al correo que consta en el pedido. La web no envía correos automáticos. Conserva el enlace: permite consultar el expediente durante 30 días, salvo que el vendedor lo sustituya o revoque antes.</p><p>Desde ese enlace puedes comunicar un desistimiento, un libro dañado, un envío equivocado u otra incidencia. Tras registrar la solicitud se muestra una confirmación y puedes descargar un justificante para conservarlo. La respuesta del vendedor aparece en ese mismo apartado; consulta de nuevo el enlace para verla.</p><p>Cuando proceda, el vendedor facilita las instrucciones y adjunta una etiqueta o código real obtenido del transportista. La web no contrata recogidas ni genera por sí sola etiquetas de transporte. Sigue las instrucciones del transportista y no utilices documentos de demostración. Aprobar o cerrar una devolución no confirma un reembolso de dinero: la devolución del importe debe tramitarse por el medio de pago correspondiente.</p><p>La demostración pública utiliza solo datos ficticios, con número de pedido simulado y cambios compartidos entre dispositivos durante 7 días desde su creación. Ninguna acción en ella celebra una compra ni crea una devolución o un reembolso real. Cualquier participante con el enlace puede gestionar sus pedidos de ejemplo.</p></section><section id="garantia"><h2>6. Libro dañado, equivocado o no conforme</h2><p>Si recibes un libro dañado, equivocado o que no se corresponda con lo contratado, contacta en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> para tramitar la solución legal que proceda sin coste para ti, incluidos los gastos de transporte necesarios para resolver la falta de conformidad. El desistimiento es distinto de una reclamación por falta de conformidad.</p><p>En las ventas de bienes nuevos sometidas al régimen español, el vendedor responde por las faltas de conformidad que se manifiesten en los tres años siguientes a la entrega, con los remedios y condiciones previstos en la normativa. Se respetarán las protecciones imperativas aplicables al consumidor.</p></section>
 <section><h2>7. Atención y reclamaciones</h2><p>Escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> indicando el número de pedido, si existe, y el motivo. No envíes datos completos de tarjeta. Se facilitarán las vías de reclamación que correspondan al establecimiento y al consumidor, sin limitar el acceso a las autoridades o tribunales competentes.</p><p>También puedes llamar al <a href="tel:+34684339309">+34 684 339 309</a>. No se afirma adhesión a un sistema arbitral o entidad de resolución alternativa que no haya sido confirmada.</p></section>
 <section id="formulario"><h2>8. Modelo de comunicación de desistimiento</h2><p>Cuando existan pedidos, puedes utilizar este modelo, sin que sea obligatorio. Es una plantilla para copiar y enviar; esta página no transmite una solicitud automáticamente.</p><div class="legal-template"><p><strong>Destinatario:</strong> Alex Rivera Mosquera · <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a><br>Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España</p><p>Por la presente comunico que desisto de mi contrato de compraventa del siguiente bien:</p><p>Libro, formato y cantidad: ____________________<br>Número de pedido: ____________________<br>Fecha de pedido y de recepción: ____________________<br>Nombre de la persona consumidora: ____________________<br>Domicilio y correo de contacto: ____________________<br>Fecha: ____________________<br>Firma, solo si se presenta en papel: ____________________</p></div><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Desistimiento%20de%20compra%20-%20Fumada%20XXL">Abrir un correo al vendedor <span aria-hidden="true">↗</span></a></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html" aria-current="page">Condiciones de venta</a></nav></footer></body></html>
 
@@ -1230,9 +1368,143 @@ ARCHIVO: web/dist/cookies.html
     </nav>
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de cookies</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#alcance">Qué utiliza la web</a><a href="#plataforma">Alojamiento</a><a href="#preferencias">Preferencias</a></nav>
-<section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>El código del libro no incorpora cookies publicitarias ni analítica de visitas. Al añadir un libro, el carrito utiliza almacenamiento local para recordar exclusivamente las ediciones y cantidades elegidas en este navegador. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Carrito: <code>fumada-cart-v1</code></td><td>Almacenamiento local propio con ediciones, cantidades y fecha de caducidad. Solo sirve para conservar la selección solicitada; no crea pedidos ni guarda nombre, correo o dirección.</td><td>7 días desde el último cambio. La web descarta el contenido caducado al volver a cargarlo. Se elimina al vaciar el carrito o borrar los datos del sitio.</td></tr><tr><td>Formulario de prueba</td><td>Campos y resumen en memoria; el código no los envía ni los guarda en almacenamiento local.</td><td>Hasta cerrar el carrito o recargar la página.</td></tr><tr><td>Portal de devoluciones</td><td>El enlace privado se usa solo en memoria y su código se retira de la barra de direcciones. No se guarda en cookies ni en almacenamiento local por el código del portal. Las solicitudes y etiquetas se conservan en el servidor según la política de privacidad.</td><td>La sesión en memoria termina al recargar o cerrar. El enlace original caduca a los 30 días o antes si se sustituye o revoca.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
+<section id="alcance"><h2>1. Cookies y tecnologías similares</h2><p>Las cookies son pequeños archivos que un servicio puede guardar en el navegador. Existen otras tecnologías de almacenamiento y acceso al dispositivo que también deben tenerse en cuenta.</p><p>El código del libro no incorpora cookies publicitarias ni analítica de visitas. Al añadir un libro, el carrito utiliza almacenamiento local para recordar exclusivamente las ediciones y cantidades elegidas en este navegador. Esto describe el código de la web; no constituye una afirmación de que la infraestructura completa no utilice cookies.</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Tabla informativa; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Función propia</th><th scope="col">Cómo funciona</th><th scope="col">Duración</th></tr></thead><tbody><tr><td>Pausa de respiración</td><td>Estado en memoria; sin cookie propia ni envío al titular.</td><td>Hasta recargar o cerrar la página.</td></tr><tr><td>Carrito: <code>fumada-cart-v1</code></td><td>Almacenamiento local propio con ediciones, cantidades y fecha de caducidad. Solo sirve para conservar la selección solicitada; no crea pedidos ni guarda nombre, correo o dirección.</td><td>7 días desde el último cambio. La web descarta el contenido caducado al volver a cargarlo. Se elimina al vaciar el carrito o borrar los datos del sitio.</td></tr><tr><td>Formulario de prueba</td><td>Campos y resumen en memoria; el código no los envía ni los guarda en almacenamiento local.</td><td>Hasta cerrar el carrito o recargar la página.</td></tr><tr><td>Portal de devoluciones</td><td>El enlace privado se usa solo en memoria y su código se retira de la barra de direcciones. No se guarda en cookies ni en almacenamiento local por el código del portal. Las solicitudes y etiquetas se conservan en el servidor según la política de privacidad.</td><td>La sesión en memoria termina al recargar o cerrar. El enlace original caduca a los 30 días o antes si se sustituye o revoca.</td></tr><tr><td>Demostración compartida: <code>fumada-shared-demo-v1</code></td><td>Almacenamiento de sesión propio con la clave de acceso, caducidad y pedido seleccionado. Se activa al iniciar una demo o abrir/importar su enlace. Sirve para mantener la demostración solicitada entre sus páginas. Los datos ficticios se guardan aparte en el servidor.</td><td>Durante la sesión de la pestaña; acceso máximo de 7 días desde que se crea la demo. El navegador puede restaurar una pestaña según sus ajustes. Puedes borrar los datos del sitio; si el almacenamiento está bloqueado, se utiliza memoria.</td></tr><tr><td>Tipografías e imagen</td><td>Archivos del propio sitio; sin peticiones a Google Fonts.</td><td>Caché técnica según navegador y alojamiento, si procede.</td></tr><tr><td>Publicidad y estadísticas propias</td><td>No incorporadas a esta versión.</td><td>No aplicable.</td></tr></tbody></table></div></section>
 <section id="plataforma"><h2>2. Seguridad del alojamiento y acceso privado</h2><p>La web del libro y la demostración del panel son públicas. La demo utiliza exclusivamente pedidos ficticios. Solo el área de gestión del titular requiere iniciar sesión mediante ChatGPT y superar una autorización adicional.</p><p>En las respuestas del dominio público se ha observado la siguiente cookie de seguridad, incluida en el inventario el 28 de septiembre de 2026:</p><div class="legal-table-wrap" tabindex="0" role="region" aria-label="Cookies observadas; desplázate para ver todas las columnas"><table class="legal-table"><thead><tr><th scope="col">Nombre</th><th scope="col">Proveedor y finalidad</th><th scope="col">Duración</th></tr></thead><tbody><tr><td><code>__cf_bm</code></td><td>Cloudflare, infraestructura de seguridad: distinguir tráfico automatizado y proteger el servicio frente a abusos. Se establece en el dominio prueba-aleix.com.</td><td>30 minutos de inactividad continuada, según el proveedor.</td></tr></tbody></table></div><p>Cloudflare identifica esta cookie como necesaria para su protección frente a bots. No se utiliza en el código de esta tienda para publicidad ni analítica comercial. Consulta la <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">documentación de cookies de Cloudflare</a>.</p><p>Este inventario corresponde a las respuestas públicas comprobadas; no sustituye una revisión de todas las variantes de autenticación o de las cookies que puedan emitir desafíos de seguridad. El inicio de sesión del titular se gestiona en la plataforma y debe revisarse por separado conforme a su configuración.</p><p>Stripe aún no está integrado. Antes de conectar pagos, estadísticas o publicidad se actualizará el inventario y, cuando sea necesario, se habilitará el consentimiento previo.</p></section>
 <section id="preferencias"><h2>3. Consentimiento y control</h2><p>Las tecnologías estrictamente necesarias para prestar un servicio solicitado tienen un régimen distinto de las utilizadas para publicidad o finalidades opcionales. Si se añaden tecnologías no exentas, se bloquearán hasta obtener una elección válida y se ofrecerán opciones claras para aceptar, rechazar o configurar y retirar el consentimiento.</p><p>No se muestra un botón de «aceptar todas» que pretenda consentir servicios no identificados. La navegación por la web no equivale a dar consentimiento. La cookie de seguridad descrita presta una función técnica necesaria. Cualquier tecnología opcional que se incorpore deberá tener su propia información y mecanismo de consentimiento.</p><p>Puedes eliminar la selección con «Vaciar carrito». También puedes consultar, eliminar o bloquear las cookies y el almacenamiento local desde los ajustes de privacidad del navegador. Si bloqueas el almacenamiento, el carrito funciona en memoria, pero se pierde al recargar. Bloquear las necesarias para el acceso privado puede impedir iniciar sesión. Para consultas, escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><p>Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">Guía sobre el uso de las cookies de la AEPD</a>.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html" aria-current="page">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
+
+
+========================================================================
+ARCHIVO: web/dist/demo-checkout.js
+========================================================================
+
+// Only the explicit demonstration can create fictitious orders.
+(()=>{
+ const session=window.DemoSession,dialog=document.getElementById('order-dialog');
+ if(!session?.enabled||!dialog)return;
+ const $=id=>document.getElementById(id),button=$('demo-purchase');
+ let selection={},requestId='',fingerprint='',pending=false,epoch=0;
+ const fictitious={fullName:'Persona de ejemplo',email:'compra-ficticia@example.invalid',address:'Calle de ejemplo, sin dirección real',addressExtra:'Datos ficticios · No realizar envíos',postalCode:'00000',city:'Ciudad de ejemplo',region:'Provincia de ejemplo',country:'España'};
+ for(const [key,value]of Object.entries(fictitious)){const field=$('customer-'+key);field.value=value;field.readOnly=true;field.autocomplete='off';}
+ $('details-privacy').textContent='Demostración conectada: estos datos son ficticios. Solo se enviarán los formatos y cantidades para crear un pedido de prueba; no habrá cobros ni correos.';
+ $('order-notice').textContent='Demostración conectada. Puedes generar un pedido ficticio con su número y verlo en el panel. No es una compra real.';
+ $('demo-purchase-area').hidden=false;
+ $('review-preparation-note').hidden=true;$('real-payment-unavailable').hidden=true;
+ $('demo-purchase-note').textContent='Se simulará un pago, sin tarjeta ni dinero. El pedido se guardará en esta demostración durante un máximo de 7 días.';
+ const updateLinks=orderId=>{
+  $('demo-order-returns').href=session.link('/devoluciones?demo=1',{orderId});
+  $('demo-order-admin').href=session.link('/demo',{orderId});
+ };
+ const availability=()=>{button.disabled=pending||!session.ready()||!Object.keys(selection).length;};
+ session.subscribe(()=>{epoch++;requestId='';fingerprint='';$('demo-order-confirmation').hidden=true;availability();});
+ window.addEventListener('fumada-cart-reviewed',event=>{
+  selection={};for(const key of ['paperback','hardcover']){const quantity=event.detail?.items?.[key];if(Number.isInteger(quantity)&&quantity>0&&quantity<=10)selection[key]=quantity;}
+  const next=JSON.stringify(selection);if(next!==fingerprint){fingerprint=next;requestId=crypto.randomUUID();$('demo-order-confirmation').hidden=true;}
+  availability();$('demo-purchase-status').textContent=session.ready()?'':'Inicia una demostración con la barra superior antes de crear el pedido.';
+ });
+ // The cart clears its fields on close. Restore only synthetic values on reopening.
+ window.addEventListener('fumada-cart-details',()=>{for(const [key,value]of Object.entries(fictitious))$('customer-'+key).value=value;});
+ button.addEventListener('click',async()=>{
+  if(pending||!session.ready()||!Object.keys(selection).length)return;
+  if(!requestId)requestId=crypto.randomUUID();
+  const version=epoch;pending=true;availability();$('demo-purchase-status').textContent='Creando pedido de prueba…';
+  try{
+   const response=await session.request('/api/demo/orders',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Action':'purchase'},body:JSON.stringify({items:selection,requestId})});
+   const result=await response.json();if(version!==epoch)return;
+   if(!response.ok)throw new Error(result.error||'No se ha podido crear el pedido. Puedes reintentarlo.');
+   const order=result.order;if(!/^DEMO-[A-Za-z0-9]+$/.test(order?.id||''))throw new Error('No se ha recibido un número de pedido válido.');
+   session.selectOrder(order.id);$('demo-order-number').textContent=order.id;
+   $('demo-order-total').textContent=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(order.total/100);
+   $('demo-order-confirmation').hidden=false;updateLinks(order.id);
+   $('demo-purchase-status').textContent='Pedido de prueba guardado. Conserva su número; ya puedes consultarlo en el panel y solicitar una devolución.';
+   if(dialog.open)$('demo-order-title').focus();
+  }catch(error){if(version===epoch)$('demo-purchase-status').textContent=error.message;}
+  finally{pending=false;availability();}
+ });
+ $('demo-order-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('demo-order-number').textContent);$('demo-purchase-status').textContent='Número de pedido copiado.';}catch{$('demo-purchase-status').textContent='Selecciona el número para copiarlo.';}});
+ $('demo-order-receipt').addEventListener('click',()=>{
+  const id=$('demo-order-number').textContent;if(!id)return;
+  const blob=new Blob(['PEDIDO FICTICIO — SIN COMPRA NI PAGO REAL\nFumada XXL\nNúmero de pedido: '+id+'\nTotal simulado: '+$('demo-order-total').textContent+'\nCorreo ficticio: compra-ficticia@example.invalid\nNo se ha enviado ningún correo.\nConserva aparte el enlace de la demostración para volver desde otro dispositivo.'],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='pedido-de-prueba.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ });
+ availability();
+})();
+
+
+
+========================================================================
+ARCHIVO: web/dist/demo-session.css
+========================================================================
+
+.demo-session-bar{background:#e9eddf;border-bottom:1px solid #b9c4a9;color:#303b2c;font:14px/1.7 'DM Sans',Arial,sans-serif;padding:22px 24px}.demo-session-inner{max-width:1180px;margin:auto}.demo-session-heading{display:flex;gap:12px 24px;flex-wrap:wrap;align-items:center}.demo-session-heading strong{font:400 23px/1.5 'Playfair Display',Georgia,serif}.demo-session-heading>span{color:#526146;font-size:13px}.demo-session-notice{max-width:950px;margin:10px 0 16px}.demo-session-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}.demo-session-bar button{border:1px solid #859671;border-radius:4px;min-height:46px;background:#f7f6f0;color:#303b2c;font:500 14px/1.6 'DM Sans',Arial,sans-serif;padding:10px 16px;cursor:pointer;touch-action:manipulation}.demo-session-bar button:hover{background:#dce4ce}.demo-session-bar button:disabled{opacity:.6;cursor:default}.demo-session-bar button:focus-visible,.demo-session-bar a:focus-visible,.demo-session-bar input:focus-visible{outline:3px solid #aa793e;outline-offset:3px}.demo-session-bar nav{display:flex;flex-wrap:wrap;gap:24px}.demo-session-bar nav a{display:inline-flex;align-items:center;min-height:44px;color:#303b2c;text-decoration:underline;text-underline-offset:4px}.demo-session-import{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;max-width:900px;margin-top:14px}.demo-session-import label{grid-column:1/-1;font-size:14px;margin:0}.demo-session-import input{width:100%;min-width:0;height:48px;background:#fffefa;border:1px solid #94a47e;border-radius:4px;color:#303b2c;padding:10px 12px;font:16px/1.6 'DM Sans',Arial,sans-serif;margin:0}.demo-session-bar #demo-session-message{font-size:14px;margin:12px 0 0;overflow-wrap:anywhere}.demo-session-bar #demo-session-message:empty{display:none}.demo-session-bar *{box-sizing:border-box}
+@media(max-width:580px){.demo-session-bar{padding:20px 18px}.demo-session-heading{display:grid;gap:4px}.demo-session-heading strong{font-size:22px}.demo-session-actions{display:grid;grid-template-columns:1fr}.demo-session-import{grid-template-columns:1fr}.demo-session-bar button{width:100%;min-height:48px}.demo-session-bar nav{gap:18px}.demo-session-notice{font-size:14px}}
+@media print{.demo-session-bar{display:none!important}}
+#demo-order-panel{margin-bottom:24px}
+
+
+
+========================================================================
+ARCHIVO: web/dist/demo-session.js
+========================================================================
+
+/* Technical session for fictional demonstrations only. */
+(() => {
+ 'use strict';
+ const enabled=new URLSearchParams(location.search).get('demo')==='1'||['/demo','/demo/'].includes(location.pathname);
+ const KEY='fumada-shared-demo-v1',TTL=7*24*60*60*1000,validToken=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{43}$/.test(value),validOrder=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,100}$/.test(value);
+ let token='',expiresAt=0,expiryKnown=false,selectedOrder='',storage,expiryTimer=null,creating=false,stateVersion=0,bar=null;
+ const listeners=new Set(),controls={};
+ try{storage=window.sessionStorage;}catch{}
+ function persist(){try{if(token)storage?.setItem(KEY,JSON.stringify({token,expiresAt,expiryKnown,orderId:selectedOrder}));else storage?.removeItem(KEY);}catch{}}
+ function notify(){updateBar();for(const fn of listeners){try{fn();}catch{}}}
+ function clear(){if(!token)return;token='';expiresAt=0;expiryKnown=false;selectedOrder='';stateVersion++;if(expiryTimer!==null)clearTimeout(expiryTimer);expiryTimer=null;persist();notify();}
+ function ready(){if(token&&expiresAt<=Date.now())clear();return enabled&&!!token;}
+ function scheduleExpiry(){if(expiryTimer!==null)clearTimeout(expiryTimer);expiryTimer=token?setTimeout(()=>{expiryTimer=null;if(expiresAt<=Date.now())clear();else scheduleExpiry();},Math.max(1,expiresAt-Date.now())):null;}
+ function accept(value,expiry,order='',known=false){token=value;expiresAt=expiry;expiryKnown=known;selectedOrder=validOrder(order)?order:'';stateVersion++;persist();scheduleExpiry();notify();}
+ function consume(){
+  if(!enabled)return false;const params=new URLSearchParams(location.hash.slice(1));if(params.has('token')||!params.has('session'))return false;
+  const value=params.get('session');history.replaceState(null,'',location.pathname+location.search);
+  if(!validToken(value)){if(controls.message)controls.message.textContent='El enlace de demostración no es válido. Pide uno nuevo.';return false;}
+  accept(value,Date.now()+TTL,params.get('order')||'');return true;
+ }
+ function link(path,{orderId}={}){
+  const url=new URL(path,location.origin);
+  if(url.origin!==location.origin||!['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname))throw new Error('Ese enlace no pertenece a la demostración.');
+  if(url.pathname!=='/demo')url.searchParams.set('demo','1');
+  url.hash='';if(ready()){const params=new URLSearchParams({session:token}),id=orderId===undefined?selectedOrder:orderId;if(validOrder(id))params.set('order',id);url.hash=params.toString();}return url.href;
+ }
+ async function request(path,options={}){
+  const url=new URL(path,location.origin);if(url.origin!==location.origin||!url.pathname.startsWith('/api/demo/'))throw new Error('Solo se pueden consultar datos de la demostración.');
+  if(!ready())throw new Error('Inicia una demostración o usa un enlace compartido. La sesión puede haber caducado.');
+  const currentToken=token,headers=new Headers(options.headers||{});headers.set('X-Demo-Session',currentToken);
+  const response=await fetch(url.pathname+url.search,{...options,headers,cache:'no-store',credentials:'omit'});
+  if([401,410].includes(response.status)&&currentToken===token)clear();return response;
+ }
+ function busy(value){creating=value;for(const key of ['start','importButton'])if(controls[key])controls[key].disabled=value;}
+ async function create(){
+  if(!enabled||creating)return false;const version=stateVersion;busy(true);if(controls.message)controls.message.textContent='Preparando demostración…';
+  try{const response=await fetch('/api/demo/session',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Action':'session'},body:'{}',cache:'no-store',credentials:'omit'});let data;try{data=await response.json();}catch{throw new Error('No se ha podido iniciar. Inténtalo de nuevo.');}
+   if(!response.ok||!validToken(data.token)||!Number.isFinite(data.expiresAt)||data.expiresAt<=Date.now()||data.expiresAt>Date.now()+TTL+60000)throw new Error('No se ha podido iniciar la demostración. Inténtalo de nuevo.');
+   if(version!==stateVersion)return false;accept(data.token,data.expiresAt,'',true);if(controls.message)controls.message.textContent='Demostración conectada. Puedes compartir el enlace con otro dispositivo.';return true;
+  }catch(error){if(controls.message)controls.message.textContent=error.message;return false;}finally{busy(false);updateBar();}
+ }
+ function node(tag,text,id){const value=document.createElement(tag);if(text)value.textContent=text;if(id)value.id=id;return value;}
+ function connectPageLinks(){for(const anchor of document.querySelectorAll?.('a[href]')||[]){try{const url=new URL(anchor.getAttribute('href'),location.href);if(url.origin===location.origin&&['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname)&&(!url.hash||url.hash.startsWith('#session=')))anchor.href=link(url.pathname);}catch{}}}
+ function updateBar(){if(!bar)return;const connected=enabled&&!!token&&expiresAt>Date.now();controls.status.textContent=connected?'Demostración conectada'+(selectedOrder?' · Pedido '+selectedOrder:''):'Demostración sin conectar';controls.start.textContent=connected?'Nueva demostración':'Iniciar demostración';controls.copy.disabled=!connected;controls.expiry.textContent=connected&&expiryKnown?'Caduca el '+new Intl.DateTimeFormat('es-ES',{dateStyle:'medium'}).format(new Date(expiresAt))+'.':'La sesión dura 7 días desde que se crea.';for(const [path,anchor]of controls.links)anchor.href=link(path);connectPageLinks();}
+ function mount(){
+  if(!enabled||bar||!document.body)return;bar=node('section',null,'demo-session-bar');bar.className='demo-session-bar';bar.setAttribute('aria-label','Sesión de demostración compartida');
+  const inner=node('div');inner.className='demo-session-inner';const heading=node('div');heading.className='demo-session-heading';controls.status=node('strong',null,'demo-session-status');controls.status.setAttribute('role','status');controls.status.setAttribute('aria-live','polite');controls.expiry=node('span');heading.append(controls.status,controls.expiry);
+  const notice=node('p','Solo datos ficticios: no uses nombres, correos ni direcciones reales. Quien reciba el enlace podrá ver y gestionar los pedidos de esta demostración.');notice.className='demo-session-notice';
+  const actions=node('div');actions.className='demo-session-actions';controls.start=node('button','Iniciar demostración','demo-session-start');controls.start.type='button';controls.start.addEventListener('click',create);controls.copy=node('button','Copiar enlace para otro dispositivo','demo-session-copy');controls.copy.type='button';controls.copy.addEventListener('click',async()=>{if(!ready())return;try{await navigator.clipboard.writeText(link('/'));controls.message.textContent='Enlace copiado. Compártelo solo con quien quieras que vea la demostración.';}catch{controls.message.textContent='No se ha podido copiar. Usa el enlace de la tienda y copia su dirección para compartirlo.';}});actions.append(controls.start,controls.copy);
+  const nav=node('nav');nav.setAttribute('aria-label','Navegar por la demostración');controls.links=[['/','Tienda'],['/devoluciones','Devoluciones'],['/demo','Panel']].map(([path,text])=>{const anchor=node('a',text);nav.append(anchor);return[path,anchor];});
+  const form=node('form',null,'demo-session-import-form');form.className='demo-session-import';const label=node('label','Usar el enlace de otro dispositivo');label.setAttribute('for','demo-session-import');controls.input=node('input',null,'demo-session-import');controls.input.type='text';controls.input.name='demoLink';controls.input.autocomplete='off';controls.input.spellcheck=false;controls.input.placeholder='Pega aquí el enlace compartido…';controls.importButton=node('button','Conectar enlace');controls.importButton.type='submit';form.append(label,controls.input,controls.importButton);
+  controls.message=node('p',null,'demo-session-message');controls.message.setAttribute('role','status');controls.message.setAttribute('aria-live','polite');
+  form.addEventListener('submit',event=>{event.preventDefault();if(creating)return;try{const url=new URL(controls.input.value.trim(),location.origin),params=new URLSearchParams(url.hash.slice(1));if(url.origin!==location.origin||!['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname)||params.has('token')||!validToken(params.get('session')))throw new Error();accept(params.get('session'),Date.now()+TTL,params.get('order')||'');controls.input.value='';controls.message.textContent='Enlace conectado. Los pedidos se comparten con el otro dispositivo.';}catch{controls.message.textContent='Pega un enlace de demostración válido de esta web.';controls.input.focus();}});
+  inner.append(heading,notice,actions,nav,form,controls.message);bar.append(inner);document.body.prepend(bar);updateBar();
+ }
+ window.DemoSession=Object.freeze({enabled,ready,request,link,create,orderId:()=>ready()?selectedOrder:'',selectOrder(id){if(!enabled||!validOrder(id)||id===selectedOrder)return;selectedOrder=id;persist();updateBar();},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn);},expiry:()=>ready()&&expiryKnown?expiresAt:null});
+ if(enabled){try{const record=JSON.parse(storage?.getItem(KEY)||'null');if(validToken(record?.token)&&Number.isFinite(record.expiresAt)&&record.expiresAt>Date.now()&&record.expiresAt<=Date.now()+TTL){token=record.token;expiresAt=record.expiresAt;expiryKnown=record.expiryKnown===true;selectedOrder=validOrder(record.orderId)?record.orderId:'';scheduleExpiry();}else storage?.removeItem(KEY);}catch{}consume();mount();if(!document.body)document.addEventListener('DOMContentLoaded',mount);window.addEventListener('hashchange',consume);}
+})();
+
 
 
 ========================================================================
@@ -1240,10 +1512,11 @@ ARCHIVO: web/dist/devoluciones.html
 ========================================================================
 
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Devoluciones y ayuda · Fumada XXL</title><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/returns.css"><script src="/returns.js" defer></script></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f6f0"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Devoluciones y ayuda · Fumada XXL</title><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/returns.css"><link rel="stylesheet" href="/demo-session.css"><script src="/demo-session.js" defer></script><script src="/returns.js" defer></script></head>
 <body><a class="skip" href="#contenido">Saltar al contenido</a><header class="portal-header"><a class="brand" href="/">Fumada XXL <span>Un libro de Aleix</span></a><a href="/" class="back-link">Volver al libro</a></header>
 <main id="contenido"><div class="page-intro"><p class="eyebrow">Para cuidar cada lectura</p><h1>Devoluciones<br><em>y ayuda.</em></h1><p>Consulta tu solicitud, escribe a Aleix y encuentra las indicaciones para devolver tu libro.</p></div>
-<p id="demo-note" class="notice" hidden><strong>Demostración con un pedido ficticio.</strong> Los cambios se simulan en esta página y se pierden al recargar. No se envían solicitudes ni correos. La etiqueta de ejemplo no sirve para enviar un paquete.</p>
+<p id="demo-note" class="notice" hidden><strong>Demostración con pedidos ficticios.</strong> Los cambios se guardan en la sesión compartida durante un máximo de 7 días. Puedes verlos y gestionarlos desde el panel o desde otro dispositivo con el mismo enlace. No se envían correos, no se cobran compras y la etiqueta de ejemplo no sirve para enviar un paquete. Usa únicamente datos ficticios.</p>
+<section id="demo-order-panel" class="paper-panel" hidden aria-labelledby="demo-order-title"><h2 id="demo-order-title">Tu pedido de prueba.</h2><form id="demo-order-form"><fieldset id="demo-order-fields" disabled><legend class="sr-only">Consultar un pedido de demostración</legend><label for="demo-order">Número de pedido de prueba</label><input id="demo-order" name="orderId" autocomplete="off" maxlength="100" spellcheck="false" placeholder="DEMO-001 o el número de tu compra…" aria-describedby="demo-order-help"><button class="button" type="submit">Consultar pedido de prueba</button></fieldset></form><p id="demo-order-help" class="help" role="status" aria-live="polite"></p></section>
 <p id="page-message" class="notice" role="status" aria-live="polite" hidden></p>
 <noscript><p class="notice">Necesitas activar JavaScript para solicitar un enlace o consultar una devolución. También puedes <a href="mailto:theshoz@gmail.com">escribir a Aleix</a>.</p></noscript>
 <section id="access-panel" class="paper-panel" aria-labelledby="access-title"><h2 id="access-title">Pide tu enlace privado.</h2><p>Indica el número de pedido y el correo que usaste al comprar. Si los datos coinciden, Aleix preparará tu enlace y te lo enviará manualmente. El correo no se envía automáticamente.</p>
@@ -1253,9 +1526,9 @@ ARCHIVO: web/dist/devoluciones.html
 <section id="case-panel" class="paper-panel" hidden aria-labelledby="case-title"><div class="case-heading"><div><h2 id="case-title" tabindex="-1">Tu devolución.</h2><p class="help">Pedido <strong id="case-order"></strong></p></div><span id="case-status" class="status-badge"></span></div><p class="help" id="case-reason"></p><p class="notice">Registrar una solicitud no devuelve dinero. Aleix revisará el caso y el estado del pago se actualizará cuando corresponda.</p>
 <section id="seller-response" class="seller-response" hidden aria-labelledby="seller-title"><h3 id="seller-title">Respuesta de Aleix</h3><p id="case-reply"></p><dl id="label-information"><div><dt>Transportista</dt><dd id="case-carrier"></dd></div><div><dt>Código de devolución</dt><dd id="case-code"></dd></div></dl><button id="label-download" type="button" class="button secondary" hidden>Descargar etiqueta</button><p class="help" id="label-help"></p><p id="label-message" class="feedback" role="status" aria-live="polite"></p></section>
 <form id="request-form"><fieldset id="request-fields" disabled><legend>Cuéntanos qué necesitas.</legend><label for="return-kind">Tipo de solicitud</label><select id="return-kind" name="kind"><option value="withdrawal">Quiero desistir de la compra</option><option value="damaged">El libro ha llegado dañado</option><option value="wrong">He recibido un libro equivocado</option><option value="other">Otra consulta sobre la devolución</option></select><label for="return-reason">Detalles <span id="reason-caption">(opcionales para desistimiento)</span></label><textarea id="return-reason" name="reason" rows="4" maxlength="1000" placeholder="Cuéntanos qué ha pasado…" aria-describedby="request-help"></textarea><p id="request-help" class="help">Para desistir no necesitas explicar el motivo. En los demás casos, añade detalles para que Aleix pueda ayudarte. Consulta las <a href="/condiciones-de-venta.html#envios">condiciones de devolución</a>.</p><p class="help" id="request-privacy">Responsable: Alex Rivera Mosquera (Aleix). Los detalles se usarán para atender y gestionar esta devolución. Más información y derechos en la <a href="/privacidad.html">política de privacidad</a>.</p><button class="button" type="submit" aria-describedby="request-privacy">Registrar solicitud</button></fieldset></form>
-<p id="request-message" class="feedback" role="status" aria-live="polite"></p><button class="text-button" type="button" id="case-refresh">Actualizar estado</button><button class="text-button" type="button" id="demo-approved" hidden>Ver ejemplo aprobado</button>
+<p id="request-message" class="feedback" role="status" aria-live="polite"></p><button class="text-button" type="button" id="case-refresh">Actualizar estado</button><a class="text-button" id="demo-panel-link" hidden>Ir al panel para gestionar este pedido</a>
 <section id="receipt" class="receipt" hidden aria-labelledby="receipt-title"><h3 id="receipt-title" tabindex="-1">Solicitud registrada.</h3><p>Guarda este justificante para conservar los detalles y la fecha. No se envía una confirmación automática por correo.</p><pre id="receipt-text"></pre><button id="receipt-download" class="button secondary" type="button">Descargar justificante</button></section>
-<p class="help">Tu enlace da acceso a esta información: guárdalo en privado. Para volver después de recargar, abre de nuevo el enlace del correo. No guardamos el acceso en este navegador.</p></section>
+<p class="help" id="case-access-help">Tu enlace da acceso a esta información: guárdalo en privado. Para volver después de recargar, abre de nuevo el enlace del correo. No guardamos el acceso en este navegador.</p></section>
 <footer class="portal-footer"><p>Si prefieres hablarlo, <a href="mailto:theshoz@gmail.com?subject=Ayuda%20con%20una%20devoluci%C3%B3n">escribe a Aleix</a>.</p><nav aria-label="Ayuda y privacidad"><a href="/devoluciones?demo=1">Probar con un pedido ficticio</a><a href="/privacidad.html">Privacidad</a><a href="/condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
 </main></body></html>
 
@@ -1327,6 +1600,7 @@ ARCHIVO: web/dist/index.html
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f6f0">
+  <meta name="referrer" content="no-referrer">
   <meta name="description" content="Fumada XXL. Un libro sobre meditación y el pequeño arte de bajar el ritmo. Encuentra un momento para respirar y volver a ti.">
   <title>Fumada XXL de Aleix | Libro de meditación</title>
   <link rel="canonical" href="https://prueba-aleix.com/">
@@ -1347,6 +1621,9 @@ ARCHIVO: web/dist/index.html
   <link rel="stylesheet" href="shop.css">
   <link rel="stylesheet" href="legal.css">
   <script src="app.js" defer></script>
+  <link rel="stylesheet" href="/demo-session.css">
+  <script src="/demo-session.js" defer></script>
+  <script src="/demo-checkout.js" defer></script>
   <script src="shop.js" type="module"></script>
 </head>
 <body>
@@ -1405,9 +1682,14 @@ ARCHIVO: web/dist/index.html
           <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover" disabled>Añadir tapa dura <span aria-hidden="true">+</span></button></article>
         </div>
         <p class="shipping-highlight">Envío a Europa · <strong>7,00 € por pedido</strong></p><p class="shop-availability">La venta online está en preparación. Puedes consultar tu importe, pero todavía no se admiten pedidos ni se realizan cobros. La disponibilidad y el plazo para tu destino se confirmarán antes del pago.</p>
-        <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="/devoluciones">Gestionar una devolución</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
+        <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
       </div>
     </section>
+
+    <aside class="returns-help wrap" aria-labelledby="returns-help-title">
+      <div><p class="eyebrow">TE ACOMPAÑAMOS DESPUÉS</p><h2 id="returns-help-title">¿Necesitas ayuda con tu pedido?</h2><p>Comunica una incidencia, solicita una devolución o consulta cómo va tu solicitud.</p></div>
+      <a class="button button-primary" id="returns-link" href="/devoluciones">Devoluciones y reembolsos <span aria-hidden="true">↗</span></a>
+    </aside>
 
     <section class="faq-section wrap" id="preguntas" aria-labelledby="faq-title">
       <div class="faq-intro"><p class="eyebrow">CON LAS COSAS CLARAS</p><h2 id="faq-title">Tus dudas,<br><em>con calma.</em></h2><p>Unas respuestas antes de elegir tu edición.</p><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Consulta%20sobre%20Fumada%20XXL">Escribir a Aleix <span aria-hidden="true">↗</span></a></div>
@@ -1434,7 +1716,7 @@ ARCHIVO: web/dist/index.html
     <section class="closing wrap" aria-label="Una última idea"><span class="closing-star" aria-hidden="true">✳</span><p>No hace falta ir más lejos.<br><em>Hace falta volver a ti.</em></p><a href="#inicio" class="underlined-link">Volver al principio <span aria-hidden="true">↑</span></a></section>
   </main>
 
-  <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
+  <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="/demo" rel="nofollow">Demo del panel</a><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
 
   <dialog id="order-dialog" class="order-dialog" aria-labelledby="order-title" aria-describedby="order-notice">
     <div class="order-top"><span class="cart-brand">Fumada XXL · Aleix</span><button class="dialog-close" type="button" aria-label="Cerrar carrito" data-close-cart>×</button></div>
@@ -1474,8 +1756,9 @@ ARCHIVO: web/dist/index.html
       <ul id="review-items" class="review-items"></ul>
       <div class="order-summary"><div><span>Envío previsto</span><span id="review-shipping">7,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="review-total"></strong></div><p>Impuestos incluidos. El destino y el plazo de entrega aún no están confirmados.</p></div>
       <div class="review-details"><h3>Destinatario y dirección</h3><address id="review-address"></address><h3>Correo para la confirmación</h3><p id="review-email"></p><button class="cart-text-button" type="button" data-back="details">Editar mis datos</button></div>
-      <p class="checkout-notice"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
-      <button class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
+      <p class="checkout-notice" id="review-preparation-note"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
+      <button id="real-payment-unavailable" class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
+      <div id="demo-purchase-area" hidden><p id="demo-purchase-note" class="checkout-notice"></p><button id="demo-purchase" type="button" class="button button-primary" disabled>Crear pedido de prueba · sin pagar</button><p id="demo-purchase-status" class="checkout-help" role="status" aria-live="polite"></p><section id="demo-order-confirmation" class="demo-order-confirmation" hidden aria-labelledby="demo-order-title"><h3 id="demo-order-title" tabindex="-1">Tu pedido de prueba está confirmado.</h3><p>Conserva este número para cualquier consulta o devolución.</p><p class="demo-order-number"><strong id="demo-order-number"></strong></p><p>Total simulado: <strong id="demo-order-total"></strong>. No se ha cobrado dinero ni enviado un correo.</p><div class="demo-order-actions"><button type="button" class="cart-text-button" id="demo-order-copy">Copiar número</button><button type="button" class="cart-text-button" id="demo-order-receipt">Guardar justificante</button><a id="demo-order-returns" class="button button-primary">Solicitar devolución de este pedido</a><a id="demo-order-admin" class="button">Ver este pedido en el panel</a></div></section></div>
       <button class="cart-text-button checkout-back" type="button" data-back="cart">Editar los libros</button>
     </section>
     <div class="order-legal"><a href="condiciones-de-venta.html" target="_blank" rel="noopener">Condiciones de venta</a><a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></div>
@@ -1513,7 +1796,7 @@ ARCHIVO: web/dist/privacidad.html
     <a class="header-cta" href="/#comprar">Ver ediciones <span aria-hidden="true">↗</span></a>
   </header><main id="contenido" class="legal-shell wrap"><a class="legal-back" href="/#comprar">← Volver al libro</a><p class="eyebrow">INFORMACIÓN Y CONDICIONES</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el <time datetime="2026-09-28">28 de septiembre de 2026</time></p><aside class="legal-notice"><strong>Versión de preparación.</strong> La tienda todavía no acepta pedidos ni pagos. La conexión de cobro, los plazos por destino y la información operativa pendiente deben completarse antes de abrir la venta.</aside><nav class="legal-toc" aria-label="En esta página"><a href="#responsable">Responsable</a><a href="#tratamientos">Datos y finalidades</a><a href="#proveedores">Proveedores</a><a href="#derechos">Tus derechos</a></nav>
 <section id="responsable"><h2>1. Responsable del tratamiento</h2><p>El titular de la web es Alex Rivera Mosquera, con domicilio en Camí Ral de Cardona, número 5, 08600 Berga, Barcelona, España. Puedes contactar en <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Los datos de identificación fiscal figuran en el <a href="aviso-legal.html">aviso legal</a>.</p><p>Esta política describe la versión actual, sin pago ni recogida de pedidos. Antes de activar la tienda se actualizará para identificar los proveedores y las operaciones de compra efectivamente implantadas.</p></section>
-<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración funciona en memoria. El carrito recuerda las ediciones y cantidades en este navegador durante 7 días desde el último cambio, para conservar la selección solicitada; no se vincula a una cuenta ni se envía al titular. Puedes eliminarlo con «Vaciar carrito».</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Carrito y formulario de prueba</h3><p>Puedes probar el recorrido como invitado con datos ficticios: nombre, correo y dirección de envío. El código los utiliza únicamente en la memoria de la página para mostrarte el resumen solicitado. No los envía al vendedor, a una pasarela ni a la base de datos; tampoco los guarda en el carrito persistente. Se borran al cerrar el carrito o recargar. No se crea una cuenta ni se mandan confirmaciones por correo.</p><p>El navegador puede ofrecer su propio autocompletado; puedes gestionarlo desde sus ajustes. No introduzcas datos de tarjeta ni documentos de identidad en esta prueba.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Solicitudes y portal de devoluciones</h3><p>El formulario de acceso utiliza la referencia y el correo facilitados para comprobar su coincidencia con un pedido existente y avisar al titular de la solicitud. No revela públicamente si un pedido existe. El titular envía manualmente el enlace privado al correo ya asociado a ese pedido. No hay envío automático de correos.</p><p>Al tramitar una devolución se registran el tipo de solicitud, tu explicación si procede, la fecha, su estado, la respuesta del vendedor y, cuando corresponda, las instrucciones y la etiqueta de transporte. Se utilizan para ejecutar el contrato, atender incidencias y cumplir las obligaciones legales aplicables. No incluyas datos de salud, documentos de identidad ni datos bancarios. El comprador no puede consultar notas internas ni datos de otros pedidos.</p><p>El enlace es confidencial, tiene una vigencia máxima de 30 días y se puede sustituir o revocar. No lo compartas: quien lo tenga podrá acceder a ese expediente. El navegador lo utiliza solo en memoria y retira el código de la barra de direcciones; el servidor conserva únicamente su huella. Para limitar solicitudes abusivas se guardan temporalmente huellas de la dirección IP facilitada por la infraestructura y de la referencia, con contadores, sobre la base del interés legítimo en proteger el servicio.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; el formulario actual es solo una prueba local, sin envío ni contratación.</p></section>
+<section id="tratamientos"><h2>2. Qué datos se utilizan y para qué</h2><h3>Navegación y funcionamiento</h3><p>El código de esta web no incluye formularios de registro, boletines, herramientas publicitarias ni estadísticas añadidas por el titular. El ejercicio de respiración funciona en memoria. El carrito recuerda las ediciones y cantidades en este navegador durante 7 días desde el último cambio, para conservar la selección solicitada; no se vincula a una cuenta ni se envía al titular. Puedes eliminarlo con «Vaciar carrito».</p><p>Al abrir cualquier página, la infraestructura de alojamiento recibe necesariamente información de la conexión, como dirección IP y petición del recurso. La finalidad actual es entregar el contenido y proteger el servicio frente a abusos, sobre la base del interés legítimo en mantener un sitio disponible y seguro. La infraestructura observada incluye la protección de Cloudflare, descrita en la <a href="cookies.html">política de cookies</a>. El código del libro no guarda un historial de visitas propio.</p><h3>Carrito y formulario de prueba</h3><p>Puedes probar el recorrido como invitado con datos ficticios: nombre, correo y dirección de envío. El código los utiliza únicamente en la memoria de la página para mostrarte el resumen solicitado. No los envía al vendedor, a una pasarela ni a la base de datos; tampoco los guarda en el carrito persistente. Se borran al cerrar el carrito o recargar. No se crea una cuenta ni se mandan confirmaciones por correo.</p><p>El navegador puede ofrecer su propio autocompletado; puedes gestionarlo desde sus ajustes. No introduzcas datos de tarjeta ni documentos de identidad en esta prueba.</p><h3>Demostración conectada entre dispositivos</h3><p>Al iniciar expresamente una demostración, el servidor crea una sesión independiente con pedidos ficticios. La compra de prueba envía únicamente los formatos, cantidades y una referencia técnica para evitar duplicados; el servidor asigna un comprador de ejemplo. Las solicitudes, motivos, respuestas y cambios del panel se guardan en esa sesión para mostrar el mismo recorrido en móvil y ordenador. No introduzcas datos personales reales en los campos de la demostración.</p><p>Quien tenga el enlace compartido puede ver y gestionar todos los pedidos de esa demostración. Se guarda una clave técnica en el almacenamiento de sesión de la pestaña, o solo en memoria si el navegador lo bloquea; el servidor conserva su huella. El acceso caduca a los 7 días de crear la sesión y los registros caducados se eliminan mediante la limpieza del servicio. Crear una nueva demostración no prolonga ni elimina inmediatamente la anterior. Conserva el enlace solo mientras necesites la presentación y compártelo únicamente con sus participantes. Se limita la creación de sesiones con una huella temporal de la dirección IP para evitar abusos. Esta función no envía correos, no cobra ni reembolsa dinero y no consulta pedidos reales.</p><h3>Consultas por correo</h3><p>Si escribes a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>, se utilizarán tu dirección de correo y los datos que facilites para responder a la consulta. Una solicitud previa a una compra puede tratarse para adoptar medidas precontractuales a petición tuya; las consultas generales se atienden por el interés legítimo de responder a quien se dirige voluntariamente al titular. Las solicitudes de derechos y los requerimientos legalmente exigibles se tramitan para cumplir obligaciones legales.</p><p>No envíes información clínica, documentos de identidad completos ni datos bancarios en una consulta ordinaria. El correo no se utilizará para añadirte automáticamente a listas comerciales.</p><h3>Área privada del titular</h3><p>El acceso a la gestión de pedidos utiliza la autenticación de ChatGPT y una autorización adicional en el servidor. Se utiliza el identificador de la cuenta y, durante la vinculación inicial, su correo verificado. Se conserva el identificador para restringir el acceso al titular, por el interés legítimo de impedir accesos no autorizados. La demo pública contiene solo datos ficticios y no consulta pedidos reales. La web dispone de una base de datos de pedidos; en esta fase no recibe compras. Cuando se conecte el cobro, el panel permitirá consultar los datos necesarios para atender y entregar cada pedido. Los datos de compradores no se publican en la web.</p><h3>Solicitudes y portal de devoluciones</h3><p>El formulario de acceso utiliza la referencia y el correo facilitados para comprobar su coincidencia con un pedido existente y avisar al titular de la solicitud. No revela públicamente si un pedido existe. El titular envía manualmente el enlace privado al correo ya asociado a ese pedido. No hay envío automático de correos.</p><p>Al tramitar una devolución se registran el tipo de solicitud, tu explicación si procede, la fecha, su estado, la respuesta del vendedor y, cuando corresponda, las instrucciones y la etiqueta de transporte. Se utilizan para ejecutar el contrato, atender incidencias y cumplir las obligaciones legales aplicables. No incluyas datos de salud, documentos de identidad ni datos bancarios. El comprador no puede consultar notas internas ni datos de otros pedidos.</p><p>El enlace es confidencial, tiene una vigencia máxima de 30 días y se puede sustituir o revocar. No lo compartas: quien lo tenga podrá acceder a ese expediente. El navegador lo utiliza solo en memoria y retira el código de la barra de direcciones; el servidor conserva únicamente su huella. Para limitar solicitudes abusivas se guardan temporalmente huellas de la dirección IP facilitada por la infraestructura y de la referencia, con contadores, sobre la base del interés legítimo en proteger el servicio.</p><h3>Futuras compras</h3><p>Cuando el pago esté habilitado se necesitarán los datos imprescindibles para tramitar y entregar el pedido, gestionar incidencias y cumplir obligaciones fiscales. Su base jurídica será la ejecución del contrato o la obligación legal correspondiente. La información concreta se facilitará antes de recoger esos datos; el formulario ordinario actual es una prueba local sin contratación; la demostración conectada descrita arriba solo guarda pedidos ficticios.</p></section>
 <section><h2>3. Conservación</h2><p>Las solicitudes de devolución y sus documentos se conservan para resolver el expediente y atender las responsabilidades legales que resulten aplicables. El titular debe revisar y eliminar los documentos que dejen de ser necesarios; no hay un borrado general automático de expedientes. Los enlaces caducados ya no permiten acceder. Los contadores de protección dejan de limitar solicitudes al terminar su ventana de 15 minutos y se depuran durante nuevas solicitudes, con borrado por lotes, por lo que no se promete una eliminación inmediata al caducar.</p><p>El estado del ejercicio desaparece al recargar o cerrar la página. El nombre, el correo y la dirección de la prueba se borran al cerrar el carrito o recargar. Las ediciones y cantidades se conservan localmente un máximo de 7 días desde el último cambio y se descartan al volver a cargar un carrito caducado; puedes eliminarlas antes con «Vaciar carrito» o borrando los datos del sitio. Las consultas por correo se conservarán mientras sea necesario resolverlas y, cuando proceda, durante los plazos exigidos para atender responsabilidades legales. No se conservarán para una finalidad publicitaria no solicitada.</p><p>El identificador de la cuenta propietaria permanece vinculado mientras se mantenga el área privada; el titular debe gestionar su supresión cuando retire esa autorización. La aplicación no dispone de borrado automático general programado de pedidos o expedientes. Los registros técnicos que mantengan los proveedores siguen sus condiciones y configuración; sus plazos concretos no se han verificado para esta cuenta. Los plazos de futuros pedidos, facturas y datos de pago se concretarán antes de recogerlos.</p></section>
 <section id="proveedores"><h2>4. Servicios y comunicaciones de datos</h2><p>La web se publica mediante Sites de OpenAI y utiliza infraestructura de seguridad de Cloudflare. Las etiquetas aportadas por el vendedor se alojan de forma privada en Cloudflare R2 y se entregan solo mediante el acceso autorizado al expediente. El correo de contacto utiliza Gmail, de Google. Estos proveedores intervienen en el alojamiento, seguridad, autenticación o correo según el servicio utilizado. Puedes consultar la <a href="https://openai.com/policies/eu-privacy-policy/">política europea de OpenAI</a>, la <a href="https://www.cloudflare.com/privacypolicy/">política de Cloudflare</a> y la <a href="https://policies.google.com/privacy?hl=es">política de Google</a>. Las fuentes tipográficas y la imagen se sirven desde el propio sitio, sin solicitar Google Fonts al navegar.</p><p>La integración de pagos con Stripe se encuentra pendiente: en esta versión no se carga su formulario ni se le envían datos de compra. Tampoco hay un transportista conectado. Antes de activar estos servicios se revisarán sus roles, contratos, destinatarios y posibles transferencias internacionales y se actualizará esta política.</p><p>Las transferencias fuera del Espacio Económico Europeo, si se realizan, deberán contar con el mecanismo legal aplicable, como una decisión de adecuación o garantías contractuales apropiadas. La ubicación del servidor y las garantías de cada proveedor requieren confirmación; no se afirma que todos los datos permanezcan en España.</p></section>
 <section id="derechos"><h2>5. Cómo ejercer tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación o portabilidad cuando sean aplicables escribiendo a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> o al domicilio del titular. Si un tratamiento se basa en tu consentimiento, puedes retirarlo sin afectar a la licitud del tratamiento anterior.</p><p>Se pedirá únicamente la información necesaria para verificar la identidad cuando existan dudas razonables. Las solicitudes se atenderán en los plazos previstos por el RGPD, normalmente un mes, con las ampliaciones justificadas que permita la normativa.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>, sin perjuicio de otras autoridades competentes. El código actual no realiza perfiles comerciales ni decisiones automatizadas con efectos jurídicos.</p></section></main>  <footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html" aria-current="page">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer></body></html>
@@ -1539,16 +1822,18 @@ let fragment='',token='';
 function consumeFragment(){fragment=location.hash;if(fragment)history.replaceState(null,'',location.pathname+location.search);token=new URLSearchParams(fragment.slice(1)).get('token')||'';if(!/^[A-Za-z0-9_-]{43}$/.test(token))token='';}
 consumeFragment();
 const demo=new URLSearchParams(location.search).get('demo')==='1';
-let currentCase=null,busy=false,receiptText='',viewRequest=0;
+const session=window.DemoSession;
+let currentCase=null,busy=false,receiptText='',viewRequest=0,pollTimer=null;
 const statusLabels={none:'Sin solicitud',requested:'Solicitud registrada',reviewing:'En revisión',approved:'Devolución aprobada',received:'Libro recibido',closed:'Gestión cerrada',rejected:'Solicitud rechazada'};
 const kindLabels={withdrawal:'Desistimiento',damaged:'Libro dañado',wrong:'Libro equivocado',other:'Otra consulta'};
 const canRequest=()=>currentCase&&['none','closed','rejected'].includes(currentCase.status);
-function lock(value){busy=value;$('access-fields').disabled=value;$('request-fields').disabled=value;$('label-download').disabled=value;$('case-refresh').disabled=value;$('demo-approved').disabled=value;}
+function lock(value){busy=value;$('access-fields').disabled=value;$('request-fields').disabled=value;$('label-download').disabled=value;$('case-refresh').disabled=value;$('demo-order-fields').disabled=value||(demo&&!session?.ready());}
 function download(blob,name){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 async function api(path,{action,body}={}){
- const headers={...(token?{'X-Return-Token':token}:{}),...(action?{'X-Return-Action':action}:{})};
+ const headers=demo?{...(action?{'X-Demo-Action':action}:{})}:{...(token?{'X-Return-Token':token}:{}),...(action?{'X-Return-Action':action}:{})};
  if(body)headers['Content-Type']='application/json';
- const response=await fetch(path,{method:action?'POST':'GET',headers,credentials:'omit',cache:'no-store',...(body?{body:JSON.stringify(body)}:{})});
+ const options={method:action?'POST':'GET',headers,credentials:'omit',cache:'no-store',...(body?{body:JSON.stringify(body)}:{})};let response;
+ if(demo){if(path!=='/api/returns/case'||!session?.ready())throw new Error('Inicia una demostración desde la barra o usa un enlace compartido.');const id=currentCase?.orderId||$('demo-order').value.trim();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id))throw new Error('Indica un número de pedido de prueba válido.');response=await session.request('/api/demo/returns/'+encodeURIComponent(id),options);}else response=await fetch(path,options);
  let data;try{data=await response.json();}catch{throw new Error('No se ha podido cargar la información. Inténtalo de nuevo o escribe a Aleix.');}
  if(!response.ok)throw new Error(data.error||'No se ha podido completar la solicitud. Inténtalo de nuevo o pide un enlace nuevo.');return data;
 }
@@ -1561,6 +1846,7 @@ function render(value){
  $('request-form').hidden=!canRequest();
  $('request-message').textContent=canRequest()?'':'La solicitud está registrada. Puedes actualizar el estado y consultar la respuesta de Aleix.';
  if(value.submittedAt!=null&&value.status!=='none'&&Object.hasOwn(kindLabels,value.kind))showReceipt(value);
+ if(demo){$('demo-panel-link').href=session.link('/demo',{orderId:value.orderId});schedulePoll();}
 }
 function showReceipt(value,kind=value.kind,reason=value.reason){
  const timestamp=new Intl.DateTimeFormat('es-ES',{dateStyle:'long',timeStyle:'short'}).format(new Date(value.submittedAt??Date.now()));
@@ -1568,7 +1854,10 @@ function showReceipt(value,kind=value.kind,reason=value.reason){
  $('receipt-text').textContent=receiptText;$('receipt').hidden=false;
 }
 function reasonState(){const optional=$('return-kind').value==='withdrawal';$('return-reason').required=!optional;$('reason-caption').textContent=optional?'(opcional para desistimiento)':'(necesarios para revisar este caso)';}
-async function refresh(){if(busy||!currentCase)return;const version=viewRequest;lock(true);$('request-message').textContent='Actualizando…';try{const value=demo?currentCase:(await api('/api/returns/case')).case;if(version===viewRequest)render(value);}catch(error){if(version===viewRequest)$('request-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}}
+function stopPoll(){if(pollTimer!==null)clearTimeout(pollTimer);pollTimer=null;}
+function hasDraft(){return!$('request-form').hidden&&($('return-reason').value.trim()||$('return-kind').value!=='withdrawal');}
+function schedulePoll(){stopPoll();if(!demo||document.hidden||!currentCase||!session?.ready())return;pollTimer=setTimeout(async()=>{pollTimer=null;if(!document.hidden&&!busy&&!hasDraft())await refresh({silent:true});schedulePoll();},5000);}
+async function refresh({silent=false}={}){if(busy||!currentCase)return;const version=viewRequest;if(!silent){lock(true);$('request-message').textContent='Actualizando…';}else busy=true;try{const value=(await api('/api/returns/case')).case;if(version===viewRequest&&(!silent||value.version!==currentCase?.version))render(value);}catch(error){if(version===viewRequest)$('request-message').textContent=error.message;}finally{if(version===viewRequest){if(!silent)lock(false);else busy=false;}}}
 $('return-kind').addEventListener('change',reasonState);
 $('access-form').addEventListener('submit',async event=>{
  event.preventDefault();if(busy)return;const orderId=$('access-order').value.trim(),email=$('access-email').value.trim();if(!orderId||!email){$('access-message').textContent='Indica el número de pedido y el correo de compra.';(!orderId?$('access-order'):$('access-email')).focus();return;}
@@ -1580,12 +1869,12 @@ $('request-form').addEventListener('submit',async event=>{
  if(kind!=='withdrawal'&&!reason){$('request-message').textContent='Añade detalles para que Aleix pueda revisar el caso.';$('return-reason').focus();return;}
  if(reason.length>1000){$('request-message').textContent='Los detalles pueden tener hasta 1000 caracteres.';$('return-reason').focus();return;}
  const version=viewRequest;lock(true);$('request-message').textContent='Registrando solicitud…';try{
-  const value=demo?{...currentCase,status:'requested',kind,reason,version:currentCase.version+1}:(await api('/api/returns/case',{action:'request',body:{kind,reason,expectedVersion:currentCase.version}})).case;
+  const value=(await api('/api/returns/case',{action:'request',body:{kind,reason,expectedVersion:currentCase.version}})).case;
   if(version!==viewRequest)return;
-  render(value);showReceipt(value,kind,reason);$('request-message').textContent=demo?'Solicitud simulada. No se ha enviado al vendedor.':'Solicitud registrada. Descarga el justificante para conservarla.';$('receipt-title').focus();
+  render(value);showReceipt(value,kind,reason);$('request-message').textContent=demo?'Solicitud de prueba guardada en la demostración compartida. Puedes gestionarla desde el panel.':'Solicitud registrada. Descarga el justificante para conservarla.';$('receipt-title').focus();
  }catch(error){if(version===viewRequest)$('request-message').textContent=error.message+' Los detalles siguen en el formulario. Puedes reintentarlo.';}finally{if(version===viewRequest)lock(false);}
 });
-$('case-refresh').addEventListener('click',refresh);
+$('case-refresh').addEventListener('click',()=>refresh());
 $('receipt-download').addEventListener('click',()=>{if(receiptText)download(new Blob([receiptText],{type:'text/plain;charset=utf-8'}),'justificante-devolucion.txt');});
 $('label-download').addEventListener('click',async()=>{
  if(busy||!currentCase?.label)return;const version=viewRequest;lock(true);$('label-message').textContent='Preparando descarga…';try{
@@ -1594,17 +1883,19 @@ $('label-download').addEventListener('click',async()=>{
   $('label-message').textContent=demo?'Ejemplo descargado; no es válido para envíos.':'Etiqueta descargada.';
  }catch(error){if(version===viewRequest)$('label-message').textContent=error.message;}finally{if(version===viewRequest)lock(false);}
 });
-$('demo-approved').addEventListener('click',()=>{if(!demo||busy)return;render({...currentCase,status:'approved',reply:'Ejemplo de respuesta: protege el libro y espera las indicaciones de Aleix antes de enviarlo.',carrier:'Transportista ficticio',code:'EJEMPLO SIN VALIDEZ',label:{type:'text/plain',size:90}});$('request-message').textContent='Estado aprobado simulado. No corresponde a una solicitud real.';});
+$('demo-order-form').addEventListener('submit',async event=>{event.preventDefault();if(busy||!demo||!session?.ready())return;const id=$('demo-order').value.trim();if(!/^[A-Za-z0-9_-]{1,100}$/.test(id)){$('demo-order-help').textContent='Indica un número de pedido de prueba válido.';$('demo-order').focus();return;}session.selectOrder(id);return start();});
 async function start(){
- const version=++viewRequest;currentCase=null;receiptText='';$('case-panel').hidden=true;$('access-panel').hidden=false;$('page-message').hidden=true;
+ const version=++viewRequest;stopPoll();currentCase=null;receiptText='';$('case-panel').hidden=true;$('access-panel').hidden=demo;$('page-message').hidden=true;
  for(const id of ['case-order','case-reply','case-reason','case-code','case-carrier','receipt-text','access-message','request-message','label-message'])$(id).textContent='';
  $('return-reason').value='';$('return-kind').value='withdrawal';
- $('receipt').hidden=true;$('demo-note').hidden=!demo;$('demo-approved').hidden=!demo;reasonState();lock(false);
- if(demo){token='';render({orderId:'DEMO-DEVOLUCION',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:0,paymentStatus:'paid'});return;}
- if(!token){if(fragment){$('page-message').hidden=false;$('page-message').textContent='El enlace no es válido. Solicita un enlace nuevo o escribe a Aleix.';}return;}
+ $('receipt').hidden=true;$('demo-note').hidden=!demo;$('demo-order-panel').hidden=!demo;$('demo-panel-link').hidden=!demo;reasonState();lock(false);
+ if(demo){const help=$('case-access-help');if(help)help.textContent='La demostración guarda el acceso en esta pestaña, si el navegador lo permite. Para continuar en otro dispositivo o volver a la sesión, usa el enlace compartido de la barra. La sesión caduca 7 días después de crearse. Comparte solo datos ficticios.';token='';const connected=session?.ready();$('demo-order-fields').disabled=!connected;$('demo-order-help').textContent=connected?'Consulta el número de tu compra de prueba o un pedido de ejemplo como DEMO-001.':'Inicia una demostración desde la barra o pega un enlace compartido para consultar pedidos de prueba.';if(!connected)return;$('demo-order').value=session.orderId()||'';if(!$('demo-order').value)return;}
+ if(!demo&&!token){if(fragment){$('page-message').hidden=false;$('page-message').textContent='El enlace no es válido. Solicita un enlace nuevo o escribe a Aleix.';}return;}
  lock(true);$('page-message').hidden=false;$('page-message').textContent='Consultando tu devolución…';try{const value=(await api('/api/returns/case')).case;if(version!==viewRequest)return;render(value);$('page-message').hidden=true;}catch(error){if(version===viewRequest)$('page-message').textContent=error.message+' Abre de nuevo el enlace del correo o solicita uno nuevo.';}finally{if(version===viewRequest)lock(false);}
 }
-window.addEventListener('hashchange',()=>{if(!location.hash)return;consumeFragment();return start();});
+window.addEventListener('hashchange',()=>{if(!location.hash||demo)return;consumeFragment();return start();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPoll();else schedulePoll();});
+if(demo&&session)session.subscribe(()=>start());
 start();
 
 
@@ -1639,6 +1930,7 @@ ARCHIVO: web/dist/shop.css
 .order-summary strong,.edition-price{font-variant-numeric:tabular-nums}
 
 /* The cart extends the book's existing paper, olive and serif palette. */
+.returns-help{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:36px;border-bottom:1px solid var(--line)}.returns-help .eyebrow{color:#59654b;margin:0 0 10px}.returns-help h2{font:400 1.8rem/1.3 var(--serif);letter-spacing:-.02em;margin:0 0 10px}.returns-help p:last-child{font-size:.9375rem;line-height:1.7;color:#59654b;margin:0;max-width:520px}.returns-help .button{flex-shrink:0;gap:20px;min-height:48px}.returns-help .button:focus-visible{outline:3px solid #aa793e;outline-offset:4px}@media(max-width:760px){.returns-help{align-items:flex-start;flex-direction:column}.returns-help .button{width:100%;justify-content:space-between}}
 [hidden]{display:none!important}
 .cart-open{background:transparent;color:var(--ink);cursor:pointer;gap:10px;font-size:.875rem;min-height:44px}
 .cart-open svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
@@ -1695,6 +1987,7 @@ ARCHIVO: web/dist/shop.css
 .review-details address,.review-details p{font-style:normal;font-size:1rem;line-height:1.7;margin:10px 0;color:#59654b;overflow-wrap:anywhere}
 .review-details address span{display:block}
 .payment-button{font-size:1rem}
+.demo-order-confirmation{margin-top:24px;padding:24px;border:1px solid #b3bd9c;background:#edf0e5;border-radius:8px}.demo-order-confirmation h3{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;font-weight:400}.demo-order-number{font-size:1.35rem;overflow-wrap:anywhere;user-select:all}.demo-order-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.demo-order-actions a{font-size:1rem}.demo-order-confirmation p{line-height:1.7}
 @media(max-width:580px){.order-dialog{padding:20px;width:calc(100% - 20px);max-height:calc(100dvh - 20px)}.checkout-steps{gap:12px;font-size:.8125rem}.order-dialog h2{font-size:2rem}.checkout-fields{grid-template-columns:1fr;gap:18px}.field-wide{grid-column:auto}.cart-add>div{display:grid;grid-template-columns:1fr}.cart-open{max-width:none;gap:7px}.cart-open svg{width:20px}.cart-brand{font-size:.8125rem}}
 
 
@@ -1718,6 +2011,7 @@ if(dialog){
  const format=cents=>money.format(cents/100);
  const announce=text=>{$('#order-announcement').textContent=text;};
  function go(next,{focus=true}={}){
+  if(next==='details')window.dispatchEvent(new CustomEvent('fumada-cart-details'));
   step=next;
   dialog.querySelectorAll('[data-step]').forEach(panel=>{panel.hidden=panel.dataset.step!==next;});
   $('#order-title').textContent=titles[next];
@@ -1803,6 +2097,7 @@ if(dialog){
    name.textContent=`${qty} × ${CATALOG[key].name}`;price.textContent=format(qty*CATALOG[key].cents);li.append(name,price);return li;
   }));
   const cost=totals(items);$('#review-total').textContent=format(cost.total);$('#review-shipping').textContent=format(cost.shipping);go('review');
+  window.dispatchEvent(new CustomEvent('fumada-cart-reviewed',{detail:{items:{...items}}}));
  });
  // No payment integration: no address, email or order leaves this page.
  dialog.querySelectorAll('[data-close-cart]').forEach(button=>button.addEventListener('click',()=>dialog.close()));
@@ -2014,6 +2309,20 @@ ALTER TABLE `orders` ADD `return_label_key` text;--> statement-breakpoint
 ALTER TABLE `orders` ADD `return_label_type` text;--> statement-breakpoint
 ALTER TABLE `orders` ADD `return_label_size` integer;--> statement-breakpoint
 ALTER TABLE `orders` ADD `return_submitted_at` integer;
+
+
+========================================================================
+ARCHIVO: web/drizzle/0004_chunky_microchip.sql
+========================================================================
+
+CREATE TABLE `demo_sessions` (
+	`token_hash` text PRIMARY KEY NOT NULL,
+	`expires_at` integer NOT NULL,
+	`data` text NOT NULL,
+	`revision` integer DEFAULT 0 NOT NULL
+);
+--> statement-breakpoint
+CREATE INDEX `demo_sessions_expiry` ON `demo_sessions` (`expires_at`);
 
 
 ========================================================================
@@ -3507,6 +3816,620 @@ ARCHIVO: web/drizzle/meta/0003_snapshot.json
 
 
 ========================================================================
+ARCHIVO: web/drizzle/meta/0004_snapshot.json
+========================================================================
+
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "f2615513-3236-4c10-93e8-d591ab9329cf",
+  "prevId": "f59aac57-ade2-4d67-b191-6099e66ef676",
+  "tables": {
+    "demo_sessions": {
+      "name": "demo_sessions",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revision": {
+          "name": "revision",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "demo_sessions_expiry": {
+          "name": "demo_sessions_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "order_items": {
+      "name": "order_items",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "order_items_order_id_edition_pk": {
+          "columns": [
+            "order_id",
+            "edition"
+          ],
+          "name": "order_items_order_id_edition_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "item_edition": {
+          "name": "item_edition",
+          "value": "\"order_items\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "item_quantity": {
+          "name": "item_quantity",
+          "value": "\"order_items\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "item_unit_price": {
+          "name": "item_unit_price",
+          "value": "\"order_items\".\"unit_price\" >= 0"
+        }
+      }
+    },
+    "orders": {
+      "name": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_name": {
+          "name": "customer_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address1": {
+          "name": "address1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address2": {
+          "name": "address2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shipping": {
+          "name": "shipping",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total": {
+          "name": "total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fulfillment_status": {
+          "name": "fulfillment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shipped_at": {
+          "name": "shipped_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tracking": {
+          "name": "tracking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "carrier": {
+          "name": "carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "private_note": {
+          "name": "private_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "note_updated_at": {
+          "name": "note_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_status": {
+          "name": "return_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "return_reason": {
+          "name": "return_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_resolution": {
+          "name": "return_resolution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_updated_at": {
+          "name": "return_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "management_version": {
+          "name": "management_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "portal_requested_at": {
+          "name": "portal_requested_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "customer_reply": {
+          "name": "customer_reply",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_kind": {
+          "name": "return_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_code": {
+          "name": "return_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_carrier": {
+          "name": "return_carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_label_key": {
+          "name": "return_label_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_type": {
+          "name": "return_label_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_size": {
+          "name": "return_label_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_submitted_at": {
+          "name": "return_submitted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "orders_created": {
+          "name": "orders_created",
+          "columns": [
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_payment_fulfillment_created": {
+          "name": "orders_payment_fulfillment_created",
+          "columns": [
+            "payment_status",
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_fulfillment_created": {
+          "name": "orders_fulfillment_created",
+          "columns": [
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "order_edition": {
+          "name": "order_edition",
+          "value": "\"orders\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "order_quantity": {
+          "name": "order_quantity",
+          "value": "\"orders\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "order_payment": {
+          "name": "order_payment",
+          "value": "\"orders\".\"payment_status\" IN ('pending','paid','failed','refunded','partially_refunded')"
+        },
+        "order_fulfillment": {
+          "name": "order_fulfillment",
+          "value": "\"orders\".\"fulfillment_status\" IN ('pending','shipped')"
+        },
+        "order_total": {
+          "name": "order_total",
+          "value": "\"orders\".\"total\" = \"orders\".\"subtotal\" + \"orders\".\"shipping\" AND \"orders\".\"shipping\" >= 0 AND \"orders\".\"subtotal\" >= 0"
+        }
+      }
+    },
+    "admin_owner": {
+      "name": "admin_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "one_owner": {
+          "name": "one_owner",
+          "value": "\"admin_owner\".\"slot\" = 1"
+        }
+      }
+    },
+    "return_access": {
+      "name": "return_access",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_access_token_hash_unique": {
+          "name": "return_access_token_hash_unique",
+          "columns": [
+            "token_hash"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "return_access_order_id_orders_id_fk": {
+          "name": "return_access_order_id_orders_id_fk",
+          "tableFrom": "return_access",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "return_rate_limits": {
+      "name": "return_rate_limits",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "window_start": {
+          "name": "window_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_rate_window": {
+          "name": "return_rate_window",
+          "columns": [
+            "window_start"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+========================================================================
 ARCHIVO: web/drizzle/meta/_journal.json
 ========================================================================
 
@@ -3540,6 +4463,13 @@ ARCHIVO: web/drizzle/meta/_journal.json
       "version": "6",
       "when": 1790599297160,
       "tag": "0003_colossal_nehzno",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1790601021061,
+      "tag": "0004_chunky_microchip",
       "breakpoints": true
     }
   ]
@@ -4302,7 +5232,12 @@ assets['@returns']=assets['/devoluciones.html'];
 if(!assets['@returns'])throw new Error('Customer returns portal missing');
 assets['@returns'].noIndex=true;
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
+const liveUpdates=await readFile('admin/live-updates.js','utf8');
+assets['/admin/app.js'].data=Buffer.from((await readFile('admin/app.js','utf8'))+'\n'+liveUpdates).toString('base64');
 const database=await readFile('worker/database.mjs','utf8');
+for(const key of ['/index.html','@returns']){let html=Buffer.from(assets[key].data,'base64').toString('utf8');html=html.replace(/<script src="\/demo-(?:session|checkout)\.js" defer><\/script>/g,'').replace('<link rel="stylesheet" href="/demo-session.css">','').replace('<a href="/demo" rel="nofollow">Demo del panel</a>','');assets[key].data=Buffer.from(html).toString('base64');}
+assets['/returns.js'].data=Buffer.from(Buffer.from(assets['/returns.js'].data,'base64').toString('utf8').replace("const demo=new URLSearchParams(location.search).get('demo')==='1';","const demo=false;")).toString('base64');
+for(const key of ['/demo-session.js','/demo-session.css','/demo-checkout.js'])delete assets[key];
 // Hash once at build time; unchanged public files can revalidate without downloading again.
 for(const [key,asset] of Object.entries(assets)) {
   asset.etag=`W/"${createHash('sha256').update(Buffer.from(asset.data,'base64')).digest('hex')}"`;
@@ -4312,10 +5247,11 @@ const originalCover=Object.keys(assets).find(key=>/^\/assets\/fumada-xxl-1536-[a
 if(!originalCover)throw new Error('Optimized cover missing');
 assets['/assets/fumada-xxl-aleix.png']={redirect:originalCover};
 const returns=(await readFile('worker/returns.mjs','utf8')).replace(/^import .* from ['"]\.\/database\.mjs['"];?\s*$/gm,'');
-const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .* from ['"]\.\/(?:database|returns)\.mjs['"];?\s*$/gm,'');
+const demo=(await readFile('worker/demo.mjs','utf8')).replace(/^import .* from ['"]\.\/database\.mjs['"];?\s*$/gm,'');
+const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .* from ['"]\.\/(?:database|returns|demo)\.mjs['"];?\s*$/gm,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
-await writeFile('dist/server/index.js',`${database}\n${returns}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
+await writeFile('dist/server/index.js',`${database}\n${returns}\n${demo}\n${worker}\nexport default createWorker(${JSON.stringify(assets)});\n`);
 await cp('.openai/hosting.json','dist/.openai/hosting.json');
 console.log(`Built Worker with ${Object.keys(assets).length} preserved resources.`);
 
@@ -4396,6 +5332,64 @@ const server = http.createServer(async (req, res) => {
   } catch { res.writeHead(404); res.end('No encontrado'); }
 });
 server.listen(4173, '127.0.0.1', () => console.log('Local: http://127.0.0.1:4173'));
+
+
+
+========================================================================
+ARCHIVO: web/tests/admin-live.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {join} from 'node:path';
+import vm from 'node:vm';
+const sourceRoot=process.env.DEMO_UI_SOURCE_DIR||process.cwd();
+const sharedSource=readFileSync(join(sourceRoot,'admin/demo-shared.js'),'utf8');
+const liveSource=readFileSync(join(sourceRoot,'admin/live-updates.js'),'utf8');
+
+function shared({connected=true}={}){
+ const calls=[];const context=vm.createContext({window:{DemoSession:{ready:()=>connected,async request(path,options){calls.push({path,options});return new Response(JSON.stringify({ok:true,order:{id:'DEMO-001'}}));}}}});vm.runInContext(sharedSource,context);return{calls,api:(path,options={})=>context.demoApi(path,options)};
+}
+test('demo adapter converts raw label file to JSON metadata and preserves its version',async()=>{
+ const ui=shared(),file={type:'application/pdf',size:1234,name:'private-filename.pdf',bytes:'sensitive bytes'};await ui.api('/api/admin/orders/DEMO-001/return-label',{method:'POST',headers:{'X-Admin-Action':'return-label','X-Order-Version':'12'},body:file});const call=ui.calls[0];assert.equal(call.path,'/api/demo/admin/orders/DEMO-001/return-label');assert.equal(call.options.headers['X-Demo-Action'],'return-label');assert.equal(call.options.headers['Content-Type'],'application/json');assert.deepEqual(JSON.parse(call.options.body),{type:'application/pdf',size:1234,expectedVersion:12});assert.doesNotMatch(call.options.body,/sensitive|private-filename/);
+});
+test('already converted demo label JSON is not converted again',async()=>{
+ const ui=shared(),body=JSON.stringify({type:'image/png',size:2048,expectedVersion:3});await ui.api('/api/admin/orders/DEMO-001/return-label',{method:'POST',headers:{'X-Admin-Action':'return-label','X-Order-Version':'3'},body});assert.equal(ui.calls[0].options.body,body);
+});
+test('demo adapter refuses disconnected sessions and routes outside the order API',async()=>{
+ const disconnected=shared({connected:false});await assert.rejects(disconnected.api('/api/admin/orders'),/Inicia/);assert.equal(disconnected.calls.length,0);const ui=shared();await assert.rejects(ui.api('/api/admin/identity'),/Ruta/);assert.equal(ui.calls.length,0);
+});
+
+function live({version=1,nextVersion=2,open=true,deferred=false,demo=false,connected=true}={}){
+ const elements=new Map(),timers=new Map(),events={},calls=[],loads=[],renders=[];let timerId=0,resolveResponse,clearedLinks=0;
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',checked:false,files:[],textContent:'',open:false});return elements.get(id);};element('detail').open=open;element('return-status').value='requested';
+ const order={id:'DEMO-001',management_version:version,return_status:'none',private_note:'',carrier:'',tracking:'',return_reason:'',return_resolution:'',customer_reply:'',return_carrier:'',return_code:''};
+ const document={hidden:false,body:{classList:{contains:()=>demo}},activeElement:{tagName:'BODY',closest:()=>null},addEventListener(name,fn){events[name]=fn;}};
+ const context=vm.createContext({document,window:{DemoSession:{ready:()=>connected}},currentOrder:order,detailRequest:1,saving:false,loading:false,$:element,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},async api(path){calls.push(path);if(deferred)return new Promise(resolve=>{resolveResponse=resolve;});return{order:{...order,management_version:nextVersion,private_note:'Server note'}};},clearPortalLink(){clearedLinks++;element('portal-url').value='';},renderDetail(updated){renders.push(updated);context.currentOrder=updated;element('private-note').value=updated.private_note;},async load(options){loads.push(options);}});vm.runInContext(liveSource,context);
+ return{element,calls,loads,renders,document,context,get clearedLinks(){return clearedLinks;},async poll(){const entry=[...timers.entries()].at(-1);assert.ok(entry,'a poll is scheduled');timers.delete(entry[0]);await entry[1].fn();},async visibility(hidden){document.hidden=hidden;return events.visibilitychange();},resolve(){resolveResponse({order:{...order,management_version:99,private_note:'Late note'}});}};
+}
+test('polling a changed order preserves drafts and asks to reload before saving',async()=>{
+ const ui=live();ui.element('private-note').value='Private draft';ui.element('customer-reply').value='Buyer reply draft';ui.element('portal-url').value='old private link';await ui.poll();assert.equal(ui.renders.length,0);assert.equal(ui.element('private-note').value,'Private draft');assert.equal(ui.element('customer-reply').value,'Buyer reply draft');assert.match(ui.element('detail-message').textContent,/Se conservan tus campos/);assert.equal(ui.clearedLinks,1);assert.equal(ui.element('portal-url').value,'');
+});
+test('unchanged management version causes no detail DOM rendering',async()=>{
+ const ui=live({nextVersion:1});await ui.poll();assert.equal(ui.calls.length,1);assert.equal(ui.renders.length,0);assert.equal(ui.clearedLinks,0);assert.equal(ui.element('detail-message').textContent,'');
+});
+test('a changed clean order refreshes the detail',async()=>{
+ const ui=live();await ui.poll();assert.equal(ui.renders.length,1);assert.equal(ui.element('private-note').value,'Server note');assert.match(ui.element('detail-message').textContent,/actualizado/);
+});
+test('late polling response cannot update a detail that was reopened',async()=>{
+ const ui=live({deferred:true}),pending=ui.poll();ui.context.detailRequest++;ui.element('private-note').value='Newly reopened draft';ui.resolve();await pending;assert.equal(ui.renders.length,0);assert.equal(ui.element('private-note').value,'Newly reopened draft');
+});
+test('hidden, saving and disconnected demonstration pages do not poll',async()=>{
+ const hidden=live();await hidden.visibility(true);assert.equal(hidden.calls.length,0);const saving=live();saving.context.saving=true;await saving.poll();assert.equal(saving.calls.length,0);const disconnected=live({demo:true,connected:false});await disconnected.poll();assert.equal(disconnected.calls.length,0);
+});
+test('list polling is quiet and pauses while a user edits or focuses an order row',async()=>{
+ const ui=live({open:false});await ui.poll();assert.equal(ui.loads.length,1);assert.equal(ui.loads[0].quiet,true);ui.document.activeElement={tagName:'INPUT',closest:()=>null};await ui.poll();assert.equal(ui.loads.length,1);ui.document.activeElement={tagName:'BUTTON',closest:selector=>selector==='#table-wrap'?{}:null};await ui.poll();assert.equal(ui.loads.length,1);
+});
+test('confirmation checks and a selected label are dirty edits preserved during polling',async()=>{
+ const confirmed=live();confirmed.element('deliver-confirm').checked=true;await confirmed.poll();assert.equal(confirmed.renders.length,0);const label=live();label.element('return-label-file').files=[{name:'label.pdf'}];await label.poll();assert.equal(label.renders.length,0);
+});
 
 
 
@@ -4805,19 +5799,22 @@ import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import vm from 'node:vm';
 const source=existsSync('dist/returns.js')?readFileSync('dist/returns.js','utf8'):'';
-function harness({demo=false,token='',failSave=false,caseOverrides={},deferFirst=false}={}){
+function harness({demo=false,demoReady=true,token='',failSave=false,caseOverrides={},deferFirst=false}={}){
  assert.ok(source,'returns script exists');const elements=new Map(),calls=[],downloads=[],timeline=[];let resolveFirst;
  const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,events:{},children:[],addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},replaceChildren(...nodes){this.children=nodes;},focus(){},append(...nodes){this.children.push(...nodes);},remove(){},click(){downloads.push({name:this.download,href:this.href});},checkValidity(){return true;}});return elements.get(id);};
  element('return-kind').value='withdrawal';const document={getElementById:element,body:element('body'),createElement:()=>element('download'+Math.random())};
- let value={orderId:'PEDIDO-1',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:4,paymentStatus:'paid',...caseOverrides};
+ let value={orderId:demo?'DEMO-001':'PEDIDO-1',status:'none',kind:'',reason:'',reply:'',carrier:'',code:'',label:null,version:4,paymentStatus:'paid',...caseOverrides};let selectedOrder=demo?'DEMO-001':'';const timers=new Map();let timerId=0;
  const listeners={},location={hash:token?'#token='+token:'',search:demo?'?demo=1':'',pathname:'/devoluciones'};
- const context=vm.createContext({document,URLSearchParams,URL:{createObjectURL:()=> 'blob:local',revokeObjectURL(){}},Blob,Intl,Date,console,setTimeout,window:{addEventListener(name,fn){listeners[name]=fn;}},location,history:{replaceState(_s,_t,path){timeline.push('clear');this.path=path;location.hash='';}},fetch:async(path,options={})=>{
+ document.addEventListener=(name,fn)=>{listeners[name]=fn;};document.hidden=false;
+ const transport=async(path,options={})=>{
   timeline.push('fetch');calls.push({path,options});if(path.endsWith('/access'))return new Response('{}',{status:202});
   if(deferFirst&&calls.length===1)return new Promise(resolve=>{resolveFirst=resolve;});
-  if(options.method==='POST'&&path.endsWith('/case')){if(failSave)return new Response(JSON.stringify({error:'No se pudo guardar'}),{status:503});const body=JSON.parse(options.body);value={...value,status:'requested',kind:body.kind,reason:body.reason,version:5};}
+  if(options.method==='POST'&&(path.endsWith('/case')||path.startsWith('/api/demo/returns/'))){if(failSave)return new Response(JSON.stringify({error:'No se pudo guardar'}),{status:503});const body=JSON.parse(options.body);value={...value,status:'requested',kind:body.kind,reason:body.reason,version:5};}
   return new Response(JSON.stringify({case:value}));
- }});vm.runInContext(source.replace(/start\(\);\s*$/,'globalThis.started=start();'),context);
- return {element,calls,downloads,timeline,ready:context.started,completeFirst(){resolveFirst(new Response(JSON.stringify({case:{...value,orderId:'PEDIDO-ANTERIOR'}})));},async openHash(value){location.hash='#token='+value;await listeners.hashchange?.();},get hash(){return location.hash;}};
+ };
+ const session={enabled:demo,ready:()=>demoReady,orderId:()=>selectedOrder,selectOrder(id){selectedOrder=id;},subscribe(){return()=>{};},link:(path,{orderId=selectedOrder}={})=>'https://book.example'+path+'#session=DEMO&order='+orderId,request:(path,options={})=>transport(path,{...options,headers:{...options.headers,'X-Demo-Session':'demo-test'}})};
+ const context=vm.createContext({document,URLSearchParams,URL:{createObjectURL:()=> 'blob:local',revokeObjectURL(){}},Blob,Intl,Date,console,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},window:{DemoSession:session,addEventListener(name,fn){listeners[name]=fn;}},location,history:{replaceState(_s,_t,path){timeline.push('clear');this.path=path;location.hash='';}},fetch:transport});vm.runInContext(source.replace(/start\(\);\s*$/,'globalThis.started=start();'),context);
+ return {element,calls,downloads,timeline,ready:context.started,serverUpdate(update){value={...value,...update};},async poll(){const timer=[...timers.values()].find(value=>value.ms===5000);assert.ok(timer,'poll is scheduled');await timer.fn();},completeFirst(){resolveFirst(new Response(JSON.stringify({case:{...value,orderId:'PEDIDO-ANTERIOR'}})));},async openHash(value){location.hash='#token='+value;await listeners.hashchange?.();},get hash(){return location.hash;}};
 }
 const submit=(ui,id)=>ui.element(id).events.submit({preventDefault(){}});
 test('private token is removed before fetch and travels only in header',async()=>{
@@ -4835,8 +5832,8 @@ test('request confirms only a successful save and creates a token-free receipt',
 test('failed saves preserve text and do not display receipt',async()=>{
  const ui=harness({token:'c'.repeat(43),failSave:true});await ui.ready;ui.element('return-kind').value='other';ui.element('return-reason').value='Mi motivo';await submit(ui,'request-form');assert.equal(ui.element('return-reason').value,'Mi motivo');assert.equal(ui.element('receipt').hidden,true);assert.match(ui.element('request-message').textContent,/No se pudo guardar/);
 });
-test('demo request and approved example make no network calls',async()=>{
- const ui=harness({demo:true});await ui.ready;await submit(ui,'request-form');await ui.element('demo-approved').events.click();await ui.element('label-download').events.click();assert.equal(ui.calls.length,0);assert.equal(ui.element('demo-note').hidden,false);assert.match(ui.downloads.at(-1).name,/ejemplo/);
+test('demo request and case use only shared demo APIs and label is an invalid TXT example',async()=>{
+ const ui=harness({demo:true});await ui.ready;await submit(ui,'request-form');ui.serverUpdate({status:'approved',version:6,label:{type:'text/plain',size:20},reply:'Aprobado desde el panel'});await ui.element('case-refresh').events.click();await ui.element('label-download').events.click();assert.ok(ui.calls.length>=3);assert.ok(ui.calls.every(call=>call.path.startsWith('/api/demo/returns/')));assert.equal(ui.calls.find(call=>call.options.method==='POST').options.headers['X-Demo-Action'],'request');assert.equal(ui.element('demo-note').hidden,false);assert.match(ui.downloads.at(-1).name,/ejemplo/);
 });
 test('reopening a saved request offers receipt with its original server date',async()=>{
  const ui=harness({token:'d'.repeat(43),caseOverrides:{status:'requested',kind:'damaged',reason:'Cubierta dañada',submittedAt:86400000}});await ui.ready;assert.equal(ui.element('receipt').hidden,false);assert.match(ui.element('receipt-text').textContent,/1970/);assert.match(ui.element('receipt-text').textContent,/Cubierta dañada/);
@@ -4846,6 +5843,11 @@ test('hash-only navigation on an already open page loads new private access safe
 });
 test('a late response from an older fragment cannot replace the new case',async()=>{
  const ui=harness({token:'f'.repeat(43),deferFirst:true});await ui.openHash('g'.repeat(43));assert.equal(ui.element('case-order').textContent,'PEDIDO-1');ui.completeFirst();await ui.ready;assert.equal(ui.element('case-order').textContent,'PEDIDO-1');assert.equal(ui.calls.at(-1).options.headers['X-Return-Token'],'g'.repeat(43));
+});
+test('demo without a connected session asks to start the bar and makes no API call',async()=>{const ui=harness({demo:true,demoReady:false});await ui.ready;assert.equal(ui.calls.length,0);assert.match(ui.element('demo-order-help').textContent,/Inicia/);assert.equal(ui.element('demo-order-fields').disabled,true);});
+test('demo access help describes shared tab storage and the bar instead of a nonexistent email',async()=>{const ui=harness({demo:true});await ui.ready;assert.match(ui.element('case-access-help').textContent,/pestaña/);assert.match(ui.element('case-access-help').textContent,/barra/);assert.doesNotMatch(ui.element('case-access-help').textContent,/correo|No guardamos/);});
+test('shared demo polling updates response but does not poll over a form draft',async()=>{
+ const ui=harness({demo:true});await ui.ready;ui.element('return-reason').value='Borrador';const before=ui.calls.length;await ui.poll();assert.equal(ui.calls.length,before);assert.equal(ui.element('return-reason').value,'Borrador');ui.element('return-reason').value='';ui.serverUpdate({version:9,status:'approved',reply:'Respuesta compartida'});await ui.poll();assert.equal(ui.element('case-reply').textContent,'Respuesta compartida');
 });
 
 
@@ -5056,6 +6058,80 @@ export function localDatabase(){
   };
   return {sqlite,prepare,async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const stmt of statements)result.push(await stmt.all());sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
 }
+
+
+
+========================================================================
+ARCHIVO: web/tests/demo-checkout.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {join} from 'node:path';
+import vm from 'node:vm';
+
+const source=readFileSync(join(process.env.DEMO_UI_SOURCE_DIR||process.cwd(),'dist/demo-checkout.js'),'utf8');
+const fields=['fullName','email','address','addressExtra','postalCode','city','region','country'];
+function harness({enabled=true,connected=true,deferred=false,failFirst=false}={}){
+ const elements=new Map(),events=new Map(),requests=[],subscribers=[],selected=[];let resolveRequest,requestSequence=0;
+ const document={getElementById(id){if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:true,disabled:false,readOnly:false,open:false,events:{},addEventListener(name,fn){this.events[name]=fn;},focus(){document.activeElement=this;}});return elements.get(id);},createElement:()=>({click(){}})};
+ for(const name of fields)document.getElementById('customer-'+name).value='PERSONAL DATA MUST NOT LEAVE THIS PAGE';
+ document.getElementById('order-dialog').open=true;
+ const session={enabled,ready:()=>connected,subscribe(fn){subscribers.push(fn);},selectOrder(id){selected.push(id);},link(path,{orderId}={}){const url=new URL(path,'https://book.example');url.hash='session='+'a'.repeat(43)+'&order='+orderId;return url.href;},async request(path,options){requests.push({path,options});if(deferred)return new Promise(resolve=>{resolveRequest=resolve;});return new Response(JSON.stringify(failFirst&&requests.length===1?{error:'Fallo de prueba'}:{order:{id:'DEMO-abc123def456',total:4200}}),{status:failFirst&&requests.length===1?503:200});}};
+ const context=vm.createContext({document,window:{DemoSession:session,addEventListener(name,fn){events.set(name,fn);}},crypto:{randomUUID:()=>`00000000-0000-4000-8000-${String(++requestSequence).padStart(12,'0')}`},Intl,Blob,URL:{createObjectURL:()=> 'blob:fixture',revokeObjectURL(){}},setTimeout(){},navigator:{clipboard:{writeText:async()=>{}}}});
+ vm.runInContext(source,context);
+ return{element:id=>document.getElementById(id),requests,selected,review:items=>events.get('fumada-cart-reviewed')?.({detail:{items}}),restore:()=>events.get('fumada-cart-details')?.(),click:()=>document.getElementById('demo-purchase').events.click?.(),changeSession(){for(const fn of subscribers)fn();},resolve(){resolveRequest(new Response(JSON.stringify({order:{id:'DEMO-old123456789',total:2200}})));},get focus(){return document.activeElement;}};
+}
+
+test('demo purchase sends only catalog quantities and an idempotency request ID, never customer fields',async()=>{
+ const ui=harness();ui.review({paperback:1,hardcover:1,email:'real@example.test',address:'A real address',other:4});
+ for(const name of fields)ui.element('customer-'+name).value='PRIVATE '+name;
+ await ui.click();const request=ui.requests[0],body=JSON.parse(request.options.body);
+ assert.equal(request.path,'/api/demo/orders');assert.equal(request.options.headers['X-Demo-Action'],'purchase');assert.deepEqual(Object.keys(body).sort(),['items','requestId']);assert.deepEqual(body.items,{paperback:1,hardcover:1});assert.match(body.requestId,/^[a-f0-9-]{36}$/);assert.doesNotMatch(request.options.body,/PRIVATE|real@example|address|email/i);
+});
+
+test('purchase confirmation exposes the returned ID, simulated total and linked returns/admin pages',async()=>{
+ const ui=harness();ui.review({paperback:1,hardcover:1});await ui.click();assert.equal(ui.element('demo-order-number').textContent,'DEMO-abc123def456');assert.match(ui.element('demo-order-total').textContent,/42,00/);assert.equal(ui.element('demo-order-confirmation').hidden,false);assert.deepEqual(ui.selected,['DEMO-abc123def456']);assert.equal(ui.focus.id,'demo-order-title');
+ for(const [id,path]of [['demo-order-returns','/devoluciones'],['demo-order-admin','/demo']]){const url=new URL(ui.element(id).href);assert.equal(url.pathname,path);assert.match(url.hash,/session=a{43}&order=DEMO-abc123def456/);}assert.equal(new URL(ui.element('demo-order-returns').href).searchParams.get('demo'),'1');
+});
+
+test('reopening cart details restores only the fixed fictional recipient',()=>{
+ const ui=harness();const initial=Object.fromEntries(fields.map(name=>[name,ui.element('customer-'+name).value]));for(const name of fields){assert.equal(ui.element('customer-'+name).readOnly,true);ui.element('customer-'+name).value='';}
+ ui.restore();for(const name of fields)assert.equal(ui.element('customer-'+name).value,initial[name]);assert.match(initial.email,/@example\.invalid$/);assert.match(initial.address,/ejemplo/);
+});
+
+test('late order response from an earlier session never confirms or selects the old order',async()=>{
+ const ui=harness({deferred:true});ui.review({paperback:1});const pending=ui.click();ui.changeSession();ui.resolve();await pending;assert.equal(ui.element('demo-order-confirmation').hidden,true);assert.equal(ui.element('demo-order-number').textContent,'');assert.equal(ui.element('demo-order-returns').href,undefined);assert.deepEqual(ui.selected,[]);assert.doesNotMatch(ui.element('demo-purchase-status').textContent,/Pedido de prueba guardado/);
+});
+
+test('retry preserves idempotency and changing catalog selection creates a new request ID',async()=>{
+ const ui=harness({failFirst:true});ui.review({paperback:1});await ui.click();assert.equal(ui.element('demo-order-confirmation').hidden,true);assert.match(ui.element('demo-purchase-status').textContent,/Fallo/);await ui.click();const first=JSON.parse(ui.requests[0].options.body).requestId;assert.equal(JSON.parse(ui.requests[1].options.body).requestId,first);ui.review({hardcover:2});await ui.click();assert.notEqual(JSON.parse(ui.requests[2].options.body).requestId,first);
+});
+
+test('real storefront is untouched and a disconnected or empty demo cannot create orders',async()=>{
+ const real=harness({enabled:false});assert.equal(real.element('customer-email').value,'PERSONAL DATA MUST NOT LEAVE THIS PAGE');assert.equal(real.element('demo-purchase').events.click,undefined);assert.equal(real.requests.length,0);
+ const disconnected=harness({connected:false});disconnected.review({paperback:1});await disconnected.click();assert.equal(disconnected.requests.length,0);assert.equal(disconnected.element('demo-purchase').disabled,true);
+ const empty=harness();empty.review({paperback:11,hardcover:-1});await empty.click();assert.equal(empty.requests.length,0);
+});
+
+
+
+========================================================================
+ARCHIVO: web/tests/export-isolation.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import worker from '../dist/server/index.js';
+test('private export omits public demo routes and activation while retaining the real portal',async()=>{
+ const call=path=>worker.fetch(new Request('https://book.example'+path),{});
+ for(const path of ['/demo','/demo/app.js','/api/demo/session','/demo-session.js'])assert.equal((await call(path)).status,404,path);
+ const html=await(await call('/?demo=1')).text();assert.doesNotMatch(html,/<script src="\/demo-/);
+ const buyer=await(await call('/devoluciones?demo=1')).text();assert.doesNotMatch(buyer,/<script src="\/demo-/);
+ assert.match(await(await call('/returns.js')).text(),/const demo=false;/);
+ assert.equal((await call('/admin')).status,302);assert.equal((await call('/api/admin/orders')).status,401);
+});
 
 
 
@@ -5321,6 +6397,170 @@ test('production copy excludes demonstration and protects the owner panel',async
 
 
 ========================================================================
+ARCHIVO: web/tests/shared-demo-ui.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import vm from 'node:vm';
+const source=existsSync('dist/demo-session.js')?readFileSync('dist/demo-session.js','utf8'):'';
+function harness({enabled=true,hash='',storageWorks=true}={}){
+ assert.ok(source,'shared session script exists');let now=1000000;const nodes=[],calls=[],events={},storage=new Map(),timers=new Map();let timerId=0;
+ const node=()=>{const n={children:[],events:{},value:'',hidden:false,disabled:false,textContent:'',append(...children){this.children.push(...children);},prepend(...children){this.children.unshift(...children);},addEventListener(name,fn){this.events[name]=fn;},setAttribute(name,value){this[name]=value;},focus(){},removeAttribute(name){delete this[name];}};nodes.push(n);return n;};
+ const document={body:node(),createElement:node,addEventListener(name,fn){events[name]=fn;}};
+ const location={origin:'https://book.example',pathname:enabled?'/demo':'/devoluciones',search:'',hash};
+ const window={addEventListener(name,fn){events[name]=fn;},sessionStorage:{getItem(key){if(!storageWorks)throw Error('blocked');return storage.get(key)||null;},setItem(key,value){if(!storageWorks)throw Error('blocked');storage.set(key,value);},removeItem(key){storage.delete(key);}}};
+ class ClockDate extends Date{static now(){return now;}}
+ const context=vm.createContext({window,document,location,history:{replaceState(_s,_t,path){location.hash='';location.path=path;}},URL,URLSearchParams,Headers,Intl,Date:ClockDate,setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},navigator:{clipboard:{writeText:async()=>{}}},fetch:async(path,options={})=>{calls.push({path,options});return new Response(JSON.stringify({token:'a'.repeat(43),expiresAt:now+604800000}));}});
+ vm.runInContext(source,context);return {session:window.DemoSession,calls,storage,location,element:id=>nodes.find(n=>n.id===id),async hash(value){location.hash=value;await events.hashchange?.();},expire(){now+=604800001;},timers};
+}
+test('real token links are untouched and no room is auto-created',()=>{
+ const real=harness({enabled:false,hash:'#token='+'r'.repeat(43)});assert.equal(real.location.hash,'#token='+'r'.repeat(43));assert.equal(real.session.enabled,false);assert.equal(real.calls.length,0);
+ const demo=harness();assert.equal(demo.session.ready(),false);assert.equal(demo.calls.length,0);
+});
+test('explicit create provides private shared navigation and notified subscribers',async()=>{
+ const ui=harness();let changes=0;ui.session.subscribe(()=>changes++);await ui.session.create();assert.equal(ui.session.ready(),true);assert.equal(ui.calls[0].options.headers['X-Demo-Action'],'session');assert.equal(ui.session.token,undefined);assert.equal(changes,1);
+ ui.session.selectOrder('DEMO-001');assert.equal(changes,1,'selecting an order must not restart session consumers');const url=new URL(ui.session.link('/devoluciones',{orderId:'DEMO-001'}));assert.equal(url.searchParams.get('demo'),'1');assert.match(url.hash,/session=a{43}&order=DEMO-001/);assert.ok(ui.storage.size);assert.throws(()=>ui.session.link('https://evil.example/'),/enlace/i);
+});
+test('incoming session fragment is removed and order survives navigation',()=>{
+ const ui=harness({hash:'#session='+'b'.repeat(43)+'&order=DEMO-002'});assert.equal(ui.location.hash,'');assert.equal(ui.session.ready(),true);assert.equal(ui.session.orderId(),'DEMO-002');assert.equal(ui.calls.length,0);assert.match(ui.session.link('/demo'),/order=DEMO-002/);
+});
+test('technical storage failure keeps session in memory and navigation links',async()=>{
+ const ui=harness({storageWorks:false});await ui.session.create();assert.equal(ui.session.ready(),true);assert.match(ui.session.link('/'),/demo=1#session=/);assert.equal(ui.storage.size,0);
+});
+test('authenticated requests send token only to same-origin demo APIs',async()=>{
+ const ui=harness({hash:'#session='+'c'.repeat(43)});await ui.session.request('/api/demo/orders',{headers:{'X-Demo-Action':'purchase'},method:'POST',body:'{}'});const headers=ui.calls[0].options.headers;assert.equal(new Headers(headers).get('X-Demo-Session'),'c'.repeat(43));assert.equal(ui.calls[0].options.cache,'no-store');assert.equal(ui.calls[0].options.credentials,'omit');await assert.rejects(ui.session.request('https://evil.example/api/demo/orders'),/demostración/i);assert.equal(ui.calls.length,1);
+});
+test('expiry clears storage and notifies the connected page',async()=>{
+ const ui=harness();await ui.session.create();let changes=0;ui.session.subscribe(()=>changes++);ui.expire();assert.equal(ui.session.ready(),false);assert.equal(ui.storage.size,0);assert.equal(changes,1);
+});
+test('pasting a shared link accepts only this site and refuses real private tokens',async()=>{
+ const ui=harness(),form=ui.element('demo-session-import-form'),input=ui.element('demo-session-import');input.value='https://evil.example/?demo=1#session='+'a'.repeat(43);await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),false);input.value='https://book.example/devoluciones#token='+'a'.repeat(43);await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),false);input.value='https://book.example/devoluciones?demo=1#session='+'d'.repeat(43)+'&order=DEMO-004';await form.events.submit({preventDefault(){}});assert.equal(ui.session.ready(),true);assert.equal(ui.session.orderId(),'DEMO-004');assert.equal(input.value,'');assert.equal(ui.calls.length,0);
+});
+
+
+
+========================================================================
+ARCHIVO: web/tests/shared-demo.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createHash,randomUUID } from 'node:crypto';
+import { handleDemo } from '../worker/demo.mjs';
+import { localDatabase } from './database.mjs';
+
+function setup(t){
+  const DB=localDatabase();t.after(()=>DB.sqlite.close());
+  const env={DB,FILES:{put(){throw new Error('Demo must not write R2');},get(){throw new Error('Demo must not read R2');},delete(){throw new Error('Demo must not delete R2');}}};
+  const call=(path,method='GET',headers={},body)=>handleDemo(new Request('https://book.example'+path,{method,headers,body}),env);
+  const create=(ip='192.0.2.1',extra={},body={})=>call('/api/demo/session','POST',{origin:'https://book.example','x-demo-action':'session','content-type':'application/json','cf-connecting-ip':ip,...extra},JSON.stringify(body));
+  const session=async()=>{const response=await create();assert.equal(response.status,200);return response.json();};
+  const read=(token,path='/api/demo/admin/orders')=>call(path,'GET',{'x-demo-session':token});
+  const post=(token,path,action,body,extra={})=>call(path,'POST',{'x-demo-session':token,origin:'https://book.example','x-demo-action':action,'content-type':'application/json',...extra},JSON.stringify(body));
+  const action=(token,id,name,body)=>post(token,'/api/demo/admin/orders/'+id+'/'+name,name,body);
+  const buy=(token,requestId=randomUUID(),items={paperback:1,hardcover:1},extra={})=>post(token,'/api/demo/orders','purchase',{items,requestId,...extra});
+  const detail=async(token,id)=>(await(await read(token,'/api/demo/admin/orders/'+id)).json()).order;
+  const customer=async(token,id)=>(await(await read(token,'/api/demo/returns/'+id)).json()).case;
+  return {DB,env,call,create,session,read,post,action,buy,detail,customer};
+}
+
+test('shared demo creates expiring hashed bearer sessions with four fictional examples and private responses',async t=>{
+  const {session,read,DB,call}=setup(t);const {token,expiresAt}=await session();assert.match(token,/^[A-Za-z0-9_-]{43}$/);assert.ok(expiresAt>Date.now()+6*86400000);
+  const stored=DB.sqlite.prepare('SELECT * FROM demo_sessions').get();assert.equal(stored.token_hash,createHash('sha256').update(token).digest('hex'));assert.ok(!stored.data.includes(token));assert.equal(stored.revision,0);
+  const response=await read(token);assert.equal(response.status,200);assert.match(response.headers.get('cache-control'),/no-store/);assert.match(response.headers.get('x-robots-tag'),/noindex/);assert.equal(response.headers.get('referrer-policy'),'no-referrer');
+  const list=await response.json();assert.equal(list.orders.length,4);assert.equal(list.stats.total,4);assert.equal(list.stats.pending,1);assert.equal(list.stats.returns,1);assert.equal(list.stats.delivered,1);assert.equal(list.paymentConnected,false);
+  const mixed=list.orders.find(o=>o.id==='DEMO-002');assert.equal(mixed.items.length,2);assert.equal(mixed.total,4200);assert.equal(mixed.return_status,'requested');assert.equal(list.orders.find(o=>o.id==='DEMO-004').payment_status,'refunded');
+  assert.equal(await call('/api/admin/orders'),null);assert.equal(await call('/'),null);
+});
+
+test('session creation throttles its own IP quota and respects atomic active-session cap and bounded cleanup',async t=>{
+  const {create,DB}=setup(t);
+  for(let i=0;i<5;i++)assert.equal((await create()).status,200);
+  assert.equal((await create()).status,429);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,5);
+  const quota=DB.sqlite.prepare('SELECT * FROM return_rate_limits').get();assert.match(quota.key,/^[a-f0-9]{64}$/);assert.ok(!JSON.stringify(quota).includes('192.0.2.1'));
+  DB.sqlite.exec('DELETE FROM demo_sessions');
+  const insert=DB.sqlite.prepare('INSERT INTO demo_sessions(token_hash,expires_at,data,revision) VALUES(?,?,?,0)');for(let i=0;i<250;i++)insert.run(createHash('sha256').update('active_'+i).digest('hex'),Date.now()+86400000,'{"orders":[],"purchases":{}}');
+  assert.equal((await create('198.51.100.1')).status,429);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions').get().n,250);
+  DB.sqlite.exec('DELETE FROM demo_sessions');for(let i=0;i<31;i++)insert.run(createHash('sha256').update('expired_'+i).digest('hex'),1,'{"orders":[],"purchases":{}}');
+  assert.equal((await create('198.51.100.2')).status,200);assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM demo_sessions WHERE expires_at=1').get().n,11);
+});
+
+test('bearers isolate sessions and expired or URL-only credentials grant no access',async t=>{
+  const {session,buy,read,DB}=setup(t);const a=await session(),b=await session();const purchased=await(await buy(a.token)).json();
+  assert.equal((await read(b.token,'/api/demo/admin/orders/'+purchased.order.id)).status,404);
+  assert.equal((await read('X'.repeat(43))).status,401);assert.equal((await read(undefined,'/api/demo/admin/orders?token='+a.token)).status,401);
+  DB.sqlite.prepare('UPDATE demo_sessions SET expires_at=1 WHERE token_hash=?').run(createHash('sha256').update(a.token).digest('hex'));assert.equal((await read(a.token)).status,401);assert.equal((await buy(a.token)).status,401);
+});
+
+test('fictional purchase calculates prices on server, is idempotent, and cannot store personal fields or touch real orders',async t=>{
+  const {session,buy,DB,read}=setup(t);const {token}=await session(),requestId=randomUUID();
+  const response=await buy(token,requestId);assert.equal(response.status,200);const first=await response.json();assert.match(first.order.id,/^DEMO-[A-F0-9]{12}$/);assert.equal(first.order.subtotal,3500);assert.equal(first.order.shipping,700);assert.equal(first.order.total,4200);assert.equal(first.order.payment_status,'paid');assert.equal(first.order.quantity,2);assert.equal(first.order.items.length,2);assert.ok(first.order.email.endsWith('@example.invalid'));
+  const second=await(await buy(token,requestId)).json();assert.equal(second.order.id,first.order.id);assert.equal((await(await read(token)).json()).count,5);
+  assert.equal((await buy(token,requestId,{paperback:2,hardcover:0})).status,409);
+  assert.equal((await buy(token,randomUUID(),{paperback:1,hardcover:0},{email:'real@example.com',address:'Real street'})).status,400);
+  for(const table of ['orders','return_access','admin_owner'])assert.equal(DB.sqlite.prepare('SELECT count(*) AS n FROM '+table).get().n,0);
+  const stored=DB.sqlite.prepare('SELECT data FROM demo_sessions').get().data;assert.ok(!stored.includes('real@example.com'));assert.ok(!stored.includes('Real street'));
+});
+
+test('purchase bounds and order cap prevent unbounded state while duplicate confirmation still works at capacity',async t=>{
+  const {session,buy,read}=setup(t);const {token}=await session();
+  for(const items of [{paperback:0,hardcover:0},{paperback:11},{paperback:-1},{paperback:1.5},{paperback:'1'},{paperback:1,extra:1},{paperback:null,hardcover:1},null])assert.equal((await buy(token,randomUUID(),items)).status,400);
+  assert.equal((await buy(token,'not-a-uuid')).status,400);
+  let first;const requestId=randomUUID();for(let i=0;i<16;i++){const response=await buy(token,i?randomUUID():requestId,{hardcover:10,paperback:10});assert.equal(response.status,200);if(!i)first=(await response.json()).order;}
+  assert.equal((await(await read(token)).json()).count,20);assert.equal((await buy(token)).status,409);assert.equal((await(await buy(token,requestId,{hardcover:10,paperback:10})).json()).order.id,first.id);
+});
+
+test('all writes need same origin, matching action, bounded JSON and an explicit order version',async t=>{
+  const {session,create,post,buy,action,detail}=setup(t);const {token}=await session();
+  assert.equal((await create(undefined,{origin:'https://evil.example'})).status,403);assert.equal((await create(undefined,{}, {email:'real@example.test'})).status,400);
+  for(const extra of [{origin:'https://evil.example'},{'x-demo-action':'session'},{'content-type':'text/plain'}])assert.equal((await post(token,'/api/demo/orders','purchase',{items:{paperback:1},requestId:randomUUID()},extra)).status,403);
+  assert.equal((await action(token,'DEMO-001','notes',{note:'x'.repeat(9000),expectedVersion:0})).status,413);
+  assert.equal((await action(token,'DEMO-001','notes',{note:'bad\u0000',expectedVersion:0})).status,400);
+  assert.equal((await action(token,'DEMO-001','ship',{tracking:'SIMULADO'})).status,400);assert.equal((await action(token,'DEMO-001','notes',{note:'x',expectedVersion:'0'})).status,400);
+  assert.equal((await detail(token,'DEMO-001')).management_version,0);assert.equal((await buy(token)).status,200);
+});
+
+test('buyer request, owner response, delivery and fake label stay synchronized between separate clients',async t=>{
+  const {session,buy,post,customer,action,detail,read}=setup(t);const {token}=await session();const {order}=await(await buy(token)).json();
+  const request=await post(token,'/api/demo/returns/'+order.id,'request',{kind:'withdrawal',reason:'',expectedVersion:0});assert.equal(request.status,200);assert.equal((await customer(token,order.id)).status,'requested');assert.equal((await detail(token,order.id)).return_reason,'Desistimiento sin motivo indicado.');
+  assert.equal((await action(token,order.id,'ship',{tracking:'SIMULADO',expectedVersion:1})).status,409);
+  assert.equal((await action(token,order.id,'return',{status:'approved',reason:'Desistimiento',resolution:'',expectedVersion:1})).status,200);
+  assert.equal((await action(token,order.id,'portal-reply',{reply:'Instrucciones simuladas',carrier:'Transportista ficticio',code:'FICTICIO-123',expectedVersion:2})).status,200);
+  assert.equal((await action(token,order.id,'return-label',{type:'application/pdf',size:100,expectedVersion:3})).status,200);
+  const current=await customer(token,order.id);assert.equal(current.reply,'Instrucciones simuladas');assert.equal(current.code,'FICTICIO-123');assert.deepEqual(current.label,{type:'application/pdf',size:100});assert.ok(current.submittedAt>0);assert.equal(current.version,4);assert.equal(current.paymentStatus,'paid');assert.ok(!JSON.stringify(current).includes('email'));
+  assert.equal((await action(token,order.id,'return-label-remove',{expectedVersion:4})).status,200);assert.equal((await customer(token,order.id)).label,null);
+  const link=await(await action(token,order.id,'portal-link',{expectedVersion:5})).json();assert.equal(link.path,'/devoluciones?demo=1#session='+token+'&order='+order.id);
+  assert.equal((await action(token,order.id,'portal-revoke',{expectedVersion:6})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,401);
+  assert.equal((await action(token,order.id,'portal-link',{expectedVersion:7})).status,200);assert.equal((await read(token,'/api/demo/returns/'+order.id)).status,200);
+});
+
+test('management and list filters preserve return holds, shipping states, search and payment separation',async t=>{
+  const {session,action,detail,read}=setup(t);const {token}=await session();
+  assert.equal((await action(token,'DEMO-003','return',{status:'requested',reason:'x',resolution:'',expectedVersion:0})).status,409);
+  assert.equal((await action(token,'DEMO-001','ship',{carrier:'Ficticio',tracking:'DEMO',expectedVersion:0})).status,200);
+  assert.equal((await action(token,'DEMO-001','tracking',{carrier:'Otro ficticio',tracking:'DEMO-2',expectedVersion:1})).status,200);
+  assert.equal((await action(token,'DEMO-001','deliver',{confirmed:true,expectedVersion:2})).status,200);
+  assert.equal((await action(token,'DEMO-001','tracking',{carrier:'x',tracking:'y',expectedVersion:3})).status,409);assert.equal((await detail(token,'DEMO-001')).payment_status,'paid');
+  assert.equal((await action(token,'DEMO-002','notes',{note:'Revisar\nEmbalaje',expectedVersion:0})).status,200);assert.equal((await detail(token,'DEMO-002')).private_note,'Revisar\nEmbalaje');
+  assert.equal((await(await read(token,'/api/demo/admin/orders?filter=delivered')).json()).count,2);assert.equal((await(await read(token,'/api/demo/admin/orders?filter=returns')).json()).count,1);assert.equal((await(await read(token,'/api/demo/admin/orders?q=DEMO-002')).json()).count,1);
+  assert.equal((await read(token,'/api/demo/admin/orders?filter=unknown')).status,400);
+});
+
+test('session CAS merges simultaneous edits to different orders and only one same-version edit wins',async t=>{
+  const {session,action,detail,DB}=setup(t);const {token}=await session();
+  const both=await Promise.all([action(token,'DEMO-001','notes',{note:'A',expectedVersion:0}),action(token,'DEMO-002','notes',{note:'B',expectedVersion:0})]);assert.deepEqual(both.map(r=>r.status),[200,200]);assert.equal((await detail(token,'DEMO-001')).private_note,'A');assert.equal((await detail(token,'DEMO-002')).private_note,'B');
+  const conflict=await Promise.all([action(token,'DEMO-001','notes',{note:'C',expectedVersion:1}),action(token,'DEMO-001','notes',{note:'D',expectedVersion:1})]);assert.deepEqual(conflict.map(r=>r.status).sort(),[200,409]);assert.equal(DB.sqlite.prepare('SELECT revision FROM demo_sessions').get().revision,3);
+});
+
+test('concurrent duplicate purchases create one ID and one new row in the session',async t=>{
+  const {session,buy,read}=setup(t);const {token}=await session(),requestId=randomUUID();const replies=await Promise.all([buy(token,requestId),buy(token,requestId)]);assert.deepEqual(replies.map(r=>r.status),[200,200]);const data=await Promise.all(replies.map(r=>r.json()));assert.equal(data[0].order.id,data[1].order.id);assert.equal((await(await read(token)).json()).count,5);
+});
+
+
+
+========================================================================
 ARCHIVO: web/worker/database.mjs
 ========================================================================
 
@@ -5439,11 +6679,181 @@ export async function updateReturn(env,id,{status,reason,resolution,expectedVers
 
 
 ========================================================================
+ARCHIVO: web/worker/demo.mjs
+========================================================================
+
+import { database } from './database.mjs';
+
+const demoHeaders={'Cache-Control':'private, no-store, max-age=0','Vary':'X-Demo-Session','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
+const demoJson=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{...demoHeaders,'Content-Type':'application/json; charset=utf-8'}});
+function demoFail(status,message){const error=new Error(message);error.demoStatus=status;throw error;}
+const demoVersion=n=>Number.isSafeInteger(n)&&n>=0;
+const demoActiveCase=order=>['requested','reviewing','approved','received'].includes(order.return_status);
+const demoSettled=order=>['paid','refunded','partially_refunded'].includes(order.payment_status);
+const demoLabelAllowed=order=>['approved','received','closed'].includes(order.return_status);
+const demoStateTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
+function demoTextValue(value,max,multiline=false){
+  if(typeof value!=='string'||value.length>max||(multiline?/[\x00-\x09\x0b-\x1f\x7f]/:/[\x00-\x1f\x7f]/).test(value))demoFail(400,'Revisa los datos introducidos.');
+  return value.trim();
+}
+function demoKeys(body,allowed){if(Object.keys(body).some(key=>!allowed.includes(key)))demoFail(400,'Usa únicamente los datos ficticios previstos para esta demostración.');}
+function demoRequireMutation(request,action){
+  if(request.headers.get('origin')!==new URL(request.url).origin||request.headers.get('x-demo-action')!==action||!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''))demoFail(403,'Solicitud no permitida.');
+}
+async function demoReadBody(request){
+  const limit=8192;if(Number(request.headers.get('content-length'))>limit)demoFail(413,'Solicitud demasiado grande.');
+  const reader=request.body?.getReader();let size=0,raw='';const decoder=new TextDecoder();
+  if(reader){try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>limit){await reader.cancel();demoFail(413,'Solicitud demasiado grande.');}raw+=decoder.decode(value,{stream:true});}raw+=decoder.decode();}finally{reader.releaseLock();}}
+  let body;try{body=JSON.parse(raw);}catch{demoFail(400,'Datos no válidos.');}
+  if(!body||typeof body!=='object'||Array.isArray(body))demoFail(400,'Datos no válidos.');return body;
+}
+async function demoHash(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('');}
+function demoNewSecret(){return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');}
+function demoNewOrderId(){return 'DEMO-'+Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();}
+function demoFictionalOrder(input){
+  return {created_at:Date.now(),customer_name:'Persona de ejemplo',email:'compra-ficticia@example.invalid',recipient:'Persona de ejemplo',address1:'Calle de ejemplo, sin dirección real',address2:'Datos ficticios · No realizar envíos',city:'Ciudad de ejemplo',postal_code:'00000',region:'Provincia de ejemplo',country:'ES',phone:null,shipping:700,paid_at:null,shipped_at:null,tracking:null,carrier:'',delivered_at:null,private_note:'',note_updated_at:null,return_status:'none',return_reason:'',return_resolution:'',return_updated_at:null,management_version:0,portal_requested_at:null,customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:null,demo_portal_revoked:false,...input};
+}
+function demoSeed(){
+  const orders=[
+    {id:'DEMO-001',customer_name:'Persona de ejemplo A',email:'ejemplo-a@example.invalid',edition:'paperback',quantity:1,subtotal:1500,total:2200,payment_status:'paid',fulfillment_status:'pending'},
+    {id:'DEMO-002',customer_name:'Persona de ejemplo B',email:'ejemplo-b@example.invalid',edition:'hardcover',quantity:2,subtotal:3500,total:4200,payment_status:'paid',fulfillment_status:'shipped',items:[{edition:'paperback',quantity:1,unit_price:1500,subtotal:1500},{edition:'hardcover',quantity:1,unit_price:2000,subtotal:2000}],return_status:'requested',return_reason:'El libro de tapa dura ha llegado con la cubierta doblada. Solicito una devolución.',return_updated_at:1790590000000,private_note:'Ejemplo: revisar el embalaje antes de resolver la solicitud.',portal_requested_at:1790590000000,return_kind:'damaged',return_submitted_at:1790590000000},
+    {id:'DEMO-003',customer_name:'Persona de ejemplo C',email:'ejemplo-c@example.invalid',edition:'hardcover',quantity:1,subtotal:2000,total:2700,payment_status:'pending',fulfillment_status:'pending'},
+    {id:'DEMO-004',customer_name:'Persona de ejemplo D',email:'ejemplo-d@example.invalid',edition:'hardcover',quantity:1,subtotal:2000,total:2700,payment_status:'refunded',fulfillment_status:'shipped',paid_at:1790586000000,delivered_at:1790589000000,return_status:'closed',return_reason:'El libro ha llegado con la tapa doblada y varias páginas dañadas.',return_resolution:'Ejemplo de reembolso completo ya confirmado: 27 € con envío. No se ha devuelto dinero real.',return_updated_at:1790590000000},
+  ].map((order,i)=>demoFictionalOrder({created_at:1790586000000-i*3600000,recipient:order.customer_name,paid_at:order.payment_status==='paid'?1790586000000:null,shipped_at:order.fulfillment_status==='shipped'?1790587000000:null,tracking:order.fulfillment_status==='shipped'?'SEGUIMIENTO-FICTICIO':null,carrier:order.fulfillment_status==='shipped'?'Transportista de ejemplo':'',items:[{edition:order.edition,quantity:order.quantity,unit_price:order.subtotal/order.quantity,subtotal:order.subtotal}],...order}));
+  return {orders,purchases:{}};
+}
+async function demoCreateSession(request,env){
+  demoRequireMutation(request,'session');const body=await demoReadBody(request);demoKeys(body,[]);
+  const db=database(env),now=Date.now(),start=now-15*60*1000;
+  const key=await demoHash('demo-session:ip:'+(request.headers.get('cf-connecting-ip')||'unknown'));
+  await db.prepare('DELETE FROM return_rate_limits WHERE key IN (SELECT key FROM return_rate_limits WHERE window_start < ? LIMIT 20)').bind(start).run();
+  const rate=await db.prepare('INSERT INTO return_rate_limits(key,window_start,count) VALUES(?,?,1) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN window_start<=? THEN 1 ELSE count+1 END,window_start=CASE WHEN window_start<=? THEN ? ELSE window_start END RETURNING count').bind(key,now,start,start,now).first();
+  if(rate.count>5)demoFail(429,'Has creado varias demostraciones. Vuelve a intentarlo en quince minutos.');
+  await db.prepare('DELETE FROM demo_sessions WHERE token_hash IN (SELECT token_hash FROM demo_sessions WHERE expires_at<=? LIMIT 20)').bind(now).run();
+  const token=demoNewSecret(),hash=await demoHash(token),expiresAt=now+7*86400000;
+  // The capacity check and insertion execute in one atomic SQLite statement.
+  const inserted=await db.prepare('INSERT INTO demo_sessions(token_hash,expires_at,data,revision) SELECT ?,?,?,0 WHERE (SELECT count(*) FROM demo_sessions WHERE expires_at>?)<250 RETURNING token_hash').bind(hash,expiresAt,JSON.stringify(demoSeed()),now).first();
+  if(!inserted)demoFail(429,'La demostración está ocupada. Vuelve a intentarlo más tarde.');
+  return demoJson({token,expiresAt});
+}
+async function demoReadSession(env,hash){
+  const row=await database(env).prepare('SELECT data,revision,expires_at FROM demo_sessions WHERE token_hash=? AND expires_at>?').bind(hash,Date.now()).first();
+  if(!row)demoFail(401,'La sesión de demostración no está disponible. Crea una nueva.');
+  const state=JSON.parse(row.data);if(!Array.isArray(state.orders)||state.orders.length>20||!state.purchases||typeof state.purchases!=='object'||Array.isArray(state.purchases))throw new Error('Invalid demo state');
+  return {state,revision:row.revision,expiresAt:row.expires_at};
+}
+async function demoMutateSession(env,hash,apply){
+  for(let attempt=0;attempt<4;attempt++){
+    const session=await demoReadSession(env,hash),result=apply(session.state,session.expiresAt);
+    if(result.unchanged)return demoJson(result.body);
+    const changed=await database(env).prepare('UPDATE demo_sessions SET data=?,revision=revision+1 WHERE token_hash=? AND revision=? AND expires_at>? RETURNING revision').bind(JSON.stringify(session.state),hash,session.revision,Date.now()).first();
+    if(changed)return demoJson(result.body);
+    // Re-read and re-apply: unrelated order edits merge; an obsolete order version fails explicitly.
+  }
+  demoFail(409,'La demostración ha cambiado. Actualiza y vuelve a intentarlo.');
+}
+function demoFindOrder(state,id){const order=state.orders.find(o=>o.id===id);if(!order)demoFail(404,'Pedido ficticio no encontrado.');return order;}
+function demoCase(order){return {orderId:order.id,status:order.return_status,kind:order.return_kind,reason:order.return_reason,reply:order.customer_reply,carrier:order.return_carrier,code:order.return_code,label:demoLabelAllowed(order)&&order.return_label_key?{type:order.return_label_type,size:order.return_label_size}:null,version:order.management_version,paymentStatus:order.payment_status,submittedAt:order.return_submitted_at};}
+function demoCustomerAllowed(order){if(order.demo_portal_revoked)demoFail(401,'El acceso ficticio se ha revocado. Genera otro enlace desde el panel.');if(!demoSettled(order))demoFail(409,'El pedido ficticio no admite devoluciones en su estado actual.');}
+function demoResetCase(order,now){Object.assign(order,{customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:now});}
+function demoCheckVersion(order,body){if(!demoVersion(body.expectedVersion))demoFail(400,'Indica una versión válida del pedido ficticio.');if(body.expectedVersion!==order.management_version)demoFail(409,'El pedido ficticio ha cambiado. Actualízalo antes de guardar.');}
+function demoPurchase(state,body){
+  demoKeys(body,['items','requestId']);
+  if(typeof body.requestId!=='string'||!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(body.requestId)||!body.items||typeof body.items!=='object'||Array.isArray(body.items))demoFail(400,'Datos de compra ficticia no válidos.');
+  demoKeys(body.items,['paperback','hardcover']);
+  const quantities={paperback:Object.hasOwn(body.items,'paperback')?body.items.paperback:0,hardcover:Object.hasOwn(body.items,'hardcover')?body.items.hardcover:0};
+  if(Object.values(quantities).some(n=>!Number.isInteger(n)||n<0||n>10)||quantities.paperback+quantities.hardcover<1)demoFail(400,'Selecciona entre uno y diez ejemplares de cada edición.');
+  const requestId=body.requestId.toLowerCase(),signature=JSON.stringify(quantities),previous=state.purchases[requestId];
+  if(previous){if(previous.signature!==signature)demoFail(409,'Esta compra ficticia ya se confirmó con otra selección.');const order=demoFindOrder(state,previous.orderId);return {unchanged:true,body:{order,case:demoCase(order)}};}
+  if(state.orders.length>=20)demoFail(409,'Esta demostración admite veinte pedidos, incluidos los cuatro ejemplos. Crea otra para seguir probando.');
+  const items=Object.entries(quantities).filter(([,quantity])=>quantity>0).map(([edition,quantity])=>({edition,quantity,unit_price:edition==='paperback'?1500:2000,subtotal:quantity*(edition==='paperback'?1500:2000)}));
+  const subtotal=items.reduce((sum,item)=>sum+item.subtotal,0),now=Date.now();let id=demoNewOrderId();while(state.orders.some(o=>o.id===id))id=demoNewOrderId();
+  const order=demoFictionalOrder({id,created_at:now,edition:items[0].edition,quantity:quantities.paperback+quantities.hardcover,items,subtotal,total:subtotal+700,payment_status:'paid',fulfillment_status:'pending',paid_at:now});
+  state.orders.push(order);state.purchases[requestId]={orderId:id,signature};return {body:{order,case:demoCase(order)}};
+}
+function demoCustomerRequest(state,id,body){
+  demoKeys(body,['kind','reason','expectedVersion']);const order=demoFindOrder(state,id);demoCustomerAllowed(order);demoCheckVersion(order,body);
+  const kind=body.kind,reason=demoTextValue(body.reason??'',1000,true);
+  if(!['withdrawal','damaged','wrong','other'].includes(kind)||kind!=='withdrawal'&&!reason)demoFail(400,'Indica el motivo de esta devolución ficticia.');
+  if(!['none','closed','rejected'].includes(order.return_status))demoFail(409,'Este pedido ya tiene una solicitud ficticia en curso.');
+  const now=Date.now();demoResetCase(order,now);Object.assign(order,{return_kind:kind,return_reason:reason||'Desistimiento sin motivo indicado.',return_resolution:'',return_status:'requested',return_updated_at:now,management_version:order.management_version+1});
+  return {body:{ok:true,case:demoCase(order)}};
+}
+function demoAdminMutation(state,id,action,body,token,expiresAt){
+  const order=demoFindOrder(state,id);demoCheckVersion(order,body);const now=Date.now();
+  const keys={ship:['tracking','carrier'],notes:['note'],tracking:['tracking','carrier'],deliver:['confirmed'],return:['status','reason','resolution'],'portal-link':[],'portal-revoke':[],'portal-reply':['reply','code','carrier'],'return-label':['type','size'],'return-label-remove':[]};
+  demoKeys(body,[...keys[action],'expectedVersion']);
+  if(action.startsWith('portal-')||action.startsWith('return-label')){if(!demoSettled(order))demoFail(409,'Este pedido ficticio no admite esta gestión.');}
+  if(action==='ship'){
+    const tracking=demoTextValue(body.tracking,120),carrier=demoTextValue(body.carrier??'',80);
+    if(order.payment_status!=='paid'||order.fulfillment_status!=='pending'||demoActiveCase(order))demoFail(409,'El pedido ficticio no está listo para enviar.');Object.assign(order,{fulfillment_status:'shipped',shipped_at:now,tracking,carrier});
+  }else if(action==='notes'){order.private_note=demoTextValue(body.note,2000,true);order.note_updated_at=now;}
+  else if(action==='tracking'){
+    const tracking=demoTextValue(body.tracking,120),carrier=demoTextValue(body.carrier,80);
+    if(order.fulfillment_status!=='shipped'||order.delivered_at!==null)demoFail(409,'Solo se puede editar un envío ficticio pendiente de entrega.');Object.assign(order,{tracking,carrier});
+  }else if(action==='deliver'){
+    if(body.confirmed!==true)demoFail(400,'Confirma la entrega ficticia.');if(order.fulfillment_status!=='shipped'||order.delivered_at!==null)demoFail(409,'No hay una entrega ficticia pendiente.');order.delivered_at=now;
+  }else if(action==='return'){
+    const reason=demoTextValue(body.reason,1000,true),resolution=demoTextValue(body.resolution,1000,true),status=body.status;
+    if(!Object.hasOwn(demoStateTransitions,status)||status==='none'||!reason||['closed','rejected'].includes(status)&&!resolution)demoFail(400,'Indica un motivo y una resolución al cerrar la solicitud ficticia.');
+    if(!demoSettled(order)||status!==order.return_status&&!demoStateTransitions[order.return_status].includes(status))demoFail(409,'El cambio de estado ficticio no está permitido.');
+    if(status==='requested'&&order.return_status!=='requested')demoResetCase(order,now);Object.assign(order,{return_status:status,return_reason:reason,return_resolution:resolution,return_updated_at:now});
+  }else if(action==='portal-link'){order.demo_portal_revoked=false;order.portal_requested_at=null;}
+  else if(action==='portal-revoke'){order.demo_portal_revoked=true;order.portal_requested_at=null;}
+  else if(action==='portal-reply'){
+    const reply=demoTextValue(body.reply,2000,true),code=demoTextValue(body.code??'',200),carrier=demoTextValue(body.carrier??'',80);
+    if((code||carrier)&&!demoLabelAllowed(order))demoFail(409,'Aprueba la devolución ficticia antes de indicar el transporte.');Object.assign(order,{customer_reply:reply,return_code:code,return_carrier:carrier,return_updated_at:now});
+  }else if(action==='return-label'){
+    if(!['application/pdf','image/png','image/jpeg'].includes(body.type)||!Number.isInteger(body.size)||body.size<1||body.size>2*1024*1024)demoFail(400,'Simula un PDF, PNG o JPEG de hasta dos megabytes.');
+    if(!demoLabelAllowed(order))demoFail(409,'Aprueba la devolución ficticia antes de simular una etiqueta.');Object.assign(order,{return_label_key:'DEMO-NO-VALIDA-PARA-ENVIOS',return_label_type:body.type,return_label_size:body.size,return_updated_at:now});
+  }else if(action==='return-label-remove'){
+    if(!demoLabelAllowed(order))demoFail(409,'Este pedido ficticio no admite gestionar la etiqueta.');Object.assign(order,{return_label_key:null,return_label_type:null,return_label_size:null,return_updated_at:now});
+  }
+  order.management_version++;
+  const result={ok:true,order};if(action==='portal-link')Object.assign(result,{path:'/devoluciones?demo=1#session='+token+'&order='+order.id,expiresAt});return {body:result};
+}
+function demoList(state,url){
+  const checks={all:()=>true,pending:o=>o.payment_status==='paid'&&o.fulfillment_status==='pending'&&!demoActiveCase(o),shipped:o=>o.fulfillment_status==='shipped',unpaid:o=>o.payment_status==='pending',incidents:o=>['failed','refunded','partially_refunded'].includes(o.payment_status)||demoActiveCase(o),attention:o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveCase(o),returns:demoActiveCase,access_requests:o=>o.portal_requested_at!==null,delivered:o=>o.delivered_at!==null};
+  const filter=url.searchParams.get('filter')||'all';if(!Object.hasOwn(checks,filter))demoFail(400,'Filtro no válido.');
+  const fold=value=>value.normalize('NFD').replace(/[\u0301\u0308\u0303]/g,'').toLowerCase();const query=fold((url.searchParams.get('q')||'').trim().slice(0,120));
+  const page=Math.max(1,Math.min(1000000,Number.parseInt(url.searchParams.get('page'),10)||1));
+  const orders=state.orders.filter(o=>checks[filter](o)&&[o.customer_name,o.email,o.id].some(value=>fold(value).includes(query))).sort((a,b)=>b.created_at-a.created_at||(a.id<b.id?1:a.id>b.id?-1:0));
+  const stats={total:state.orders.length,pending:state.orders.filter(checks.pending).length,shipped:state.orders.filter(checks.shipped).length,incidents:state.orders.filter(checks.attention).length,returns:state.orders.filter(checks.returns).length,delivered:state.orders.filter(checks.delivered).length,accessRequests:state.orders.filter(checks.access_requests).length};
+  const rows=orders.slice((page-1)*20,page*20).map(({id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version,portal_requested_at,items})=>({id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version,portal_requested_at,items}));
+  return {orders:rows,count:orders.length,page,paymentConnected:false,stats};
+}
+export async function handleDemo(request,env){
+  const url=new URL(request.url),path=url.pathname;if(!path.startsWith('/api/demo/')&&path!=='/api/demo')return null;
+  try{
+    if(path==='/api/demo/session'){if(request.method!=='POST')demoFail(404,'Ruta o método no disponible.');return await demoCreateSession(request,env);}
+    const token=request.headers.get('x-demo-session')||'';if(!/^[A-Za-z0-9_-]{43}$/.test(token))demoFail(401,'La sesión de demostración no está disponible. Crea una nueva.');const hash=await demoHash(token);
+    if(request.method==='GET'){
+      const {state}=await demoReadSession(env,hash);
+      if(path==='/api/demo/admin/orders')return demoJson(demoList(state,url));
+      const detail=/^\/api\/demo\/admin\/orders\/(DEMO-(?:\d{3}|[A-F0-9]{12}))$/.exec(path);if(detail)return demoJson({order:demoFindOrder(state,detail[1])});
+      const buyer=/^\/api\/demo\/returns\/(DEMO-(?:\d{3}|[A-F0-9]{12}))$/.exec(path);if(buyer){const order=demoFindOrder(state,buyer[1]);demoCustomerAllowed(order);return demoJson({case:demoCase(order)});}
+    }
+    if(request.method==='POST'){
+      // Authentication precedes payload processing; headers and JSON are bounded before persistence.
+      await demoReadSession(env,hash);
+      if(path==='/api/demo/orders'){demoRequireMutation(request,'purchase');const body=await demoReadBody(request);return await demoMutateSession(env,hash,state=>demoPurchase(state,body));}
+      const buyer=/^\/api\/demo\/returns\/(DEMO-(?:\d{3}|[A-F0-9]{12}))$/.exec(path);if(buyer){demoRequireMutation(request,'request');const body=await demoReadBody(request);return await demoMutateSession(env,hash,state=>demoCustomerRequest(state,buyer[1],body));}
+      const admin=/^\/api\/demo\/admin\/orders\/(DEMO-(?:\d{3}|[A-F0-9]{12}))\/(ship|notes|tracking|deliver|return|portal-link|portal-revoke|portal-reply|return-label|return-label-remove)$/.exec(path);
+      if(admin){demoRequireMutation(request,admin[2]);const body=await demoReadBody(request);return await demoMutateSession(env,hash,(state,expiresAt)=>demoAdminMutation(state,admin[1],admin[2],body,token,expiresAt));}
+    }
+    demoFail(404,'Ruta o método no disponible.');
+  }catch(error){return demoJson({error:error.demoStatus?error.message:'No se puede abrir la demostración ahora. Vuelve a intentarlo.'},error.demoStatus||503);}
+}
+
+
+
+========================================================================
 ARCHIVO: web/worker/index.mjs
 ========================================================================
 
 import { authorizeOwner, listOrders, getOrder, shipOrder, updateNote, updateTracking, deliverOrder, updateReturn } from './database.mjs';
 import { handlePublicReturns, handleAdminReturns } from './returns.mjs';
+import { handleDemo } from './demo.mjs';
 
 const privateHeaders = {'Cache-Control':'private, no-store, max-age=0','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:{...privateHeaders,'Content-Type':'application/json; charset=utf-8'}});
@@ -5484,6 +6894,7 @@ export function createWorker(assets) {
     const api = p.startsWith('/api/admin/');
     const adminPage = p === '/admin' || p === '/admin/';
     try {
+      if(p.startsWith('/api/demo/')||p==='/api/demo')return json({error:'No encontrado.'},404);
       if(p.startsWith('/api/returns/')||p==='/api/returns')return await handlePublicReturns(request,env);
       if(p==='/devoluciones'||p==='/devoluciones/'||p==='/devoluciones.html'){
         if(!['GET','HEAD'].includes(request.method))return json({error:'Método no permitido.'},405);
@@ -5530,7 +6941,7 @@ export function createWorker(assets) {
       if(p==='/index.html')return new Response(null,{status:301,headers:{Location:'/'+url.search,'Cache-Control':'public, max-age=3600'}});
       const asset=assets[p === '/'?'/index.html':p];
       if(asset?.redirect)return new Response(null,{status:301,headers:{Location:asset.redirect+url.search,'Cache-Control':'public, max-age=3600'}});
-      if(asset) return assetResponse(asset,request,p.startsWith('/admin/'));
+      if(asset){const demonstration=p==='/demo'||p==='/demo/'||url.searchParams.get('demo')==='1';return assetResponse(demonstration?{...asset,noIndex:true}:asset,request,p.startsWith('/admin/')||demonstration);}
       return assets['/404.html'] ? assetResponse(assets['/404.html'],request,false,404) : new Response('No encontrado',{status:404});
     } catch {
       // Never log addresses, identity headers, request bodies, or customer data.

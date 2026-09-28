@@ -46,3 +46,7 @@ export const returnAccess = sqliteTable('return_access', {
 export const returnRateLimits = sqliteTable('return_rate_limits', {
   key: text('key').primaryKey(), windowStart: integer('window_start').notNull(), count: integer('count').notNull(),
 },t=>[index('return_rate_window').on(t.windowStart)]);
+export const demoSessions = sqliteTable('demo_sessions', {
+  tokenHash: text('token_hash').primaryKey(), expiresAt: integer('expires_at').notNull(),
+  data: text('data').notNull(), revision: integer('revision').notNull().default(0),
+},t=>[index('demo_sessions_expiry').on(t.expiresAt)]);

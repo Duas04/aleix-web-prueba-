@@ -1,84 +1,15 @@
-// Fictional, resettable examples. This transport never reaches the private API.
-const demoOrders = [
-  {id:'DEMO-001',customer_name:'Persona de ejemplo A',email:'ejemplo-a@example.invalid',edition:'paperback',quantity:1,subtotal:1500,total:2200,payment_status:'paid',fulfillment_status:'pending'},
-  {id:'DEMO-002',customer_name:'Persona de ejemplo B',email:'ejemplo-b@example.invalid',edition:'hardcover',quantity:2,subtotal:3500,total:4200,payment_status:'paid',fulfillment_status:'shipped',
-    items:[{edition:'paperback',quantity:1,unit_price:1500,subtotal:1500},{edition:'hardcover',quantity:1,unit_price:2000,subtotal:2000}],
-    return_status:'requested',return_reason:'El libro de tapa dura ha llegado con la cubierta doblada. Solicito una devolución.',return_updated_at:1790590000000,
-    private_note:'Ejemplo: revisar el embalaje antes de resolver la solicitud.',portal_requested_at:1790590000000,return_kind:'damaged',return_submitted_at:1790590000000},
-  {id:'DEMO-003',customer_name:'Persona de ejemplo C',email:'ejemplo-c@example.invalid',edition:'hardcover',quantity:1,subtotal:2000,total:2700,payment_status:'pending',fulfillment_status:'pending'},
-  {id:'DEMO-004',customer_name:'Persona de ejemplo D',email:'ejemplo-d@example.invalid',edition:'hardcover',quantity:1,subtotal:2000,total:2700,payment_status:'refunded',fulfillment_status:'shipped',paid_at:1790586000000,
-    delivered_at:1790589000000,return_status:'closed',return_reason:'El libro ha llegado con la tapa doblada y varias páginas dañadas.',
-    return_resolution:'Ejemplo de reembolso completo ya confirmado: 27 € con envío. No se ha devuelto dinero real.',return_updated_at:1790590000000},
-].map((order,i)=>({created_at:1790586000000-i*3600000,recipient:order.customer_name,address1:'Calle de ejemplo, sin dirección real',address2:'Datos ficticios · No realizar envíos',city:'Ciudad de ejemplo',postal_code:'00000',region:'Provincia de ejemplo',country:'ES',phone:null,shipping:700,paid_at:order.payment_status==='paid'?1790586000000:null,shipped_at:order.fulfillment_status==='shipped'?1790587000000:null,tracking:order.fulfillment_status==='shipped'?'SEGUIMIENTO-FICTICIO':null,carrier:order.fulfillment_status==='shipped'?'Transportista de ejemplo':'',delivered_at:null,private_note:'',note_updated_at:null,return_status:'none',return_reason:'',return_resolution:'',return_updated_at:null,management_version:0,items:[{edition:order.edition,quantity:order.quantity,unit_price:order.subtotal/order.quantity,subtotal:order.subtotal}],...order}));
-for(const order of demoOrders)Object.assign(order,{portal_requested_at:null,customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:null,...order});
-const demoActiveReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
-const demoTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
-function demoText(value,max,multiline=false){
-  if(typeof value!=='string'||value.length>max||(multiline?/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/:/[\x00-\x1f\x7f]/).test(value))throw new Error('Revisa los datos introducidos.');
-  return value.trim();
-}
-async function demoApi(path,options={}) {
-  const url=new URL(path,'https://demo.invalid');
-  if(url.pathname==='/api/admin/orders'){
-    const fold=value=>value.normalize('NFD').replace(/[\u0301\u0308\u0303]/g,'').toLowerCase();
-    const filter=url.searchParams.get('filter')||'all',q=fold((url.searchParams.get('q')||'').trim());
-    const checks={all:()=>true,pending:o=>o.payment_status==='paid'&&o.fulfillment_status==='pending'&&!demoActiveReturn(o),shipped:o=>o.fulfillment_status==='shipped',unpaid:o=>o.payment_status==='pending',incidents:o=>['failed','refunded','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o),attention:o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o),returns:demoActiveReturn,access_requests:o=>!!o.portal_requested_at,delivered:o=>!!o.delivered_at};
-    if(!Object.hasOwn(checks,filter))throw new Error('Filtro no válido.');
-    const orders=demoOrders.filter(o=>checks[filter](o)&&[o.customer_name,o.email,o.id].some(v=>fold(v).includes(q)));
-    return {orders:structuredClone(orders),count:orders.length,page:1,paymentConnected:false,stats:{accessRequests:demoOrders.filter(checks.access_requests).length,total:demoOrders.length,pending:demoOrders.filter(checks.pending).length,shipped:demoOrders.filter(checks.shipped).length,returns:demoOrders.filter(checks.returns).length,incidents:demoOrders.filter(o=>['failed','partially_refunded'].includes(o.payment_status)||demoActiveReturn(o)).length,delivered:demoOrders.filter(checks.delivered).length}};
-  }
-  const match=/^\/api\/admin\/orders\/(DEMO-\d+)(?:\/(ship|notes|tracking|deliver|return|portal-link|portal-revoke|portal-reply|return-label|return-label-remove))?$/.exec(url.pathname);
-  const order=match&&demoOrders.find(o=>o.id===match[1]);
-  if(!order)throw new Error('Ejemplo no encontrado.');
-  const action=match[2];
-  if(!action)return {order:structuredClone(order)};
-  if(options.method!=='POST')throw new Error('Acción no permitida.');
-  const body=action==='return-label'?{expectedVersion:Number(options.headers?.['X-Order-Version'])}:JSON.parse(options.body);
-  if(!body||typeof body!=='object'||Array.isArray(body))throw new Error('Datos no válidos.');
-  if((action!=='ship'||body.expectedVersion!==undefined)&&(!Number.isInteger(body.expectedVersion)||body.expectedVersion!==order.management_version))throw new Error('El pedido ha cambiado. Actualízalo antes de guardar.');
-  if(action.startsWith('portal-')||action.startsWith('return-label')){
-    if(!['paid','refunded','partially_refunded'].includes(order.payment_status))throw new Error('Este pedido no admite devoluciones.');
-    if(action==='portal-link'){
-      order.portal_requested_at=null;order.management_version++;
-      return {ok:true,path:'/devoluciones?demo=1',expiresAt:Date.now()+30*86400000,order:structuredClone(order)};
-    }
-    if(action==='portal-revoke'){order.portal_requested_at=null;}
-    if(action==='portal-reply'){
-      const reply=demoText(body.reply,2000,true),code=demoText(body.code,200),carrier=demoText(body.carrier,80);
-      if((code||carrier)&&!['approved','received','closed'].includes(order.return_status))throw new Error('Aprueba la devolución antes de adjuntar instrucciones de transporte.');
-      Object.assign(order,{customer_reply:reply,return_code:code,return_carrier:carrier});
-    }
-    if(action==='return-label'){
-      if(!['approved','received','closed'].includes(order.return_status))throw new Error('Aprueba la devolución antes de adjuntar una etiqueta.');
-      const file=options.body;
-      if(!file||file.size>2*1024*1024||!['application/pdf','image/png','image/jpeg'].includes(file.type))throw new Error('Usa un PDF, PNG o JPEG de hasta 2 MB.');
-      Object.assign(order,{return_label_key:'DEMO-NO-VALIDA-PARA-ENVIOS',return_label_type:file.type,return_label_size:file.size});
-    }
-    if(action==='return-label-remove')Object.assign(order,{return_label_key:null,return_label_type:null,return_label_size:null});
-  }else if(action==='ship'){
-    if(order.payment_status!=='paid'||order.fulfillment_status!=='pending'||demoActiveReturn(order))throw new Error('Este ejemplo no se puede marcar como enviado.');
-    const tracking=demoText(body.tracking,120),carrier=demoText(body.carrier??'',80);
-    Object.assign(order,{fulfillment_status:'shipped',shipped_at:Date.now(),tracking,carrier});
-  }else if(action==='notes'){
-    order.private_note=demoText(body.note,2000,true);order.note_updated_at=Date.now();
-  }else if(action==='tracking'){
-    if(order.fulfillment_status!=='shipped'||order.delivered_at)throw new Error('Solo se puede editar un envío pendiente de entrega.');
-    const tracking=demoText(body.tracking,120),carrier=demoText(body.carrier,80);
-    Object.assign(order,{tracking,carrier});
-  }else if(action==='deliver'){
-    if(body.confirmed!==true)throw new Error('Confirma la entrega antes de guardar.');
-    if(order.fulfillment_status!=='shipped'||order.delivered_at)throw new Error('Este pedido no tiene una entrega pendiente.');
-    order.delivered_at=Date.now();
-  }else if(action==='return'){
-    if(!['paid','refunded','partially_refunded'].includes(order.payment_status))throw new Error('Este pedido no admite una devolución.');
-    const reason=demoText(body.reason,1000,true),resolution=demoText(body.resolution,1000,true),status=body.status;
-    if(!Object.hasOwn(demoTransitions,status)||status==='none'||!reason||(['closed','rejected'].includes(status)&&!resolution))throw new Error('Indica el motivo y la resolución cuando cierres la solicitud.');
-    if(status!==order.return_status&&!demoTransitions[order.return_status].includes(status))throw new Error('El cambio de estado no está permitido.');
-    if(status==='requested'&&order.return_status!=='requested')Object.assign(order,{customer_reply:'',return_kind:'',return_code:'',return_carrier:'',return_label_key:null,return_label_type:null,return_label_size:null,return_submitted_at:Date.now()});
-    Object.assign(order,{return_status:status,return_reason:reason,return_resolution:resolution,return_updated_at:Date.now()});
-  }
-  order.management_version++;
-  return {ok:true,order:structuredClone(order)};
+// The presentation uses its own short-lived server session, never real order APIs.
+async function demoApi(path,options={}){
+  const session=window.DemoSession;
+  if(!session?.ready())throw new Error('Inicia una demostración o abre el enlace compartido de tu otro dispositivo.');
+  if(!path.startsWith('/api/admin/orders'))throw new Error('Ruta de demostración no válida.');
+  const action=options.headers?.['X-Admin-Action'];
+  let body=options.body;
+  if(action==='return-label'&&typeof body!=='string')body=JSON.stringify({type:body.type,size:body.size,expectedVersion:Number(options.headers['X-Order-Version'])});
+  const response=await session.request(path.replace('/api/admin/','/api/demo/admin/'),{method:options.method||'GET',...(body?{body}:{}),headers:{...(action?{'X-Demo-Action':action,'Content-Type':'application/json'}:{})}});
+  let result;try{result=await response.json();}catch{throw new Error('No se puede cargar la demostración. Vuelve a intentarlo.');}
+  if(!response.ok)throw new Error(result.error||'No se puede actualizar la demostración.');
+  return result;
 }
 
 const $=id=>document.getElementById(id);
@@ -92,7 +23,7 @@ const shippingLabel=order=>order.delivered_at?'Entregado':order.fulfillment_stat
 const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':activeReturn(order)?'return-state':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
 let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
-let saving=false;
+let saving=false,lastListSignature='';
 const returnLabels={none:'Sin devolución',requested:'Solicitada',reviewing:'En revisión',approved:'Aprobada',received:'Recibida',closed:'Cerrada',rejected:'Rechazada'};
 const returnTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
 const activeReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
@@ -100,17 +31,20 @@ function orderItems(order){return order.items?.length?order.items:[{edition:orde
 async function api(path,options={}) { return demoApi(path,options); }
 function cell(text,label){const e=document.createElement('td');e.setAttribute('role','cell');e.textContent=text;if(label)e.dataset.label=label;return e;}
 function badge(status,text){const e=document.createElement('span');e.className='badge '+status;e.textContent=text;return e;}
-async function load() {
+async function load({quiet=false}={}) {
   const version=++listRequest;
   const paginationFocus=['previous','next'].includes(document.activeElement?.id)?document.activeElement:null;
   const hadRows=$('rows').children.length>0;
   loading=true;$('table-wrap').setAttribute('aria-busy','true');
   for(const id of ['refresh','previous','next'])$(id).setAttribute('aria-disabled','true');
-  $('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Cargando tus pedidos…';$('empty').hidden=true;
+  if(!quiet){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Cargando tus pedidos…';$('empty').hidden=true;}
   try {
     const params=new URLSearchParams({page:String(page),filter:$('filter').value,q:$('search').value.trim()});
     const data=await api('/api/admin/orders?'+params);
     if(version!==listRequest)return;
+    const signature=String(params)+JSON.stringify(data);
+    if(quiet&&lastListSignature===signature)return;
+    lastListSignature=signature;
     total=data.count;
     if(page>1&&data.orders.length===0){page=1;return load();}
     loadedPage=page;
@@ -154,7 +88,7 @@ function renderDetail(order){
   $('customer').textContent=order.customer_name;$('email').textContent=order.email;$('phone').textContent=order.phone||'Teléfono no facilitado';$('address').textContent=address(order);
   $('items').replaceChildren(...orderItems(order).map(item=>{const line=document.createElement('li');line.textContent=`${item.quantity} × ${edition(item.edition)} · ${money(item.unit_price)} por ejemplar · Subtotal ${money(item.subtotal)}`;return line;}));
   $('subtotal').textContent=money(order.subtotal);$('shipping').textContent=money(order.shipping);$('total').textContent=money(order.total);
-  $('payment-note').textContent=order.payment_status==='paid'?(activeReturn(order)?'Pago confirmado. Hay una devolución activa: revisa su gestión antes de preparar el envío.':order.fulfillment_status==='shipped'?'Pago simulado: este pedido ficticio figura como enviado.':'Pago simulado: este pedido es ficticio.'):order.payment_status==='pending'?'Pago pendiente de confirmación. No envíes el libro todavía.':order.payment_status==='refunded'?'Reembolso total simulado de '+money(order.total)+' por recibir el libro en mal estado. Incluye el libro y los gastos de envío. No se ha devuelto dinero real.':'Este pago tiene una incidencia o un reembolso. Revisa la operación antes de realizar cualquier envío.';
+  $('payment-note').textContent=order.payment_status==='paid'?(activeReturn(order)?'Pago simulado. Hay una devolución activa: revisa su gestión antes de preparar el envío.':order.fulfillment_status==='shipped'?'Pago simulado: este pedido ficticio figura como enviado.':'Pago simulado: este pedido es ficticio.'):order.payment_status==='pending'?'Pago pendiente de confirmación. No envíes el libro todavía.':order.payment_status==='refunded'?'Reembolso total simulado de '+money(order.total)+' por recibir el libro en mal estado. Incluye el libro y los gastos de envío. No se ha devuelto dinero real.':'Este pago tiene una incidencia o un reembolso. Revisa la operación antes de realizar cualquier envío.';
   $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending'||activeReturn(order);
   $('ship-confirm').checked=false;$('carrier').value=order.carrier||'';$('tracking').value=order.tracking||'';$('ship-button').disabled=false;
   const canTrack=order.fulfillment_status==='shipped'&&!order.delivered_at;
@@ -228,10 +162,11 @@ $('return-form').addEventListener('submit',event=>{
   return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
 });
 $('portal-link-create').addEventListener('click',()=>saveManagement('portal-link',{},'Enlace preparado. Aún debes enviarlo al comprador.',undefined,{afterSave:result=>{
-  clearPortalLink();const demoLink=result.path==='/devoluciones?demo=1'&&document.body?.classList?.contains('demo-page');if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
+  clearPortalLink();const demoLink=document.body?.classList?.contains('demo-page')&&(result.path==='/devoluciones?demo=1'||/^\/devoluciones\?demo=1#session=[A-Za-z0-9_-]{43}&order=DEMO-[A-Za-z0-9]+$/.test(result.path||''));if(!demoLink&&!/^\/devoluciones#token=[A-Za-z0-9_-]{43}$/.test(result.path||''))throw new Error('No se ha recibido un enlace válido. Prepara uno nuevo.');
   const url=location.origin+result.path;$('portal-url').value=url;$('portal-link-output').hidden=false;
   $('portal-expiry').textContent='Caduca el '+date(result.expiresAt)+'. Al generar otro enlace, el anterior deja de funcionar.';
   $('portal-mail').href='mailto:'+encodeURIComponent(currentOrder.email)+'?subject='+encodeURIComponent('Tu enlace privado de devolución · Fumada XXL')+'&body='+encodeURIComponent('Hola,\n\nPuedes consultar tu devolución del pedido '+currentOrder.id+' en este enlace privado:\n'+url+'\n\nGuárdalo en privado. Caduca en 30 días.\n\nAleix');
+  if(demoLink){$('portal-expiry').textContent='Demostración compartida hasta el '+date(result.expiresAt)+'. Solo contiene datos de prueba.';$('portal-mail').href=url;$('portal-mail').textContent='Abrir devolución de prueba';}
 }}));
 $('portal-revoke').addEventListener('click',()=>{if(!$('portal-revoke-confirm').checked){$('detail-message').textContent='Confirma que quieres invalidar el enlace del comprador.';$('portal-revoke-confirm').focus();return;}return saveManagement('portal-revoke',{},'Enlace del comprador invalidado.',undefined,{afterSave:()=>{clearPortalLink();$('portal-revoke-confirm').checked=false;}});});
 $('portal-copy').addEventListener('click',async()=>{const url=$('portal-url').value,version=detailRequest;if(!url)return;try{await navigator.clipboard.writeText(url);if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Enlace copiado. Todavía debes enviarlo al comprador.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Selecciona el enlace y cópialo manualmente.';}});
@@ -240,8 +175,45 @@ $('return-label-form').addEventListener('submit',event=>{event.preventDefault();
 $('return-label-remove').addEventListener('click',()=>{if(!$('return-label-remove-confirm').checked){$('detail-message').textContent='Confirma que quieres retirar la etiqueta.';$('return-label-remove-confirm').focus();return;}return saveManagement('return-label-remove',{},'Etiqueta retirada.',undefined,{afterSave:()=>{$('return-label-remove-confirm').checked=false;}});});
 load();
 
-// Included only in the fictional demo bundle; never served with the private panel.
 $('demo-start').addEventListener('click',()=>openDetail('DEMO-001'));
 $('demo-refund').addEventListener('click',()=>openDetail('DEMO-004'));
 $('demo-return').addEventListener('click',()=>openDetail('DEMO-002'));
-$('demo-reset').addEventListener('click',()=>{$('search-form').reset();window.location.reload();});
+$('demo-reset').addEventListener('click',()=>window.DemoSession.create());
+$('demo-label').addEventListener('click',()=>saveManagement('return-label',{type:'application/pdf',size:120},'Etiqueta de ejemplo disponible en el portal del comprador. No es válida para envíos.'));
+window.DemoSession.subscribe(()=>{
+  listRequest++;detailRequest++;if($('detail').open)$('detail').close();
+  currentOrder=null;page=1;$('search').value='';$('filter').value='all';load();
+});
+const sharedSelected=window.DemoSession.orderId();
+if(window.DemoSession.ready()&&sharedSelected)openDetail(sharedSelected);
+
+// Refresh only visible pages and preserve all unsaved management fields.
+(()=>{
+ let timer=null,checking=false;
+ const dirty=()=>{
+  if(!currentOrder)return false;
+  const initial={'private-note':currentOrder.private_note||'','carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','return-status':currentOrder.return_status==='none'||!currentOrder.return_status?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||'','customer-reply':currentOrder.customer_reply||'','return-carrier':currentOrder.return_carrier||'','return-code':currentOrder.return_code||''};
+  return Object.entries(initial).some(([id,value])=>$(id).value!==value)||['ship-confirm','deliver-confirm','portal-revoke-confirm','return-label-remove-confirm'].some(id=>$(id).checked)||!!$('return-label-file').files?.length;
+ };
+ const schedule=()=>{clearTimeout(timer);if(!document.hidden)timer=setTimeout(poll,5000);};
+ async function poll(){
+  if(checking||document.hidden||saving||loading){schedule();return;}
+  if(document.body.classList.contains('demo-page')&&!window.DemoSession?.ready()){schedule();return;}
+  checking=true;
+  try{
+   if($('detail').open&&currentOrder){
+    const version=detailRequest,id=currentOrder.id;
+    const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));
+    if(version!==detailRequest||!$('detail').open||saving||currentOrder?.id!==id)return;
+    if(order.management_version!==currentOrder.management_version){
+      clearPortalLink();
+      if(dirty()){$('detail-message').textContent='Este pedido cambió en otro dispositivo. Se conservan tus campos; cierra y vuelve a abrir el detalle antes de guardar.';}
+      else{renderDetail(order);$('detail-message').textContent='Pedido actualizado desde otro dispositivo.';}
+    }
+   }else if(!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!document.activeElement?.closest?.('#table-wrap'))await load({quiet:true});
+  }catch{/* Retain the current view; manual refresh exposes persistent errors. */}
+  finally{checking=false;schedule();}
+ }
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else poll();});
+ schedule();
+})();

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f6f0">
+  <meta name="referrer" content="no-referrer">
   <meta name="description" content="Fumada XXL. Un libro sobre meditación y el pequeño arte de bajar el ritmo. Encuentra un momento para respirar y volver a ti.">
   <title>Fumada XXL de Aleix | Libro de meditación</title>
   <link rel="canonical" href="https://prueba-aleix.com/">
@@ -24,6 +25,9 @@
   <link rel="stylesheet" href="shop.css">
   <link rel="stylesheet" href="legal.css">
   <script src="app.js" defer></script>
+  <link rel="stylesheet" href="/demo-session.css">
+  <script src="/demo-session.js" defer></script>
+  <script src="/demo-checkout.js" defer></script>
   <script src="shop.js" type="module"></script>
 </head>
 <body>
@@ -82,9 +86,14 @@
           <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover" disabled>Añadir tapa dura <span aria-hidden="true">+</span></button></article>
         </div>
         <p class="shipping-highlight">Envío a Europa · <strong>7,00 € por pedido</strong></p><p class="shop-availability">La venta online está en preparación. Puedes consultar tu importe, pero todavía no se admiten pedidos ni se realizan cobros. La disponibilidad y el plazo para tu destino se confirmarán antes del pago.</p>
-        <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="/devoluciones">Gestionar una devolución</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
+        <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
       </div>
     </section>
+
+    <aside class="returns-help wrap" aria-labelledby="returns-help-title">
+      <div><p class="eyebrow">TE ACOMPAÑAMOS DESPUÉS</p><h2 id="returns-help-title">¿Necesitas ayuda con tu pedido?</h2><p>Comunica una incidencia, solicita una devolución o consulta cómo va tu solicitud.</p></div>
+      <a class="button button-primary" id="returns-link" href="/devoluciones">Devoluciones y reembolsos <span aria-hidden="true">↗</span></a>
+    </aside>
 
     <section class="faq-section wrap" id="preguntas" aria-labelledby="faq-title">
       <div class="faq-intro"><p class="eyebrow">CON LAS COSAS CLARAS</p><h2 id="faq-title">Tus dudas,<br><em>con calma.</em></h2><p>Unas respuestas antes de elegir tu edición.</p><a class="underlined-link" href="mailto:theshoz@gmail.com?subject=Consulta%20sobre%20Fumada%20XXL">Escribir a Aleix <span aria-hidden="true">↗</span></a></div>
@@ -111,7 +120,7 @@
     <section class="closing wrap" aria-label="Una última idea"><span class="closing-star" aria-hidden="true">✳</span><p>No hace falta ir más lejos.<br><em>Hace falta volver a ti.</em></p><a href="#inicio" class="underlined-link">Volver al principio <span aria-hidden="true">↑</span></a></section>
   </main>
 
-  <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
+  <footer class="site-footer wrap"><div class="footer-line"><a href="#inicio" class="footer-brand">Fumada XXL</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/devoluciones">Devoluciones</a><a href="/demo" rel="nofollow">Demo del panel</a><a href="/admin" rel="nofollow">Área privada</a><a href="aviso-legal.html">Aviso legal y términos de uso</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a><a href="condiciones-de-venta.html">Condiciones de venta</a></nav></footer>
 
   <dialog id="order-dialog" class="order-dialog" aria-labelledby="order-title" aria-describedby="order-notice">
     <div class="order-top"><span class="cart-brand">Fumada XXL · Aleix</span><button class="dialog-close" type="button" aria-label="Cerrar carrito" data-close-cart>×</button></div>
@@ -151,8 +160,9 @@
       <ul id="review-items" class="review-items"></ul>
       <div class="order-summary"><div><span>Envío previsto</span><span id="review-shipping">7,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="review-total"></strong></div><p>Impuestos incluidos. El destino y el plazo de entrega aún no están confirmados.</p></div>
       <div class="review-details"><h3>Destinatario y dirección</h3><address id="review-address"></address><h3>Correo para la confirmación</h3><p id="review-email"></p><button class="cart-text-button" type="button" data-back="details">Editar mis datos</button></div>
-      <p class="checkout-notice"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
-      <button class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
+      <p class="checkout-notice" id="review-preparation-note"><strong>Has llegado al final de la prueba.</strong> Tu selección no se ha enviado ni se ha creado un pedido. El pago y el correo de confirmación estarán disponibles cuando se abra la venta.</p>
+      <button id="real-payment-unavailable" class="button button-primary payment-button" type="button" disabled>Pago todavía no disponible</button>
+      <div id="demo-purchase-area" hidden><p id="demo-purchase-note" class="checkout-notice"></p><button id="demo-purchase" type="button" class="button button-primary" disabled>Crear pedido de prueba · sin pagar</button><p id="demo-purchase-status" class="checkout-help" role="status" aria-live="polite"></p><section id="demo-order-confirmation" class="demo-order-confirmation" hidden aria-labelledby="demo-order-title"><h3 id="demo-order-title" tabindex="-1">Tu pedido de prueba está confirmado.</h3><p>Conserva este número para cualquier consulta o devolución.</p><p class="demo-order-number"><strong id="demo-order-number"></strong></p><p>Total simulado: <strong id="demo-order-total"></strong>. No se ha cobrado dinero ni enviado un correo.</p><div class="demo-order-actions"><button type="button" class="cart-text-button" id="demo-order-copy">Copiar número</button><button type="button" class="cart-text-button" id="demo-order-receipt">Guardar justificante</button><a id="demo-order-returns" class="button button-primary">Solicitar devolución de este pedido</a><a id="demo-order-admin" class="button">Ver este pedido en el panel</a></div></section></div>
       <button class="cart-text-button checkout-back" type="button" data-back="cart">Editar los libros</button>
     </section>
     <div class="order-legal"><a href="condiciones-de-venta.html" target="_blank" rel="noopener">Condiciones de venta</a><a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a></div>
