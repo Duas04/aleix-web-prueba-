@@ -18,6 +18,13 @@ export async function authorizeOwner(request, env) {
   }
   return owner?.user_id === userId ? 200 : 403;
 }
+// SQLite lower() folds ASCII only. Apply the same bounded Spanish search fold
+// to columns and bound queries, including decomposed acute/diaeresis/tilde.
+// This is intentionally not general Unicode transliteration; stored text is untouched.
+function spanishSearchSql(expression) {
+  const folds = [['Á','a'],['á','a'],['É','e'],['é','e'],['Í','i'],['í','i'],['Ó','o'],['ó','o'],['Ú','u'],['ú','u'],['Ü','u'],['ü','u'],['Ñ','n'],['ñ','n'],['\u0301',''],['\u0308',''],['\u0303','']];
+  return `lower(${folds.reduce((sql,[from,to])=>`replace(${sql}, '${from}', '${to}')`,expression)})`;
+}
 export async function listOrders(env, url) {
   const db = database(env);
   const filter = url.searchParams.get('filter') || 'all';
@@ -25,7 +32,8 @@ export async function listOrders(env, url) {
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
   const filters = { all:'1=1', pending:"payment_status = 'paid' AND fulfillment_status = 'pending'", shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:"payment_status IN ('failed','refunded','partially_refunded')" };
   if (!Object.hasOwn(filters,filter)) return null;
-  const where = `${filters[filter]} AND (? = '' OR instr(lower(customer_name), lower(?)) > 0 OR instr(lower(email), lower(?)) > 0 OR instr(lower(id), lower(?)) > 0)`;
+  const matches = ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ');
+  const where = `${filters[filter]} AND (? = '' OR ${matches})`;
   const params = [query,query,query,query];
   const results = await db.batch([
     db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,total,payment_status,fulfillment_status FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),

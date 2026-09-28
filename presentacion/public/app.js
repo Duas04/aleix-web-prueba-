@@ -11,9 +11,24 @@
   let running = false;
   let elapsed = 0;
   let startedAt = 0;
-  let frame = 0;
+  let frame = null;
+  let timer = null;
   let lastPhase = '';
   const duration = 60000;
+
+  function cancelTick() {
+    if (frame !== null) window.cancelAnimationFrame(frame);
+    if (timer !== null) window.clearTimeout(timer);
+    frame = timer = null;
+  }
+
+  function scheduleTick() {
+    if (reducedMotion.matches) {
+      timer = window.setTimeout(() => { timer = null; tick(performance.now()); }, 1000);
+    } else {
+      frame = window.requestAnimationFrame(now => { frame = null; tick(now); });
+    }
+  }
 
   function setStatus(text) {
     if (status.textContent !== text) status.textContent = text;
@@ -37,6 +52,7 @@
   }
 
   function finish() {
+    cancelTick();
     running = false;
     elapsed = duration;
     orb.style.transform = 'scale(1)';
@@ -53,14 +69,14 @@
     const ms = elapsed + now - startedAt;
     if (ms >= duration) { finish(); return; }
     draw(ms);
-    frame = window.requestAnimationFrame(tick);
+    scheduleTick();
   }
 
   function pause() {
     if (!running) return;
     elapsed = Math.min(duration, elapsed + performance.now() - startedAt);
     running = false;
-    window.cancelAnimationFrame(frame);
+    cancelTick();
     if (elapsed >= duration) { finish(); return; }
     phase.textContent = 'A tu ritmo';
     hint.textContent = 'EN PAUSA';
@@ -77,13 +93,13 @@
     reset.hidden = false;
     lastPhase = '';
     draw(elapsed);
-    frame = window.requestAnimationFrame(tick);
+    scheduleTick();
   }
 
   toggle.addEventListener('click', () => running ? pause() : start());
   reset.addEventListener('click', () => {
     running = false;
-    window.cancelAnimationFrame(frame);
+    cancelTick();
     elapsed = 0;
     lastPhase = '';
     orb.style.transform = 'scale(1)';
@@ -97,5 +113,11 @@
   });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && running) pause();
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) orb.style.transform = 'scale(1)';
+    if (!running) return;
+    cancelTick();
+    tick(performance.now());
   });
 })();

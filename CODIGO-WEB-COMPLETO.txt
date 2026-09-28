@@ -1,7 +1,8 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Versión de origen: d6a6824b707a4058ddfe5bb74da7e93c3159d6db
+Revisión Git de base: 456f2464a22efbefd4bf83347d228d5f61bea0fe
+Incluye las correcciones posteriores de búsqueda, caché y movimiento reducido.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
 
@@ -42,10 +43,13 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 34. web/scripts/preview-admin.mjs
 35. web/serve.mjs
 36. web/tests/admin.test.mjs
-37. web/tests/database.mjs
-38. web/tests/separation.test.mjs
-39. web/worker/database.mjs
-40. web/worker/index.mjs
+37. web/tests/breathing.test.mjs
+38. web/tests/cache.test.mjs
+39. web/tests/database.mjs
+40. web/tests/search.test.mjs
+41. web/tests/separation.test.mjs
+42. web/worker/database.mjs
+43. web/worker/index.mjs
 
 
 ========================================================================
@@ -515,9 +519,24 @@ ARCHIVO: web/dist/app.js
   let running = false;
   let elapsed = 0;
   let startedAt = 0;
-  let frame = 0;
+  let frame = null;
+  let timer = null;
   let lastPhase = '';
   const duration = 60000;
+
+  function cancelTick() {
+    if (frame !== null) window.cancelAnimationFrame(frame);
+    if (timer !== null) window.clearTimeout(timer);
+    frame = timer = null;
+  }
+
+  function scheduleTick() {
+    if (reducedMotion.matches) {
+      timer = window.setTimeout(() => { timer = null; tick(performance.now()); }, 1000);
+    } else {
+      frame = window.requestAnimationFrame(now => { frame = null; tick(now); });
+    }
+  }
 
   function setStatus(text) {
     if (status.textContent !== text) status.textContent = text;
@@ -541,6 +560,7 @@ ARCHIVO: web/dist/app.js
   }
 
   function finish() {
+    cancelTick();
     running = false;
     elapsed = duration;
     orb.style.transform = 'scale(1)';
@@ -557,14 +577,14 @@ ARCHIVO: web/dist/app.js
     const ms = elapsed + now - startedAt;
     if (ms >= duration) { finish(); return; }
     draw(ms);
-    frame = window.requestAnimationFrame(tick);
+    scheduleTick();
   }
 
   function pause() {
     if (!running) return;
     elapsed = Math.min(duration, elapsed + performance.now() - startedAt);
     running = false;
-    window.cancelAnimationFrame(frame);
+    cancelTick();
     if (elapsed >= duration) { finish(); return; }
     phase.textContent = 'A tu ritmo';
     hint.textContent = 'EN PAUSA';
@@ -581,13 +601,13 @@ ARCHIVO: web/dist/app.js
     reset.hidden = false;
     lastPhase = '';
     draw(elapsed);
-    frame = window.requestAnimationFrame(tick);
+    scheduleTick();
   }
 
   toggle.addEventListener('click', () => running ? pause() : start());
   reset.addEventListener('click', () => {
     running = false;
-    window.cancelAnimationFrame(frame);
+    cancelTick();
     elapsed = 0;
     lastPhase = '';
     orb.style.transform = 'scale(1)';
@@ -601,6 +621,12 @@ ARCHIVO: web/dist/app.js
   });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && running) pause();
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) orb.style.transform = 'scale(1)';
+    if (!running) return;
+    cancelTick();
+    tick(performance.now());
   });
 })();
 
@@ -2392,6 +2418,7 @@ ARCHIVO: web/scripts/build.mjs
 ========================================================================
 
 import {readFile,writeFile,readdir,mkdir,cp} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 import path from 'node:path';
 // Bundle the existing static bytes without changing public URLs or introducing third-party assets.
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.ttf':'font/ttf','.woff2':'font/woff2','.txt':'text/plain; charset=utf-8'};
@@ -2407,6 +2434,8 @@ async function walk(dir,prefix='') {
 await walk('dist');
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
 const database=await readFile('worker/database.mjs','utf8');
+// Hash once at build time; unchanged public files can revalidate without downloading again.
+for(const asset of Object.values(assets)) asset.etag=`W/"${createHash('sha256').update(Buffer.from(asset.data,'base64')).digest('hex')}"`;
 const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .*database\.mjs';\s*/,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
@@ -2570,6 +2599,156 @@ test('invalid shipping payloads return client errors and never change the order'
 
 
 ========================================================================
+ARCHIVO: web/tests/breathing.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+
+const source = readFileSync(new URL('../dist/app.js', import.meta.url), 'utf8');
+function browser(reduced = false) {
+  let now = 0, nextId = 1;
+  const jobs = new Map(), elements = new Map(), documentEvents = new Map(), mediaEvents = new Map();
+  const media = {matches: reduced, addEventListener: (name, fn) => mediaEvents.set(name, fn)};
+  for (const name of ['toggle','reset','phase','hint','status','time','orb']) {
+    elements.set(`#breath-${name}`, {textContent:'',innerHTML:'',style:{},hidden:false,events:new Map(),addEventListener(name, fn){this.events.set(name,fn);},focus(){this.focused=true;}});
+  }
+  const schedule = (kind, fn, delay) => {const id=nextId++; jobs.set(id,{kind,fn,delay}); return id;};
+  const document = {hidden:false,querySelector: id => elements.get(id),addEventListener: (name,fn) => documentEvents.set(name,fn)};
+  vm.runInNewContext(source, {document,performance:{now:()=>now},window:{matchMedia:()=>media,requestAnimationFrame:fn=>schedule('raf',fn,0),cancelAnimationFrame:id=>jobs.delete(id),setTimeout:(fn,delay)=>schedule('timeout',fn,delay),clearTimeout:id=>jobs.delete(id)}});
+  return {
+    jobs, element: name => elements.get(`#breath-${name}`),
+    click(name){elements.get(`#breath-${name}`).events.get('click')();},
+    setTime(value){now=value;},
+    fire(value){now=value; assert.equal(jobs.size,1,'exactly one callback pending'); const [id,job]=jobs.entries().next().value; jobs.delete(id); job.fn(now);},
+    preference(value){media.matches=value;mediaEvents.get('change')?.({matches:value});},
+    hide(){document.hidden=true;documentEvents.get('visibilitychange')();}
+  };
+}
+
+test('reduced motion uses a one-second timer and elapsed real time, not frame callbacks',()=>{
+  const b=browser(true); b.click('toggle');
+  assert.equal([...b.jobs.values()][0].kind,'timeout');
+  assert.equal([...b.jobs.values()][0].delay,1000);
+  b.fire(4250);
+  assert.equal(b.element('phase').textContent,'Suelta el aire');
+  assert.equal(b.element('time').textContent,'0:56 · TU MOMENTO DE CALMA');
+  assert.equal(b.element('orb').style.transform,'scale(1)');
+  b.fire(65000);
+  assert.equal(b.jobs.size,0);
+  assert.equal(b.element('phase').textContent,'Gracias por parar');
+});
+
+test('motion preference switches replace the active scheduler without restarting elapsed time',()=>{
+  const b=browser(); b.click('toggle');
+  assert.equal([...b.jobs.values()][0].kind,'raf');
+  b.fire(1500); assert.notEqual(b.element('orb').style.transform,'scale(1)');
+  b.setTime(4500); b.preference(true);
+  assert.equal(b.jobs.size,1);assert.equal([...b.jobs.values()][0].kind,'timeout');
+  assert.equal(b.element('orb').style.transform,'scale(1)');
+  assert.equal(b.element('phase').textContent,'Suelta el aire');
+  b.setTime(8000); b.preference(false);
+  assert.equal(b.jobs.size,1);assert.equal([...b.jobs.values()][0].kind,'raf');
+  b.fire(60000);assert.equal(b.jobs.size,0);assert.equal(b.element('phase').textContent,'Gracias por parar');
+});
+
+for(const reduced of [false,true]) test(`pause/resume, hidden tab, reset and replay preserve controls (${reduced ? 'reduced' : 'animated'})`,()=>{
+  const b=browser(reduced);b.click('toggle');b.setTime(2500);b.click('toggle');
+  assert.equal(b.jobs.size,0);assert.equal(b.element('phase').textContent,'A tu ritmo');
+  b.preference(!reduced);assert.equal(b.jobs.size,0,'preference change does not resume paused exercise');
+  b.setTime(10000);b.click('toggle');b.fire(11500);
+  assert.equal(b.element('time').textContent,'0:56 · TU MOMENTO DE CALMA');
+  b.setTime(12000);b.hide();assert.equal(b.jobs.size,0);
+  assert.equal(b.element('toggle').textContent,'Continuar mi pausa ↗');
+  b.click('reset');assert.equal(b.element('reset').hidden,true);assert.equal(b.element('toggle').focused,true);
+  b.setTime(20000);b.click('toggle');b.fire(79999);assert.equal(b.element('time').textContent,'0:01 · TU MOMENTO DE CALMA');
+  b.fire(80000);assert.equal(b.jobs.size,0);assert.equal(b.element('reset').hidden,true);
+  b.setTime(90000);b.click('toggle');assert.equal(b.element('time').textContent,'1:00 · TU MOMENTO DE CALMA');
+  b.click('reset');assert.equal(b.jobs.size,0,'reset cancels active scheduler');
+});
+
+
+
+========================================================================
+ARCHIVO: web/tests/cache.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {createWorker} from '../worker/index.mjs';
+import {localDatabase} from './database.mjs';
+import builtWorker from '../dist/server/index.js';
+
+const asset = text => ({type:'text/plain',data:Buffer.from(text).toString('base64'),etag:`W/"${createHash('sha256').update(text).digest('hex')}"`});
+const publicAsset = asset('PUBLIC VERSION ONE');
+const assets = {'/index.html':publicAsset,'/app.js':publicAsset,'@admin':asset('PRIVATE'),'/admin/app.js':asset('ADMIN SCRIPT'),'/404.html':asset('MISSING')};
+const request = (path='/',headers={},method='GET') => new Request('https://book.example'+path,{headers,method});
+
+test('matching public validators return 304 with no body for GET and HEAD',async()=>{
+  const worker=createWorker(assets);
+  const first=await worker.fetch(request(),{});
+  assert.equal(first.status,200);
+  assert.equal(first.headers.get('etag'),publicAsset.etag);
+  assert.match(first.headers.get('cache-control'),/must-revalidate/);
+  assert.equal(await first.text(),'PUBLIC VERSION ONE');
+  for(const method of ['GET','HEAD']) for(const validator of [publicAsset.etag,publicAsset.etag.slice(2),`"older", ${publicAsset.etag}`,'*']) {
+    const response=await worker.fetch(request('/',{'if-none-match':validator},method),{});
+    assert.equal(response.status,304);
+    assert.equal(await response.text(),'');
+    assert.equal(response.headers.get('etag'),publicAsset.etag);
+    assert.equal(response.headers.get('cache-control'),first.headers.get('cache-control'));
+  }
+});
+
+test('a stale validator gets the changed public bytes and a new validator',async()=>{
+  const changed=asset('PUBLIC VERSION TWO');
+  const response=await createWorker({'/index.html':changed}).fetch(request('/',{'if-none-match':publicAsset.etag}),{});
+  assert.equal(response.status,200);
+  assert.equal(response.headers.get('etag'),changed.etag);
+  assert.equal(await response.text(),'PUBLIC VERSION TWO');
+});
+
+test('conditional requests cannot cache private content, bypass login, or hide missing pages',async()=>{
+  const worker=createWorker(assets), env={DB:localDatabase(),ADMIN_OWNER_EMAIL:'owner@example.test'};
+  const headers={'if-none-match':'*'};
+  try {
+    const anonymous=await worker.fetch(request('/admin',headers),env);
+    assert.equal(anonymous.status,302);
+    const owner={...headers,'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'owner@example.test'};
+    for(const [path,status] of [['/admin',200],['/admin/app.js',200],['/api/admin/orders',200],['/missing',404]]) {
+      const response=await worker.fetch(request(path,owner),env);
+      assert.equal(response.status,status);
+      assert.equal(response.headers.get('etag'),null);
+      assert.match(response.headers.get('cache-control'),/no-store/);
+      assert.ok((await response.text()).length>0);
+    }
+  } finally { env.DB.sqlite.close(); }
+});
+
+test('built public assets have content-derived validators, including binary fonts',async()=>{
+  const fonts=readFileSync('dist/fonts.css','utf8');
+  const fontUrl=fonts.match(/url\(['"]?([^)'"\s]+\.woff2)['"]?\)/)?.[1];
+  assert.ok(fontUrl,'test uses a real font from the site');
+  const fontPath=new URL(fontUrl,'https://book.example/fonts.css').pathname;
+  for(const path of ['/','/app.js',fontPath]) {
+    const first=await builtWorker.fetch(request(path),{});
+    assert.equal(first.status,200);
+    const bytes=Buffer.from(await first.arrayBuffer());
+    const expected=`W/"${createHash('sha256').update(bytes).digest('hex')}"`;
+    assert.equal(first.headers.get('etag'),expected);
+    const cached=await builtWorker.fetch(request(path,{'if-none-match':expected}),{});
+    assert.equal(cached.status,304);
+    assert.equal((await cached.arrayBuffer()).byteLength,0);
+  }
+});
+
+
+
+========================================================================
 ARCHIVO: web/tests/database.mjs
 ========================================================================
 
@@ -2585,6 +2764,48 @@ export function localDatabase(){
   };
   return {sqlite,prepare,async batch(statements){sqlite.exec('BEGIN');try{const result=[];for(const stmt of statements)result.push(await stmt.all());sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
 }
+
+
+
+========================================================================
+ARCHIVO: web/tests/search.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { listOrders } from '../worker/database.mjs';
+import { localDatabase } from './database.mjs';
+
+function seed(db,id,name,email='fixture@example.test',payment='paid',created=10){
+  db.sqlite.prepare(`INSERT INTO orders (id,created_at,customer_name,email,recipient,address1,city,postal_code,country,edition,quantity,subtotal,shipping,total,payment_status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(id,created,name,email,'Persona','Calle','Ciudad','00000','ES','paperback',1,1500,700,2200,payment);
+}
+const search=(DB,q,extra={})=>listOrders({DB},new URL('https://book.example/api/admin/orders?'+new URLSearchParams({q,...extra})));
+
+test('Spanish names match case, accents and composed/decomposed spellings without altering stored text',async()=>{
+  const db=localDatabase();
+  const names=['Álvaro Érica Íñigo Óscar Úrsula Ü Ñ','álvaro érica íñigo óscar úrsula ü ñ','Álvaro Érica Íñigo Óscar Úrsula Ü Ñ'.normalize('NFD')];
+  names.forEach((name,i)=>seed(db,'order_'+i,name));
+  for(const q of ['álvaro','ALVARO','érica','INIGO','óscar','ursula','ü','ñ','ÁLVARO'.normalize('NFD')]){
+    const data=await search(db,q);assert.equal(data.count,3,q);
+  }
+  assert.deepEqual((await search(db,'alvaro')).orders.map(o=>o.customer_name),[...names].reverse());
+  db.sqlite.close();
+});
+
+test('normalized search filters/counts before pagination, including email and ID with bound literal queries',async()=>{
+  const db=localDatabase();
+  for(let i=0;i<25;i++)seed(db,'match_'+String(i).padStart(2,'0'),'Álvaro',undefined,'paid',i);
+  seed(db,'unpaid','Álvaro',undefined,'pending',99);
+  seed(db,'unrelated','Otro',undefined,'paid',100);
+  seed(db,'email','Otro','ÉRICA@example.test');
+  seed(db,'PEDIDO-Ñ','Otro');
+  const first=await search(db,'alvaro',{filter:'pending'}),second=await search(db,'alvaro',{filter:'pending',page:'2'});
+  assert.equal(first.count,25);assert.equal(second.count,25);assert.equal(first.orders.length,20);assert.equal(second.orders.length,5);
+  assert.deepEqual([...first.orders,...second.orders].map(o=>o.id),Array.from({length:25},(_,i)=>'match_'+String(24-i).padStart(2,'0')));
+  assert.equal((await search(db,'erica@')).count,1);assert.equal((await search(db,'pedido-n')).count,1);
+  for(const q of ["' OR 1=1--",'%', '_missing'])assert.equal((await search(db,q)).count,0);
+  db.sqlite.close();
+});
 
 
 
@@ -2630,6 +2851,13 @@ export async function authorizeOwner(request, env) {
   }
   return owner?.user_id === userId ? 200 : 403;
 }
+// SQLite lower() folds ASCII only. Apply the same bounded Spanish search fold
+// to columns and bound queries, including decomposed acute/diaeresis/tilde.
+// This is intentionally not general Unicode transliteration; stored text is untouched.
+function spanishSearchSql(expression) {
+  const folds = [['Á','a'],['á','a'],['É','e'],['é','e'],['Í','i'],['í','i'],['Ó','o'],['ó','o'],['Ú','u'],['ú','u'],['Ü','u'],['ü','u'],['Ñ','n'],['ñ','n'],['\u0301',''],['\u0308',''],['\u0303','']];
+  return `lower(${folds.reduce((sql,[from,to])=>`replace(${sql}, '${from}', '${to}')`,expression)})`;
+}
 export async function listOrders(env, url) {
   const db = database(env);
   const filter = url.searchParams.get('filter') || 'all';
@@ -2637,7 +2865,8 @@ export async function listOrders(env, url) {
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
   const filters = { all:'1=1', pending:"payment_status = 'paid' AND fulfillment_status = 'pending'", shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:"payment_status IN ('failed','refunded','partially_refunded')" };
   if (!Object.hasOwn(filters,filter)) return null;
-  const where = `${filters[filter]} AND (? = '' OR instr(lower(customer_name), lower(?)) > 0 OR instr(lower(email), lower(?)) > 0 OR instr(lower(id), lower(?)) > 0)`;
+  const matches = ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ');
+  const where = `${filters[filter]} AND (? = '' OR ${matches})`;
   const params = [query,query,query,query];
   const results = await db.batch([
     db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,total,payment_status,fulfillment_status FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
@@ -2720,6 +2949,13 @@ export function createWorker(assets) {
 }
 function assetResponse(asset,request,isPrivate,status=200) {
   const headers={'Content-Type':asset.type,'X-Content-Type-Options':'nosniff',...(isPrivate?privateHeaders:{'Cache-Control':'public, max-age=0, must-revalidate'})};
+  if(!isPrivate && status===200 && asset.etag) {
+    headers.ETag=asset.etag;
+    // GET/HEAD use weak comparison; private pages and errors never return cached content.
+    const validator=asset.etag.replace(/^W\//,'');
+    const matches=request.headers.get('if-none-match')?.split(',').some(value=>value.trim()==='*'||value.trim().replace(/^W\//,'')===validator);
+    if(matches) return new Response(null,{status:304,headers});
+  }
   if(status===404){headers['Cache-Control']='no-store';headers['X-Robots-Tag']='noindex, nofollow';}
   if(isPrivate) headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";
   return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.data),c=>c.charCodeAt(0)),{status,headers});
@@ -2745,4 +2981,3 @@ web/dist/assets/fonts/font-7.woff2
 web/dist/assets/fumada-xxl-aleix.png
 
 Repositorio: https://github.com/Duas04/aleix-web-prueba-/tree/main/web
-

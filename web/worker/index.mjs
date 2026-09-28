@@ -58,6 +58,13 @@ export function createWorker(assets) {
 }
 function assetResponse(asset,request,isPrivate,status=200) {
   const headers={'Content-Type':asset.type,'X-Content-Type-Options':'nosniff',...(isPrivate?privateHeaders:{'Cache-Control':'public, max-age=0, must-revalidate'})};
+  if(!isPrivate && status===200 && asset.etag) {
+    headers.ETag=asset.etag;
+    // GET/HEAD use weak comparison; private pages and errors never return cached content.
+    const validator=asset.etag.replace(/^W\//,'');
+    const matches=request.headers.get('if-none-match')?.split(',').some(value=>value.trim()==='*'||value.trim().replace(/^W\//,'')===validator);
+    if(matches) return new Response(null,{status:304,headers});
+  }
   if(status===404){headers['Cache-Control']='no-store';headers['X-Robots-Tag']='noindex, nofollow';}
   if(isPrivate) headers['Content-Security-Policy']="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";
   return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.data),c=>c.charCodeAt(0)),{status,headers});

@@ -1,4 +1,5 @@
 import {readFile,writeFile,readdir,mkdir,cp} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 import path from 'node:path';
 // Bundle the existing static bytes without changing public URLs or introducing third-party assets.
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.ttf':'font/ttf','.woff2':'font/woff2','.txt':'text/plain; charset=utf-8'};
@@ -14,6 +15,8 @@ async function walk(dir,prefix='') {
 await walk('dist');
 for(const [file,key] of [['index.html','@admin'],['styles.css','/admin/styles.css'],['app.js','/admin/app.js']]) assets[key]={type:types[path.extname(file)],data:(await readFile('admin/'+file)).toString('base64')};
 const database=await readFile('worker/database.mjs','utf8');
+// Hash once at build time; unchanged public files can revalidate without downloading again.
+for(const asset of Object.values(assets)) asset.etag=`W/"${createHash('sha256').update(Buffer.from(asset.data,'base64')).digest('hex')}"`;
 const worker=(await readFile('worker/index.mjs','utf8')).replace(/^import .*database\.mjs';\s*/,'');
 await mkdir('dist/server',{recursive:true});
 await mkdir('dist/.openai',{recursive:true});
