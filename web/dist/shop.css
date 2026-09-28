@@ -43,6 +43,10 @@
 .cart-add>div{display:flex;gap:12px;flex-wrap:wrap}
 .cart-add-button{border:1px solid #aab599;background:transparent;color:var(--ink);min-height:44px;padding:10px 16px;font-size:.875rem}
 .cart-add-button:hover{background:#e5e9dc;transform:none}
+.edition-button:disabled,.cart-add-button:disabled{opacity:.6;cursor:default}
+.edition-button:disabled:hover,.cart-add-button:disabled:hover{transform:none}
+.cart-unavailable{font-size:.875rem;line-height:1.7;color:#59654b;margin:0 0 22px}
+.cart-unavailable a{text-decoration:underline;text-underline-offset:3px}
 .checkout-help,.field-hint{font-size:.875rem;line-height:1.7;color:#59654b;margin:18px 0}
 .checkout-help a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .checkout-primary{width:100%;margin-top:20px;font-size:1rem}

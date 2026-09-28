@@ -1,7 +1,7 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 7c787a50c98c2a402e906adcc80419e9382097ae
+Revisión Git de base: 30d197f19ff82b979ea9e167f84ff83a3614aaf7
 Incluye el carrito y formulario de invitado de prueba, además de las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
@@ -258,8 +258,8 @@ const money=n=>moneyFormat.format(n/100);
 const date=n=>dateFormat.format(new Date(n));
 const payments={paid:'Pagado',pending:'Pago pendiente',failed:'Pago fallido',refunded:'Reembolsado',partially_refunded:'Reembolso parcial'};
 const edition=e=>e==='paperback'?'Tapa blanda':'Tapa dura';
-const shippingLabel=order=>order.fulfillment_status==='shipped'?'Enviado':order.payment_status==='refunded'?'No enviar':'Por enviar';
-const shippingTone=order=>order.payment_status==='refunded'&&order.fulfillment_status!=='shipped'?'refunded':order.fulfillment_status;
+const shippingLabel=order=>order.fulfillment_status==='shipped'?'Enviado':({paid:'Por enviar',pending:'Pago pendiente',failed:'No enviar',refunded:'No enviar',partially_refunded:'Revisar pago'}[order.payment_status]||'Revisar pago');
+const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
 let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
 async function api(path,options={}) {
@@ -311,6 +311,7 @@ const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
 async function openDetail(id){
+  const restoreRetryFocus=document.activeElement===$('retry-detail');
   detailId=id;$('retry-detail').hidden=true;
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
@@ -324,12 +325,13 @@ async function openDetail(id){
     $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending';$('ship-confirm').checked=false;$('tracking').value='';$('ship-button').disabled=false;
     $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.tracking?' Seguimiento: '+order.tracking:''}`:'';
     $('detail-feedback').textContent='';$('detail-body').hidden=false;
-  }catch(error){if(version===detailRequest){$('detail-feedback').textContent=error.message;$('retry-detail').hidden=false;}}
+    if(restoreRetryFocus){$('detail-title').tabIndex=-1;$('detail-title').focus();}
+  }catch(error){if(version===detailRequest){$('detail-feedback').textContent=error.message;$('retry-detail').hidden=false;if(restoreRetryFocus)$('retry-detail').focus();}}
 }
 $('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
 $('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
-$('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;try{await navigator.clipboard.writeText(address(currentOrder));$('detail-message').textContent='Dirección copiada.';}catch{$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
+$('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;const version=detailRequest;try{await navigator.clipboard.writeText(address(currentOrder));if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Dirección copiada.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
 $('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);if($('detail').open&&currentOrder?.id===id){$('close-detail').focus();$('detail-message').textContent='Pedido marcado como enviado.';}}}catch(error){if($('detail').open&&currentOrder?.id===id){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}}});
 load();
@@ -1204,9 +1206,10 @@ ARCHIVO: web/dist/index.html
       <div class="wrap">
         <div class="shop-heading"><div><p class="eyebrow">FUMADA XXL · ALEIX</p><h2 id="shop-title">Tu próxima pausa,<br><em>en papel.</em></h2></div><p>Dos formas de llevarte la calma.<br>Elige la edición que va contigo.</p></div>
         <p class="shop-status"><span aria-hidden="true">◷</span><span><strong>Venta en preparación.</strong> Consulta el importe de tu edición. Todavía no se aceptan pedidos ni pagos.</span></p>
-        <div class="edition-grid">
-          <article class="edition-card"><p class="eyebrow">EDICIÓN FLEXIBLE</p><div class="edition-title"><h3>Tapa blanda</h3><p class="edition-price">15<span>,00 €</span></p></div><p>Una cubierta flexible para acompañar tus momentos de lectura.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="paperback">Añadir tapa blanda <span aria-hidden="true">+</span></button></article>
-          <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover">Añadir tapa dura <span aria-hidden="true">+</span></button></article>
+        <p id="cart-unavailable" class="cart-unavailable">Si el carrito no se activa, recarga la página o <a href="mailto:theshoz@gmail.com">consulta por correo</a>.<noscript> Activa JavaScript para utilizar el carrito.</noscript></p>
+      <div class="edition-grid">
+          <article class="edition-card"><p class="eyebrow">EDICIÓN FLEXIBLE</p><div class="edition-title"><h3>Tapa blanda</h3><p class="edition-price">15<span>,00 €</span></p></div><p>Una cubierta flexible para acompañar tus momentos de lectura.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="paperback" disabled>Añadir tapa blanda <span aria-hidden="true">+</span></button></article>
+          <article class="edition-card edition-card-hard"><p class="eyebrow">EDICIÓN RÍGIDA</p><div class="edition-title"><h3>Tapa dura</h3><p class="edition-price">20<span>,00 €</span></p></div><p>Una cubierta rígida para guardar y volver a abrir con calma.</p><p class="price-caption">Precio por ejemplar · impuestos incluidos</p><button class="button button-primary edition-button" type="button" data-edition="hardcover" disabled>Añadir tapa dura <span aria-hidden="true">+</span></button></article>
         </div>
         <p class="shipping-highlight">Envío a Europa · <strong>7,00 € por pedido</strong></p><p class="shop-availability">La venta online está en preparación. Puedes consultar tu importe, pero todavía no se admiten pedidos ni se realizan cobros. La disponibilidad y el plazo para tu destino se confirmarán antes del pago.</p>
         <div class="shop-links"><a href="condiciones-de-venta.html">Condiciones de venta</a><a href="condiciones-de-venta.html#envios">Envíos y devoluciones</a><a href="mailto:theshoz@gmail.com">Contactar con Aleix</a></div>
@@ -1253,7 +1256,7 @@ ARCHIVO: web/dist/index.html
         <div class="order-summary"><div><span>Libros</span><strong id="order-subtotal">0,00 €</strong></div><div><span>Envío previsto · una vez por pedido</span><span id="order-shipping">0,00 €</span></div><div class="order-total"><span>Total estimado</span><strong id="order-total">0,00 €</strong></div><p>Impuestos incluidos. Destinos, disponibilidad y plazo de entrega pendientes de confirmar. Fuera del territorio aduanero de la UE pueden existir gastos de importación que deberán concretarse antes de aceptar la compra.</p></div>
         <button id="cart-continue" class="button button-primary checkout-primary" type="button" disabled>Continuar con mis datos</button>
       </div>
-      <div class="cart-add"><p>Añadir un ejemplar</p><div><button class="button cart-add-button" type="button" data-edition="paperback">Tapa blanda · 15 €</button><button class="button cart-add-button" type="button" data-edition="hardcover">Tapa dura · 20 €</button></div></div>
+      <div class="cart-add"><p>Añadir un ejemplar</p><div><button class="button cart-add-button" type="button" data-edition="paperback" disabled>Tapa blanda · 15 €</button><button class="button cart-add-button" type="button" data-edition="hardcover" disabled>Tapa dura · 20 €</button></div></div>
       <p class="checkout-help" id="cart-storage-note">Solo guardamos los libros y cantidades en este navegador durante 7 días desde el último cambio. Puedes vaciar el carrito cuando quieras.</p>
       <button class="cart-text-button keep-reading" type="button" data-close-cart>Seguir viendo el libro</button>
     </section>
@@ -1383,6 +1386,10 @@ ARCHIVO: web/dist/shop.css
 .cart-add>div{display:flex;gap:12px;flex-wrap:wrap}
 .cart-add-button{border:1px solid #aab599;background:transparent;color:var(--ink);min-height:44px;padding:10px 16px;font-size:.875rem}
 .cart-add-button:hover{background:#e5e9dc;transform:none}
+.edition-button:disabled,.cart-add-button:disabled{opacity:.6;cursor:default}
+.edition-button:disabled:hover,.cart-add-button:disabled:hover{transform:none}
+.cart-unavailable{font-size:.875rem;line-height:1.7;color:#59654b;margin:0 0 22px}
+.cart-unavailable a{text-decoration:underline;text-underline-offset:3px}
 .checkout-help,.field-hint{font-size:.875rem;line-height:1.7;color:#59654b;margin:18px 0}
 .checkout-help a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .checkout-primary{width:100%;margin-top:20px;font-size:1rem}
@@ -1527,6 +1534,8 @@ if(dialog){
  });
  window.addEventListener('pageshow',event=>{if(event.persisted){clearDetails();items=loadCart(storage);render();go('cart',{focus:false});}});
  render();
+ document.querySelectorAll('[data-edition]').forEach(button=>{button.disabled=false;});
+ const unavailable=document.querySelector('#cart-unavailable');if(unavailable)unavailable.hidden=true;
  if(!storage)$('#cart-storage-note').textContent='Tu navegador no permite guardar el carrito. Se perderá al recargar la página.';
 }
 
@@ -3068,16 +3077,16 @@ import vm from 'node:vm';
 const source=readFileSync('admin/app.js','utf8').replace(/\nload\(\);\s*$/,'\n');
 const order=id=>({id,created_at:1,customer_name:'Prueba',email:'fixture@example.invalid',recipient:'Prueba',address1:'Calle ficticia',postal_code:'00000',city:'Ciudad',country:'ES',edition:'paperback',quantity:1,subtotal:1500,shipping:700,total:2200,payment_status:'paid',fulfillment_status:'pending'});
 function harness(){
- const elements=new Map();let resolveShip,failDetail=false;
- const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
+ const elements=new Map();let resolveShip,resolveCopy,deferredCopy=false,failDetail=false;
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
  const document={getElementById:element,activeElement:element('opener'),createElement:()=>({...element('node'),dataset:{}})};
- const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:async()=>{}}},fetch:async path=>{
+ const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async path=>{
   if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
   if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:0,pending:0,shipped:0}}));
   return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:order(path.split('/').pop())}),{status:failDetail?503:200});
  }});
  vm.runInContext(source,context);
- return {element,open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
+ return {element,open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
 }
 test('a delayed shipping error never changes another open order',async()=>{
  const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;
@@ -3094,6 +3103,24 @@ test('failed order details offer a working retry without closing the dialog',asy
  assert.ok(ui.element('retry-detail').events.click,'retry is connected');
  ui.failDetails(false);await ui.element('retry-detail').events.click();
  assert.equal(ui.element('detail-body').hidden,false);assert.equal(ui.element('retry-detail').hidden,true);assert.equal(ui.element('detail-title').textContent,'Pedido A');
+});
+test('unpaid and incident orders never suggest they are ready to ship',()=>{
+ const ui=harness();
+ for(const [payment,label]of Object.entries({paid:'Por enviar',pending:'Pago pendiente',failed:'No enviar',refunded:'No enviar',partially_refunded:'Revisar pago'})){
+  assert.equal(ui.label({payment_status:payment,fulfillment_status:'pending'}),label);
+  assert.equal(ui.label({payment_status:payment,fulfillment_status:'shipped'}),'Enviado');
+ }
+});
+test('a delayed clipboard confirmation never changes another order',async()=>{
+ const ui=harness();await ui.open('A');ui.deferCopy();
+ const pending=ui.element('copy-address').events.click();
+ ui.element('detail').close();await ui.open('B');ui.element('detail-message').textContent='Información de B';
+ ui.completeCopy();await pending;assert.equal(ui.element('detail-message').textContent,'Información de B');
+});
+test('retry keeps keyboard focus on the recovered title or the retry button',async()=>{
+ const ui=harness();ui.failDetails(true);await ui.open('A');ui.element('retry-detail').focus();
+ await ui.element('retry-detail').events.click();assert.equal(ui.focus.id,'retry-detail');
+ ui.failDetails(false);await ui.element('retry-detail').events.click();assert.equal(ui.focus.id,'detail-title');
 });
 
 

@@ -112,5 +112,7 @@ if(dialog){
  });
  window.addEventListener('pageshow',event=>{if(event.persisted){clearDetails();items=loadCart(storage);render();go('cart',{focus:false});}});
  render();
+ document.querySelectorAll('[data-edition]').forEach(button=>{button.disabled=false;});
+ const unavailable=document.querySelector('#cart-unavailable');if(unavailable)unavailable.hidden=true;
  if(!storage)$('#cart-storage-note').textContent='Tu navegador no permite guardar el carrito. Se perderá al recargar la página.';
 }
