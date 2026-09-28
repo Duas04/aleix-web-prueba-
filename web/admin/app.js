@@ -5,10 +5,15 @@ const money=n=>moneyFormat.format(n/100);
 const date=n=>dateFormat.format(new Date(n));
 const payments={paid:'Pagado',pending:'Pago pendiente',failed:'Pago fallido',refunded:'Reembolsado',partially_refunded:'Reembolso parcial'};
 const edition=e=>e==='paperback'?'Tapa blanda':'Tapa dura';
-const shippingLabel=order=>order.fulfillment_status==='shipped'?'Enviado':({paid:'Por enviar',pending:'Pago pendiente',failed:'No enviar',refunded:'No enviar',partially_refunded:'Revisar pago'}[order.payment_status]||'Revisar pago');
-const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
+const shippingLabel=order=>order.delivered_at?'Entregado':order.fulfillment_status==='shipped'?'Enviado':order.payment_status==='paid'&&activeReturn(order)?'En pausa por devolución':({paid:'Por enviar',pending:'Pago pendiente',failed:'No enviar',refunded:'No enviar',partially_refunded:'Revisar pago'}[order.payment_status]||'Revisar pago');
+const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':activeReturn(order)?'return-state':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
 let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
+let saving=false;
+const returnLabels={none:'Sin devolución',requested:'Solicitada',reviewing:'En revisión',approved:'Aprobada',received:'Recibida',closed:'Cerrada',rejected:'Rechazada'};
+const returnTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
+const activeReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
+function orderItems(order){return order.items?.length?order.items:[{edition:order.edition,quantity:order.quantity,unit_price:order.quantity?order.subtotal/order.quantity:0,subtotal:order.subtotal}];}
 async function api(path,options={}) {
   const response=await fetch(path,{credentials:'same-origin',cache:'no-store',...options});
   let body;try{body=await response.json();}catch{throw new Error('No se ha podido cargar la información. Actualiza e inténtalo de nuevo.');}
@@ -32,13 +37,16 @@ async function load() {
     if(page>1&&data.orders.length===0){page=1;return load();}
     loadedPage=page;
     $('stat-total').textContent=data.stats.total;$('stat-pending').textContent=data.stats.pending;$('stat-shipped').textContent=data.stats.shipped;
+    for(const key of ['pending','returns','incidents'])$('task-'+key+'-count').textContent=String(data.stats[key]??0);
+    for(const key of ['pending','returns','incidents'])$('task-'+key).setAttribute('aria-pressed',String($('filter').value===(key==='incidents'?'attention':key)));
     $('result-count').textContent=total===1?'1 pedido':`${total} pedidos`;
     $('rows').replaceChildren();
     for(const order of data.orders) {
       const tr=document.createElement('tr');tr.setAttribute('role','row');
       const customer=cell(order.customer_name), number=document.createElement('small'),small=document.createElement('small');number.className='order-number';number.textContent=order.id;small.textContent=date(order.created_at);customer.append(number,small);
-      const book=cell(`${order.quantity} × ${edition(order.edition)}`,'Libro'), amount=cell(money(order.total),'Total'), pay=cell('','Pago'),ship=cell('','Envío'),detail=cell('');
+      const book=cell(orderItems(order).map(item=>`${item.quantity} × ${edition(item.edition)}`).join(' · '),'Libro'), amount=cell(money(order.total),'Total'), pay=cell('','Pago'),ship=cell('','Envío'),detail=cell('');
       pay.append(badge(order.payment_status,payments[order.payment_status]||'Sin confirmar'));ship.append(badge(shippingTone(order),shippingLabel(order)));
+      if(order.return_status&&order.return_status!=='none')ship.append(badge('return-state','Devolución: '+(returnLabels[order.return_status]||'Revisar')));
       const button=document.createElement('button');button.type='button';button.className='text-link';button.textContent='Ver pedido';button.setAttribute('aria-label',`Ver pedido de ${order.customer_name}, ${order.id}`);button.addEventListener('click',()=>openDetail(order.id));detail.append(button);tr.append(customer,book,amount,pay,ship,detail);$('rows').append(tr);
     }
     $('feedback').hidden=true;
@@ -51,34 +59,84 @@ async function load() {
     const keepPaginationFocus=paginationFocus&&document.activeElement===paginationFocus;
     $('pagination').hidden=total<=20;$('previous').disabled=page===1;$('next').disabled=page*20>=total;$('page-label').textContent=`Página ${page} de ${Math.max(1,Math.ceil(total/20))}`;
     if(keepPaginationFocus&&paginationFocus.disabled){const target=$('pagination').hidden?$('orders-title'):$('page-label');target.tabIndex=-1;target.focus();}
-  }catch(error){if(version!==listRequest)return;page=loadedPage;$('feedback').className='feedback error';$('feedback').textContent=error.message+(hadRows?' Se mantienen los últimos resultados. Pulsa Actualizar para reintentarlo.':'');if(!hadRows){$('result-count').textContent='No disponible';for(const id of ['stat-total','stat-pending','stat-shipped'])$(id).textContent='—';}}
+  }catch(error){if(version!==listRequest)return;page=loadedPage;$('feedback').className='feedback error';$('feedback').textContent=error.message+(hadRows?' Se mantienen los últimos resultados. Pulsa Actualizar para reintentarlo.':'');if(!hadRows){$('result-count').textContent='No disponible';for(const id of ['stat-total','stat-pending','stat-shipped','task-pending-count','task-returns-count','task-incidents-count'])$(id).textContent='—';}}
   finally{if(version===listRequest){loading=false;$('table-wrap').setAttribute('aria-busy','false');for(const id of ['refresh','previous','next'])$(id).removeAttribute('aria-disabled');}}
 }
 const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
+function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields'])$(id).disabled=saving;}
+function renderDetail(order){
+  currentOrder=order;
+  $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
+  $('detail-payment').textContent=payments[order.payment_status]||'Pago sin confirmar';$('detail-payment').className='badge '+order.payment_status;
+  $('detail-shipping').textContent=shippingLabel(order);$('detail-shipping').className='badge '+shippingTone(order);
+  $('customer').textContent=order.customer_name;$('email').textContent=order.email;$('phone').textContent=order.phone||'Teléfono no facilitado';$('address').textContent=address(order);
+  $('items').replaceChildren(...orderItems(order).map(item=>{const line=document.createElement('li');line.textContent=`${item.quantity} × ${edition(item.edition)} · ${money(item.unit_price)} por ejemplar · Subtotal ${money(item.subtotal)}`;return line;}));
+  $('subtotal').textContent=money(order.subtotal);$('shipping').textContent=money(order.shipping);$('total').textContent=money(order.total);
+  $('payment-note').textContent=order.payment_status==='paid'?(activeReturn(order)?'Pago confirmado. Hay una devolución activa: revisa su gestión antes de preparar el envío.':order.fulfillment_status==='shipped'?'Pago confirmado por la pasarela. Este pedido ya está enviado.':'Pago confirmado por la pasarela. Puedes preparar este pedido.'):order.payment_status==='pending'?'Pago pendiente de confirmación. No envíes el libro todavía.':order.payment_status==='refunded'?'Pago reembolsado. No prepares un envío.':'Este pago tiene una incidencia o un reembolso. Revisa la operación antes de realizar cualquier envío.';
+  $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending'||activeReturn(order);
+  $('ship-confirm').checked=false;$('carrier').value=order.carrier||'';$('tracking').value=order.tracking||'';$('ship-button').disabled=false;
+  const canTrack=order.fulfillment_status==='shipped'&&!order.delivered_at;
+  $('tracking-form').hidden=!canTrack;$('deliver-form').hidden=!canTrack;
+  $('tracking-carrier').value=order.carrier||'';$('tracking-code').value=order.tracking||'';$('deliver-confirm').checked=false;
+  $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.carrier?' Transportista: '+order.carrier+'.':''}${order.tracking?' Seguimiento: '+order.tracking+'.':''}${order.delivered_at?' Entrega confirmada el '+date(order.delivered_at)+'.':''}`:'';
+  $('private-note').value=order.private_note||'';$('note-date').textContent=order.note_updated_at?'Última actualización: '+date(order.note_updated_at):'Solo visible en este panel. No se incluye al imprimir.';
+  $('return-form').hidden=!['paid','refunded','partially_refunded'].includes(order.payment_status);
+  const status=order.return_status||'none',options=[...new Set([...(status==='none'?[]:[status]),...(returnTransitions[status]||[])])];
+  $('return-status').replaceChildren(...options.map(value=>{const option=document.createElement('option');option.value=value;option.textContent=returnLabels[value];return option;}));
+  $('return-status').value=status==='none'?'requested':status;
+  $('return-reason').value=order.return_reason||'';$('return-resolution').value=order.return_resolution||'';
+  $('return-current').textContent='Estado de devolución: '+(returnLabels[status]||'Revisar');
+  $('return-date').textContent=order.return_updated_at?'Última actualización: '+date(order.return_updated_at):'';
+  lockActions();$('detail-feedback').textContent='';$('detail-body').hidden=false;
+}
 async function openDetail(id){
   const restoreRetryFocus=document.activeElement===$('retry-detail');
   detailId=id;$('retry-detail').hidden=true;
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
-    const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;currentOrder=order;
-    $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
-    $('detail-payment').textContent=payments[order.payment_status]||'Pago sin confirmar';$('detail-payment').className='badge '+order.payment_status;
-    $('detail-shipping').textContent=shippingLabel(order);$('detail-shipping').className='badge '+shippingTone(order);
-    $('customer').textContent=order.customer_name;$('email').textContent=order.email;$('phone').textContent=order.phone||'Teléfono no facilitado';$('address').textContent=address(order);
-    $('items').textContent=`Fumada XXL · ${order.quantity} × ${edition(order.edition)}`;$('subtotal').textContent=money(order.subtotal);$('shipping').textContent=money(order.shipping);$('total').textContent=money(order.total);
-    $('payment-note').textContent=order.payment_status==='paid'?(order.fulfillment_status==='shipped'?'Pago confirmado por la pasarela. Este pedido ya está enviado.':'Pago confirmado por la pasarela. Puedes preparar este pedido.'):order.payment_status==='pending'?'Pago pendiente de confirmación. No envíes el libro todavía.':order.payment_status==='refunded'?'Pago reembolsado. No prepares un envío.':'Este pago tiene una incidencia o un reembolso. Revisa la operación antes de realizar cualquier envío.';
-    $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending';$('ship-confirm').checked=false;$('tracking').value='';$('ship-button').disabled=false;
-    $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.tracking?' Seguimiento: '+order.tracking:''}`:'';
-    $('detail-feedback').textContent='';$('detail-body').hidden=false;
+    const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;renderDetail(order);
     if(restoreRetryFocus){$('detail-title').tabIndex=-1;$('detail-title').focus();}
   }catch(error){if(version===detailRequest){$('detail-feedback').textContent=error.message;$('retry-detail').hidden=false;if(restoreRetryFocus)$('retry-detail').focus();}}
 }
 $('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
+for(const key of ['pending','returns','incidents'])$('task-'+key).addEventListener('click',()=>{$('filter').value=key==='incidents'?'attention':key;$('search').value='';page=1;return load();});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
 $('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;const version=detailRequest;try{await navigator.clipboard.writeText(address(currentOrder));if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Dirección copiada.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-$('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);if($('detail').open&&currentOrder?.id===id){$('close-detail').focus();$('detail-message').textContent='Pedido marcado como enviado.';}}}catch(error){if($('detail').open&&currentOrder?.id===id){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}}});
+async function saveManagement(action,data,message,focusId){
+  if(saving||!currentOrder)return;
+  const id=currentOrder.id,version=detailRequest,expectedVersion=currentOrder.management_version||0;
+  const previousFocus=document.activeElement,drafts=[];
+  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution']};
+  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||''};
+  for(const [section,ids]of Object.entries(sections))if(section!==action)for(const fieldId of ids){const field=$(fieldId),check=fieldId.endsWith('-confirm');if(check?field.checked:field.value!==initial[fieldId])drafts.push({fieldId,value:field.value,checked:field.checked});}
+  let saved=false;
+  saving=true;lockActions();$('detail-message').textContent='Guardando…';
+  const stillCurrent=()=>version===detailRequest&&$('detail').open&&currentOrder?.id===id;
+  try{
+    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':action},body:JSON.stringify({...data,expectedVersion})});
+    if(!stillCurrent())return;
+    const updated=result.order||(await api('/api/admin/orders/'+encodeURIComponent(id))).order;
+    if(!stillCurrent())return;
+    renderDetail(updated);
+    for(const draft of drafts){$(draft.fieldId).value=draft.value;$(draft.fieldId).checked=draft.checked;}
+    saved=true;$('detail-message').textContent=message;await load();
+  }catch(error){if(stillCurrent())$('detail-message').textContent=error.message+' Tus cambios siguen en los campos. Revisa el dato e intenta guardar otra vez; si el pedido cambió en otra pestaña, cierra y vuelve a abrir el detalle.';}
+  finally{saving=false;lockActions();if(stillCurrent()){if(saved&&focusId)$(focusId).focus();else if(previousFocus?.isConnected)previousFocus.focus();}}
+}
+$('ship-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked||currentOrder.payment_status!=='paid'||currentOrder.fulfillment_status!=='pending'||activeReturn(currentOrder))return;return saveManagement('ship',{carrier:$('carrier').value.trim(),tracking:$('tracking').value.trim()},'Pedido marcado como enviado.','close-detail');});
+$('tracking-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||currentOrder.fulfillment_status!=='shipped'||currentOrder.delivered_at)return;return saveManagement('tracking',{carrier:$('tracking-carrier').value.trim(),tracking:$('tracking-code').value.trim()},'Seguimiento actualizado.','close-detail');});
+$('deliver-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!$('deliver-confirm').checked||currentOrder.fulfillment_status!=='shipped'||currentOrder.delivered_at)return;return saveManagement('deliver',{confirmed:true},'Entrega confirmada.','close-detail');});
+$('note-form').addEventListener('submit',event=>{event.preventDefault();return saveManagement('notes',{note:$('private-note').value.trim()},'Nota privada guardada.');});
+$('return-form').addEventListener('submit',event=>{
+  event.preventDefault();if(!currentOrder||!['paid','refunded','partially_refunded'].includes(currentOrder.payment_status))return;
+  const status=$('return-status').value,reason=$('return-reason').value.trim(),resolution=$('return-resolution').value.trim(),old=currentOrder.return_status||'none';
+  if(status!==old&&!(returnTransitions[old]||[]).includes(status)){$('detail-message').textContent='Ese cambio de estado no está disponible. Vuelve a abrir el pedido.';return;}
+  if(!reason){$('detail-message').textContent='Escribe el motivo de la devolución.';$('return-reason').focus();return;}
+  if(['closed','rejected'].includes(status)&&!resolution){$('detail-message').textContent='Escribe la resolución antes de cerrar o rechazar la devolución.';$('return-resolution').focus();return;}
+  return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
+});
 load();

@@ -15,6 +15,13 @@
       "when": 1790589562796,
       "tag": "0001_lonely_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790597047930,
+      "tag": "0002_cute_blazing_skull",
+      "breakpoints": true
     }
   ]
 }

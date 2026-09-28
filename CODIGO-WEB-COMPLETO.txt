@@ -1,8 +1,8 @@
 FUMADA XXL — CÓDIGO COMPLETO DE LA WEB
 
 Archivo de lectura para móvil. Contiene el código fuente, configuración, pruebas y documentación de web/. No ejecuta la página.
-Revisión Git de base: 30d197f19ff82b979ea9e167f84ff83a3614aaf7
-Incluye el carrito y formulario de invitado de prueba, además de las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
+Revisión Git de base: 601d237d6382e5e529fe7800be04862cfee1e050
+Incluye el panel ampliado con tareas, seguimiento, notas y devoluciones, junto al carrito de prueba y las mejoras de rendimiento, SEO y textos legales del 28 de septiembre de 2026.
 
 Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enumeran al final. No incluye claves ni bases de datos de pedidos.
 
@@ -37,27 +37,30 @@ Las imágenes y fuentes binarias no son código y se conservan en GitHub; se enu
 28. web/drizzle.config.ts
 29. web/drizzle/0000_cultured_mathemanic.sql
 30. web/drizzle/0001_lonely_black_bolt.sql
-31. web/drizzle/meta/0000_snapshot.json
-32. web/drizzle/meta/0001_snapshot.json
-33. web/drizzle/meta/_journal.json
-34. web/package.json
-35. web/pnpm-lock.yaml
-36. web/pnpm-workspace.yaml
-37. web/scripts/build.mjs
-38. web/scripts/package.mjs
-39. web/scripts/preview-admin.mjs
-40. web/serve.mjs
-41. web/tests/admin-ui.test.mjs
-42. web/tests/admin.test.mjs
-43. web/tests/breathing.test.mjs
-44. web/tests/cache.test.mjs
-45. web/tests/cart.test.mjs
-46. web/tests/database.mjs
-47. web/tests/search.test.mjs
-48. web/tests/seo.test.mjs
-49. web/tests/separation.test.mjs
-50. web/worker/database.mjs
-51. web/worker/index.mjs
+31. web/drizzle/0002_cute_blazing_skull.sql
+32. web/drizzle/meta/0000_snapshot.json
+33. web/drizzle/meta/0001_snapshot.json
+34. web/drizzle/meta/0002_snapshot.json
+35. web/drizzle/meta/_journal.json
+36. web/package.json
+37. web/pnpm-lock.yaml
+38. web/pnpm-workspace.yaml
+39. web/scripts/build.mjs
+40. web/scripts/package.mjs
+41. web/scripts/preview-admin.mjs
+42. web/serve.mjs
+43. web/tests/admin-ui.test.mjs
+44. web/tests/admin.test.mjs
+45. web/tests/breathing.test.mjs
+46. web/tests/cache.test.mjs
+47. web/tests/cart.test.mjs
+48. web/tests/database.mjs
+49. web/tests/management.test.mjs
+50. web/tests/search.test.mjs
+51. web/tests/seo.test.mjs
+52. web/tests/separation.test.mjs
+53. web/worker/database.mjs
+54. web/worker/index.mjs
 
 
 ========================================================================
@@ -258,10 +261,15 @@ const money=n=>moneyFormat.format(n/100);
 const date=n=>dateFormat.format(new Date(n));
 const payments={paid:'Pagado',pending:'Pago pendiente',failed:'Pago fallido',refunded:'Reembolsado',partially_refunded:'Reembolso parcial'};
 const edition=e=>e==='paperback'?'Tapa blanda':'Tapa dura';
-const shippingLabel=order=>order.fulfillment_status==='shipped'?'Enviado':({paid:'Por enviar',pending:'Pago pendiente',failed:'No enviar',refunded:'No enviar',partially_refunded:'Revisar pago'}[order.payment_status]||'Revisar pago');
-const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
+const shippingLabel=order=>order.delivered_at?'Entregado':order.fulfillment_status==='shipped'?'Enviado':order.payment_status==='paid'&&activeReturn(order)?'En pausa por devolución':({paid:'Por enviar',pending:'Pago pendiente',failed:'No enviar',refunded:'No enviar',partially_refunded:'Revisar pago'}[order.payment_status]||'Revisar pago');
+const shippingTone=order=>order.fulfillment_status==='shipped'?'shipped':activeReturn(order)?'return-state':order.payment_status==='paid'?'pending':['failed','refunded','partially_refunded'].includes(order.payment_status)?order.payment_status:'neutral';
 let detailOpener=null,detailId=null;
 let page=1,total=0,currentOrder=null,listRequest=0,detailRequest=0,loading=false,loadedPage=1;
+let saving=false;
+const returnLabels={none:'Sin devolución',requested:'Solicitada',reviewing:'En revisión',approved:'Aprobada',received:'Recibida',closed:'Cerrada',rejected:'Rechazada'};
+const returnTransitions={none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested']};
+const activeReturn=order=>['requested','reviewing','approved','received'].includes(order.return_status);
+function orderItems(order){return order.items?.length?order.items:[{edition:order.edition,quantity:order.quantity,unit_price:order.quantity?order.subtotal/order.quantity:0,subtotal:order.subtotal}];}
 async function api(path,options={}) {
   const response=await fetch(path,{credentials:'same-origin',cache:'no-store',...options});
   let body;try{body=await response.json();}catch{throw new Error('No se ha podido cargar la información. Actualiza e inténtalo de nuevo.');}
@@ -285,13 +293,16 @@ async function load() {
     if(page>1&&data.orders.length===0){page=1;return load();}
     loadedPage=page;
     $('stat-total').textContent=data.stats.total;$('stat-pending').textContent=data.stats.pending;$('stat-shipped').textContent=data.stats.shipped;
+    for(const key of ['pending','returns','incidents'])$('task-'+key+'-count').textContent=String(data.stats[key]??0);
+    for(const key of ['pending','returns','incidents'])$('task-'+key).setAttribute('aria-pressed',String($('filter').value===(key==='incidents'?'attention':key)));
     $('result-count').textContent=total===1?'1 pedido':`${total} pedidos`;
     $('rows').replaceChildren();
     for(const order of data.orders) {
       const tr=document.createElement('tr');tr.setAttribute('role','row');
       const customer=cell(order.customer_name), number=document.createElement('small'),small=document.createElement('small');number.className='order-number';number.textContent=order.id;small.textContent=date(order.created_at);customer.append(number,small);
-      const book=cell(`${order.quantity} × ${edition(order.edition)}`,'Libro'), amount=cell(money(order.total),'Total'), pay=cell('','Pago'),ship=cell('','Envío'),detail=cell('');
+      const book=cell(orderItems(order).map(item=>`${item.quantity} × ${edition(item.edition)}`).join(' · '),'Libro'), amount=cell(money(order.total),'Total'), pay=cell('','Pago'),ship=cell('','Envío'),detail=cell('');
       pay.append(badge(order.payment_status,payments[order.payment_status]||'Sin confirmar'));ship.append(badge(shippingTone(order),shippingLabel(order)));
+      if(order.return_status&&order.return_status!=='none')ship.append(badge('return-state','Devolución: '+(returnLabels[order.return_status]||'Revisar')));
       const button=document.createElement('button');button.type='button';button.className='text-link';button.textContent='Ver pedido';button.setAttribute('aria-label',`Ver pedido de ${order.customer_name}, ${order.id}`);button.addEventListener('click',()=>openDetail(order.id));detail.append(button);tr.append(customer,book,amount,pay,ship,detail);$('rows').append(tr);
     }
     $('feedback').hidden=true;
@@ -304,36 +315,86 @@ async function load() {
     const keepPaginationFocus=paginationFocus&&document.activeElement===paginationFocus;
     $('pagination').hidden=total<=20;$('previous').disabled=page===1;$('next').disabled=page*20>=total;$('page-label').textContent=`Página ${page} de ${Math.max(1,Math.ceil(total/20))}`;
     if(keepPaginationFocus&&paginationFocus.disabled){const target=$('pagination').hidden?$('orders-title'):$('page-label');target.tabIndex=-1;target.focus();}
-  }catch(error){if(version!==listRequest)return;page=loadedPage;$('feedback').className='feedback error';$('feedback').textContent=error.message+(hadRows?' Se mantienen los últimos resultados. Pulsa Actualizar para reintentarlo.':'');if(!hadRows){$('result-count').textContent='No disponible';for(const id of ['stat-total','stat-pending','stat-shipped'])$(id).textContent='—';}}
+  }catch(error){if(version!==listRequest)return;page=loadedPage;$('feedback').className='feedback error';$('feedback').textContent=error.message+(hadRows?' Se mantienen los últimos resultados. Pulsa Actualizar para reintentarlo.':'');if(!hadRows){$('result-count').textContent='No disponible';for(const id of ['stat-total','stat-pending','stat-shipped','task-pending-count','task-returns-count','task-incidents-count'])$(id).textContent='—';}}
   finally{if(version===listRequest){loading=false;$('table-wrap').setAttribute('aria-busy','false');for(const id of ['refresh','previous','next'])$(id).removeAttribute('aria-disabled');}}
 }
 const countries=new Intl.DisplayNames(['es'],{type:'region'});
 function countryName(code){try{return countries.of(code)||code;}catch{return code;}}
 function address(order){return[order.recipient,order.address1,order.address2,`${order.postal_code} ${order.city}`,order.region,countryName(order.country)].filter(Boolean).join('\n');}
+function lockActions(){for(const id of ['ship-fields','tracking-fields','deliver-fields','note-fields','return-fields'])$(id).disabled=saving;}
+function renderDetail(order){
+  currentOrder=order;
+  $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
+  $('detail-payment').textContent=payments[order.payment_status]||'Pago sin confirmar';$('detail-payment').className='badge '+order.payment_status;
+  $('detail-shipping').textContent=shippingLabel(order);$('detail-shipping').className='badge '+shippingTone(order);
+  $('customer').textContent=order.customer_name;$('email').textContent=order.email;$('phone').textContent=order.phone||'Teléfono no facilitado';$('address').textContent=address(order);
+  $('items').replaceChildren(...orderItems(order).map(item=>{const line=document.createElement('li');line.textContent=`${item.quantity} × ${edition(item.edition)} · ${money(item.unit_price)} por ejemplar · Subtotal ${money(item.subtotal)}`;return line;}));
+  $('subtotal').textContent=money(order.subtotal);$('shipping').textContent=money(order.shipping);$('total').textContent=money(order.total);
+  $('payment-note').textContent=order.payment_status==='paid'?(activeReturn(order)?'Pago confirmado. Hay una devolución activa: revisa su gestión antes de preparar el envío.':order.fulfillment_status==='shipped'?'Pago confirmado por la pasarela. Este pedido ya está enviado.':'Pago confirmado por la pasarela. Puedes preparar este pedido.'):order.payment_status==='pending'?'Pago pendiente de confirmación. No envíes el libro todavía.':order.payment_status==='refunded'?'Pago reembolsado. No prepares un envío.':'Este pago tiene una incidencia o un reembolso. Revisa la operación antes de realizar cualquier envío.';
+  $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending'||activeReturn(order);
+  $('ship-confirm').checked=false;$('carrier').value=order.carrier||'';$('tracking').value=order.tracking||'';$('ship-button').disabled=false;
+  const canTrack=order.fulfillment_status==='shipped'&&!order.delivered_at;
+  $('tracking-form').hidden=!canTrack;$('deliver-form').hidden=!canTrack;
+  $('tracking-carrier').value=order.carrier||'';$('tracking-code').value=order.tracking||'';$('deliver-confirm').checked=false;
+  $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.carrier?' Transportista: '+order.carrier+'.':''}${order.tracking?' Seguimiento: '+order.tracking+'.':''}${order.delivered_at?' Entrega confirmada el '+date(order.delivered_at)+'.':''}`:'';
+  $('private-note').value=order.private_note||'';$('note-date').textContent=order.note_updated_at?'Última actualización: '+date(order.note_updated_at):'Solo visible en este panel. No se incluye al imprimir.';
+  $('return-form').hidden=!['paid','refunded','partially_refunded'].includes(order.payment_status);
+  const status=order.return_status||'none',options=[...new Set([...(status==='none'?[]:[status]),...(returnTransitions[status]||[])])];
+  $('return-status').replaceChildren(...options.map(value=>{const option=document.createElement('option');option.value=value;option.textContent=returnLabels[value];return option;}));
+  $('return-status').value=status==='none'?'requested':status;
+  $('return-reason').value=order.return_reason||'';$('return-resolution').value=order.return_resolution||'';
+  $('return-current').textContent='Estado de devolución: '+(returnLabels[status]||'Revisar');
+  $('return-date').textContent=order.return_updated_at?'Última actualización: '+date(order.return_updated_at):'';
+  lockActions();$('detail-feedback').textContent='';$('detail-body').hidden=false;
+}
 async function openDetail(id){
   const restoreRetryFocus=document.activeElement===$('retry-detail');
   detailId=id;$('retry-detail').hidden=true;
   const version=++detailRequest;currentOrder=null;$('detail-body').hidden=true;$('detail-message').textContent='';$('detail-feedback').textContent='Cargando pedido…';if(!$('detail').open){detailOpener=document.activeElement;$('detail').showModal();}
   try{
-    const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;currentOrder=order;
-    $('detail-title').textContent='Pedido '+order.id;$('detail-date').textContent=date(order.created_at);
-    $('detail-payment').textContent=payments[order.payment_status]||'Pago sin confirmar';$('detail-payment').className='badge '+order.payment_status;
-    $('detail-shipping').textContent=shippingLabel(order);$('detail-shipping').className='badge '+shippingTone(order);
-    $('customer').textContent=order.customer_name;$('email').textContent=order.email;$('phone').textContent=order.phone||'Teléfono no facilitado';$('address').textContent=address(order);
-    $('items').textContent=`Fumada XXL · ${order.quantity} × ${edition(order.edition)}`;$('subtotal').textContent=money(order.subtotal);$('shipping').textContent=money(order.shipping);$('total').textContent=money(order.total);
-    $('payment-note').textContent=order.payment_status==='paid'?(order.fulfillment_status==='shipped'?'Pago confirmado por la pasarela. Este pedido ya está enviado.':'Pago confirmado por la pasarela. Puedes preparar este pedido.'):order.payment_status==='pending'?'Pago pendiente de confirmación. No envíes el libro todavía.':order.payment_status==='refunded'?'Pago reembolsado. No prepares un envío.':'Este pago tiene una incidencia o un reembolso. Revisa la operación antes de realizar cualquier envío.';
-    $('ship-form').hidden=order.payment_status!=='paid'||order.fulfillment_status!=='pending';$('ship-confirm').checked=false;$('tracking').value='';$('ship-button').disabled=false;
-    $('shipping-info').textContent=order.fulfillment_status==='shipped'?`Enviado${order.shipped_at?' el '+date(order.shipped_at):''}.${order.tracking?' Seguimiento: '+order.tracking:''}`:'';
-    $('detail-feedback').textContent='';$('detail-body').hidden=false;
+    const {order}=await api('/api/admin/orders/'+encodeURIComponent(id));if(version!==detailRequest)return;renderDetail(order);
     if(restoreRetryFocus){$('detail-title').tabIndex=-1;$('detail-title').focus();}
   }catch(error){if(version===detailRequest){$('detail-feedback').textContent=error.message;$('retry-detail').hidden=false;if(restoreRetryFocus)$('retry-detail').focus();}}
 }
 $('retry-detail').addEventListener('click',()=>{if(detailId)return openDetail(detailId);});
+for(const key of ['pending','returns','incidents'])$('task-'+key).addEventListener('click',()=>{$('filter').value=key==='incidents'?'attention':key;$('search').value='';page=1;return load();});
 $('search-form').addEventListener('submit',event=>{event.preventDefault();page=1;load();});$('filter').addEventListener('change',()=>{page=1;load();});$('refresh').addEventListener('click',()=>{if(!loading)load();});$('previous').addEventListener('click',()=>{if(!loading){page--;load();}});$('next').addEventListener('click',()=>{if(!loading){page++;load();}});
 $('close-detail').addEventListener('click',()=>$('detail').close());$('detail').addEventListener('close',()=>{detailRequest++;currentOrder=null;if(detailOpener?.isConnected)detailOpener.focus();else $('refresh').focus();});
 $('copy-address').addEventListener('click',async()=>{if(!currentOrder)return;const version=detailRequest;try{await navigator.clipboard.writeText(address(currentOrder));if(version===detailRequest&&$('detail').open)$('detail-message').textContent='Dirección copiada.';}catch{if(version===detailRequest&&$('detail').open)$('detail-message').textContent='No se ha podido copiar. Puedes seleccionar el texto de la dirección.';}});
 $('print-order').addEventListener('click',()=>{if(currentOrder)window.print();});
-$('ship-form').addEventListener('submit',async event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked)return;const id=currentOrder.id;$('ship-button').disabled=true;$('detail-message').textContent='Guardando…';try{await api('/api/admin/orders/'+encodeURIComponent(id)+'/ship',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':'ship'},body:JSON.stringify({tracking:$('tracking').value.trim()})});await load();if($('detail').open&&currentOrder?.id===id){await openDetail(id);if($('detail').open&&currentOrder?.id===id){$('close-detail').focus();$('detail-message').textContent='Pedido marcado como enviado.';}}}catch(error){if($('detail').open&&currentOrder?.id===id){$('detail-message').textContent=error.message;$('ship-button').disabled=false;}}});
+async function saveManagement(action,data,message,focusId){
+  if(saving||!currentOrder)return;
+  const id=currentOrder.id,version=detailRequest,expectedVersion=currentOrder.management_version||0;
+  const previousFocus=document.activeElement,drafts=[];
+  const sections={ship:['carrier','tracking','ship-confirm'],tracking:['tracking-carrier','tracking-code'],deliver:['deliver-confirm'],notes:['private-note'],return:['return-status','return-reason','return-resolution']};
+  const initial={'carrier':currentOrder.carrier||'','tracking':currentOrder.tracking||'','tracking-carrier':currentOrder.carrier||'','tracking-code':currentOrder.tracking||'','private-note':currentOrder.private_note||'','return-status':(!currentOrder.return_status||currentOrder.return_status==='none')?'requested':currentOrder.return_status,'return-reason':currentOrder.return_reason||'','return-resolution':currentOrder.return_resolution||''};
+  for(const [section,ids]of Object.entries(sections))if(section!==action)for(const fieldId of ids){const field=$(fieldId),check=fieldId.endsWith('-confirm');if(check?field.checked:field.value!==initial[fieldId])drafts.push({fieldId,value:field.value,checked:field.checked});}
+  let saved=false;
+  saving=true;lockActions();$('detail-message').textContent='Guardando…';
+  const stillCurrent=()=>version===detailRequest&&$('detail').open&&currentOrder?.id===id;
+  try{
+    const result=await api('/api/admin/orders/'+encodeURIComponent(id)+'/'+action,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Action':action},body:JSON.stringify({...data,expectedVersion})});
+    if(!stillCurrent())return;
+    const updated=result.order||(await api('/api/admin/orders/'+encodeURIComponent(id))).order;
+    if(!stillCurrent())return;
+    renderDetail(updated);
+    for(const draft of drafts){$(draft.fieldId).value=draft.value;$(draft.fieldId).checked=draft.checked;}
+    saved=true;$('detail-message').textContent=message;await load();
+  }catch(error){if(stillCurrent())$('detail-message').textContent=error.message+' Tus cambios siguen en los campos. Revisa el dato e intenta guardar otra vez; si el pedido cambió en otra pestaña, cierra y vuelve a abrir el detalle.';}
+  finally{saving=false;lockActions();if(stillCurrent()){if(saved&&focusId)$(focusId).focus();else if(previousFocus?.isConnected)previousFocus.focus();}}
+}
+$('ship-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!$('ship-confirm').checked||currentOrder.payment_status!=='paid'||currentOrder.fulfillment_status!=='pending'||activeReturn(currentOrder))return;return saveManagement('ship',{carrier:$('carrier').value.trim(),tracking:$('tracking').value.trim()},'Pedido marcado como enviado.','close-detail');});
+$('tracking-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||currentOrder.fulfillment_status!=='shipped'||currentOrder.delivered_at)return;return saveManagement('tracking',{carrier:$('tracking-carrier').value.trim(),tracking:$('tracking-code').value.trim()},'Seguimiento actualizado.','close-detail');});
+$('deliver-form').addEventListener('submit',event=>{event.preventDefault();if(!currentOrder||!$('deliver-confirm').checked||currentOrder.fulfillment_status!=='shipped'||currentOrder.delivered_at)return;return saveManagement('deliver',{confirmed:true},'Entrega confirmada.','close-detail');});
+$('note-form').addEventListener('submit',event=>{event.preventDefault();return saveManagement('notes',{note:$('private-note').value.trim()},'Nota privada guardada.');});
+$('return-form').addEventListener('submit',event=>{
+  event.preventDefault();if(!currentOrder||!['paid','refunded','partially_refunded'].includes(currentOrder.payment_status))return;
+  const status=$('return-status').value,reason=$('return-reason').value.trim(),resolution=$('return-resolution').value.trim(),old=currentOrder.return_status||'none';
+  if(status!==old&&!(returnTransitions[old]||[]).includes(status)){$('detail-message').textContent='Ese cambio de estado no está disponible. Vuelve a abrir el pedido.';return;}
+  if(!reason){$('detail-message').textContent='Escribe el motivo de la devolución.';$('return-reason').focus();return;}
+  if(['closed','rejected'].includes(status)&&!resolution){$('detail-message').textContent='Escribe la resolución antes de cerrar o rechazar la devolución.';$('return-resolution').focus();return;}
+  return saveManagement('return',{status,reason,resolution},'Gestión de devolución guardada. El estado del pago no cambia.');
+});
 load();
 
 
@@ -349,11 +410,22 @@ ARCHIVO: web/admin/index.html
 <main id="contenido"><header class="heading"><div><p class="eyebrow">TU LIBRO, EN BUENAS MANOS</p><h1>Mis pedidos<span>.</span></h1><p>Todo lo que necesitas para preparar cada envío.</p></div><button class="secondary" id="refresh" type="button"><span aria-hidden="true">↻</span> Actualizar</button></header>
 <section class="setup-note" aria-labelledby="setup-title"><div class="note-icon" aria-hidden="true">i</div><div><h2 id="setup-title">El cobro todavía no está conectado</h2><p>Este es tu espacio privado para gestionar las ventas. Cuando activemos el pago, aquí aparecerán los pedidos y los datos de envío. Ahora la web no acepta compras.</p></div><span class="badge neutral">Pendiente de Stripe</span></section>
 <section class="stats" aria-label="Resumen de pedidos"><article><p>Pedidos recibidos</p><strong id="stat-total">—</strong><span>Todos los pedidos registrados</span></article><article><p>Por preparar</p><strong id="stat-pending">—</strong><span>Pagados y pendientes de envío</span></article><article><p>Enviados</p><strong id="stat-shipped">—</strong><span>Marcados como enviados por ti</span></article></section>
-<section class="orders-section" aria-labelledby="orders-title"><div class="section-heading"><h2 id="orders-title">Tus pedidos</h2><span class="caption" id="result-count" role="status" aria-live="polite">Cargando…</span></div><form id="search-form" class="tools"><div class="search"><label class="sr-only" for="search">Buscar por cliente, correo o número de pedido</label><input id="search" name="q" autocomplete="off" type="search" maxlength="120" placeholder="Cliente, correo o número de pedido"><button type="submit">Buscar</button></div><label class="filter"><span class="sr-only">Filtrar pedidos</span><select id="filter" name="filter"><option value="all">Todos los pedidos</option><option value="pending">Por preparar</option><option value="shipped">Enviados</option><option value="unpaid">Pago pendiente</option><option value="incidents">Incidencias y reembolsos</option></select></label></form>
+<section class="task-strip" aria-label="Gestiones pendientes"><button type="button" id="task-pending" aria-pressed="false"><span>Por preparar</span><strong id="task-pending-count">—</strong><small>Revisar envíos pendientes</small></button><button type="button" id="task-returns" aria-pressed="false"><span>Devoluciones activas</span><strong id="task-returns-count">—</strong><small>Revisar solicitudes y recepción</small></button><button type="button" id="task-incidents" aria-pressed="false"><span>Incidencias por revisar</span><strong id="task-incidents-count">—</strong><small>Revisar pagos y devoluciones</small></button></section>
+<section class="orders-section" aria-labelledby="orders-title"><div class="section-heading"><h2 id="orders-title">Tus pedidos</h2><span class="caption" id="result-count" role="status" aria-live="polite">Cargando…</span></div><form id="search-form" class="tools"><div class="search"><label class="sr-only" for="search">Buscar por cliente, correo o número de pedido</label><input id="search" name="q" autocomplete="off" type="search" maxlength="120" placeholder="Cliente, correo o número de pedido…"><button type="submit">Buscar</button></div><label class="filter"><span class="sr-only">Filtrar pedidos</span><select id="filter" name="filter"><option value="all">Todos los pedidos</option><option value="pending">Por preparar</option><option value="shipped">Enviados</option><option value="delivered">Entregados</option><option value="returns">Devoluciones activas</option><option value="unpaid">Pago pendiente</option><option value="attention">Incidencias por revisar</option><option value="incidents">Incidencias y reembolsos</option></select></label></form>
 <div id="feedback" role="status" aria-live="polite" class="feedback">Cargando tus pedidos…</div><div id="table-wrap" class="table-wrap" tabindex="0" role="region" aria-label="Lista de pedidos" hidden><table role="table" aria-label="Tus pedidos"><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Pedido / cliente</th><th scope="col" role="columnheader">Libro</th><th scope="col" role="columnheader">Total</th><th scope="col" role="columnheader">Pago</th><th scope="col" role="columnheader">Envío</th><th scope="col" role="columnheader"><span class="sr-only">Detalles</span></th></tr></thead><tbody id="rows" role="rowgroup"></tbody></table></div>
 <div id="empty" class="empty" hidden><div class="empty-icon" aria-hidden="true">▤</div><h3 id="empty-title">Tu primer pedido tendrá su lugar aquí</h3><p id="empty-text">Podrás ver quién ha comprado, a qué dirección enviar el libro y si el pago está confirmado.</p><a href="/#comprar" class="text-link">Ver cómo queda la tienda <span aria-hidden="true">↗</span></a></div><div class="pagination" id="pagination" hidden><button class="secondary" id="previous">← Anterior</button><span id="page-label" tabindex="-1" role="status" aria-live="polite"></span><button class="secondary" id="next">Siguiente →</button></div></section>
 <footer class="dashboard-footer"><span><span aria-hidden="true">◈</span> Solo tu cuenta puede ver los datos de los compradores.</span><a href="/privacidad.html">Privacidad</a></footer></main></div>
-<dialog id="detail" aria-labelledby="detail-heading"><div class="dialog-top"><p class="eyebrow" id="detail-heading">DETALLE DEL PEDIDO</p><button id="close-detail" class="close" aria-label="Cerrar detalle">×</button></div><div id="detail-feedback" role="status"></div><button id="retry-detail" class="secondary" type="button" hidden>Reintentar</button><div id="detail-body" hidden><p class="print-only print-heading">Fumada XXL · Hoja de preparación<br><span>No es una factura</span></p><h2 id="detail-title"></h2><p class="caption" id="detail-date"></p><div class="status-line"><span id="detail-payment" class="badge"></span><span id="detail-shipping" class="badge"></span></div><div class="detail-grid"><section><h3>Comprador</h3><p id="customer"></p><p id="email"></p><p id="phone"></p></section><section><h3>Enviar a</h3><address id="address"></address><div class="address-actions"><button class="text-link" id="copy-address" type="button">Copiar dirección</button><button class="text-link" id="print-order" type="button">Imprimir pedido</button></div></section></div><section class="order-summary"><h3>Resumen de compra</h3><p id="items"></p><dl><div><dt>Libro(s)</dt><dd id="subtotal"></dd></div><div><dt>Envío</dt><dd id="shipping"></dd></div><div><dt>Total</dt><dd id="total"></dd></div></dl></section><p id="payment-note" class="payment-note"></p><form id="ship-form" class="ship-form" hidden><h3>Preparar el envío</h3><label for="tracking">Número de seguimiento <span class="caption">(opcional)</span></label><input id="tracking" name="tracking" spellcheck="false" maxlength="120" autocomplete="off" placeholder="Código del transportista"><label class="confirmation"><input type="checkbox" id="ship-confirm" required> Confirmo que he entregado este pedido al transportista.</label><button class="button" type="submit" id="ship-button">Marcar como enviado</button></form><p id="shipping-info"></p></div><p id="detail-message" role="status" aria-live="polite"></p></dialog>
+<dialog id="detail" aria-labelledby="detail-heading"><div class="dialog-top"><p class="eyebrow" id="detail-heading">DETALLE DEL PEDIDO</p><button id="close-detail" class="close" aria-label="Cerrar detalle">×</button></div><div id="detail-feedback" role="status"></div><button id="retry-detail" class="secondary" type="button" hidden>Reintentar</button><div id="detail-body" hidden>
+<p class="print-only print-heading">Fumada XXL · Hoja de preparación<br><span>No es una factura</span></p><h2 id="detail-title" tabindex="-1"></h2><p class="caption" id="detail-date"></p><div class="status-line"><span id="detail-payment" class="badge"></span><span id="detail-shipping" class="badge"></span></div>
+<div class="detail-grid"><section><h3>Comprador</h3><p id="customer"></p><p id="email"></p><p id="phone"></p></section><section><h3>Enviar a</h3><address id="address"></address><div class="address-actions"><button class="text-link" id="copy-address" type="button">Copiar dirección</button><button class="text-link" id="print-order" type="button">Imprimir pedido</button></div></section></div>
+<section class="order-summary"><h3>Resumen de compra</h3><ul id="items" class="order-items"></ul><dl><div><dt>Libro(s)</dt><dd id="subtotal"></dd></div><div><dt>Envío</dt><dd id="shipping"></dd></div><div><dt>Total</dt><dd id="total"></dd></div></dl></section><p id="payment-note" class="payment-note"></p>
+<form id="ship-form" class="management-form ship-form" hidden><fieldset id="ship-fields"><legend>Preparar el envío</legend><label for="carrier">Transportista <span class="caption">(opcional)</span></label><input id="carrier" name="carrier" maxlength="80" autocomplete="off" placeholder="Nombre del transportista…"><label for="tracking">Número de seguimiento <span class="caption">(opcional)</span></label><input id="tracking" name="tracking" spellcheck="false" maxlength="120" autocomplete="off" placeholder="Código del transportista…"><label class="confirmation"><input type="checkbox" id="ship-confirm" required> <span>Confirmo que he entregado este pedido al transportista.</span></label><button class="button" type="submit" id="ship-button">Marcar como enviado</button></fieldset></form>
+<p id="shipping-info"></p>
+<form id="tracking-form" class="management-form" hidden><fieldset id="tracking-fields"><legend>Seguimiento del envío</legend><label for="tracking-carrier">Transportista <span class="caption">(opcional)</span></label><input id="tracking-carrier" name="carrier" maxlength="80" autocomplete="off" placeholder="Nombre del transportista…"><label for="tracking-code">Número de seguimiento <span class="caption">(opcional)</span></label><input id="tracking-code" name="tracking" maxlength="120" spellcheck="false" autocomplete="off" placeholder="Código del transportista…"><button class="button" type="submit">Guardar seguimiento</button></fieldset></form>
+<form id="deliver-form" class="management-form" hidden><fieldset id="deliver-fields"><legend>Confirmar entrega</legend><p class="management-help">Marca la entrega cuando hayas comprobado que el destinatario ha recibido el pedido.</p><label class="confirmation"><input type="checkbox" id="deliver-confirm" required> <span>Confirmo que el pedido ha sido entregado al destinatario.</span></label><button class="button" type="submit">Marcar como entregado</button></fieldset></form>
+<form id="note-form" class="management-form private-management"><fieldset id="note-fields"><legend>Nota privada</legend><label for="private-note">Indicaciones para gestionar este pedido</label><textarea id="private-note" name="note" maxlength="2000" rows="4" aria-describedby="note-date" placeholder="Anota lo que necesitas recordar…"></textarea><p id="note-date" class="management-help">Solo visible en este panel. No se incluye al imprimir.</p><button class="button" type="submit">Guardar nota privada</button></fieldset></form>
+<form id="return-form" class="management-form private-management" hidden><fieldset id="return-fields"><legend>Gestión de devolución</legend><p id="return-current" class="management-help"></p><p class="management-help" id="return-payment-help"><strong>Guardar esta gestión no devuelve dinero.</strong> El estado del pago solo lo actualiza la pasarela.</p><label for="return-status">Estado de la devolución</label><select id="return-status" name="status" aria-describedby="return-payment-help"></select><label for="return-reason">Motivo de la devolución</label><textarea id="return-reason" name="reason" maxlength="1000" rows="3" required placeholder="Describe el motivo…"></textarea><label for="return-resolution">Resolución <span class="caption">(obligatoria al cerrar o rechazar)</span></label><textarea id="return-resolution" name="resolution" maxlength="1000" rows="3" placeholder="Describe cómo se ha resuelto…"></textarea><p id="return-date" class="management-help"></p><button class="button" type="submit">Guardar gestión de devolución</button></fieldset></form>
+</div><p id="detail-message" role="status" aria-live="polite" aria-atomic="true"></p></dialog>
 </body></html>
 
 
@@ -405,6 +477,21 @@ main{min-width:0}
 @media(max-width:720px){.table-hint{display:block;margin:0;padding:12px 17px;color:var(--muted);font-size:12px;background:#f6f7f1}.table-wrap:focus-visible{outline:2px solid var(--olive);outline-offset:-2px}}
 
 .order-number{font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.task-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 28px}
+.task-strip button{display:grid;grid-template-columns:1fr auto;gap:9px;text-align:left;min-height:100px;background:#ecefe5;border:1px solid #cbd2be;border-radius:7px;padding:18px;color:var(--ink)}
+.task-strip button:hover,.task-strip button[aria-pressed=true]{background:#dfe6d3;border-color:var(--olive)}
+.task-strip span{font-size:14px;font-weight:500;line-height:1.5}.task-strip strong{font:25px/1.3 'Playfair Display',serif;font-variant-numeric:tabular-nums}.task-strip small{grid-column:1/-1;color:var(--muted);font-size:12px;line-height:1.6}
+.order-items{list-style:none;padding:0;margin:0}.order-items li{font-size:14px;line-height:1.8;padding-block:10px;border-bottom:1px solid #dde2d3;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.order-items li:last-child{border:0}.badge.return-state{display:block;white-space:normal;line-height:1.6;margin-top:7px;background:#eee7db;color:#705337}
+.status-line{flex-wrap:wrap}.management-form{border-top:1px solid var(--line);margin-top:24px;padding-top:24px}
+.management-form fieldset{border:0;margin:0;padding:0;min-width:0}.management-form legend{font:22px/1.4 'Playfair Display',serif;padding:0;margin-bottom:18px}
+.management-form label{display:block;font-size:14px;line-height:1.6;margin-bottom:6px}.management-form input:not([type=checkbox]),.management-form textarea,.management-form select{display:block;width:100%;min-height:48px;font:16px/1.6 'DM Sans',sans-serif;color:var(--ink);background:var(--paper);border:1px solid #abb69a;border-radius:4px;padding:11px 12px;margin:0 0 18px}
+.management-form textarea{resize:vertical}.management-form textarea:focus-visible{outline:2px solid var(--olive);outline-offset:3px}
+.management-form .confirmation{cursor:pointer;min-height:44px;align-items:center;margin-bottom:18px}.confirmation input{flex-shrink:0;width:20px;height:20px}
+.management-form .button{font-size:14px;min-height:48px}.management-help{font-size:14px;line-height:1.8;color:var(--muted);margin:0 0 18px;overflow-wrap:anywhere}
+.management-form fieldset:disabled{opacity:.65}.management-form fieldset:disabled button{cursor:wait}#detail-message{font-size:14px;overflow-wrap:anywhere}
+@media(max-width:720px){.task-strip{grid-template-columns:1fr;gap:10px;margin-bottom:24px}.task-strip button{min-height:92px;padding:16px 18px}.task-strip strong{font-size:29px}dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px);padding:22px 18px}.management-form .button{display:block;width:100%;white-space:normal;line-height:1.6}.management-form legend{font-size:23px}.address-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.address-actions button{min-height:48px;border:1px solid #b7c0ab;border-radius:4px;padding:10px;font-size:14px;background:var(--paper)}.table-wrap td:last-child{grid-column:1/-1;justify-self:stretch}.table-wrap td:last-child button{width:100%;min-height:48px;font-size:14px}.table-wrap tr{padding:18px 16px;gap:18px}.table-wrap tbody{padding-inline:10px;gap:12px}.table-wrap td:nth-child(2){line-height:1.7}.stats{grid-template-columns:1fr}.stats article{display:grid;grid-template-columns:1fr auto;gap:8px 16px}.stats p{min-height:0;margin:0;font-size:14px}.stats strong{grid-column:2;grid-row:1/3;align-self:center;font-size:32px}.stats span{margin:0;min-height:0}.search{min-height:48px}.search button{min-width:76px}.section-heading{gap:12px;flex-wrap:wrap}.filter select{height:48px}.heading{flex-wrap:wrap}.heading p:last-child{max-width:none}}
+@media print{.task-strip,.management-form,.private-management{display:none!important}.order-items li{font-size:11pt;break-inside:avoid}}
 .address-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 [aria-disabled=true]{opacity:.6;cursor:wait}
 .print-only{display:none}
@@ -455,6 +542,18 @@ main{min-width:0}
  #detail p,#detail address,#detail h2,#detail h3,#detail .caption,#detail .badge{color:#111}
  #detail .badge{border:1px solid #777;background:white;white-space:normal}
 }
+/* Keep summary compact and let the mobile order actions fill their cards. */
+@media(max-width:720px){
+ .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .stats article{display:block;padding:16px 10px}
+ .stats p{font-size:12px;min-height:36px;margin-bottom:8px}
+ .stats strong{font-size:30px}
+ .stats span{display:none}
+ .table-wrap td:last-child{grid-column:1/-1;justify-self:stretch}
+ .table-wrap td:last-child button{width:100%;font-size:14px;min-height:48px}
+ .address-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .heading .secondary{margin-top:0}
+}
 
 
 
@@ -462,7 +561,7 @@ main{min-width:0}
 ARCHIVO: web/db/schema.ts
 ========================================================================
 
-import { sqliteTable, text, integer, index, check } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, index, check, primaryKey } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 export const owner = sqliteTable('admin_owner', {
   slot: integer('slot').primaryKey(), userId: text('user_id').notNull(),
@@ -476,6 +575,11 @@ export const orders = sqliteTable('orders', {
   subtotal: integer('subtotal').notNull(), shipping: integer('shipping').notNull(), total: integer('total').notNull(),
   paymentStatus: text('payment_status').notNull(), fulfillmentStatus: text('fulfillment_status').notNull().default('pending'),
   paidAt: integer('paid_at'), shippedAt: integer('shipped_at'), tracking: text('tracking'),
+  carrier: text('carrier'), deliveredAt: integer('delivered_at'),
+  privateNote: text('private_note').notNull().default(''), noteUpdatedAt: integer('note_updated_at'),
+  returnStatus: text('return_status').notNull().default('none'),
+  returnReason: text('return_reason').default(''), returnResolution: text('return_resolution').default(''),
+  returnUpdatedAt: integer('return_updated_at'), managementVersion: integer('management_version').notNull().default(0),
 }, t => [index('orders_created').on(t.createdAt,t.id),
 index('orders_payment_fulfillment_created').on(t.paymentStatus,t.fulfillmentStatus,t.createdAt,t.id),
 index('orders_fulfillment_created').on(t.fulfillmentStatus,t.createdAt,t.id),
@@ -484,6 +588,15 @@ check('order_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
 check('order_payment',sql`${t.paymentStatus} IN ('pending','paid','failed','refunded','partially_refunded')`),
 check('order_fulfillment',sql`${t.fulfillmentStatus} IN ('pending','shipped')`),
 check('order_total',sql`${t.total} = ${t.subtotal} + ${t.shipping} AND ${t.shipping} >= 0 AND ${t.subtotal} >= 0`)]);
+export const orderItems = sqliteTable('order_items', {
+  orderId: text('order_id').notNull().references(()=>orders.id,{onDelete:'cascade'}),
+  edition: text('edition').notNull(), quantity: integer('quantity').notNull(), unitPrice: integer('unit_price').notNull(),
+}, t=>[
+  primaryKey({columns:[t.orderId,t.edition]}),
+  check('item_edition',sql`${t.edition} IN ('paperback','hardcover')`),
+  check('item_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
+  check('item_unit_price',sql`${t.unitPrice} >= 0`),
+]);
 
 
 
@@ -1677,6 +1790,33 @@ CREATE INDEX `orders_fulfillment_created` ON `orders` (`fulfillment_status`,`cre
 
 
 ========================================================================
+ARCHIVO: web/drizzle/0002_cute_blazing_skull.sql
+========================================================================
+
+CREATE TABLE `order_items` (
+	`order_id` text NOT NULL,
+	`edition` text NOT NULL,
+	`quantity` integer NOT NULL,
+	`unit_price` integer NOT NULL,
+	PRIMARY KEY(`order_id`, `edition`),
+	FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON UPDATE no action ON DELETE cascade,
+	CONSTRAINT "item_edition" CHECK("order_items"."edition" IN ('paperback','hardcover')),
+	CONSTRAINT "item_quantity" CHECK("order_items"."quantity" BETWEEN 1 AND 10),
+	CONSTRAINT "item_unit_price" CHECK("order_items"."unit_price" >= 0)
+);
+--> statement-breakpoint
+ALTER TABLE `orders` ADD `carrier` text;--> statement-breakpoint
+ALTER TABLE `orders` ADD `delivered_at` integer;--> statement-breakpoint
+ALTER TABLE `orders` ADD `private_note` text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `note_updated_at` integer;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_status` text DEFAULT 'none' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_reason` text DEFAULT '';--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_resolution` text DEFAULT '';--> statement-breakpoint
+ALTER TABLE `orders` ADD `return_updated_at` integer;--> statement-breakpoint
+ALTER TABLE `orders` ADD `management_version` integer DEFAULT 0 NOT NULL;
+
+
+========================================================================
 ARCHIVO: web/drizzle/meta/0000_snapshot.json
 ========================================================================
 
@@ -2192,6 +2332,414 @@ ARCHIVO: web/drizzle/meta/0001_snapshot.json
 
 
 ========================================================================
+ARCHIVO: web/drizzle/meta/0002_snapshot.json
+========================================================================
+
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "400217b6-75ed-4b8f-ba13-0853398b4a55",
+  "prevId": "5572bba7-755b-41aa-923d-578c19d10277",
+  "tables": {
+    "order_items": {
+      "name": "order_items",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "order_items_order_id_edition_pk": {
+          "columns": [
+            "order_id",
+            "edition"
+          ],
+          "name": "order_items_order_id_edition_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "item_edition": {
+          "name": "item_edition",
+          "value": "\"order_items\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "item_quantity": {
+          "name": "item_quantity",
+          "value": "\"order_items\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "item_unit_price": {
+          "name": "item_unit_price",
+          "value": "\"order_items\".\"unit_price\" >= 0"
+        }
+      }
+    },
+    "orders": {
+      "name": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_name": {
+          "name": "customer_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address1": {
+          "name": "address1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address2": {
+          "name": "address2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shipping": {
+          "name": "shipping",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total": {
+          "name": "total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fulfillment_status": {
+          "name": "fulfillment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shipped_at": {
+          "name": "shipped_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tracking": {
+          "name": "tracking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "carrier": {
+          "name": "carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "private_note": {
+          "name": "private_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "note_updated_at": {
+          "name": "note_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_status": {
+          "name": "return_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "return_reason": {
+          "name": "return_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_resolution": {
+          "name": "return_resolution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_updated_at": {
+          "name": "return_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "management_version": {
+          "name": "management_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "orders_created": {
+          "name": "orders_created",
+          "columns": [
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_payment_fulfillment_created": {
+          "name": "orders_payment_fulfillment_created",
+          "columns": [
+            "payment_status",
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_fulfillment_created": {
+          "name": "orders_fulfillment_created",
+          "columns": [
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "order_edition": {
+          "name": "order_edition",
+          "value": "\"orders\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "order_quantity": {
+          "name": "order_quantity",
+          "value": "\"orders\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "order_payment": {
+          "name": "order_payment",
+          "value": "\"orders\".\"payment_status\" IN ('pending','paid','failed','refunded','partially_refunded')"
+        },
+        "order_fulfillment": {
+          "name": "order_fulfillment",
+          "value": "\"orders\".\"fulfillment_status\" IN ('pending','shipped')"
+        },
+        "order_total": {
+          "name": "order_total",
+          "value": "\"orders\".\"total\" = \"orders\".\"subtotal\" + \"orders\".\"shipping\" AND \"orders\".\"shipping\" >= 0 AND \"orders\".\"subtotal\" >= 0"
+        }
+      }
+    },
+    "admin_owner": {
+      "name": "admin_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "one_owner": {
+          "name": "one_owner",
+          "value": "\"admin_owner\".\"slot\" = 1"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+========================================================================
 ARCHIVO: web/drizzle/meta/_journal.json
 ========================================================================
 
@@ -2211,6 +2759,13 @@ ARCHIVO: web/drizzle/meta/_journal.json
       "version": "6",
       "when": 1790589562796,
       "tag": "0001_lonely_black_bolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790597047930,
+      "tag": "0002_cute_blazing_skull",
       "breakpoints": true
     }
   ]
@@ -3076,17 +3631,26 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source=readFileSync('admin/app.js','utf8').replace(/\nload\(\);\s*$/,'\n');
 const order=id=>({id,created_at:1,customer_name:'Prueba',email:'fixture@example.invalid',recipient:'Prueba',address1:'Calle ficticia',postal_code:'00000',city:'Ciudad',country:'ES',edition:'paperback',quantity:1,subtotal:1500,shipping:700,total:2200,payment_status:'paid',fulfillment_status:'pending'});
-function harness(){
- const elements=new Map();let resolveShip,resolveCopy,deferredCopy=false,failDetail=false;
+function harness(overrides={},responseUpdates={}){
+ const elements=new Map();let resolveShip,resolveCopy,deferredCopy=false,failDetail=false;const requests=[],savedOrders=new Map();
  const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',hidden:false,open:false,disabled:false,checked:false,value:'',children:[],events:{},isConnected:true,addEventListener(name,fn){this.events[name]=fn;},setAttribute(){},removeAttribute(){},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;this.events.close?.();}});return elements.get(id);};
  const document={getElementById:element,activeElement:element('opener'),createElement:()=>({...element('node'),dataset:{}})};
- const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async path=>{
-  if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
-  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:0,pending:0,shipped:0}}));
-  return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:order(path.split('/').pop())}),{status:failDetail?503:200});
+ const context=vm.createContext({document,Intl,URLSearchParams,console,window:{print(){}},navigator:{clipboard:{writeText:()=>deferredCopy?new Promise(resolve=>{resolveCopy=resolve;}):Promise.resolve()}},fetch:async(path,options={})=>{
+  requests.push({path,options});
+  if(options.method==='POST'){
+   if(path.endsWith('/ship'))return new Promise(resolve=>{resolveShip=resolve;});
+   const id=path.split('/').at(-2),action=path.split('/').at(-1),body=JSON.parse(options.body),updated={...order(id),...overrides,...savedOrders.get(id),management_version:(body.expectedVersion||0)+1};
+   if(action==='notes')updated.private_note=body.note;
+   if(action==='tracking')Object.assign(updated,{carrier:body.carrier,tracking:body.tracking});
+   if(action==='deliver')updated.delivered_at=123;
+   if(action==='return')Object.assign(updated,{return_status:body.status,return_reason:body.reason,return_resolution:body.resolution});
+   Object.assign(updated,responseUpdates);savedOrders.set(id,updated);return new Response(JSON.stringify({order:updated}));
+  }
+  if(path.includes('?'))return new Response(JSON.stringify({orders:[],count:0,page:1,stats:{total:4,pending:2,shipped:1,returns:1,incidents:2,delivered:0}}));
+  const id=path.split('/').pop();return new Response(JSON.stringify(failDetail?{error:'Error temporal'}:{order:{...order(id),...overrides,...savedOrders.get(id)}}),{status:failDetail?503:200});
  }});
  vm.runInContext(source,context);
- return {element,open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
+ return {element,requests,load:()=>vm.runInContext('load()',context),open:id=>vm.runInContext(`openDetail(${JSON.stringify(id)})`,context),label:value=>vm.runInContext(`shippingLabel(${JSON.stringify(value)})`,context),get focus(){return document.activeElement;},deferCopy(){deferredCopy=true;},completeCopy(){resolveCopy();},failDetails(value){failDetail=value;},failShipping(){resolveShip(new Response(JSON.stringify({error:'No se pudo guardar A'}),{status:503}));}};
 }
 test('a delayed shipping error never changes another open order',async()=>{
  const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;
@@ -3110,6 +3674,7 @@ test('unpaid and incident orders never suggest they are ready to ship',()=>{
   assert.equal(ui.label({payment_status:payment,fulfillment_status:'pending'}),label);
   assert.equal(ui.label({payment_status:payment,fulfillment_status:'shipped'}),'Enviado');
  }
+ assert.equal(ui.label({payment_status:'paid',fulfillment_status:'pending',return_status:'requested'}),'En pausa por devolución');
 });
 test('a delayed clipboard confirmation never changes another order',async()=>{
  const ui=harness();await ui.open('A');ui.deferCopy();
@@ -3121,6 +3686,43 @@ test('retry keeps keyboard focus on the recovered title or the retry button',asy
  const ui=harness();ui.failDetails(true);await ui.open('A');ui.element('retry-detail').focus();
  await ui.element('retry-detail').events.click();assert.equal(ui.focus.id,'retry-detail');
  ui.failDetails(false);await ui.element('retry-detail').events.click();assert.equal(ui.focus.id,'detail-title');
+});
+const submit=(ui,id)=>ui.element(id).events.submit({preventDefault(){}});
+test('mixed editions render quantity, unit price and line subtotal',async()=>{
+ const ui=harness({items:[{edition:'paperback',quantity:2,unit_price:1500,subtotal:3000},{edition:'hardcover',quantity:1,unit_price:2000,subtotal:2000}]});await ui.open('M');
+ const text=ui.element('items').children.map(node=>node.textContent).join(' ');assert.match(text,/2 × Tapa blanda/);assert.match(text,/15,00/);assert.match(text,/30,00/);assert.match(text,/1 × Tapa dura/);
+});
+test('task shortcuts show counts and filter the list',async()=>{
+ const ui=harness();await ui.load();assert.equal(ui.element('task-returns-count').textContent,'1');await ui.element('task-returns').events.click();assert.equal(ui.element('filter').value,'returns');assert.match(ui.requests.at(-1).path,/filter=returns/);
+});
+test('notes save the management version and keep payment unchanged',async()=>{
+ const ui=harness({management_version:7});await ui.open('N');ui.element('private-note').value='Texto privado';await submit(ui,'note-form');
+ const request=ui.requests.find(r=>r.path.endsWith('/notes'));assert.deepEqual(JSON.parse(request.options.body),{note:'Texto privado',expectedVersion:7});assert.equal(request.options.headers['X-Admin-Action'],'notes');assert.equal(ui.element('detail-payment').textContent,'Pagado');assert.equal(ui.element('private-note').value,'Texto privado');
+});
+test('delivery needs explicit confirmation and hides after delivery',async()=>{
+ const ui=harness({fulfillment_status:'shipped',management_version:3});await ui.open('D');await submit(ui,'deliver-form');assert.equal(ui.requests.filter(r=>r.options.method==='POST').length,0);
+ ui.element('deliver-confirm').checked=true;await submit(ui,'deliver-form');assert.equal(ui.element('deliver-form').hidden,true);assert.equal(ui.element('tracking-form').hidden,true);assert.equal(ui.element('detail-shipping').textContent,'Entregado');
+});
+test('return workflow blocks dispatch and never modifies payment',async()=>{
+ const ui=harness({return_status:'requested',return_reason:'Libro dañado'});await ui.open('R');assert.equal(ui.element('ship-form').hidden,true);
+ ui.element('return-status').value='rejected';ui.element('return-resolution').value='';await submit(ui,'return-form');assert.equal(ui.requests.filter(r=>r.options.method==='POST').length,0);
+ ui.element('return-resolution').value='Revisado con el comprador';await submit(ui,'return-form');assert.equal(ui.element('detail-payment').textContent,'Pagado');assert.equal(JSON.parse(ui.requests.find(r=>r.path.endsWith('/return')).options.body).status,'rejected');
+});
+test('global save lock and request token protect the same order reopened',async()=>{
+ const ui=harness();await ui.open('A');ui.element('ship-confirm').checked=true;const pending=submit(ui,'ship-form');ui.element('detail').close();await ui.open('A');
+ assert.equal(ui.element('note-fields').disabled,true);
+ ui.element('private-note').value='Borrador nuevo';await submit(ui,'note-form');assert.equal(ui.requests.filter(r=>r.path.endsWith('/notes')).length,0);
+ ui.element('detail-message').textContent='Nuevo detalle';ui.failShipping();await pending;assert.equal(ui.element('detail-message').textContent,'Nuevo detalle');assert.equal(ui.element('private-note').value,'Borrador nuevo');
+});
+test('saving tracking preserves unsaved note and return drafts',async()=>{
+ const ui=harness({fulfillment_status:'shipped',return_status:'requested',return_reason:'Motivo inicial'});await ui.open('P');
+ ui.element('private-note').value='Nota todavía sin guardar';ui.element('return-reason').value='Borrador de motivo';ui.element('return-resolution').value='Borrador de resolución';ui.element('return-status').value='reviewing';
+ ui.element('tracking-carrier').value='Transportista';ui.element('tracking-code').value='ABC';await submit(ui,'tracking-form');
+ assert.equal(ui.element('private-note').value,'Nota todavía sin guardar');assert.equal(ui.element('return-reason').value,'Borrador de motivo');assert.equal(ui.element('return-resolution').value,'Borrador de resolución');assert.equal(ui.element('return-status').value,'reviewing');
+});
+test('saving one section shows server changes to other fields that were not edited',async()=>{
+ const ui=harness({fulfillment_status:'shipped',private_note:'Nota previa'},{private_note:'Nota actualizada en servidor'});await ui.open('P');
+ ui.element('tracking-code').value='ABC';await submit(ui,'tracking-form');assert.equal(ui.element('private-note').value,'Nota actualizada en servidor');
 });
 
 
@@ -3410,6 +4012,159 @@ export function localDatabase(){
 
 
 ========================================================================
+ARCHIVO: web/tests/management.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync} from 'node:fs';
+import { createWorker } from '../worker/index.mjs';
+import { localDatabase } from './database.mjs';
+
+test('additive management migration preserves existing orders and owner',t=>{
+  const db=new DatabaseSync(':memory:');t.after(()=>db.close());
+  db.exec(readFileSync('drizzle/0000_cultured_mathemanic.sql','utf8'));
+  db.exec(readFileSync('drizzle/0001_lonely_black_bolt.sql','utf8'));
+  db.exec("INSERT INTO admin_owner(slot,user_id) VALUES(1,'existing-owner'); INSERT INTO orders(id,created_at,customer_name,email,recipient,address1,city,postal_code,country,edition,quantity,subtotal,shipping,total,payment_status) VALUES('legacy',10,'Prueba','example@example.invalid','Prueba','Calle ficticia','Ciudad','00000','ES','paperback',1,1500,700,2200,'paid')");
+  const before=db.prepare('SELECT * FROM orders').get();
+  db.exec(readFileSync('drizzle/0002_cute_blazing_skull.sql','utf8'));
+  const after=db.prepare('SELECT * FROM orders').get();
+  for(const [key,value]of Object.entries(before))assert.equal(after[key],value,key);
+  assert.equal(after.management_version,0);assert.equal(after.return_status,'none');assert.equal(after.private_note,'');
+  assert.equal(db.prepare('SELECT user_id FROM admin_owner').get().user_id,'existing-owner');
+  assert.deepEqual(db.prepare('PRAGMA foreign_key_check').all(),[]);
+});
+
+const owner={'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'owner@example.test'};
+function setup(t){
+  const DB=localDatabase();t.after(()=>DB.sqlite.close());
+  const env={DB,ADMIN_OWNER_EMAIL:'owner@example.test'},app=createWorker({});
+  function seed(id='one',payment='paid',fulfillment='pending'){
+    DB.sqlite.prepare(`INSERT INTO orders(id,created_at,customer_name,email,recipient,address1,city,postal_code,country,edition,quantity,subtotal,shipping,total,payment_status,fulfillment_status) VALUES(?,10,'Álvaro','fixture@example.test','Persona','Calle','Ciudad','00000','ES','paperback',2,3101,700,3801,?,?)`).run(id,payment,fulfillment);
+  }
+  const request=(path,method='GET',headers=owner,body)=>app.fetch(new Request('https://book.example'+path,{method,headers,body}),env);
+  const mutate=(action,body,id='one',headers={})=>request('/api/admin/orders/'+id+'/'+action,'POST',{...owner,origin:'https://book.example','content-type':'application/json','x-admin-action':action,...headers},JSON.stringify(body));
+  const detail=async(id='one')=>(await(await request('/api/admin/orders/'+id)).json()).order;
+  return {DB,env,app,seed,request,mutate,detail};
+}
+
+test('private notes persist with optimistic versions and never change payment or shipment',async t=>{
+  const {seed,mutate,detail}=setup(t);seed();
+  assert.equal((await mutate('notes',{note:'Llamar mañana.\nPuerta azul',expectedVersion:0})).status,200);
+  const order=await detail();assert.equal(order.private_note,'Llamar mañana.\nPuerta azul');assert.equal(order.management_version,1);assert.ok(order.note_updated_at>0);
+  assert.equal(order.payment_status,'paid');assert.equal(order.fulfillment_status,'pending');
+  assert.equal((await mutate('notes',{note:'Sobrescribir',expectedVersion:0})).status,409);
+  assert.equal((await detail()).private_note,'Llamar mañana.\nPuerta azul');
+  assert.equal((await mutate('notes',{note:'',expectedVersion:1})).status,200);assert.equal((await detail()).private_note,'');
+});
+
+test('management mutations require owner, same origin, matching action and JSON',async t=>{
+  const {seed,mutate,request}=setup(t);seed();
+  for(const action of ['notes','tracking','deliver','return']){
+    const body={note:'Privado',expectedVersion:0};
+    assert.equal((await mutate(action,body,'one',{'oai-authenticated-user-id':'visitor','oai-authenticated-user-email':'visitor@example.test'})).status,403);
+    assert.equal((await mutate(action,body,'one',{'oai-authenticated-user-id':''})).status,401);
+    assert.equal((await mutate(action,body,'one',{origin:'https://evil.example'})).status,403);
+    assert.equal((await mutate(action,body,'one',{'x-admin-action':'ship'})).status,403);
+    assert.equal((await mutate(action,body,'one',{'content-type':'text/plain'})).status,403);
+    assert.equal((await request('/api/admin/orders/one/'+action,'GET')).status,404);
+  }
+});
+
+test('management validation rejects malformed, oversized and control-bearing payloads without writes',async t=>{
+  const {seed,mutate,request,detail}=setup(t);seed();
+  const headers={...owner,origin:'https://book.example','content-type':'application/json','x-admin-action':'notes'};
+  for(const raw of ['null','[]','{','42'])assert.equal((await request('/api/admin/orders/one/notes','POST',headers,raw)).status,400);
+  const invalid=[{}, {note:'x'}, {note:3,expectedVersion:0},{note:'x',expectedVersion:-1},{note:'x',expectedVersion:0.5},{note:'x',expectedVersion:'0'},{note:'x'.repeat(2001),expectedVersion:0},{note:'bad\u0000',expectedVersion:0}];
+  for(const body of invalid)assert.equal((await mutate('notes',body)).status,400);
+  assert.equal((await mutate('notes',{note:'x'.repeat(8200),expectedVersion:0})).status,413);
+  assert.equal((await mutate('tracking',{carrier:'x'.repeat(81),tracking:'ok',expectedVersion:0})).status,400);
+  assert.equal((await mutate('tracking',{carrier:'ok',tracking:'bad\ntrack',expectedVersion:0})).status,400);
+  assert.equal((await mutate('deliver',{confirmed:false,expectedVersion:0})).status,400);
+  assert.equal((await mutate('return',{status:'refunded',reason:'x',resolution:'',expectedVersion:0})).status,400);
+  assert.equal((await mutate('return',{status:'none',reason:'',resolution:'',expectedVersion:0})).status,400);
+  assert.equal((await detail()).management_version,0);
+});
+
+test('tracking and confirmed delivery require shipment, preserve payment, and reject stale edits',async t=>{
+  const {seed,mutate,detail}=setup(t);seed();
+  assert.equal((await mutate('tracking',{carrier:'Correos',tracking:'A-1',expectedVersion:0})).status,409);
+  assert.equal((await mutate('deliver',{confirmed:true,expectedVersion:0})).status,409);
+  assert.equal((await mutate('ship',{carrier:' Correos ',tracking:' A-1 ',expectedVersion:0})).status,200);
+  assert.equal((await mutate('tracking',{carrier:'SEUR',tracking:'B-2',expectedVersion:0})).status,409);
+  assert.equal((await mutate('tracking',{carrier:' SEUR ',tracking:' B-2 ',expectedVersion:1})).status,200);
+  assert.equal((await mutate('deliver',{confirmed:true,expectedVersion:2})).status,200);
+  const order=await detail();assert.equal(order.carrier,'SEUR');assert.equal(order.tracking,'B-2');assert.equal(order.management_version,3);assert.ok(order.delivered_at>0);assert.equal(order.fulfillment_status,'shipped');assert.equal(order.payment_status,'paid');
+  assert.equal((await mutate('deliver',{confirmed:true,expectedVersion:3})).status,409);
+  assert.equal((await mutate('tracking',{carrier:'Other',tracking:'C-3',expectedVersion:3})).status,409);
+});
+
+test('active returns hold shipping and transitions never refund or rewrite payment',async t=>{
+  const {seed,mutate,detail}=setup(t);seed();
+  const change=(status,expectedVersion,reason='Tapa dañada\nFotos recibidas',resolution='')=>mutate('return',{status,reason,resolution,expectedVersion});
+  assert.equal((await change('approved',0)).status,409);
+  assert.equal((await change('requested',0,'')).status,400);
+  assert.equal((await change('requested',0)).status,200);
+  assert.equal((await mutate('ship',{tracking:'',expectedVersion:1})).status,409);
+  assert.equal((await mutate('ship',{tracking:''})).status,409);
+  assert.equal((await change('requested',0)).status,409);
+  assert.equal((await change('requested',1)).status,200);
+  assert.equal((await change('reviewing',2)).status,200);
+  assert.equal((await change('received',3)).status,409);
+  assert.equal((await change('rejected',3)).status,400);
+  assert.equal((await change('approved',3)).status,200);
+  assert.equal((await change('received',4)).status,200);
+  assert.equal((await change('closed',5,'Tapa dañada','Recambio acordado\nSin devolución de dinero')).status,200);
+  const order=await detail();assert.equal(order.return_status,'closed');assert.equal(order.payment_status,'paid');assert.equal(order.fulfillment_status,'pending');assert.ok(order.return_updated_at>0);
+  assert.equal((await change('requested',6)).status,200);
+  assert.equal((await change('rejected',7,'Consulta','No procede')).status,200);
+  assert.equal((await mutate('ship',{tracking:'',expectedVersion:8})).status,200);
+});
+
+test('returns allow settled payment statuses and reject unpaid orders',async t=>{
+  const {seed,mutate,detail}=setup(t);
+  for(const payment of ['pending','failed','paid','refunded','partially_refunded']){
+    seed(payment,payment);
+    assert.equal((await mutate('return',{status:'requested',reason:'Consulta',resolution:'',expectedVersion:0},payment)).status,['pending','failed'].includes(payment)?409:200);
+    assert.equal((await detail(payment)).payment_status,payment);
+  }
+});
+
+test('lists expose management fields and count delivery and active returns across filters and search',async t=>{
+  const {seed,DB,request}=setup(t);
+  seed('prepare');seed('hold');seed('sent','paid','shipped');seed('received','paid','shipped');seed('failed','failed');seed('refund','refunded');seed('partial','partially_refunded');
+  DB.sqlite.exec("UPDATE orders SET return_status='requested' WHERE id='hold'; UPDATE orders SET delivered_at=10 WHERE id='received'");
+  const list=async(filter='all',q='')=>(await(await request('/api/admin/orders?'+new URLSearchParams({filter,q}))).json());
+  const all=await list();assert.deepEqual(all.stats,{total:7,pending:1,shipped:2,incidents:3,returns:1,delivered:1});
+  assert.equal((await list('pending')).count,1);assert.equal((await list('returns')).count,1);assert.equal((await list('delivered')).count,1);assert.equal((await list('shipped')).count,2);assert.equal((await list('incidents')).count,4);assert.equal((await list('attention')).count,3);
+  assert.equal((await list('returns','not-present')).count,0);
+  const row=all.orders.find(o=>o.id==='hold');assert.equal(row.return_status,'requested');assert.equal(row.management_version,0);assert.ok(Object.hasOwn(row,'carrier'));assert.ok(Object.hasOwn(row,'tracking'));assert.ok(Object.hasOwn(row,'delivered_at'));assert.ok(Array.isArray(row.items));assert.equal(row.private_note,undefined);
+});
+
+test('mixed items are fetched by page in one query and legacy fallback keeps the true subtotal',async t=>{
+  const {seed,DB,detail,request}=setup(t);seed('mixed');seed('legacy');
+  DB.sqlite.prepare('INSERT INTO order_items(order_id,edition,quantity,unit_price) VALUES(?,?,?,?)').run('mixed','paperback',1,1500);
+  DB.sqlite.prepare('INSERT INTO order_items(order_id,edition,quantity,unit_price) VALUES(?,?,?,?)').run('mixed','hardcover',2,2000);
+  const mixed=await detail('mixed');assert.deepEqual(mixed.items,[{edition:'paperback',quantity:1,unit_price:1500,subtotal:1500},{edition:'hardcover',quantity:2,unit_price:2000,subtotal:4000}]);
+  assert.deepEqual((await detail('legacy')).items,[{edition:'paperback',quantity:2,unit_price:1550.5,subtotal:3101}]);
+  for(let i=0;i<21;i++)seed('page_'+i);
+  let itemQueries=0;const original=DB.prepare;DB.prepare=sql=>{if(/FROM order_items/.test(sql))itemQueries++;return original(sql);};
+  const list=await(await request('/api/admin/orders')).json();assert.equal(list.orders.length,20);assert.equal(itemQueries,1);assert.ok(list.orders.every(o=>Array.isArray(o.items)&&o.items.length>0));
+});
+
+test('competing updates allow one winner and storage failures do not report success',async t=>{
+  const {seed,mutate,detail,env,app}=setup(t);seed();
+  const responses=await Promise.all([mutate('notes',{note:'A',expectedVersion:0}),mutate('notes',{note:'B',expectedVersion:0})]);
+  assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);assert.equal((await detail()).management_version,1);
+  env.DB.prepare=()=>{throw new Error('storage unavailable');};
+  const failed=await app.fetch(new Request('https://book.example/api/admin/orders/one/notes',{method:'POST',headers:{...owner,origin:'https://book.example','content-type':'application/json','x-admin-action':'notes'},body:JSON.stringify({note:'C',expectedVersion:1})}),env);
+  assert.equal(failed.status,503);assert.match(failed.headers.get('cache-control'),/no-store/);
+});
+
+
+
+========================================================================
 ARCHIVO: web/tests/search.test.mjs
 ========================================================================
 
@@ -3548,32 +4303,77 @@ function spanishSearchSql(expression) {
   const folds = [['Á','a'],['á','a'],['É','e'],['é','e'],['Í','i'],['í','i'],['Ó','o'],['ó','o'],['Ú','u'],['ú','u'],['Ü','u'],['ü','u'],['Ñ','n'],['ñ','n'],['\u0301',''],['\u0308',''],['\u0303','']];
   return `lower(${folds.reduce((sql,[from,to])=>`replace(${sql}, '${from}', '${to}')`,expression)})`;
 }
+const activeReturnSql = "return_status IN ('requested','reviewing','approved','received')";
+const pendingSql = `payment_status = 'paid' AND fulfillment_status = 'pending' AND NOT (${activeReturnSql})`;
+function orderItems(order, rows) {
+  if(rows.length)return rows.map(({edition,quantity,unit_price})=>({edition,quantity,unit_price,subtotal:quantity*unit_price}));
+  // Historical amounts can contain discounts: never replace them with today's catalogue price.
+  return [{edition:order.edition,quantity:order.quantity,unit_price:order.subtotal/order.quantity,subtotal:order.subtotal}];
+}
 export async function listOrders(env, url) {
   const db = database(env);
   const filter = url.searchParams.get('filter') || 'all';
   const page = Math.max(1, Math.min(1000000, Number.parseInt(url.searchParams.get('page'),10) || 1));
   const query = (url.searchParams.get('q') || '').trim().slice(0,120);
-  const filters = { all:'1=1', pending:"payment_status = 'paid' AND fulfillment_status = 'pending'", shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:"payment_status IN ('failed','refunded','partially_refunded')" };
+  const filters = { all:'1=1', pending:pendingSql, shipped:"fulfillment_status = 'shipped'", unpaid:"payment_status = 'pending'", incidents:`(payment_status IN ('failed','refunded','partially_refunded') OR ${activeReturnSql})`, attention:`(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql})`, returns:activeReturnSql, delivered:"delivered_at IS NOT NULL" };
   if (!Object.hasOwn(filters,filter)) return null;
   const matches = query ? ['customer_name','email','id'].map(column=>`instr(${spanishSearchSql(column)}, ${spanishSearchSql('?')}) > 0`).join(' OR ') : '';
   const where = matches ? `${filters[filter]} AND (${matches})` : filters[filter];
   const params = query ? [query,query,query] : [];
   const statements = [
-    db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,total,payment_status,fulfillment_status FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
-    db.prepare("SELECT count(*) AS total, coalesce(sum(payment_status = 'paid' AND fulfillment_status = 'pending'),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped FROM orders"),
+    db.prepare(`SELECT id,created_at,customer_name,email,edition,quantity,subtotal,total,payment_status,fulfillment_status,carrier,tracking,delivered_at,return_status,management_version FROM orders WHERE ${where} ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET ?`).bind(...params,(page-1)*20),
+    db.prepare(`SELECT count(*) AS total, coalesce(sum(${pendingSql}),0) AS pending, coalesce(sum(fulfillment_status = 'shipped'),0) AS shipped, coalesce(sum(payment_status IN ('failed','partially_refunded') OR ${activeReturnSql}),0) AS incidents, coalesce(sum(${activeReturnSql}),0) AS returns, coalesce(sum(delivered_at IS NOT NULL),0) AS delivered FROM orders`),
   ];
   // The unfiltered list already gets its total from statistics in this same batch.
   if(query||filter!=='all')statements.push(db.prepare(`SELECT count(*) AS count FROM orders WHERE ${where}`).bind(...params));
   const results = await db.batch(statements);
   if (results.some(r=>!r.success)) throw new Error('Order query failed');
   const stats=results[1].results[0];
-  return {orders:results[0].results,count:results[2]?.results[0].count??stats.total,stats,page,paymentConnected:false};
+  const orders=results[0].results;
+  // At most twenty IDs: one related query per page, independent of the number of orders.
+  if(orders.length){
+    const related=await db.prepare(`SELECT order_id,edition,quantity,unit_price FROM order_items WHERE order_id IN (${orders.map(()=>'?').join(',')}) ORDER BY CASE edition WHEN 'paperback' THEN 0 ELSE 1 END`).bind(...orders.map(o=>o.id)).all();
+    if(!related.success)throw new Error('Order items query failed');
+    const grouped=new Map();for(const row of related.results){if(!grouped.has(row.order_id))grouped.set(row.order_id,[]);grouped.get(row.order_id).push(row);}
+    for(const order of orders)order.items=orderItems(order,grouped.get(order.id)||[]);
+  }
+  return {orders,count:results[2]?.results[0].count??stats.total,stats,page,paymentConnected:false};
 }
 export async function getOrder(env,id) {
-  return database(env).prepare('SELECT * FROM orders WHERE id = ?').bind(id).first();
+  const db=database(env);
+  const results=await db.batch([
+    db.prepare('SELECT * FROM orders WHERE id = ?').bind(id),
+    db.prepare("SELECT edition,quantity,unit_price FROM order_items WHERE order_id = ? ORDER BY CASE edition WHEN 'paperback' THEN 0 ELSE 1 END").bind(id),
+  ]);
+  if(results.some(r=>!r.success))throw new Error('Order detail query failed');
+  const order=results[0].results[0];
+  if(!order)return null;
+  order.items=orderItems(order,results[1].results);return order;
 }
-export async function shipOrder(env,id,tracking) {
-  return database(env).prepare("UPDATE orders SET fulfillment_status = 'shipped', shipped_at = ?, tracking = ? WHERE id = ? AND payment_status = 'paid' AND fulfillment_status = 'pending' RETURNING id").bind(Date.now(),tracking,id).first();
+export async function shipOrder(env,id,input) {
+  const {tracking,carrier='',expectedVersion}=typeof input==='string'?{tracking:input}:input;
+  const version=expectedVersion===undefined?'':' AND management_version = ?';
+  const values=[Date.now(),tracking,carrier,id];if(expectedVersion!==undefined)values.push(expectedVersion);
+  return database(env).prepare(`UPDATE orders SET fulfillment_status = 'shipped', shipped_at = ?, tracking = ?, carrier = ?, management_version = management_version + 1 WHERE id = ? AND ${pendingSql}${version} RETURNING id`).bind(...values).first();
+}
+// All edits compare and increment the same version in the UPDATE itself.
+// No management query writes payment status, monetary amounts, or provider state.
+export async function updateNote(env,id,{note,expectedVersion}) {
+  return database(env).prepare('UPDATE orders SET private_note = ?, note_updated_at = ?, management_version = management_version + 1 WHERE id = ? AND management_version = ? RETURNING id').bind(note,Date.now(),id,expectedVersion).first();
+}
+export async function updateTracking(env,id,{carrier,tracking,expectedVersion}) {
+  return database(env).prepare("UPDATE orders SET carrier = ?, tracking = ?, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND fulfillment_status = 'shipped' AND delivered_at IS NULL RETURNING id").bind(carrier,tracking,id,expectedVersion).first();
+}
+export async function deliverOrder(env,id,{expectedVersion}) {
+  return database(env).prepare("UPDATE orders SET delivered_at = ?, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND fulfillment_status = 'shipped' AND delivered_at IS NULL RETURNING id").bind(Date.now(),id,expectedVersion).first();
+}
+const returnTransitions = {
+  none:['requested'],requested:['reviewing','approved','rejected'],reviewing:['approved','rejected'],
+  approved:['received','closed'],received:['closed'],closed:['requested'],rejected:['requested'],
+};
+export async function updateReturn(env,id,{status,reason,resolution,expectedVersion}) {
+  const from=Object.keys(returnTransitions).filter(previous=>previous===status||returnTransitions[previous].includes(status));
+  return database(env).prepare(`UPDATE orders SET return_status = ?, return_reason = ?, return_resolution = ?, return_updated_at = ?, management_version = management_version + 1 WHERE id = ? AND management_version = ? AND payment_status IN ('paid','refunded','partially_refunded') AND return_status IN (${from.map(()=>'?').join(',')}) RETURNING id`).bind(status,reason,resolution,Date.now(),id,expectedVersion,...from).first();
 }
 
 
@@ -3582,11 +4382,39 @@ export async function shipOrder(env,id,tracking) {
 ARCHIVO: web/worker/index.mjs
 ========================================================================
 
-import { authorizeOwner, listOrders, getOrder, shipOrder } from './database.mjs';
+import { authorizeOwner, listOrders, getOrder, shipOrder, updateNote, updateTracking, deliverOrder, updateReturn } from './database.mjs';
 
 const privateHeaders = {'Cache-Control':'private, no-store, max-age=0','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:{...privateHeaders,'Content-Type':'application/json; charset=utf-8'}});
 const message = (title,text,status) => new Response(`<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title} · Fumada XXL</title><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/admin/styles.css"><main class="access"><p class="eyebrow">FUMADA XXL · ÁREA PRIVADA</p><h1>${title}</h1><p>${text}</p><a class="button" href="/">Volver a la web</a> <a href="/signout-with-chatgpt?return_to=%2Fadmin" target="_top">Cambiar de cuenta</a></main></html>`,{status,headers:{...privateHeaders,'Content-Type':'text/html; charset=utf-8'}});
+const validVersion=n=>Number.isSafeInteger(n)&&n>=0;
+const validText=(value,max,multiline=false)=>typeof value==='string'&&value.length<=max&&!(multiline?/[\x00-\x09\x0b-\x1f\x7f]/:/[\x00-\x1f\x7f]/).test(value);
+const returnStatuses=['requested','reviewing','approved','received','closed','rejected'];
+async function readActionBody(request,limit) {
+  if(Number(request.headers.get('content-length'))>limit)return {status:413,error:'Solicitud demasiado grande.'};
+  // Enforce the bound while reading, including requests without Content-Length.
+  const reader=request.body?.getReader();let size=0,raw='';const decoder=new TextDecoder();
+  if(reader){try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>limit){await reader.cancel();return {status:413,error:'Solicitud demasiado grande.'};}raw+=decoder.decode(value,{stream:true});}raw+=decoder.decode();}finally{reader.releaseLock();}}
+  let body;try{body=JSON.parse(raw);}catch{return {status:400,error:'Datos no válidos.'};}
+  if(!body||typeof body!=='object'||Array.isArray(body))return {status:400,error:'Datos no válidos.'};
+  return {body};
+}
+function actionPayload(action,body) {
+  if(action==='ship'){
+    if(!validText(body.tracking,120)||body.carrier!==undefined&&!validText(body.carrier,80)||body.expectedVersion!==undefined&&!validVersion(body.expectedVersion))return null;
+    return {tracking:body.tracking.trim(),carrier:(body.carrier||'').trim(),expectedVersion:body.expectedVersion};
+  }
+  if(!validVersion(body.expectedVersion))return null;
+  if(action==='notes')return validText(body.note,2000,true)?{note:body.note,expectedVersion:body.expectedVersion}:null;
+  if(action==='tracking')return validText(body.carrier,80)&&validText(body.tracking,120)?{carrier:body.carrier.trim(),tracking:body.tracking.trim(),expectedVersion:body.expectedVersion}:null;
+  if(action==='deliver')return body.confirmed===true?{expectedVersion:body.expectedVersion}:null;
+  if(action==='return'){
+    if(!returnStatuses.includes(body.status)||!validText(body.reason,1000,true)||!validText(body.resolution,1000,true)||body.status!=='none'&&!body.reason.trim()||['closed','rejected'].includes(body.status)&&!body.resolution.trim())return null;
+    return {status:body.status,reason:body.reason.trim(),resolution:body.resolution.trim(),expectedVersion:body.expectedVersion};
+  }
+  return null;
+}
+const managementActions={ship:shipOrder,notes:updateNote,tracking:updateTracking,deliver:deliverOrder,return:updateReturn};
 
 export function createWorker(assets) {
   return { async fetch(request,env) {
@@ -3607,21 +4435,22 @@ export function createWorker(assets) {
             const data=await listOrders(env,url);
             return data ? json(data) : json({error:'Filtro no válido.'},400);
           }
-          const match = /^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})(\/ship)?$/.exec(p);
+          const match = /^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})(?:\/(ship|notes|tracking|deliver|return))?$/.exec(p);
           if (match && request.method === 'GET' && !match[2]) {
             const order=await getOrder(env,match[1]);
             return order ? json({order}) : json({error:'No se ha encontrado el pedido.'},404);
           }
           if (match?.[2] && request.method === 'POST') {
             // Authenticated same-origin JSON, plus a non-simple header: no cross-site form writes.
-            if (request.headers.get('origin') !== url.origin || request.headers.get('x-admin-action') !== 'ship' || !request.headers.get('content-type')?.startsWith('application/json')) return json({error:'Solicitud no permitida.'},403);
-            if (Number(request.headers.get('content-length')) > 2048) return json({error:'Solicitud demasiado grande.'},413);
-            const raw=await request.text();
-            if(raw.length>2048) return json({error:'Solicitud demasiado grande.'},413);
-            let body; try { body=JSON.parse(raw); } catch { return json({error:'Datos no válidos.'},400); }
-            if (!body || typeof body !== 'object' || Array.isArray(body) || typeof body.tracking !== 'string' || body.tracking.length>120 || /[\x00-\x1f]/.test(body.tracking)) return json({error:'El seguimiento no es válido.'},400);
-            const result=await shipOrder(env,match[1],body.tracking.trim());
-            return result ? json({ok:true}) : json({error:'Solo se pueden enviar pedidos pagados y pendientes. Actualiza el pedido.'},409);
+            const action=match[2];
+            if (request.headers.get('origin') !== url.origin || request.headers.get('x-admin-action') !== action || !/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||'')) return json({error:'Solicitud no permitida.'},403);
+            const parsed=await readActionBody(request,action==='ship'?2048:8192);
+            if(parsed.status)return json({error:parsed.error},parsed.status);
+            const payload=actionPayload(action,parsed.body);
+            if(!payload)return json({error:'Los datos de gestión no son válidos.'},400);
+            const result=await managementActions[action](env,match[1],payload);
+            if(!result)return json({error:'El pedido ha cambiado o esta acción no está permitida en su estado actual. Actualiza el pedido.'},409);
+            return json({ok:true,order:await getOrder(env,match[1])});
           }
           return json({error:'Ruta o método no disponible.'},404);
         }

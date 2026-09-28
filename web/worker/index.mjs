@@ -1,8 +1,36 @@
-import { authorizeOwner, listOrders, getOrder, shipOrder } from './database.mjs';
+import { authorizeOwner, listOrders, getOrder, shipOrder, updateNote, updateTracking, deliverOrder, updateReturn } from './database.mjs';
 
 const privateHeaders = {'Cache-Control':'private, no-store, max-age=0','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
 const json = (data,status=200) => new Response(JSON.stringify(data), {status,headers:{...privateHeaders,'Content-Type':'application/json; charset=utf-8'}});
 const message = (title,text,status) => new Response(`<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title} · Fumada XXL</title><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/admin/styles.css"><main class="access"><p class="eyebrow">FUMADA XXL · ÁREA PRIVADA</p><h1>${title}</h1><p>${text}</p><a class="button" href="/">Volver a la web</a> <a href="/signout-with-chatgpt?return_to=%2Fadmin" target="_top">Cambiar de cuenta</a></main></html>`,{status,headers:{...privateHeaders,'Content-Type':'text/html; charset=utf-8'}});
+const validVersion=n=>Number.isSafeInteger(n)&&n>=0;
+const validText=(value,max,multiline=false)=>typeof value==='string'&&value.length<=max&&!(multiline?/[\x00-\x09\x0b-\x1f\x7f]/:/[\x00-\x1f\x7f]/).test(value);
+const returnStatuses=['requested','reviewing','approved','received','closed','rejected'];
+async function readActionBody(request,limit) {
+  if(Number(request.headers.get('content-length'))>limit)return {status:413,error:'Solicitud demasiado grande.'};
+  // Enforce the bound while reading, including requests without Content-Length.
+  const reader=request.body?.getReader();let size=0,raw='';const decoder=new TextDecoder();
+  if(reader){try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>limit){await reader.cancel();return {status:413,error:'Solicitud demasiado grande.'};}raw+=decoder.decode(value,{stream:true});}raw+=decoder.decode();}finally{reader.releaseLock();}}
+  let body;try{body=JSON.parse(raw);}catch{return {status:400,error:'Datos no válidos.'};}
+  if(!body||typeof body!=='object'||Array.isArray(body))return {status:400,error:'Datos no válidos.'};
+  return {body};
+}
+function actionPayload(action,body) {
+  if(action==='ship'){
+    if(!validText(body.tracking,120)||body.carrier!==undefined&&!validText(body.carrier,80)||body.expectedVersion!==undefined&&!validVersion(body.expectedVersion))return null;
+    return {tracking:body.tracking.trim(),carrier:(body.carrier||'').trim(),expectedVersion:body.expectedVersion};
+  }
+  if(!validVersion(body.expectedVersion))return null;
+  if(action==='notes')return validText(body.note,2000,true)?{note:body.note,expectedVersion:body.expectedVersion}:null;
+  if(action==='tracking')return validText(body.carrier,80)&&validText(body.tracking,120)?{carrier:body.carrier.trim(),tracking:body.tracking.trim(),expectedVersion:body.expectedVersion}:null;
+  if(action==='deliver')return body.confirmed===true?{expectedVersion:body.expectedVersion}:null;
+  if(action==='return'){
+    if(!returnStatuses.includes(body.status)||!validText(body.reason,1000,true)||!validText(body.resolution,1000,true)||body.status!=='none'&&!body.reason.trim()||['closed','rejected'].includes(body.status)&&!body.resolution.trim())return null;
+    return {status:body.status,reason:body.reason.trim(),resolution:body.resolution.trim(),expectedVersion:body.expectedVersion};
+  }
+  return null;
+}
+const managementActions={ship:shipOrder,notes:updateNote,tracking:updateTracking,deliver:deliverOrder,return:updateReturn};
 
 export function createWorker(assets) {
   return { async fetch(request,env) {
@@ -23,21 +51,22 @@ export function createWorker(assets) {
             const data=await listOrders(env,url);
             return data ? json(data) : json({error:'Filtro no válido.'},400);
           }
-          const match = /^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})(\/ship)?$/.exec(p);
+          const match = /^\/api\/admin\/orders\/([a-zA-Z0-9_-]{1,200})(?:\/(ship|notes|tracking|deliver|return))?$/.exec(p);
           if (match && request.method === 'GET' && !match[2]) {
             const order=await getOrder(env,match[1]);
             return order ? json({order}) : json({error:'No se ha encontrado el pedido.'},404);
           }
           if (match?.[2] && request.method === 'POST') {
             // Authenticated same-origin JSON, plus a non-simple header: no cross-site form writes.
-            if (request.headers.get('origin') !== url.origin || request.headers.get('x-admin-action') !== 'ship' || !request.headers.get('content-type')?.startsWith('application/json')) return json({error:'Solicitud no permitida.'},403);
-            if (Number(request.headers.get('content-length')) > 2048) return json({error:'Solicitud demasiado grande.'},413);
-            const raw=await request.text();
-            if(raw.length>2048) return json({error:'Solicitud demasiado grande.'},413);
-            let body; try { body=JSON.parse(raw); } catch { return json({error:'Datos no válidos.'},400); }
-            if (!body || typeof body !== 'object' || Array.isArray(body) || typeof body.tracking !== 'string' || body.tracking.length>120 || /[\x00-\x1f]/.test(body.tracking)) return json({error:'El seguimiento no es válido.'},400);
-            const result=await shipOrder(env,match[1],body.tracking.trim());
-            return result ? json({ok:true}) : json({error:'Solo se pueden enviar pedidos pagados y pendientes. Actualiza el pedido.'},409);
+            const action=match[2];
+            if (request.headers.get('origin') !== url.origin || request.headers.get('x-admin-action') !== action || !/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||'')) return json({error:'Solicitud no permitida.'},403);
+            const parsed=await readActionBody(request,action==='ship'?2048:8192);
+            if(parsed.status)return json({error:parsed.error},parsed.status);
+            const payload=actionPayload(action,parsed.body);
+            if(!payload)return json({error:'Los datos de gestión no son válidos.'},400);
+            const result=await managementActions[action](env,match[1],payload);
+            if(!result)return json({error:'El pedido ha cambiado o esta acción no está permitida en su estado actual. Actualiza el pedido.'},409);
+            return json({ok:true,order:await getOrder(env,match[1])});
           }
           return json({error:'Ruta o método no disponible.'},404);
         }
