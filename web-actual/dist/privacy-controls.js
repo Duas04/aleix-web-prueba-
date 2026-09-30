@@ -1,7 +1,7 @@
 'use strict';
 (()=>{
  const key='lectura_privacy_v1',lifetime=180*86400000;let choice=null,sent=false;const blocked=navigator.globalPrivacyControl===true||navigator.doNotTrack==='1';
- try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&['essential','analytics'].includes(saved.choice)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<lifetime)choice=saved.choice;}catch{}
+ try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&['essential','analytics'].includes(saved.choice)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<lifetime)choice=saved.choice;else localStorage.removeItem(key);}catch{try{localStorage.removeItem(key);}catch{}}
  function node(tag,value){const el=document.createElement(tag);el.textContent=value;return el;}
  const panel=document.createElement('section');panel.className='privacy-panel';panel.setAttribute('aria-label','Preferencias de privacidad');panel.hidden=!!choice;
  panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon, sin perfiles personales.'));

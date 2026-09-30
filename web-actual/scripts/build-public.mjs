@@ -3,12 +3,14 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.xml':'application/xml; charset=utf-8','.woff2':'font/woff2','.txt':'text/plain; charset=utf-8'};
 const assets={};
-const retired=new Set(['tienda-demo.html','devoluciones.html','returns.js','returns.css','shop.js','cart.js','demo-session.js','demo-session.css','demo-checkout.js','propietario.html']);
+// Only approved public resources enter the bundle. A stray export or secret in
+// dist must never become a publicly accessible asset.
+const publicFiles=new Set(['index.html','404.html','acceso-restringido.html','comunidad.html','aviso-legal.html','privacidad.html','cookies.html','condiciones-de-venta.html','normas-comunidad.html','app.js','community.js','owner.js','privacy-controls.js','styles.css','community.css','shop.css','legal.css','site-updates.css','fonts.css','favicon.svg','robots.txt','sitemap.xml']);
+const publicAsset=key=>publicFiles.has(key.slice(1))||/^\/assets\/donde-siempre-estuviste-(?:\d+-[a-f0-9]{12}\.webp|social-[a-f0-9]{12}\.jpg)$/.test(key)||/^\/assets\/fonts\/(?:font-[1-7]\.woff2|(?:playfairdisplay|manrope|dmsans)-OFL\.txt)$/.test(key);
 async function walk(dir,prefix=''){for(const ent of await readdir(dir,{withFileTypes:true})){
- if(['server','.openai'].includes(ent.name)||!prefix&&retired.has(ent.name))continue;
+ if(['server','.openai'].includes(ent.name))continue;
  const key=prefix+'/'+ent.name,file=path.join(dir,ent.name);
- if(key==='/assets/fumada-xxl-aleix.png'||key.endsWith('.ttf')||key.startsWith('/assets/fumada-xxl-'))continue;
- if(ent.isDirectory())await walk(file,key);else assets[key]={type:types[path.extname(file)]||'application/octet-stream',data:(await readFile(file)).toString('base64')};
+ if(ent.isDirectory()){if(key==='/assets'||key==='/assets/fonts')await walk(file,key);}else if(publicAsset(key))assets[key]={type:types[path.extname(file)],data:(await readFile(file)).toString('base64')};
 }}
 await walk('dist');assets['@owner']={type:types['.html'],data:(await readFile('dist/propietario.html')).toString('base64')};
 // Fingerprint fonts as well as images so long-lived cache entries cannot go stale.

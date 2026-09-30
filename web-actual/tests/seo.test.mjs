@@ -16,7 +16,7 @@ test('search metadata identifies the real book without advertising an active che
 test('sitemap contains the canonical public page and robots lets noindex pages be read',async()=>{
  const sitemap=await call('/sitemap.xml');assert.equal(sitemap.status,200);
  assert.match(sitemap.headers.get('content-type'),/xml/);
- const xml=await sitemap.text();assert.deepEqual([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]),['https://prueba-aleix.com/','https://prueba-aleix.com/comunidad','https://prueba-aleix.com/condiciones-de-venta']);
+ const xml=await sitemap.text();assert.deepEqual([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]),['https://prueba-aleix.com/','https://prueba-aleix.com/comunidad','https://prueba-aleix.com/condiciones-de-venta','https://prueba-aleix.com/aviso-legal','https://prueba-aleix.com/privacidad','https://prueba-aleix.com/cookies','https://prueba-aleix.com/normas-comunidad']);
  const robots=await call('/robots.txt');assert.equal(robots.status,200);const text=await robots.text();
  assert.match(text,/Sitemap: https:\/\/prueba-aleix.com\/sitemap.xml/);assert.doesNotMatch(text,/Disallow:\s*\//);
  const demo=await call('/propietario');assert.match(demo.headers.get('x-robots-tag'),/noindex/);
@@ -42,4 +42,13 @@ test('responsive cover is smaller, typed correctly and cacheable by its content 
  const old=await call('/assets/donde-siempre-estuviste-aleix.png');assert.equal(old.status,404);
  assert.equal((await call('/assets/fonts/font-1.ttf')).status,404);
  assert.ok(readFileSync('dist/server/index.js').length<1500000,'unused originals excluded from Worker');
+});
+
+test('every public page has specific share metadata and an accessible brand image',async()=>{
+ for(const path of ['/','/comunidad','/privacidad','/cookies','/aviso-legal','/normas-comunidad','/condiciones-de-venta']){
+  const html=await(await call(path)).text(),url='https://prueba-aleix.com'+path;
+  const value=name=>html.match(new RegExp('<meta (?:property|name)="'+name+'" content="([^\"]*)"'))?.[1];
+  assert.equal(value('og:url'),url);assert.ok(value('og:title'));assert.ok(value('og:description'));assert.equal(value('twitter:card'),'summary_large_image');
+  const image=new URL(value('og:image'));assert.equal(image.origin,'https://prueba-aleix.com');const response=await call(image.pathname);assert.equal(response.status,200);assert.match(response.headers.get('content-type'),/image/);
+ }
 });

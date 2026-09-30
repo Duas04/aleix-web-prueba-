@@ -1,6 +1,6 @@
 import {handleCommunity,communitySession} from './community.mjs';
 import {handleMetrics} from './metrics.mjs';
-const sitePrivateHeaders={'Cache-Control':'private, no-store','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer'};
+const sitePrivateHeaders={'Cache-Control':'private, no-store','Vary':'Cookie','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer'};
 const siteSecurityHeaders={'X-Content-Type-Options':'nosniff','Strict-Transport-Security':'max-age=31536000','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()'};
 const siteJson=(data,status)=>new Response(JSON.stringify(data),{status,headers:{...siteSecurityHeaders,...sitePrivateHeaders,'Content-Type':'application/json; charset=utf-8'}});
 const siteRedirect=(to,status=301)=>new Response(null,{status,headers:{...siteSecurityHeaders,Location:to,'Cache-Control':'no-store'}});
@@ -40,6 +40,6 @@ function siteAsset(asset,request,privatePage=false,status=200){
  if(isHtml)headers['Cache-Control']=privatePage?'private, no-store':'no-store';
  if(status!==200){headers['Cache-Control']='no-store';headers['X-Robots-Tag']='noindex, nofollow';}
  if(!privatePage&&!isHtml&&status===200&&asset.etag){headers.ETag=asset.etag;const tag=asset.etag.replace(/^W\//,'');if(request.headers.get('if-none-match')?.split(',').some(v=>v.trim()==='*'||v.trim().replace(/^W\//,'')===tag))return new Response(null,{status:304,headers});}
- if(isHtml){const nonce=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));headers['Content-Security-Policy']="default-src 'self'; script-src 'self' 'nonce-"+nonce+"' 'sha256-"+asset.jsonLdHash+"'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";}
+ if(isHtml){const nonce=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));headers['Content-Security-Policy']="default-src 'self'; script-src 'self' 'nonce-"+nonce+"' 'sha256-"+asset.jsonLdHash+"'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self'";}
  return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.data),c=>c.charCodeAt(0)),{status,headers});
 }

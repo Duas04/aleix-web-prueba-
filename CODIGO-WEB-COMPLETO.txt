@@ -1,6 +1,6 @@
 DONDE SIEMPRE ESTUVISTE — CÓDIGO DE LA WEB
 
-Código actual de web-actual/. Fuente publicada: b04a6a87f78df73daa3c017709bd2304921290e1.
+Código actual de web-actual/. Fuente publicada: c99fcf0d57ffba45f9efc4f26971981f07d75a19.
 El build activo es scripts/build-public.mjs; algunos módulos y pruebas históricos se conservan como archivo y no se sirven al público.
 Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene credenciales ni bases de datos de personas.
 
@@ -66,65 +66,66 @@ Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene crede
 59. web-actual/docs/amazon-comunidad-2026-09-30.md
 60. web-actual/docs/community-google-team-2026-09-30.md
 61. web-actual/docs/revision-general-2026-09-30.md
-62. web-actual/drizzle.config.ts
-63. web-actual/drizzle/0000_cultured_mathemanic.sql
-64. web-actual/drizzle/0001_lonely_black_bolt.sql
-65. web-actual/drizzle/0002_cute_blazing_skull.sql
-66. web-actual/drizzle/0003_colossal_nehzno.sql
-67. web-actual/drizzle/0004_chunky_microchip.sql
-68. web-actual/drizzle/0005_flat_bullseye.sql
-69. web-actual/drizzle/0006_heavy_human_torch.sql
-70. web-actual/drizzle/0007_goofy_anthem.sql
-71. web-actual/drizzle/0008_spicy_mystique.sql
-72. web-actual/drizzle/meta/0000_snapshot.json
-73. web-actual/drizzle/meta/0001_snapshot.json
-74. web-actual/drizzle/meta/0002_snapshot.json
-75. web-actual/drizzle/meta/0003_snapshot.json
-76. web-actual/drizzle/meta/0004_snapshot.json
-77. web-actual/drizzle/meta/0005_snapshot.json
-78. web-actual/drizzle/meta/0006_snapshot.json
-79. web-actual/drizzle/meta/0007_snapshot.json
-80. web-actual/drizzle/meta/0008_snapshot.json
-81. web-actual/drizzle/meta/_journal.json
-82. web-actual/package.json
-83. web-actual/pnpm-lock.yaml
-84. web-actual/pnpm-workspace.yaml
-85. web-actual/scripts/backup-source.mjs
-86. web-actual/scripts/build-public.mjs
-87. web-actual/scripts/build.mjs
-88. web-actual/scripts/package.mjs
-89. web-actual/scripts/preview-admin.mjs
-90. web-actual/scripts/preview-public.mjs
-91. web-actual/serve.mjs
-92. web-actual/tests/admin-live.test.mjs
-93. web-actual/tests/admin-ui.test.mjs
-94. web-actual/tests/admin.test.mjs
-95. web-actual/tests/breathing.test.mjs
-96. web-actual/tests/cache.test.mjs
-97. web-actual/tests/cart.test.mjs
-98. web-actual/tests/community-team.test.mjs
-99. web-actual/tests/community-ui.test.mjs
-100. web-actual/tests/community.test.mjs
-101. web-actual/tests/customer-returns-ui.test.mjs
-102. web-actual/tests/customer-returns.test.mjs
-103. web-actual/tests/database.mjs
-104. web-actual/tests/demo-checkout.test.mjs
-105. web-actual/tests/demo.test.mjs
-106. web-actual/tests/management.test.mjs
-107. web-actual/tests/privacy-ui.test.mjs
-108. web-actual/tests/public-site.test.mjs
-109. web-actual/tests/search.test.mjs
-110. web-actual/tests/seo.test.mjs
-111. web-actual/tests/shared-demo-ui.test.mjs
-112. web-actual/tests/shared-demo.test.mjs
-113. web-actual/worker/community.mjs
-114. web-actual/worker/database.mjs
-115. web-actual/worker/demo.mjs
-116. web-actual/worker/index.mjs
-117. web-actual/worker/legacy-index.mjs
-118. web-actual/worker/metrics.mjs
-119. web-actual/worker/returns.mjs
-120. web-actual/worker/site.mjs
+62. web-actual/docs/revision-publicacion-comunidad-2026-09-30.md
+63. web-actual/drizzle.config.ts
+64. web-actual/drizzle/0000_cultured_mathemanic.sql
+65. web-actual/drizzle/0001_lonely_black_bolt.sql
+66. web-actual/drizzle/0002_cute_blazing_skull.sql
+67. web-actual/drizzle/0003_colossal_nehzno.sql
+68. web-actual/drizzle/0004_chunky_microchip.sql
+69. web-actual/drizzle/0005_flat_bullseye.sql
+70. web-actual/drizzle/0006_heavy_human_torch.sql
+71. web-actual/drizzle/0007_goofy_anthem.sql
+72. web-actual/drizzle/0008_spicy_mystique.sql
+73. web-actual/drizzle/meta/0000_snapshot.json
+74. web-actual/drizzle/meta/0001_snapshot.json
+75. web-actual/drizzle/meta/0002_snapshot.json
+76. web-actual/drizzle/meta/0003_snapshot.json
+77. web-actual/drizzle/meta/0004_snapshot.json
+78. web-actual/drizzle/meta/0005_snapshot.json
+79. web-actual/drizzle/meta/0006_snapshot.json
+80. web-actual/drizzle/meta/0007_snapshot.json
+81. web-actual/drizzle/meta/0008_snapshot.json
+82. web-actual/drizzle/meta/_journal.json
+83. web-actual/package.json
+84. web-actual/pnpm-lock.yaml
+85. web-actual/pnpm-workspace.yaml
+86. web-actual/scripts/backup-source.mjs
+87. web-actual/scripts/build-public.mjs
+88. web-actual/scripts/build.mjs
+89. web-actual/scripts/package.mjs
+90. web-actual/scripts/preview-admin.mjs
+91. web-actual/scripts/preview-public.mjs
+92. web-actual/serve.mjs
+93. web-actual/tests/admin-live.test.mjs
+94. web-actual/tests/admin-ui.test.mjs
+95. web-actual/tests/admin.test.mjs
+96. web-actual/tests/breathing.test.mjs
+97. web-actual/tests/cache.test.mjs
+98. web-actual/tests/cart.test.mjs
+99. web-actual/tests/community-team.test.mjs
+100. web-actual/tests/community-ui.test.mjs
+101. web-actual/tests/community.test.mjs
+102. web-actual/tests/customer-returns-ui.test.mjs
+103. web-actual/tests/customer-returns.test.mjs
+104. web-actual/tests/database.mjs
+105. web-actual/tests/demo-checkout.test.mjs
+106. web-actual/tests/demo.test.mjs
+107. web-actual/tests/management.test.mjs
+108. web-actual/tests/privacy-ui.test.mjs
+109. web-actual/tests/public-site.test.mjs
+110. web-actual/tests/search.test.mjs
+111. web-actual/tests/seo.test.mjs
+112. web-actual/tests/shared-demo-ui.test.mjs
+113. web-actual/tests/shared-demo.test.mjs
+114. web-actual/worker/community.mjs
+115. web-actual/worker/database.mjs
+116. web-actual/worker/demo.mjs
+117. web-actual/worker/index.mjs
+118. web-actual/worker/legacy-index.mjs
+119. web-actual/worker/metrics.mjs
+120. web-actual/worker/returns.mjs
+121. web-actual/worker/site.mjs
 
 
 ========================================================================
@@ -1761,7 +1762,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 ARCHIVO: web-actual/dist/aviso-legal.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Identificación del titular, condiciones de uso y contacto de la web de Donde siempre estuviste."><meta name="referrer" content="no-referrer"><title>Aviso legal y términos de uso · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/aviso-legal"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Identificación del titular, condiciones de uso y contacto de la web de Donde siempre estuviste."><meta name="referrer" content="no-referrer"><title>Aviso legal y términos de uso · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/aviso-legal"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><meta property="og:site_name" content="Donde siempre estuviste · Aleix"><meta property="og:title" content="Aviso legal y términos de uso · Donde siempre estuviste"><meta property="og:description" content="Identificación del titular, condiciones de uso y contacto de la web de Donde siempre estuviste."><meta property="og:url" content="https://prueba-aleix.com/aviso-legal"><meta property="og:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="900"><meta property="og:image:alt" content="Portada de Donde siempre estuviste, de Aleix"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Aviso legal y términos de uso · Donde siempre estuviste"><meta name="twitter:description" content="Identificación del titular, condiciones de uso y contacto de la web de Donde siempre estuviste."><meta name="twitter:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta name="twitter:image:alt" content="Portada de Donde siempre estuviste, de Aleix"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
     <a class="wordmark" href="/#inicio" aria-label="Donde siempre estuviste, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
@@ -1831,6 +1832,166 @@ ARCHIVO: web-actual/dist/community.css
 
 .moderation-tools{width:100%;padding:10px 12px;border:1px dashed #9d7e50;border-radius:4px}.moderation-tools summary{cursor:pointer;min-height:44px;display:list-item;padding-top:10px}.moderation-tools .text-button{margin-right:18px}.owner-card summary{cursor:pointer;min-height:44px;padding-top:14px}
 
+/* Community reading room: the owner area uses the shared rules above. */
+body.community-page .community-shell{padding-block:34px 88px}
+body.community-page .community-heading{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr);
+  column-gap:clamp(24px,5vw,76px);
+  align-items:center;
+  max-width:none;
+  margin:0 0 42px;
+  padding:clamp(28px,4vw,50px) clamp(28px,5vw,62px);
+  background:#f1e8d9;
+  border-radius:14px;
+}
+body.community-page .community-heading h1{
+  grid-column:1;
+  grid-row:1;
+  max-width:18ch;
+  margin:0;
+  font-size:clamp(2.35rem,4vw,3.8rem);
+  line-height:1.17;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+body.community-page .community-heading h1 em{color:#805b28}
+body.community-page .community-heading>p:not(.eyebrow){
+  grid-column:2;
+  grid-row:1;
+  max-width:37ch;
+  margin:0;
+  font-size:1rem;
+  line-height:1.75;
+  color:#594632;
+}
+body.community-page .community-account-jump{display:none}
+body.community-page .community-layout{grid-template-columns:minmax(0,1fr) minmax(250px,290px);gap:clamp(26px,4vw,56px);align-items:start}
+body.community-page .community-discussions{min-width:0}
+body.community-page .community-toolbar{padding-bottom:16px;border-bottom:1px solid #d3c1a8}
+body.community-page .community-toolbar h2{font-size:2rem;line-height:1.2}
+body.community-page .community-toolbar .text-button{font-size:.875rem;color:#624823}
+body.community-page .community-filters{margin:18px 0 16px;gap:7px}
+body.community-page .community-filters .secondary{
+  min-height:44px;
+  padding:8px 15px;
+  border-color:#cab898;
+  border-radius:999px;
+  font-size:.875rem;
+  font-weight:600;
+}
+body.community-page .community-filters [aria-pressed=true]{border-color:#805b28;background:#805b28;color:#fff}
+body.community-page .secondary:hover:not(:disabled){background:#eadbc2}
+body.community-page .community-filters [aria-pressed=true]:hover:not(:disabled){background:#65441e;color:#fff}
+body.community-page .community-search{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(150px,190px);
+  column-gap:16px;
+  align-items:end;
+  margin:0 0 22px;
+  padding:18px 20px 20px;
+  border:1px solid #ddd0bc;
+  border-radius:10px;
+  background:#fffdf8;
+}
+body.community-page .community-search>label{margin:0 0 7px;font-size:.8125rem;font-weight:600;color:#594632}
+body.community-page .community-search>label[for=community-search]{grid-column:1;grid-row:1}
+body.community-page .community-search .search-row{grid-column:1;grid-row:2;gap:8px}
+body.community-page .community-search>label[for=community-sort]{grid-column:2;grid-row:1}
+body.community-page .community-search select{grid-column:2;grid-row:2;width:100%;min-height:48px;background:#fffef9}
+body.community-page .community-search .search-row input{min-width:0}
+body.community-page .community-search .search-row .secondary{min-height:48px;background:#f4ebdc}
+body.community-page .community-search select:focus-visible{outline:3px solid #94631e;outline-offset:3px}
+body.community-page #community-status:not(:empty),body.community-page #topic-status:not(:empty){line-height:1.6;color:#594632}
+body.community-page #community-status:not(:empty){margin:0 0 14px}
+body.community-page #topics{display:grid;gap:12px}
+body.community-page #topics>.topic{
+  padding:23px 26px 20px;
+  border:1px solid #e2d4c0;
+  border-radius:11px;
+  background:#fffdf8;
+}
+body.community-page #topics>.topic:focus-within{border-color:#a57b41}
+body.community-page #topics>.topic h3{font-size:1.47rem;line-height:1.33;margin:14px 0 9px;letter-spacing:-.02em}
+body.community-page #topics>.topic .topic-open{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+body.community-page #topics>.topic .topic-open:hover{text-decoration:underline;text-underline-offset:4px}
+body.community-page #topics>.topic .topic-body{margin:0 0 10px;line-height:1.68;color:#584b3c}
+body.community-page #topics>.topic.topic-preview .topic-body{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;white-space:normal}
+body.community-page #topics>.topic .topic-actions{align-items:center;gap:8px 18px}
+body.community-page .topic-meta{gap:6px 10px;color:#66523a;line-height:1.5}
+body.community-page .topic-avatar{
+  display:inline-grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  border-radius:50%;
+  background:#e9dac0;
+  color:#513918;
+  font-size:.8rem;
+  font-weight:700;
+}
+body.community-page .topic-author{font-weight:700;color:#3d3023}
+body.community-page .topic-date{font-size:.8125rem;font-variant-numeric:tabular-nums}
+body.community-page .topic-replies{font-size:.875rem;font-weight:600;color:#65471f}
+body.community-page .community-empty{border:1px solid #e2d4c0;border-radius:11px;background:#fffdf8}
+body.community-page .community-account{
+  position:sticky;
+  top:20px;
+  padding:24px;
+  border:1px solid #ddcbb0;
+  border-radius:11px;
+  background:#f4ecdf;
+}
+body.community-page .community-account h2{margin-bottom:8px;font-size:1.55rem}
+body.community-page .community-account #login-note{margin:6px 0 16px;color:#574733}
+body.community-page .community-account .button{min-height:48px}
+body.community-page .community-rules{margin-top:22px;padding-top:18px;border-color:#d7c4a7}
+body.community-page .community-rules h3{margin:0 0 9px}
+body.community-page .community-rules p{margin:0 0 12px}
+body.community-page #compose{margin:0 0 18px;padding:0;border:1px solid #d9c3a2;border-radius:10px;background:#f5ecde}
+body.community-page #compose summary{padding:17px 21px;font-size:1.28rem;line-height:1.4;font-weight:500}
+body.community-page #compose[open] summary{border-bottom:1px solid #d9c3a2}
+body.community-page #compose form{padding:4px 21px 21px}
+body.community-page .community-dialog{width:min(760px,calc(100% - 28px));padding:27px clamp(20px,4vw,38px) 34px;border-color:#ceb792;border-radius:12px;overscroll-behavior:contain}
+body.community-page .community-dialog h2{margin:8px 0 14px;font-size:clamp(1.75rem,3vw,2.4rem);line-height:1.25}
+body.community-page .community-dialog .thread-tools{padding-bottom:14px;border-bottom:1px solid #e1d4bf}
+body.community-page #thread-news{border-left:1px solid #805b28}
+body.community-page .community-dialog .topic-meta{margin-bottom:10px}
+body.community-page #thread-replies .topic{background:#f4ecde;border-left:1px solid #b9955e}
+body.community-page .community-dialog .close-thread{font-size:.875rem}
+body.community-page .community-dialog textarea{max-height:45dvh}
+body.community-page .community-account:target{scroll-margin-top:18px}
+body.community-page #account-title{scroll-margin-top:18px}
+
+@media(max-width:940px){
+  body.community-page .community-layout{grid-template-columns:minmax(0,1fr) 240px;gap:22px}
+  body.community-page .community-account{padding:19px}
+}
+@media(max-width:760px){
+  body.community-page .community-shell{padding-block:24px 58px}
+  body.community-page .community-heading{grid-template-columns:1fr;gap:0;margin-bottom:27px;padding:25px 24px 27px}
+  body.community-page .community-heading h1{grid-column:1;grid-row:auto;max-width:16ch;font-size:clamp(2.1rem,7vw,3.1rem)}
+  body.community-page .community-heading>p:not(.eyebrow){grid-column:1;grid-row:auto;max-width:56ch;margin-top:13px;font-size:.9375rem;line-height:1.65}
+  body.community-page .community-account-jump{display:inline-flex;align-items:center;grid-column:1;margin-top:14px;min-height:44px;width:max-content;max-width:100%;font-size:.875rem;font-weight:700;text-decoration:underline;text-underline-offset:4px;color:#65471f}
+  body.community-page .community-account-jump:hover{color:#3d3023}
+  body.community-page .community-layout{grid-template-columns:1fr;gap:30px}
+  body.community-page .community-account{position:static}
+  body.community-page .community-toolbar h2{font-size:1.8rem}
+}
+@media(max-width:560px){
+  body.community-page .community-heading{padding:23px 20px 24px}
+  body.community-page .community-heading h1{font-size:2.12rem}
+  body.community-page .community-search{grid-template-columns:1fr;padding:16px}
+  body.community-page .community-search>label[for=community-search],body.community-page .community-search .search-row,body.community-page .community-search>label[for=community-sort],body.community-page .community-search select{grid-column:1;grid-row:auto}
+  body.community-page .community-search>label[for=community-sort]{margin-top:14px}
+  body.community-page #topics>.topic{padding:18px 17px 17px}
+  body.community-page #topics>.topic h3{font-size:1.35rem}
+  body.community-page .community-dialog{width:calc(100% - 16px);max-height:94dvh;padding:17px 18px 23px}
+  body.community-page .community-dialog .thread-tools{gap:4px 14px}
+  body.community-page .community-dialog .thread-tools button{font-size:.875rem}
+}
+
 
 
 ========================================================================
@@ -1850,12 +2011,16 @@ function button(label,action){const el=text('button',label,'text-button');el.typ
 function notice(id,value){byId(id).textContent=value;}
 function locked(value){saving=value;for(const id of ['topic-form','reply-form','profile-form'])for(const el of byId(id).elements)el.disabled=value;}
 function postElement(post,{preview=false,moderate=false}={}){
- const article=document.createElement('article');article.className='topic';const meta=document.createElement('div');meta.className='topic-meta';meta.append(text('span',post.author),text('span',post.role==='owner'?'Dueño':'Lector','rank '+(post.role==='owner'?'owner':'')),text('time',new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(post.createdAt))));article.append(meta);
+ const article=document.createElement('article');article.className='topic'+(preview?' topic-preview':'');
+ const meta=document.createElement('div');meta.className='topic-meta';
+ const avatar=text('span',Array.from((post.author||'Lector').trim())[0]?.toLocaleUpperCase('es-ES')||'L','topic-avatar');avatar.setAttribute('aria-hidden','true');
+ const date=new Date(post.createdAt),time=text('time',new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(date),'topic-date');time.dateTime=date.toISOString();
+ meta.append(avatar,text('span',post.author,'topic-author'),text('span',post.role==='owner'?'Dueño':'Lector','rank '+(post.role==='owner'?'owner':'')),time);article.append(meta);
  if(post.parentId&&moderate)article.append(button('Ver conversación original',()=>openThread(post.parentId)));
  if(post.status!=='published')article.append(text('p',post.status==='pending'?'Pendiente de revisión':'Retirada','rank'));
  if(post.title){const heading=document.createElement('h3');if(preview&&post.status!=='hidden'){const open=button(post.title,()=>openThread(post.id));open.className='topic-open';heading.append(open);}else heading.textContent=post.title;article.append(heading);}
  article.append(text('p',preview&&post.body.length>240?post.body.slice(0,240)+'…':post.body,'topic-body'));
- if(preview&&post.status==='published')article.append(button((post.replyCount||0)+' '+(post.replyCount===1?'respuesta':'respuestas')+' · Leer conversación',()=>openThread(post.id)));
+ if(preview&&post.status==='published'){const replies=button((post.replyCount||0)+' '+(post.replyCount===1?'respuesta':'respuestas')+' · Leer conversación',()=>openThread(post.id));replies.className='text-button topic-replies';article.append(replies);}
  const actions=document.createElement('div');actions.className='topic-actions';
  if(post.mine&&post.status!=='hidden')actions.append(button('Retirar mi publicación',async()=>{if(saving||!confirm('¿Retirar esta publicación? Si inicia una conversación, también dejarán de verse sus respuestas.'))return;locked(true);try{await api('posts/'+post.id+'/delete',{version:post.version});byId('thread-dialog').close();await loadTopics();}catch(e){notice('community-status',e.message);notice('reply-status',e.message);}finally{locked(false);}}));
  if(moderate){const tools=document.createElement('details');tools.className='moderation-tools';tools.open=post.status==='pending';tools.append(text('summary','Moderar publicación'));const reason=document.createElement('input');reason.maxLength=500;reason.placeholder='Motivo obligatorio al retirar';reason.setAttribute('aria-label','Motivo de moderación');tools.append(reason);const choices=post.status==='pending'?[['Aprobar','published'],['Rechazar','hidden']]:[['Retirar contenido','hidden']];for(const [label,status]of choices)tools.append(button(label,async()=>{if(saving)return;if(status==='hidden'&&reason.value.trim().length<3){reason.setCustomValidity('Escribe el motivo de la retirada (al menos 3 caracteres).');reason.reportValidity();return;}reason.setCustomValidity('');locked(true);try{await api('posts/'+post.id+'/moderate',{version:post.version,status,reason:reason.value});if(byId('thread-dialog').open)byId('thread-dialog').close();await loadTopics();notice('community-status',status==='published'?'Publicación aprobada.':'Contenido retirado. La decisión ha quedado registrada.');}catch(e){notice('community-status',e.message);notice('reply-status',e.message);}finally{locked(false);}}));reason.addEventListener('input',()=>reason.setCustomValidity(''));actions.append(tools);}
@@ -1905,19 +2070,20 @@ ARCHIVO: web-actual/dist/comunidad.html
 ========================================================================
 
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Comparte preguntas y lecturas de Donde siempre estuviste con la comunidad de Aleix. Un espacio para conversar con calma."><meta name="referrer" content="no-referrer"><meta name="theme-color" content="#fbf7ef"><title>Comunidad de lectores · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/comunidad"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><script src="/community.js" defer></script><script src="/privacy-controls.js" defer></script><link rel="stylesheet" href="/site-updates.css"></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Comparte preguntas y lecturas de Donde siempre estuviste con la comunidad de Aleix. Un espacio para conversar con calma."><meta name="referrer" content="no-referrer"><meta name="theme-color" content="#fbf7ef"><title>Comunidad de lectores · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/comunidad"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><script src="/community.js" defer></script><script src="/privacy-controls.js" defer></script><link rel="stylesheet" href="/site-updates.css"><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><meta property="og:site_name" content="Donde siempre estuviste · Aleix"><meta property="og:title" content="Comunidad de lectores · Donde siempre estuviste"><meta property="og:description" content="Comparte preguntas y lecturas de Donde siempre estuviste con la comunidad de Aleix. Un espacio para conversar con calma."><meta property="og:url" content="https://prueba-aleix.com/comunidad"><meta property="og:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="900"><meta property="og:image:alt" content="Portada de Donde siempre estuviste, de Aleix"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Comunidad de lectores · Donde siempre estuviste"><meta name="twitter:description" content="Comparte preguntas y lecturas de Donde siempre estuviste con la comunidad de Aleix. Un espacio para conversar con calma."><meta name="twitter:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta name="twitter:image:alt" content="Portada de Donde siempre estuviste, de Aleix"></head>
 <body class="community-page"><a class="skip-link" href="#contenido">Saltar al contenido</a>
 <header class="site-header wrap"><a class="wordmark" href="/"><span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span></a><nav aria-label="Navegación principal"><a href="/#el-libro">El libro</a><a href="/#comprar">Amazon</a><a href="/comunidad" aria-current="page">Comunidad</a></nav><a class="header-cta" href="/">Volver al libro</a></header>
 <main id="contenido" class="community-shell wrap">
- <div class="community-heading"><p class="eyebrow">UN ESPACIO ENTRE LECTORES</p><h1>La lectura sigue<br><em>en la conversación.</em></h1><p>Preguntas sobre el libro, pequeñas ideas y distintas formas de empezar. Compártelas con calma.</p></div>
- <div class="community-layout"><aside class="community-account" aria-labelledby="account-title"><h2 id="account-title">Tu lugar aquí</h2><p id="login-note" role="status">Comprobando el acceso…</p><a id="google-login" class="button button-primary" href="/auth/google/start" target="_top" hidden>Continuar con Google</a><noscript><p>Activa JavaScript para consultar las conversaciones y el estado de tu cuenta.</p></noscript>
+ <div class="community-heading"><h1>La lectura sigue <em>en la conversación.</em></h1><p>Preguntas sobre el libro, pequeñas ideas y distintas formas de empezar. Compártelas con calma.</p><a class="community-account-jump" href="#account-title">Entrar o ver mi cuenta</a></div>
+ <div class="community-layout">
+<section class="community-discussions" aria-labelledby="discussion-title"><div class="community-toolbar"><h2 id="discussion-title">Conversaciones</h2><button id="reload-topics" class="text-button" type="button">Actualizar</button></div><div class="community-filters"><button id="all-topics" class="secondary" type="button" aria-pressed="true">Todas</button><button id="my-topics" class="secondary" type="button" hidden aria-pressed="false">Mis preguntas</button><button id="moderation" class="secondary" type="button" hidden aria-pressed="false">Moderación</button></div>
+ <details id="compose" hidden><summary>Plantear una pregunta</summary><form id="topic-form"><label for="topic-title">¿Sobre qué quieres conversar?</label><input id="topic-title" required minlength="3" maxlength="120"><label for="topic-body">Tu mensaje</label><textarea id="topic-body" required minlength="3" maxlength="4000" rows="5" aria-describedby="publish-help"></textarea><div class="spam-field" aria-hidden="true"><label for="website">Deja este campo vacío</label><input id="website" tabindex="-1" autocomplete="off"></div><p id="publish-help">Tu alias y mensaje serán públicos cuando el equipo los apruebe. No compartas información privada.</p><button class="button button-primary" type="submit">Enviar para revisión</button><p id="topic-status" role="status"></p></form></details>
+ <form id="search-form" class="community-search" role="search"><label for="community-search">Buscar una conversación</label><div class="search-row"><input id="community-search" type="search" maxlength="120" placeholder="Una pregunta, una idea…"><button class="secondary" type="submit">Buscar</button></div><label for="community-sort">Ordenar por</label><select id="community-sort"><option value="activity">Actividad reciente</option><option value="new">Preguntas nuevas</option></select></form><p id="community-status" role="status" aria-live="polite"></p><div id="topics" aria-busy="true"></div><button id="more-topics" class="secondary" type="button" hidden>Más conversaciones</button>
+ </section>
+<aside class="community-account" aria-labelledby="account-title"><h2 id="account-title">Tu lugar aquí</h2><p id="login-note" role="status">Comprobando el acceso…</p><a id="google-login" class="button button-primary" href="/auth/google/start" target="_top" hidden>Continuar con Google</a><noscript><p>Activa JavaScript para consultar las conversaciones y el estado de tu cuenta.</p></noscript>
  <section id="account" hidden><p><strong id="profile-name"></strong> <span id="profile-role" class="rank"></span></p><details id="profile-details"><summary>Editar mi perfil</summary><form id="profile-form"><label for="alias">Nombre público</label><input id="alias" name="alias" required minlength="2" maxlength="40" autocomplete="nickname"><label class="check-row"><input id="accept-rules" type="checkbox" required> Acepto las <a href="/normas-comunidad">normas de la comunidad</a> y he leído la <a href="/privacidad">privacidad</a>.</label><button type="submit" class="secondary">Guardar perfil</button></form></details><button id="logout" class="text-button" type="button">Cerrar sesión</button><p id="profile-status" role="status"></p></section>
  <a id="owner-panel" class="secondary" href="/propietario" hidden>Gestionar comunidad y equipo</a>
- <div class="community-rules"><h3>Una conversación cuidada</h3><p>Las aportaciones se revisan antes de aparecer. Usa un alias y evita datos de salud, direcciones o números de pedido.</p><p>La insignia <span class="rank owner">Dueño</span> identifica al equipo autorizado por Aleix. Iniciar sesión no verifica una compra de Amazon.</p><a href="/normas-comunidad">Normas y avisos de contenido</a></div></aside>
- <section class="community-discussions" aria-labelledby="discussion-title"><div class="community-toolbar"><h2 id="discussion-title">Conversaciones</h2><button id="reload-topics" class="text-button" type="button">Actualizar</button></div><div class="community-filters"><button id="all-topics" class="secondary" type="button" aria-pressed="true">Todas</button><button id="my-topics" class="secondary" type="button" hidden aria-pressed="false">Mis preguntas</button><button id="moderation" class="secondary" type="button" hidden aria-pressed="false">Moderación</button></div>
- <form id="search-form" class="community-search" role="search"><label for="community-search">Buscar una conversación</label><div class="search-row"><input id="community-search" type="search" maxlength="120" placeholder="Una pregunta, una idea…"><button class="secondary" type="submit">Buscar</button></div><label for="community-sort">Ordenar por</label><select id="community-sort"><option value="activity">Actividad reciente</option><option value="new">Preguntas nuevas</option></select></form><p id="community-status" role="status" aria-live="polite"></p><div id="topics" aria-busy="true"></div><button id="more-topics" class="secondary" type="button" hidden>Más conversaciones</button>
- <details id="compose" hidden><summary>Plantear una pregunta</summary><form id="topic-form"><label for="topic-title">¿Sobre qué quieres conversar?</label><input id="topic-title" required minlength="3" maxlength="120"><label for="topic-body">Tu mensaje</label><textarea id="topic-body" required minlength="3" maxlength="4000" rows="5" aria-describedby="publish-help"></textarea><div class="spam-field" aria-hidden="true"><label for="website">Deja este campo vacío</label><input id="website" tabindex="-1" autocomplete="off"></div><p id="publish-help">Tu alias y mensaje serán públicos cuando el equipo los apruebe. No compartas información privada.</p><button class="button button-primary" type="submit">Enviar para revisión</button><p id="topic-status" role="status"></p></form></details>
- </section></div>
+ <div class="community-rules"><h3>Una conversación cuidada</h3><p>Las aportaciones se revisan antes de aparecer. Usa un alias y evita datos de salud, direcciones o números de pedido.</p><p>La insignia <span class="rank owner">Dueño</span> identifica al equipo autorizado por Aleix. Iniciar sesión no verifica una compra de Amazon.</p><a href="/normas-comunidad">Normas y avisos de contenido</a></div></aside></div>
  <dialog id="thread-dialog" class="community-dialog" aria-labelledby="thread-title"><button id="close-thread" class="text-button close-thread" type="button">Cerrar conversación</button><h2 id="thread-title" tabindex="-1"></h2><div class="thread-tools"><button id="share-thread" type="button" class="text-button">Copiar enlace</button><button id="refresh-thread" type="button" class="secondary">Actualizar conversación</button></div><p id="thread-news" role="status" aria-live="polite"></p><div id="thread-content"></div><div id="thread-replies"></div><button id="more-replies" type="button" class="secondary" hidden>Más respuestas</button><form id="reply-form" hidden><label for="reply-body">Tu respuesta</label><textarea id="reply-body" required minlength="3" maxlength="4000" rows="4"></textarea><button class="button button-primary" type="submit">Enviar respuesta</button></form><p id="reply-status" role="status"></p></dialog>
 <dialog id="report-dialog" class="community-dialog" aria-labelledby="report-title"><button id="close-report" class="text-button close-thread" type="button">Cerrar aviso</button><h2 id="report-title">Avisar de un problema</h2><p>El aviso es privado y lo revisará el equipo de moderación. No incluyas datos sensibles.</p><p id="report-login" hidden>Para enviar el aviso desde aquí, <a href="/auth/google/start" target="_top">entra con Google</a>. También puedes escribir a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><form id="report-form"><label for="report-reason">¿Qué ocurre con esta publicación?</label><textarea id="report-reason" required minlength="10" maxlength="1000" rows="4" placeholder="Explica qué contenido consideras inapropiado y por qué."></textarea><button id="send-report" class="button button-primary" type="submit">Enviar aviso</button></form><p id="report-status" role="status" aria-live="polite"></p></dialog></main><footer class="site-footer wrap"><nav class="legal-links" aria-label="Información y ayuda"><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/normas-comunidad">Normas de la comunidad</a><a href="mailto:theshoz@gmail.com">Contacto</a></nav></footer></body></html>
 
@@ -1927,7 +2093,7 @@ ARCHIVO: web-actual/dist/comunidad.html
 ARCHIVO: web-actual/dist/condiciones-de-venta.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Dónde se comprará Donde siempre estuviste y cómo consultar las condiciones del vendedor en Amazon."><meta name="referrer" content="no-referrer"><title>Comprar en Amazon · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/condiciones-de-venta"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Dónde se comprará Donde siempre estuviste y cómo consultar las condiciones del vendedor en Amazon."><meta name="referrer" content="no-referrer"><title>Comprar en Amazon · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/condiciones-de-venta"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><meta property="og:site_name" content="Donde siempre estuviste · Aleix"><meta property="og:title" content="Comprar en Amazon · Donde siempre estuviste"><meta property="og:description" content="Dónde se comprará Donde siempre estuviste y cómo consultar las condiciones del vendedor en Amazon."><meta property="og:url" content="https://prueba-aleix.com/condiciones-de-venta"><meta property="og:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="900"><meta property="og:image:alt" content="Portada de Donde siempre estuviste, de Aleix"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Comprar en Amazon · Donde siempre estuviste"><meta name="twitter:description" content="Dónde se comprará Donde siempre estuviste y cómo consultar las condiciones del vendedor en Amazon."><meta name="twitter:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta name="twitter:image:alt" content="Portada de Donde siempre estuviste, de Aleix"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
     <a class="wordmark" href="/#inicio" aria-label="Donde siempre estuviste, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
@@ -1946,7 +2112,7 @@ ARCHIVO: web-actual/dist/condiciones-de-venta.html
 ARCHIVO: web-actual/dist/cookies.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Almacenamiento necesario, sesión de la comunidad y elección de analítica opcional."><meta name="referrer" content="no-referrer"><title>Cookies y privacidad del navegador · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/cookies"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Almacenamiento necesario, sesión de la comunidad y elección de analítica opcional."><meta name="referrer" content="no-referrer"><title>Cookies y privacidad del navegador · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/cookies"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><meta property="og:site_name" content="Donde siempre estuviste · Aleix"><meta property="og:title" content="Cookies y privacidad del navegador · Donde siempre estuviste"><meta property="og:description" content="Almacenamiento necesario, sesión de la comunidad y elección de analítica opcional."><meta property="og:url" content="https://prueba-aleix.com/cookies"><meta property="og:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="900"><meta property="og:image:alt" content="Portada de Donde siempre estuviste, de Aleix"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Cookies y privacidad del navegador · Donde siempre estuviste"><meta name="twitter:description" content="Almacenamiento necesario, sesión de la comunidad y elección de analítica opcional."><meta name="twitter:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta name="twitter:image:alt" content="Portada de Donde siempre estuviste, de Aleix"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
     <a class="wordmark" href="/#inicio" aria-label="Donde siempre estuviste, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
@@ -2254,7 +2420,7 @@ ARCHIVO: web-actual/dist/index.html
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header wrap">
-    <a class="wordmark" href="#inicio" aria-label="Donde siempre estuviste, inicio">
+    <a class="wordmark" href="#inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
     </a>
@@ -2340,7 +2506,7 @@ ARCHIVO: web-actual/dist/legal.css
 ARCHIVO: web-actual/dist/normas-comunidad.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Participación, moderación y comunicación de incidencias en la comunidad de Donde siempre estuviste."><meta name="referrer" content="no-referrer"><title>Normas de la comunidad · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/normas-comunidad"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Participación, moderación y comunicación de incidencias en la comunidad de Donde siempre estuviste."><meta name="referrer" content="no-referrer"><title>Normas de la comunidad · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/normas-comunidad"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><meta property="og:site_name" content="Donde siempre estuviste · Aleix"><meta property="og:title" content="Normas de la comunidad · Donde siempre estuviste"><meta property="og:description" content="Participación, moderación y comunicación de incidencias en la comunidad de Donde siempre estuviste."><meta property="og:url" content="https://prueba-aleix.com/normas-comunidad"><meta property="og:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="900"><meta property="og:image:alt" content="Portada de Donde siempre estuviste, de Aleix"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Normas de la comunidad · Donde siempre estuviste"><meta name="twitter:description" content="Participación, moderación y comunicación de incidencias en la comunidad de Donde siempre estuviste."><meta name="twitter:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta name="twitter:image:alt" content="Portada de Donde siempre estuviste, de Aleix"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
     <a class="wordmark" href="/#inicio" aria-label="Donde siempre estuviste, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
@@ -2449,7 +2615,7 @@ refreshMetrics();loadModerationHistory();loadReports();
 ARCHIVO: web-actual/dist/privacidad.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Cómo se tratan los datos de las cuentas, la comunidad, el contacto y las estadísticas de esta web."><meta name="referrer" content="no-referrer"><title>Política de privacidad · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/privacidad"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Cómo se tratan los datos de las cuentas, la comunidad, el contacto y las estadísticas de esta web."><meta name="referrer" content="no-referrer"><title>Política de privacidad · Donde siempre estuviste</title><link rel="canonical" href="https://prueba-aleix.com/privacidad"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/site-updates.css"><script src="/privacy-controls.js" defer></script><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><meta property="og:site_name" content="Donde siempre estuviste · Aleix"><meta property="og:title" content="Política de privacidad · Donde siempre estuviste"><meta property="og:description" content="Cómo se tratan los datos de las cuentas, la comunidad, el contacto y las estadísticas de esta web."><meta property="og:url" content="https://prueba-aleix.com/privacidad"><meta property="og:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="900"><meta property="og:image:alt" content="Portada de Donde siempre estuviste, de Aleix"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Política de privacidad · Donde siempre estuviste"><meta name="twitter:description" content="Cómo se tratan los datos de las cuentas, la comunidad, el contacto y las estadísticas de esta web."><meta name="twitter:image" content="https://prueba-aleix.com/assets/donde-siempre-estuviste-social-3ae9744452bb.jpg"><meta name="twitter:image:alt" content="Portada de Donde siempre estuviste, de Aleix"></head><body><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap">
     <a class="wordmark" href="/#inicio" aria-label="Donde siempre estuviste, inicio">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="9"/><path d="M20 2v5m0 26v5M2 20h5m26 0h5M7.3 7.3l3.5 3.5m18.4 18.4 3.5 3.5m0-25.4-3.5 3.5M10.8 29.2l-3.5 3.5"/></svg>
       <span>Donde siempre estuviste<span class="wordmark-sub">UN LIBRO DE ALEIX</span></span>
@@ -2471,7 +2637,7 @@ ARCHIVO: web-actual/dist/privacy-controls.js
 'use strict';
 (()=>{
  const key='lectura_privacy_v1',lifetime=180*86400000;let choice=null,sent=false;const blocked=navigator.globalPrivacyControl===true||navigator.doNotTrack==='1';
- try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&['essential','analytics'].includes(saved.choice)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<lifetime)choice=saved.choice;}catch{}
+ try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&['essential','analytics'].includes(saved.choice)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<lifetime)choice=saved.choice;else localStorage.removeItem(key);}catch{try{localStorage.removeItem(key);}catch{}}
  function node(tag,value){const el=document.createElement(tag);el.textContent=value;return el;}
  const panel=document.createElement('section');panel.className='privacy-panel';panel.setAttribute('aria-label','Preferencias de privacidad');panel.hidden=!!choice;
  panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon, sin perfiles personales.'));
@@ -2847,7 +3013,7 @@ h1 em,h2 em,.closing p em{color:#805b28}.button-primary{background:#805b28;color
 ARCHIVO: web-actual/dist/sitemap.xml
 ========================================================================
 
-<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://prueba-aleix.com/</loc></url><url><loc>https://prueba-aleix.com/comunidad</loc></url><url><loc>https://prueba-aleix.com/condiciones-de-venta</loc></url></urlset>
+<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://prueba-aleix.com/</loc></url><url><loc>https://prueba-aleix.com/comunidad</loc></url><url><loc>https://prueba-aleix.com/condiciones-de-venta</loc></url><url><loc>https://prueba-aleix.com/aviso-legal</loc></url><url><loc>https://prueba-aleix.com/privacidad</loc></url><url><loc>https://prueba-aleix.com/cookies</loc></url><url><loc>https://prueba-aleix.com/normas-comunidad</loc></url></urlset>
 
 
 
@@ -3240,6 +3406,54 @@ Revisión sobre la fuente db347e1448873192f99283c7a68faaa19f27ced3 y correccione
 - Los límites por IP dependen de la cabecera confiable CF-Connecting-IP del hosting. Su ausencia en local agrupa visitantes sin IP; no se verificó esa ausencia en producción ni se trata como fallo confirmado del sitio.
 - No se han eliminado ni resuelto avisos o publicaciones reales del usuario. Las pruebas con escrituras utilizan datos locales ficticios.
 - No hay garantía de ausencia absoluta de errores ni auditoría legal externa. No se ejecutó Strix ni una prueba intrusiva contra producción.
+
+
+
+========================================================================
+ARCHIVO: web-actual/docs/revision-publicacion-comunidad-2026-09-30.md
+========================================================================
+
+# Revisión de publicación y comunidad — 30 de septiembre de 2026
+
+## Cambios de esta revisión
+
+- Comunidad: cabecera compacta, conversaciones primero en móvil, acceso a cuenta mediante enlace visible, búsqueda/orden alineados, autores con inicial decorativa, fechas semánticas, fichas y diálogos más legibles. Sin cambios a datos, permisos ni API.
+- Vistas previas al compartir: Open Graph y Twitter Cards específicos en las siete páginas públicas; portada de marca disponible por HTTPS.
+- Sitemap: las siete páginas públicas canónicas, sin propietario, API, demostraciones o rutas privadas.
+- Privacidad: se elimina del navegador la preferencia caducada o inválida, en lugar de ignorarla dejando la clave almacenada.
+- Accesibilidad: el enlace de marca de inicio toma su nombre del texto visible completo; se retiró una etiqueta ARIA que omitía el subtítulo.
+- Empaquetado: lista explícita de recursos públicos permitidos para impedir que una exportación o archivo ajeno añadido a dist se publique accidentalmente.
+
+## Verificado
+
+- 168 pruebas de código, incluida la lógica de cuentas Google, roles, moderación, reportes, borradores, consentimientos y metadatos. La suite incluye también módulos comerciales históricos archivados; no se publican.
+- Navegador Edge: anchos 320, 390, 768 y 1440; lista con propietario y visitante, conversación y aviso. Sin desbordamiento horizontal ni errores JavaScript. Axe WCAG A/AA sin infracciones detectadas en los nueve estados probados. Borrador conservado tras cerrar y reabrir un hilo. Pruebas locales con datos ficticios, sin escribir en la base real.
+- Web publicada anterior al cambio: inicio, comunidad y health responden 200; HTTP redirige a HTTPS, HSTS activo; propietario anónimo redirige a Google con noindex/no-store; .env y backup.zip responden 404 noindex; demo 410 noindex. No se obtuvo un archivo privado.
+- UptimeRobot: portada y health aparecen Up, comprobación cada cinco minutos, cero incidencias en el momento de la revisión. No depende del ordenador. La recepción del aviso de prueba requiere confirmación del destinatario.
+- Copia diaria local de código: manifiesto existente verificado mediante SHA-256. Incluye commits de Git, no base de producción, sesiones ni configuración secreta.
+- Analítica propia: recuentos agregados de visitas y clics Amazon solo tras aceptar. Sin GA4, Tag Manager o píxeles publicitarios externos. Rechazo, retirada, GPC/DNT comprobados. Los clics no representan ventas realizadas en Amazon.
+- Imágenes de portada WebP con srcset/sizes y dimensiones; carga prioritaria de la imagen principal, cuya carga diferida perjudicaría el contenido inicial. Caché inmutable para recursos con huella de contenido.
+
+## Rendimiento medido y límites
+
+PageSpeed Insights API devolvió 429 por cuota compartida; no produjo una medición. Lighthouse local sobre la portada publicada anterior al cambio generó un informe JSON válido: rendimiento 95, accesibilidad 100, SEO 100, buenas prácticas 81; LCP 1,5 s, CLS 0,005, TBT 10 ms. Son mediciones de laboratorio, no INP ni datos de visitas reales. El proceso terminó con EPERM al limpiar su directorio temporal en Windows; el informe existe, pero no se considera una ejecución CLI completamente exitosa. La etiqueta de marca detectada se corrigió en este cambio. Los avisos de API obsoleta corresponden al script de seguridad del alojamiento; el tiempo inicial del servidor y la caché de navegación requieren revisar ese alojamiento, no desactivar protecciones de seguridad.
+
+## No aplicable a esta web
+
+El libro se compra en Amazon. No hay checkout, cobros, formulario de contacto o newsletter propios, ni correos de bienvenida/pedido/recuperación enviados por esta aplicación. No se ha realizado ninguna transacción de pago. La cuenta se autentica mediante Google. El enlace de Amazon sigue siendo el genérico solicitado hasta recibir la ficha real del libro.
+
+## Pendiente del titular o del proveedor
+
+- Enlace definitivo del libro en Amazon y pruebas de compra en su ficha.
+- Copia periódica de D1 y ensayo de restauración de la base de producción. No se ha configurado ni verificado mediante las herramientas disponibles.
+- Alta y propiedad verificada en Search Console/Bing; sitemap listo, no enviado en esta revisión.
+- Recepción de alertas de UptimeRobot en correo/móvil.
+- Prueba de alta completa con una cuenta Google externa nueva: consola verificada En producción/Usuarios externos en el turno anterior; selector de cuenta comprobado, acceso nuevo completo no realizado.
+- Pruebas en Chrome, Firefox y Safari reales. Edge comprobado; no se encontró Chrome o Firefox instalados en sus rutas habituales. Safari no está disponible en Windows. No se presenta Edge como prueba de esos navegadores.
+- Filtro global por IP del equipo no configurado. Elegir Solo necesarias en los navegadores de trabajo excluye sus eventos; GA4/Tag Manager requieren cuenta e identificador si se decide sustituir la analítica propia.
+- Correo con dominio propio, contratos de tratamiento, garantías de transferencias, plazos de conservación del historial de moderación y permisos para participación de menores requieren validación del responsable. No se garantiza cumplimiento legal completo por pasar pruebas técnicas.
+
+Referencia para revisar consentimiento y cookies: [Guía de la AEPD](https://www.aepd.es/guias/guia-cookies.pdf). La política identifica a los proveedores reales del alojamiento. No se han borrado datos de personas ni contenido real de la comunidad.
 
 
 
@@ -10995,12 +11209,14 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.xml':'application/xml; charset=utf-8','.woff2':'font/woff2','.txt':'text/plain; charset=utf-8'};
 const assets={};
-const retired=new Set(['tienda-demo.html','devoluciones.html','returns.js','returns.css','shop.js','cart.js','demo-session.js','demo-session.css','demo-checkout.js','propietario.html']);
+// Only approved public resources enter the bundle. A stray export or secret in
+// dist must never become a publicly accessible asset.
+const publicFiles=new Set(['index.html','404.html','acceso-restringido.html','comunidad.html','aviso-legal.html','privacidad.html','cookies.html','condiciones-de-venta.html','normas-comunidad.html','app.js','community.js','owner.js','privacy-controls.js','styles.css','community.css','shop.css','legal.css','site-updates.css','fonts.css','favicon.svg','robots.txt','sitemap.xml']);
+const publicAsset=key=>publicFiles.has(key.slice(1))||/^\/assets\/donde-siempre-estuviste-(?:\d+-[a-f0-9]{12}\.webp|social-[a-f0-9]{12}\.jpg)$/.test(key)||/^\/assets\/fonts\/(?:font-[1-7]\.woff2|(?:playfairdisplay|manrope|dmsans)-OFL\.txt)$/.test(key);
 async function walk(dir,prefix=''){for(const ent of await readdir(dir,{withFileTypes:true})){
- if(['server','.openai'].includes(ent.name)||!prefix&&retired.has(ent.name))continue;
+ if(['server','.openai'].includes(ent.name))continue;
  const key=prefix+'/'+ent.name,file=path.join(dir,ent.name);
- if(key==='/assets/fumada-xxl-aleix.png'||key.endsWith('.ttf')||key.startsWith('/assets/fumada-xxl-'))continue;
- if(ent.isDirectory())await walk(file,key);else assets[key]={type:types[path.extname(file)]||'application/octet-stream',data:(await readFile(file)).toString('base64')};
+ if(ent.isDirectory()){if(key==='/assets'||key==='/assets/fonts')await walk(file,key);}else if(publicAsset(key))assets[key]={type:types[path.extname(file)],data:(await readFile(file)).toString('base64')};
 }}
 await walk('dist');assets['@owner']={type:types['.html'],data:(await readFile('dist/propietario.html')).toString('base64')};
 // Fingerprint fonts as well as images so long-lived cache entries cannot go stale.
@@ -12568,8 +12784,8 @@ function browser({saved=null,dnt=false,gpc=false,storageFails=false}={}){
  const all=[],events=new Map(),requests=[],storage=new Map(saved?[['lectura_privacy_v1',JSON.stringify(saved)]]:[]);
  const node=tag=>{const el={tag,children:[],events:new Map(),hidden:false,textContent:'',setAttribute(){},append(...items){this.children.push(...items);},addEventListener(type,fn){this.events.set(type,fn);},querySelector(tag){return all.find(e=>e.tag===tag);},focus(){}};all.push(el);return el;};
  const document={body:node('body'),createElement:node,querySelector:()=>null,addEventListener:(type,fn)=>events.set(type,fn)};
- vm.runInNewContext(source,{document,navigator:{doNotTrack:dnt?'1':'0',globalPrivacyControl:gpc},location:{pathname:'/'},localStorage:{getItem:key=>storage.get(key),setItem:(key,val)=>{if(storageFails)throw Error();storage.set(key,val);}},fetch:(url,options)=>{requests.push({url,options,body:JSON.parse(options.body)});return Promise.resolve();}});
- return {requests,all,choose(label){all.find(e=>e.tag==='button'&&e.textContent===label).events.get('click')();},click(kind){events.get('click')({target:{closest:()=>({dataset:{track:kind}})}});}};
+ vm.runInNewContext(source,{document,navigator:{doNotTrack:dnt?'1':'0',globalPrivacyControl:gpc},location:{pathname:'/'},localStorage:{getItem:key=>storage.get(key),removeItem:key=>{if(storageFails)throw Error();storage.delete(key);},setItem:(key,val)=>{if(storageFails)throw Error();storage.set(key,val);}},fetch:(url,options)=>{requests.push({url,options,body:JSON.parse(options.body)});return Promise.resolve();}});
+ return {requests,all,storage,choose(label){all.find(e=>e.tag==='button'&&e.textContent===label).events.get('click')();},click(kind){events.get('click')({target:{closest:()=>({dataset:{track:kind}})}});}};
 }
 test('analytics stays off before a choice, after rejection and after withdrawal',()=>{
  const b=browser();b.click('amazon');assert.equal(b.requests.length,0);b.choose('Solo necesarias');b.click('whatsapp');assert.equal(b.requests.length,0);
@@ -12578,7 +12794,7 @@ test('analytics stays off before a choice, after rejection and after withdrawal'
  assert.deepEqual(b.requests.map(r=>r.body.event),['view','amazon']);assert.ok(b.requests.every(r=>r.options.credentials==='omit'&&r.body.page==='home'&&r.body.consent===true));
 });
 test('DNT and GPC override stored or newly accepted analytics',()=>{for(const flags of [{dnt:true},{gpc:true}]){const b=browser({...flags,saved:{choice:'analytics',at:Date.now()}});b.click('amazon');b.choose('Aceptar analítica');assert.equal(b.requests.length,0);}});
-test('expired, future and invalid preferences never activate analytics',()=>{for(const at of [Date.now()-181*86400000,Date.now()+86400000,'bad',null]){const b=browser({saved:{choice:'analytics',at}});b.click('amazon');assert.equal(b.requests.length,0);}});
+test('expired, future and invalid preferences never activate analytics',()=>{for(const at of [Date.now()-181*86400000,Date.now()+86400000,'bad',null]){const b=browser({saved:{choice:'analytics',at}});b.click('amazon');assert.equal(b.requests.length,0);assert.equal(b.storage.has('lectura_privacy_v1'),false);}});
 test('storage failure still allows an in-memory privacy choice',()=>{const b=browser({storageFails:true});b.choose('Aceptar analítica');b.click('amazon');assert.equal(b.requests.length,2);b.choose('Solo necesarias');b.click('amazon');assert.equal(b.requests.length,2);});
 
 
@@ -12674,7 +12890,7 @@ test('search metadata identifies the real book without advertising an active che
 test('sitemap contains the canonical public page and robots lets noindex pages be read',async()=>{
  const sitemap=await call('/sitemap.xml');assert.equal(sitemap.status,200);
  assert.match(sitemap.headers.get('content-type'),/xml/);
- const xml=await sitemap.text();assert.deepEqual([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]),['https://prueba-aleix.com/','https://prueba-aleix.com/comunidad','https://prueba-aleix.com/condiciones-de-venta']);
+ const xml=await sitemap.text();assert.deepEqual([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]),['https://prueba-aleix.com/','https://prueba-aleix.com/comunidad','https://prueba-aleix.com/condiciones-de-venta','https://prueba-aleix.com/aviso-legal','https://prueba-aleix.com/privacidad','https://prueba-aleix.com/cookies','https://prueba-aleix.com/normas-comunidad']);
  const robots=await call('/robots.txt');assert.equal(robots.status,200);const text=await robots.text();
  assert.match(text,/Sitemap: https:\/\/prueba-aleix.com\/sitemap.xml/);assert.doesNotMatch(text,/Disallow:\s*\//);
  const demo=await call('/propietario');assert.match(demo.headers.get('x-robots-tag'),/noindex/);
@@ -12700,6 +12916,15 @@ test('responsive cover is smaller, typed correctly and cacheable by its content 
  const old=await call('/assets/donde-siempre-estuviste-aleix.png');assert.equal(old.status,404);
  assert.equal((await call('/assets/fonts/font-1.ttf')).status,404);
  assert.ok(readFileSync('dist/server/index.js').length<1500000,'unused originals excluded from Worker');
+});
+
+test('every public page has specific share metadata and an accessible brand image',async()=>{
+ for(const path of ['/','/comunidad','/privacidad','/cookies','/aviso-legal','/normas-comunidad','/condiciones-de-venta']){
+  const html=await(await call(path)).text(),url='https://prueba-aleix.com'+path;
+  const value=name=>html.match(new RegExp('<meta (?:property|name)="'+name+'" content="([^\"]*)"'))?.[1];
+  assert.equal(value('og:url'),url);assert.ok(value('og:title'));assert.ok(value('og:description'));assert.equal(value('twitter:card'),'summary_large_image');
+  const image=new URL(value('og:image'));assert.equal(image.origin,'https://prueba-aleix.com');const response=await call(image.pathname);assert.equal(response.status,200);assert.match(response.headers.get('content-type'),/image/);
+ }
 });
 
 
@@ -13863,7 +14088,7 @@ ARCHIVO: web-actual/worker/site.mjs
 
 import {handleCommunity,communitySession} from './community.mjs';
 import {handleMetrics} from './metrics.mjs';
-const sitePrivateHeaders={'Cache-Control':'private, no-store','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer'};
+const sitePrivateHeaders={'Cache-Control':'private, no-store','Vary':'Cookie','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer'};
 const siteSecurityHeaders={'X-Content-Type-Options':'nosniff','Strict-Transport-Security':'max-age=31536000','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()'};
 const siteJson=(data,status)=>new Response(JSON.stringify(data),{status,headers:{...siteSecurityHeaders,...sitePrivateHeaders,'Content-Type':'application/json; charset=utf-8'}});
 const siteRedirect=(to,status=301)=>new Response(null,{status,headers:{...siteSecurityHeaders,Location:to,'Cache-Control':'no-store'}});
@@ -13903,7 +14128,7 @@ function siteAsset(asset,request,privatePage=false,status=200){
  if(isHtml)headers['Cache-Control']=privatePage?'private, no-store':'no-store';
  if(status!==200){headers['Cache-Control']='no-store';headers['X-Robots-Tag']='noindex, nofollow';}
  if(!privatePage&&!isHtml&&status===200&&asset.etag){headers.ETag=asset.etag;const tag=asset.etag.replace(/^W\//,'');if(request.headers.get('if-none-match')?.split(',').some(v=>v.trim()==='*'||v.trim().replace(/^W\//,'')===tag))return new Response(null,{status:304,headers});}
- if(isHtml){const nonce=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));headers['Content-Security-Policy']="default-src 'self'; script-src 'self' 'nonce-"+nonce+"' 'sha256-"+asset.jsonLdHash+"'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";}
+ if(isHtml){const nonce=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));headers['Content-Security-Policy']="default-src 'self'; script-src 'self' 'nonce-"+nonce+"' 'sha256-"+asset.jsonLdHash+"'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self'";}
  return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.data),c=>c.charCodeAt(0)),{status,headers});
 }
 
