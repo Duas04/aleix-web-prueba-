@@ -70,3 +70,9 @@ Si existe un registro A de www, se sustituye por ese CNAME; los TXT anteriores s
 La comprobación publicada detectó que Cloudflare añade su script de protección contra bots después del Worker. Se incorpora un nonce CSP aleatorio por respuesta para que Cloudflare pueda autorizar únicamente su inyección documentada. No se usa unsafe-inline ni unsafe-eval. El HTML no se reutiliza mediante caché o respuestas 304; fuentes, imágenes y recursos estáticos conservan su caché. Referencia: https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/#if-you-have-a-content-security-policy-csp.
 
 La política de cookies identifica también la comprobación de seguridad de Cloudflare y su posible cookie técnica cf_clearance, sin inventar una duración que depende del proveedor.
+
+### Verificación publicada
+
+La versión publicada con CSP por respuesta se comprobó en Edge: portada y comunidad sin errores de consola, peticiones fallidas ni violaciones CSP observadas. Google indica que falta configuración, sin simular una sesión. Las 13 comprobaciones HTTP de rutas públicas, salud de D1 y retirada de endpoints antiguos dieron el resultado esperado.
+
+Se observaron solo nombres/atributos (nunca se guardaron valores) de tres cookies del alojamiento: __Host-appgarden-visitor, de 90 días; __cf_bm, de 30 minutos; cf_clearance, con caducidad de un año. El inventario público las recoge. Antes de abrir cuentas reales, confirmar con Sites la finalidad jurídica y clasificación del identificador de visitante y la configuración/retención de las cookies del proveedor; nuestra elección de analítica controla únicamente los eventos propios de la web, no la infraestructura del alojamiento.
