@@ -1,0 +1,77 @@
+/* Technical session for fictional demonstrations only. */
+(() => {
+ 'use strict';
+ const enabled=new URLSearchParams(location.search).get('demo')==='1'||['/demo','/demo/'].includes(location.pathname);
+ const KEY='fumada-shared-demo-v1',TTL=7*24*60*60*1000,validToken=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{43}$/.test(value),validOrder=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,100}$/.test(value);
+ let token='',expiresAt=0,expiryKnown=false,selectedOrder='',storage,expiryTimer=null,creating=false,stateVersion=0,bar=null,blockedUntil=0,cooldownTimer=null;
+ const listeners=new Set(),controls={};
+ try{storage=window.sessionStorage;}catch{}
+ function persist(){try{if(token)storage?.setItem(KEY,JSON.stringify({token,expiresAt,expiryKnown,orderId:selectedOrder}));else storage?.removeItem(KEY);}catch{}}
+ function notify(){updateBar();for(const fn of listeners){try{fn();}catch{}}}
+ function clear(){if(!token)return;token='';expiresAt=0;expiryKnown=false;selectedOrder='';stateVersion++;if(expiryTimer!==null)clearTimeout(expiryTimer);expiryTimer=null;persist();notify();}
+ function ready(){if(token&&expiresAt<=Date.now())clear();return enabled&&!!token;}
+ function scheduleExpiry(){if(expiryTimer!==null)clearTimeout(expiryTimer);expiryTimer=token?setTimeout(()=>{expiryTimer=null;if(expiresAt<=Date.now())clear();else scheduleExpiry();},Math.max(1,expiresAt-Date.now())):null;}
+ function accept(value,expiry,order='',known=false){token=value;expiresAt=expiry;expiryKnown=known;selectedOrder=validOrder(order)?order:'';stateVersion++;persist();scheduleExpiry();notify();}
+ function consume(){
+  if(!enabled)return false;const params=new URLSearchParams(location.hash.slice(1));if(params.has('token')||!params.has('session'))return false;
+  const value=params.get('session');history.replaceState(null,'',location.pathname+location.search);
+  if(!validToken(value)){if(controls.message)controls.message.textContent='El enlace de demostración no es válido. Pide uno nuevo.';return false;}
+  accept(value,Date.now()+TTL,params.get('order')||'');return true;
+ }
+ function link(path,{orderId}={}){
+  const url=new URL(path,location.origin);
+  if(url.origin!==location.origin||!['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname))throw new Error('Ese enlace no pertenece a la demostración.');
+  if(url.pathname!=='/demo')url.searchParams.set('demo','1');
+  url.hash='';if(ready()){const params=new URLSearchParams({session:token}),id=orderId===undefined?selectedOrder:orderId;if(validOrder(id))params.set('order',id);url.hash=params.toString();}return url.href;
+ }
+ async function request(path,options={}){
+  const url=new URL(path,location.origin);if(url.origin!==location.origin||!url.pathname.startsWith('/api/demo/'))throw new Error('Solo se pueden consultar datos de la demostración.');
+  if(!ready())throw new Error('Inicia una demostración o usa un enlace compartido. La sesión puede haber caducado.');
+  const currentToken=token,headers=new Headers(options.headers||{});headers.set('X-Demo-Session',currentToken);
+  const response=await fetch(url.pathname+url.search,{...options,headers,cache:'no-store',credentials:'omit'});
+  if([401,410].includes(response.status)&&currentToken===token)clear();return response;
+ }
+ function busy(value){creating=value;if(controls.start)controls.start.disabled=value||blockedUntil>Date.now();if(controls.importButton)controls.importButton.disabled=value;}
+ function cooldown(seconds,version,message){blockedUntil=Date.now()+seconds*1000;if(cooldownTimer!==null)clearTimeout(cooldownTimer);cooldownTimer=setTimeout(()=>{cooldownTimer=null;blockedUntil=0;busy(creating);if(version===stateVersion&&controls.message?.textContent===message)controls.message.textContent='Ya puedes iniciar una demostración o usar un enlace compartido.';},seconds*1000);}
+ async function create(){
+  if(!enabled||creating||blockedUntil>Date.now())return false;const version=stateVersion;busy(true);if(controls.message)controls.message.textContent='Preparando demostración…';
+  try{const response=await fetch('/api/demo/session',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Action':'session'},body:'{}',cache:'no-store',credentials:'omit'});let data;try{data=await response.json();}catch{throw new Error('No se ha podido iniciar. Inténtalo de nuevo.');}
+   if(version!==stateVersion)return false;
+   if(!response.ok){let message=typeof data.error==='string'&&data.error.length<=300?data.error:'No se ha podido iniciar la demostración. Inténtalo de nuevo.';if(response.status===429){const retry=Number(response.headers.get('Retry-After')),seconds=Number.isInteger(retry)&&retry>0&&retry<=900?retry:60;message+=' Espera '+(seconds<60?seconds+' segundos':Math.ceil(seconds/60)+' min')+' antes de crear otra. Puedes abrir el enlace de una demostración existente.';cooldown(seconds,version,message);}throw new Error(message);}
+   if(!validToken(data.token)||!Number.isFinite(data.expiresAt)||data.expiresAt<=Date.now()||data.expiresAt>Date.now()+TTL+60000)throw new Error('No se ha podido iniciar la demostración. Inténtalo de nuevo.');
+   if(version!==stateVersion)return false;accept(data.token,data.expiresAt,'',true);if(controls.message)controls.message.textContent='Demostración conectada. Puedes compartir el enlace con otro dispositivo.';return true;
+  }catch(error){if(version===stateVersion&&controls.message)controls.message.textContent=error.message;return false;}finally{busy(false);updateBar();}
+ }
+ function node(tag,text,id){const value=document.createElement(tag);if(text)value.textContent=text;if(id)value.id=id;return value;}
+ function connectPageLinks(){for(const anchor of document.querySelectorAll?.('a[href]')||[]){try{const url=new URL(anchor.getAttribute('href'),location.href);if(url.origin===location.origin&&['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname)&&(!url.hash||url.hash.startsWith('#session=')))anchor.href=link(url.pathname);}catch{}}}
+ function updateBar(){
+  if(!bar)return;const connected=enabled&&!!token&&expiresAt>Date.now();
+  controls.status.textContent=connected?'Demostración conectada':'Demostración sin conectar';
+  controls.start.textContent=connected?'Nueva demostración':'Iniciar demostración';controls.copy.disabled=!connected;
+  controls.expiry.textContent=connected&&expiryKnown?'Caduca el '+new Intl.DateTimeFormat('es-ES',{dateStyle:'medium'}).format(new Date(expiresAt))+'.':'La sesión dura 7 días desde que se crea.';
+  const page=location.pathname.startsWith('/devoluciones')?1:location.pathname.startsWith('/demo')?2:0;
+  controls.guide.textContent=!connected?'Inicia una demostración para recorrer las tres páginas.':[
+   selectedOrder?'Pedido '+selectedOrder+' seleccionado. Continúa en Devoluciones o prepara otra compra.':'Elige una edición y crea tu primer pedido de prueba.',
+   selectedOrder?'Pedido '+selectedOrder+'. Envía tu solicitud y sigue su estado aquí.':'Consulta el número de tu pedido de prueba o vuelve a la Tienda para crear uno.',
+   selectedOrder?'Pedido '+selectedOrder+' seleccionado. Gestiona la solicitud y consulta la respuesta en Devoluciones.':'Abre un pedido para ver cómo se preparan los envíos y las devoluciones.'
+  ][page];
+  if(controls.shareVersion!==stateVersion){controls.shareVersion=stateVersion;controls.shareLink.value='';controls.fallback.hidden=true;}
+  for(const [index,[path,anchor]]of controls.links.entries()){anchor.href=link(path);if(index===page)anchor.setAttribute('aria-current','page');else anchor.removeAttribute('aria-current');}connectPageLinks();
+ }
+ function mount(){
+  if(!enabled||bar||!document.body)return;bar=node('section',null,'demo-session-bar');bar.className='demo-session-bar';bar.setAttribute('aria-label','Sesión de demostración compartida');
+  const inner=node('div');inner.className='demo-session-inner';const heading=node('div');heading.className='demo-session-heading';controls.status=node('strong',null,'demo-session-status');controls.status.setAttribute('role','status');controls.status.setAttribute('aria-live','polite');controls.expiry=node('p');heading.append(controls.status,node('span','Datos ficticios · Sin cobros ni correos'));
+  controls.guide=node('p',null,'demo-guide');controls.guide.className='demo-guide';
+  const tools=node('details',null,'demo-tools');tools.open=false;tools.append(node('summary','Compartir o conectar otro dispositivo'));
+  const notice=node('p','Solo datos ficticios: no uses nombres, correos ni direcciones reales. Quien reciba el enlace podrá ver y gestionar los pedidos de esta demostración.');notice.className='demo-session-notice';
+  const actions=node('div');actions.className='demo-session-actions';controls.start=node('button','Iniciar demostración','demo-session-start');controls.start.type='button';controls.start.addEventListener('click',create);controls.copy=node('button','Copiar enlace para otro dispositivo','demo-session-copy');controls.copy.type='button';controls.copy.addEventListener('click',async()=>{if(!ready())return;const version=stateVersion,url=link('/');try{await navigator.clipboard.writeText(url);if(version!==stateVersion)return;controls.fallback.hidden=true;controls.shareLink.value='';controls.message.textContent='Enlace copiado. Compártelo solo con quien quieras que vea la demostración.';}catch{if(version!==stateVersion)return;controls.shareLink.value=url;controls.fallback.hidden=false;controls.shareLink.focus();controls.shareLink.select?.();controls.message.textContent='No se ha podido copiar automáticamente: selecciona el enlace y cópialo para compartir esta demostración.';}});actions.append(controls.start);
+  controls.fallback=node('div',null,'demo-share-fallback');controls.fallback.hidden=true;const shareLabel=node('label','Enlace de esta demostración');shareLabel.setAttribute('for','demo-share-link');controls.shareLink=node('input',null,'demo-share-link');controls.shareLink.type='text';controls.shareLink.readOnly=true;controls.fallback.append(shareLabel,controls.shareLink);
+  const nav=node('nav');nav.setAttribute('aria-label','Navegar por la demostración');controls.links=[['/','Tienda'],['/devoluciones','Devoluciones'],['/demo','Panel']].map(([path,text],index)=>{const anchor=node('a',(index+1)+'. '+text,'demo-nav-'+index);nav.append(anchor);return[path,anchor];});
+  const form=node('form',null,'demo-session-import-form');form.className='demo-session-import';const label=node('label','Usar el enlace de otro dispositivo');label.setAttribute('for','demo-session-import');controls.input=node('input',null,'demo-session-import');controls.input.type='text';controls.input.name='demoLink';controls.input.autocomplete='off';controls.input.spellcheck=false;controls.input.placeholder='Pega aquí el enlace compartido…';controls.importButton=node('button','Conectar enlace');controls.importButton.type='submit';form.append(label,controls.input,controls.importButton);
+  controls.message=node('p',null,'demo-session-message');controls.message.setAttribute('role','status');controls.message.setAttribute('aria-live','polite');
+  form.addEventListener('submit',event=>{event.preventDefault();if(creating)return;try{const url=new URL(controls.input.value.trim(),location.origin),params=new URLSearchParams(url.hash.slice(1));if(url.origin!==location.origin||!['/','/devoluciones','/devoluciones.html','/demo'].includes(url.pathname)||params.has('token')||!validToken(params.get('session')))throw new Error();accept(params.get('session'),Date.now()+TTL,params.get('order')||'');controls.input.value='';controls.message.textContent='Enlace conectado. Los pedidos se comparten con el otro dispositivo.';}catch{controls.message.textContent='Pega un enlace de demostración válido de esta web.';controls.input.focus();}});
+  tools.append(notice,controls.expiry,controls.copy,controls.fallback,form);actions.append(tools);inner.append(heading,nav,controls.guide,actions,controls.message);bar.append(inner);document.body.prepend(bar);updateBar();
+ }
+ window.DemoSession=Object.freeze({enabled,ready,request,link,create,orderId:()=>ready()?selectedOrder:'',selectOrder(id){if(!enabled||!validOrder(id)||id===selectedOrder)return;selectedOrder=id;persist();updateBar();},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn);},expiry:()=>ready()&&expiryKnown?expiresAt:null});
+ if(enabled){try{const record=JSON.parse(storage?.getItem(KEY)||'null');if(validToken(record?.token)&&Number.isFinite(record.expiresAt)&&record.expiresAt>Date.now()&&record.expiresAt<=Date.now()+TTL){token=record.token;expiresAt=record.expiresAt;expiryKnown=record.expiryKnown===true;selectedOrder=validOrder(record.orderId)?record.orderId:'';scheduleExpiry();}else storage?.removeItem(KEY);}catch{}consume();mount();if(!document.body)document.addEventListener('DOMContentLoaded',mount);window.addEventListener('hashchange',consume);}
+})();

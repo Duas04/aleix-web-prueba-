@@ -1,3 +1,5 @@
+> VERSIÓN ARCHIVADA desde el 30 de septiembre de 2026. La web vigente está en ../web-actual/. Se conserva este trabajo por petición del titular; no publicarlo sobre el sitio actual.
+
 # Web y administración privada
 
 Esta carpeta contiene la tienda y el panel privado de Fumada XXL, con los cambios y correcciones realizados. La presentación con pedidos ficticios está separada en ../presentacion; esta versión no publica /demo ni empaqueta sus datos.

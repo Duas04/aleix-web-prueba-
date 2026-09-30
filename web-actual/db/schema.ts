@@ -1,0 +1,83 @@
+import { sqliteTable, text, integer, index, check, primaryKey } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
+export const owner = sqliteTable('admin_owner', {
+  slot: integer('slot').primaryKey(), userId: text('user_id').notNull(),
+}, t => [check('one_owner',sql`${t.slot} = 1`)]);
+export const orders = sqliteTable('orders', {
+  id: text('id').primaryKey(), createdAt: integer('created_at').notNull(),
+  customerName: text('customer_name').notNull(), email: text('email').notNull(), phone: text('phone'),
+  recipient: text('recipient').notNull(), address1: text('address1').notNull(), address2: text('address2'),
+  city: text('city').notNull(), postalCode: text('postal_code').notNull(), region: text('region'), country: text('country').notNull(),
+  edition: text('edition').notNull(), quantity: integer('quantity').notNull(),
+  subtotal: integer('subtotal').notNull(), shipping: integer('shipping').notNull(), total: integer('total').notNull(),
+  paymentStatus: text('payment_status').notNull(), fulfillmentStatus: text('fulfillment_status').notNull().default('pending'),
+  paidAt: integer('paid_at'), shippedAt: integer('shipped_at'), tracking: text('tracking'),
+  carrier: text('carrier'), deliveredAt: integer('delivered_at'),
+  privateNote: text('private_note').notNull().default(''), noteUpdatedAt: integer('note_updated_at'),
+  returnStatus: text('return_status').notNull().default('none'),
+  returnReason: text('return_reason').default(''), returnResolution: text('return_resolution').default(''),
+  returnUpdatedAt: integer('return_updated_at'), managementVersion: integer('management_version').notNull().default(0),
+  portalRequestedAt: integer('portal_requested_at'), customerReply: text('customer_reply').notNull().default(''),
+  returnKind: text('return_kind').notNull().default(''), returnCode: text('return_code').notNull().default(''),
+  returnCarrier: text('return_carrier').notNull().default(''), returnLabelKey: text('return_label_key'),
+  returnLabelType: text('return_label_type'), returnLabelSize: integer('return_label_size'),
+  returnSubmittedAt: integer('return_submitted_at'),
+}, t => [index('orders_created').on(t.createdAt,t.id),
+index('orders_payment_fulfillment_created').on(t.paymentStatus,t.fulfillmentStatus,t.createdAt,t.id),
+index('orders_fulfillment_created').on(t.fulfillmentStatus,t.createdAt,t.id),
+check('order_edition',sql`${t.edition} IN ('paperback','hardcover')`),
+check('order_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
+check('order_payment',sql`${t.paymentStatus} IN ('pending','paid','failed','refunded','partially_refunded')`),
+check('order_fulfillment',sql`${t.fulfillmentStatus} IN ('pending','shipped')`),
+check('order_total',sql`${t.total} = ${t.subtotal} + ${t.shipping} AND ${t.shipping} >= 0 AND ${t.subtotal} >= 0`)]);
+export const orderItems = sqliteTable('order_items', {
+  orderId: text('order_id').notNull().references(()=>orders.id,{onDelete:'cascade'}),
+  edition: text('edition').notNull(), quantity: integer('quantity').notNull(), unitPrice: integer('unit_price').notNull(),
+}, t=>[
+  primaryKey({columns:[t.orderId,t.edition]}),
+  check('item_edition',sql`${t.edition} IN ('paperback','hardcover')`),
+  check('item_quantity',sql`${t.quantity} BETWEEN 1 AND 10`),
+  check('item_unit_price',sql`${t.unitPrice} >= 0`),
+]);
+export const returnAccess = sqliteTable('return_access', {
+  orderId: text('order_id').primaryKey().references(()=>orders.id,{onDelete:'cascade'}),
+  tokenHash: text('token_hash').notNull().unique(), expiresAt: integer('expires_at').notNull(),
+});
+export const returnRateLimits = sqliteTable('return_rate_limits', {
+  key: text('key').primaryKey(), windowStart: integer('window_start').notNull(), count: integer('count').notNull(),
+},t=>[index('return_rate_window').on(t.windowStart)]);
+export const demoSessions = sqliteTable('demo_sessions', {
+  tokenHash: text('token_hash').primaryKey(), expiresAt: integer('expires_at').notNull(),
+  data: text('data').notNull(), revision: integer('revision').notNull().default(0),
+},t=>[index('demo_sessions_expiry').on(t.expiresAt)]);
+
+export const communityUsers = sqliteTable('community_users', {
+  id: text('id').primaryKey(), googleSub: text('google_sub').notNull().unique(),
+  email: text('email').notNull(), alias: text('alias').notNull().default('Lector'),
+  acceptedAt: integer('accepted_at'), createdAt: integer('created_at').notNull(),
+});
+export const communityOwner = sqliteTable('community_owner', {
+  slot: integer('slot').primaryKey(), userId: text('user_id').notNull().references(()=>communityUsers.id),
+},t=>[check('community_one_owner',sql`${t.slot} = 1`)]);
+export const communitySessions = sqliteTable('community_sessions', {
+  tokenHash: text('token_hash').primaryKey(), userId: text('user_id').notNull().references(()=>communityUsers.id,{onDelete:'cascade'}),
+  expiresAt: integer('expires_at').notNull(),
+},t=>[index('community_session_expiry').on(t.expiresAt)]);
+export const communityOauth = sqliteTable('community_oauth', {
+  stateHash: text('state_hash').primaryKey(), verifier: text('verifier').notNull(), nonce: text('nonce').notNull(), expiresAt: integer('expires_at').notNull(),
+},t=>[index('community_oauth_expiry').on(t.expiresAt)]);
+export const communityPosts = sqliteTable('community_posts', {
+  id: text('id').primaryKey(), parentId: text('parent_id'), authorId: text('author_id').notNull().references(()=>communityUsers.id),
+  title: text('title').notNull().default(''), body: text('body').notNull(), status: text('status').notNull().default('pending'),
+  createdAt: integer('created_at').notNull(), version: integer('version').notNull().default(0),
+},t=>[index('community_posts_parent_created').on(t.parentId,t.createdAt,t.id),index('community_posts_status').on(t.status,t.createdAt),check('community_post_status',sql`${t.status} IN ('pending','published','hidden')`)]);
+export const communityLimits = sqliteTable('community_limits', {
+  key: text('key').primaryKey(), count: integer('count').notNull(), expiresAt: integer('expires_at').notNull(),
+},t=>[index('community_limit_expiry').on(t.expiresAt)]);
+export const communityModeration = sqliteTable('community_moderation', {
+  id: text('id').primaryKey(), postId: text('post_id').notNull(), actorId: text('actor_id').notNull(),
+  action: text('action').notNull(), reason: text('reason').notNull(), createdAt: integer('created_at').notNull(),
+});
+export const siteMetrics = sqliteTable('site_metrics', {
+  day: text('day').notNull(), event: text('event').notNull(), page: text('page').notNull(), count: integer('count').notNull().default(0),
+},t=>[primaryKey({columns:[t.day,t.event,t.page]})]);

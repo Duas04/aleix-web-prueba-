@@ -1,0 +1,2 @@
+CREATE INDEX `orders_payment_fulfillment_created` ON `orders` (`payment_status`,`fulfillment_status`,`created_at`,`id`);--> statement-breakpoint
+CREATE INDEX `orders_fulfillment_created` ON `orders` (`fulfillment_status`,`created_at`,`id`);

@@ -1,3 +1,5 @@
+> VERSIÓN ARCHIVADA desde el 30 de septiembre de 2026. La web vigente está en ../web-actual/. Se conserva este trabajo por petición del titular; no publicarlo sobre el sitio actual.
+
 # Fumada XXL · Presentación conectada
 
 Demostración autocontenida del recorrido de compra, devolución y gestión de pedidos. Usa exclusivamente compradores, direcciones y pagos ficticios. La etiqueta de devolución es una simulación que no sirve para transportar paquetes.

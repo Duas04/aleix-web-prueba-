@@ -1,31 +1,42 @@
-# Fumada XXL · Aleix
+# Donde siempre estuviste · Aleix
 
-Dos versiones separadas del trabajo del libro. Copia del código publicado el 28 de septiembre de 2026, commit de origen `1a7570863565da1ea4453126587de00ae6d8dcb9`.
+Código de la web del libro, con las versiones anteriores conservadas. El nombre Fumada XXL era provisional. Fuente activa: `49676fea9897eddc0e8133d377ed0c7f043c6e00`, 30 de septiembre de 2026.
 
-| Carpeta | Contenido | Inicio local |
+| Carpeta | Estado | Contenido |
 | --- | --- | --- |
-| [presentacion](presentacion/) | Compra ficticia con número de pedido, devoluciones y panel sincronizados. Servidor Node con SQLite, cuatro ejemplos iniciales y sesiones de siete días. | `node presentacion/serve.mjs` → http://127.0.0.1:4180 |
-| [web](web/) | Web de la tienda y panel privado, Worker, base D1, migraciones y pruebas. Excluye la demo pública. | `cd web`, `node scripts/build.mjs`, `node scripts/preview-admin.mjs` → http://127.0.0.1:4181 |
+| [web-actual](web-actual/) | Actual | Presentación ocre, enlace provisional a Amazon, comunidad Google preparada y zona privada de moderación/estadísticas. |
+| [web](web/) | Archivo | Versión anterior de venta directa, carrito, pedidos y devoluciones. No se publica ni acepta cobros. |
+| [presentacion](presentacion/) | Archivo | Demostración con pedidos, reembolsos y direcciones ficticias. Solo para ejecutar localmente. |
 
-Necesitas Node.js 24 o superior. La presentación no necesita instalar dependencias. Para tareas con Drizzle en web: `pnpm install` (versión indicada en package.json).
+La web vigente es [prueba-aleix.com](https://prueba-aleix.com/), con [comunidad](https://prueba-aleix.com/comunidad). Las antiguas rutas de demo/devoluciones se han retirado. Las carpetas de archivo se conservan completas: no representan la tienda actual, ni la compra en Amazon.
 
-## Estado de la venta
+## Ejecutar la versión actual
 
-Tapa blanda 15 EUR, tapa dura 20 EUR, envío 7 EUR por pedido. Los cobros están desactivados. Stripe, webhooks, disponibilidad, plazos y operativa de venta siguen pendientes: ver [web/LEGAL-READINESS.md](web/LEGAL-READINESS.md). El reembolso de la presentación es ficticio y no ejecuta una devolución de dinero.
+Node.js 24 o superior:
 
-## Publicación actual
+```sh
+cd web-actual
+node scripts/build-public.mjs
+node --test tests/*.test.mjs
+node scripts/preview-public.mjs
+```
 
-- Web: https://prueba-aleix.com/
-- Demo: https://prueba-aleix.com/demo
-- Compra ficticia: https://prueba-aleix.com/?demo=1
-- Devoluciones ficticias: https://prueba-aleix.com/devoluciones?demo=1
+Abrir http://127.0.0.1:4188/. `node scripts/preview-public.mjs --owner` abre una prueba con cuenta ficticia en el puerto 4189. Su base es local y efímera. No incluye ni utiliza credenciales de Google reales.
 
-Para mostrar los mismos pedidos en móvil y ordenador, inicia una demostración y usa **Copiar enlace para otro dispositivo**. Abrir sesiones nuevas crea ejemplos separados. Consulta [las instrucciones y cambios](DEMO-CONECTADA-2026-09-28.md) y [la revisión de las demostraciones](DEMO-REVISION-2026-09-28.md).
+## Pendientes reales
 
-Esta organización para GitHub no cambia automáticamente la web publicada. El alojamiento actual mantiene ambas rutas; esta copia las separa para trabajar de forma independiente. No hay despliegue automático desde este repositorio.
+Falta la ficha final de Amazon y configurar las credenciales Google para activar la participación. Search Console, Bing, redes sociales y el alias www requieren verificación o datos del titular. La copia de código y vigilancia local no sustituyen una copia restaurable de la base D1.
 
-## Contenido y seguridad
+Consulta [revisión y checklist](web-actual/docs/amazon-comunidad-2026-09-30.md) para las comprobaciones realizadas y las instrucciones de DNS. El código de acceso bloquea los permisos en servidor y no confía en alias ni roles del navegador.
 
-Se incluyen código, portada, fuentes y sus licencias, migraciones, pruebas y documentación. No se incluyen claves, sesiones, node_modules, bases con pedidos ni archivos de configuración secretos. Los datos profesionales del vendedor presentes en las páginas legales son los publicados por indicación del titular.
+## Código para leer o enviar a otra IA
 
-`web/.openai/hosting.json` identifica el alojamiento existente; no es una clave. No publicar la presentación sobre ese proyecto ni ejecutar despliegues sin revisar el destino. La autenticación privada depende de los encabezados de identidad confiables del alojamiento Sites y del secreto ADMIN_OWNER_EMAIL, que no se incluye. No alojar el panel privado como una página estática ni confiar en encabezados enviados directamente por visitantes.
+[CODIGO-WEB-COMPLETO.txt](CODIGO-WEB-COMPLETO.txt) contiene el código de la versión actual en un único archivo de lectura. Las imágenes y fuentes están en el repositorio. No incluye secretos, cookies ni bases de datos con clientes.
+
+## Versiones archivadas
+
+- `node presentacion/serve.mjs` inicia la demo histórica en http://127.0.0.1:4180.
+- La carpeta `web/` conserva la antigua tienda y sus pruebas/documentación. Sus textos comerciales no se aplican a la web actual.
+- No publicar una versión archivada sobre el sitio actual por error. Este repositorio GitHub no despliega automáticamente el sitio.
+
+Los datos profesionales del aviso legal fueron facilitados por el titular para publicarlos. No hay claves de API en este repositorio. No añadir archivos .env, contraseñas, sesiones ni datos de compradores.
