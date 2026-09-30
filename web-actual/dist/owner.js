@@ -2,32 +2,101 @@
 const ownerElement=id=>document.getElementById(id);
 let accessVersion=0,accessLost=false,metricsVersion=0,historyVersion=0,reportsVersion=0,teamBusy=false;
 const resolutionDrafts=new Map(),resolutionInputs=new Map();
+let metricsData=null,metricsLoading=false,metricsExporting=false;
+const metricDayMs=86400000,metricPages=[['home','Portada'],['community','Comunidad'],['legal','Información legal']];
+const metricNumber=new Intl.NumberFormat('es-ES'),metricDecimal=new Intl.NumberFormat('es-ES',{maximumFractionDigits:1});
 function teamText(tag,value){const element=document.createElement(tag);element.textContent=value;return element;}
 function loseAccess(){
  accessLost=true;accessVersion++;metricsVersion++;historyVersion++;reportsVersion++;
  resolutionDrafts.clear();resolutionInputs.clear();
- for(const id of ['team-members','team-candidate','metrics-summary','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+ for(const id of ['team-members','team-candidate','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+ clearMetrics();metricsLoading=false;syncMetricsControls();
  ownerElement('team-section').hidden=true;
  for(const id of ['metrics-status','moderation-status','reports-status'])ownerElement(id).textContent='Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.';
 }
 async function ownerApi(url,body){
  const version=accessVersion;
  const response=await fetch(url,{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});
- let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Pulsa Actualizar para reintentar.');}
  if(response.status===401||response.status===403)loseAccess();
+ let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Pulsa Actualizar para reintentar.');}
  if(accessLost||version!==accessVersion)throw Error('Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.');
  if(!response.ok)throw Error(data.error||'No se ha podido completar la acción.');
  return data;
 }
 const teamApi=(path,body)=>ownerApi('/api/community/'+path,body);
 async function refreshMetrics(){
- const version=++metricsVersion,status=ownerElement('metrics-status'),button=ownerElement('refresh-metrics');button.disabled=true;status.textContent='Cargando estadísticas…';
+ if(accessLost)return;
+ const version=++metricsVersion,status=ownerElement('metrics-status'),days=[1,7,30].includes(Number(ownerElement('metrics-range').value))?Number(ownerElement('metrics-range').value):30;
+ metricsLoading=true;metricsData=null;syncMetricsControls();ownerElement('metrics-content').setAttribute('aria-busy','true');status.textContent='Cargando estadísticas…';
  try{
-  const data=await ownerApi('/api/site-metrics');if(version!==metricsVersion)return;
-  const totals={view:0,amazon:0};for(const row of data.rows)if(Object.hasOwn(totals,row.event)&&Number.isFinite(row.count))totals[row.event]+=row.count;
-  ownerElement('metrics-summary').replaceChildren(...[['Vistas registradas',totals.view],['Clics hacia Amazon',totals.amazon],['Tasa de clics a Amazon',totals.view?(100*totals.amazon/totals.view).toFixed(1)+' %':'Sin datos']].map(([title,value])=>teamText('p',title+': '+value)));
-  status.textContent=data.rows.length?'Datos actualizados.':'Todavía no hay eventos con consentimiento.';
- }catch(e){if(version===metricsVersion)status.textContent=e.message;}finally{button.disabled=false;}
+  const data=await ownerApi('/api/site-metrics?days='+days);if(version!==metricsVersion)return;
+  validateMetrics(data);if(data.days!==days)throw Error('El periodo recibido no coincide. Pulsa Actualizar.');renderMetrics(data);metricsData=data;
+  status.textContent='Actualizado a las '+new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit'}).format(new Date())+'.';
+ }catch(e){if(version===metricsVersion){clearMetrics();status.textContent=e.message;}}
+ finally{if(version===metricsVersion){metricsLoading=false;ownerElement('metrics-content').setAttribute('aria-busy','false');syncMetricsControls();}}
+}
+function clearMetrics(){metricsData=null;for(const id of ['metrics-summary','metrics-chart','metrics-days','metrics-pages','metrics-community','metrics-period'])ownerElement(id).replaceChildren();ownerElement('metrics-content').setAttribute('aria-busy','false');}
+function syncMetricsControls(){ownerElement('refresh-metrics').disabled=accessLost||metricsLoading;ownerElement('metrics-range').disabled=accessLost;ownerElement('export-metrics').disabled=accessLost||metricsLoading||metricsExporting||!metricsData;}
+function metricCount(value){return Number.isSafeInteger(value)&&value>=0?value:0;}
+function metricTime(day){const n=typeof day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(day)?Date.parse(day+'T00:00:00Z'):NaN;if(!Number.isFinite(n)||new Date(n).toISOString().slice(0,10)!==day)throw Error('No se han podido interpretar las fechas. Pulsa Actualizar.');return n;}
+function validateMetrics(data){
+ if(![1,7,30].includes(data.days)||!data.period||!data.community)throw Error('No se han podido leer las estadísticas. Pulsa Actualizar.');
+ const p=data.period,start=metricTime(p.start),end=metricTime(p.end),previousStart=metricTime(p.previousStart),previousEnd=metricTime(p.previousEnd);
+ if(end-start!==(data.days-1)*metricDayMs||previousEnd-previousStart!==(data.days-1)*metricDayMs||previousEnd+metricDayMs!==start)throw Error('El periodo recibido no es válido. Pulsa Actualizar.');
+ for(const [rows,from,to]of [[data.rows,p.start,p.end],[data.previousRows,p.previousStart,p.previousEnd]]){
+  if(!Array.isArray(rows)||rows.length>270)throw Error('No se han podido leer las estadísticas. Pulsa Actualizar.');
+  for(const row of rows){metricTime(row.day);if(!['view','amazon','whatsapp'].includes(row.event)||!metricPages.some(([key])=>key===row.page)||row.day<from||row.day>to||!Number.isSafeInteger(row.count)||row.count<0)throw Error('Las estadísticas recibidas no son válidas. Pulsa Actualizar.');}
+ }
+}
+function metricTotals(rows,page){const totals={view:0,amazon:0};for(const row of rows)if((!page||row.page===page)&&Object.hasOwn(totals,row.event))totals[row.event]+=row.count;return totals;}
+function metricDays(rows,start,days){const daily=Array.from({length:days},(_,i)=>({day:new Date(metricTime(start)+i*metricDayMs).toISOString().slice(0,10),view:0,amazon:0}));const byDate=new Map(daily.map(day=>[day.day,day]));for(const row of rows){const day=byDate.get(row.day);if(day&&Object.hasOwn(day,row.event))day[row.event]+=row.count;}return daily;}
+function metricDate(day){return new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(metricTime(day)));}
+function metricRange(start,end){return start===end?metricDate(start):metricDate(start)+' – '+metricDate(end);}
+function metricChange(current,previous,points=false){if(current===null||previous===null)return 'Sin base de comparación';if(current===previous)return 'Sin variación';if(!points&&previous===0)return 'Sin registros anteriores';const change=points?current-previous:100*(current-previous)/previous;return (change>0?'+':'')+metricDecimal.format(change)+(points?' puntos':' %')+' respecto al periodo anterior';}
+function metricItem(title,value,comparison){const group=teamText('div','');group.className='metric-item';const detail=teamText('dd',comparison);detail.className='metric-comparison';group.append(teamText('dt',title),teamText('dd',value),detail);return group;}
+function metricTable(caption,headings,rows){const table=teamText('table','');table.className='metrics-table';table.append(teamText('caption',caption));const head=teamText('thead',''),header=teamText('tr','');for(const title of headings){const cell=teamText('th',title);cell.setAttribute('scope','col');header.append(cell);}head.append(header);table.append(head);const body=teamText('tbody','');for(const row of rows){const tr=teamText('tr','');row.forEach((value,i)=>{const cell=teamText(i===0?'th':'td',typeof value==='number'?metricNumber.format(value):value);if(i===0)cell.setAttribute('scope','row');tr.append(cell);});body.append(tr);}table.append(body);return table;}
+function renderMetrics(data){
+ const totals=metricTotals(data.rows),previous=metricTotals(data.previousRows),rate=totals.view?100*totals.amazon/totals.view:null,previousRate=previous.view?100*previous.amazon/previous.view:null;
+ ownerElement('metrics-period').textContent=metricRange(data.period.start,data.period.end)+' · Comparado con '+metricRange(data.period.previousStart,data.period.previousEnd)+'. Días en UTC; hoy todavía está en curso.';
+ ownerElement('metrics-summary').replaceChildren(metricItem('Vistas registradas',metricNumber.format(totals.view),metricChange(totals.view,previous.view)),metricItem('Clics hacia Amazon',metricNumber.format(totals.amazon),metricChange(totals.amazon,previous.amazon)),metricItem('Relación clics / vistas',rate===null?'Sin datos':metricDecimal.format(rate)+' %',metricChange(rate,previousRate,true)));
+ const daily=metricDays(data.rows,data.period.start,data.days);renderMetricChart(daily);
+ ownerElement('metrics-days').replaceChildren(metricTable('Detalle diario del periodo seleccionado',['Día (UTC)','Vistas','Clics a Amazon'],daily.map(row=>[metricDate(row.day),row.view,row.amazon])));
+ ownerElement('metrics-pages').replaceChildren(metricTable('Vistas y clics por apartado',['Apartado','Vistas','Clics a Amazon'],metricPages.map(([key,name])=>{const count=metricTotals(data.rows,key);return[name,count.view,count.amazon];})));
+ const c=data.community,questions=metricCount(c.current?.questions),replies=metricCount(c.current?.replies),pendingQuestions=metricCount(c.pending?.questions),pendingReplies=metricCount(c.pending?.replies);
+ ownerElement('metrics-community').replaceChildren(metricItem('Preguntas publicadas',metricNumber.format(questions),metricChange(questions,metricCount(c.previous?.questions))),metricItem('Respuestas publicadas',metricNumber.format(replies),metricChange(replies,metricCount(c.previous?.replies))),metricItem('Esperando revisión ahora',metricNumber.format(pendingQuestions+pendingReplies),metricNumber.format(pendingQuestions)+' preguntas · '+metricNumber.format(pendingReplies)+' respuestas'));
+}
+function renderMetricChart(daily){
+ const root=ownerElement('metrics-chart');root.replaceChildren();
+ if(!daily.some(row=>row.view||row.amazon)){const empty=teamText('p','Todavía no hay vistas ni clics registrados en este periodo. Las visitas solo cuentan cuando se acepta la analítica.');empty.className='metrics-empty';root.append(empty);return;}
+ const figure=teamText('figure',''),legend=teamText('figcaption','');figure.className='metrics-figure';legend.className='metrics-legend';for(const [name,key]of [['Vistas registradas','view'],['Clics a Amazon','amazon']]){const label=teamText('span',name);label.className='metrics-key '+key;legend.append(label);}figure.append(legend);
+ const grid=teamText('div','');grid.className='metrics-plot-grid';const axis=teamText('div','');axis.className='metrics-yaxis';axis.setAttribute('aria-hidden','true');const maximum=Math.max(...daily.flatMap(row=>[row.view,row.amazon]));const ceiling=maximum<=4?Math.max(2,Math.ceil(maximum/2)*2):Math.ceil(maximum/4)*4;for(const n of [ceiling,ceiling/2,0])axis.append(teamText('span',metricNumber.format(n)));
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 640 200');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('role','img');svg.setAttribute('aria-label','Evolución diaria de vistas registradas y clics a Amazon. Los valores exactos están en el detalle diario.');
+ const shape=(tag,attrs)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));svg.append(node);return node;};
+ for(const y of [12,100,188])shape('line',{x1:0,x2:640,y1:y,y2:y,class:'metrics-gridline'});
+ const x=i=>daily.length===1?320:10+i*620/(daily.length-1),y=n=>188-176*n/ceiling;
+ for(const key of ['view','amazon']){shape('path',{d:daily.map((row,i)=>(i?'L':'M')+x(i)+' '+y(row[key])).join(' '),class:'metrics-series '+key,fill:'none'});daily.forEach((row,i)=>{const dot=shape('circle',{cx:x(i),cy:y(row[key]),r:daily.length>7?2.5:3.5,class:'metrics-point '+key});const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=metricDate(row.day)+': '+metricNumber.format(row[key])+(key==='view'?' vistas':' clics a Amazon');dot.append(title);});}
+ grid.append(axis,svg);figure.append(grid);const dates=teamText('div','');dates.className='metrics-xaxis';dates.setAttribute('aria-hidden','true');const indexes=daily.length===1?[0]:daily.length>2?[0,Math.floor((daily.length-1)/2),daily.length-1]:[0,daily.length-1];for(const i of indexes)dates.append(teamText('span',new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',timeZone:'UTC'}).format(new Date(metricTime(daily[i].day)))));figure.append(dates);root.append(figure);
+}
+function metricCsv(data){
+ const rows=[['tipo','periodo','fecha_utc','apartado','vistas','clics_amazon','preguntas_publicadas','respuestas_publicadas','pendientes_preguntas','pendientes_respuestas']];
+ for(const [period,events,start,counts]of [['actual',data.rows,data.period.start,data.community.current],['anterior',data.previousRows,data.period.previousStart,data.community.previous]]){
+  for(const day of metricDays(events,start,data.days))rows.push(['diario',period,day.day,'todos',day.view,day.amazon,'','','','']);
+  for(const [key,name]of metricPages){const total=metricTotals(events,key);rows.push(['apartado',period,'',name,total.view,total.amazon,'','','','']);}
+  rows.push(['comunidad',period,'','publicadas','','',metricCount(counts.questions),metricCount(counts.replies),'','']);
+ }
+ rows.push(['moderacion','ahora','','pendientes','','','','',metricCount(data.community.pending.questions),metricCount(data.community.pending.replies)]);
+ const cell=value=>{let text=String(value);if(/^[\s\u0000-\u001f]*[=+\-@]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};return '\uFEFF'+rows.map(row=>row.map(cell).join(';')).join('\r\n')+'\r\n';
+}
+async function exportMetrics(){
+ if(!metricsData||accessLost||metricsLoading||metricsExporting)return;
+ const version=metricsVersion,days=metricsData.days;metricsExporting=true;syncMetricsControls();
+ try{
+  const data=await ownerApi('/api/site-metrics?days='+days);if(version!==metricsVersion||accessLost)return;validateMetrics(data);
+  const blob=new Blob([metricCsv(data)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=teamText('a','');link.href=url;link.download='estadisticas-'+data.period.start+'-'+data.period.end+'.csv';document.body.append(link);
+  try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  ownerElement('metrics-status').textContent='CSV preparado: incluye solo cifras agregadas del periodo y su comparación.';
+ }catch(e){if(version===metricsVersion)ownerElement('metrics-status').textContent=e.message;}
+ finally{metricsExporting=false;syncMetricsControls();}
 }
 async function changeRole(member,grant){
  if(teamBusy||!confirm((grant?'Dar permisos de dueño a ':'Retirar permisos de dueño a ')+member.alias+' ('+member.email+')'+(grant?' permitirá moderar conversaciones y consultar estadísticas. ¿Continuar?':' impedirá su acceso privado. ¿Continuar?')))return;
@@ -77,6 +146,8 @@ async function loadReports(){
  }catch(e){if(version===reportsVersion)status.textContent=e.message;}
 }
 ownerElement('refresh-metrics').addEventListener('click',refreshMetrics);
+ownerElement('metrics-range').addEventListener('change',refreshMetrics);
+ownerElement('export-metrics').addEventListener('click',exportMetrics);
 ownerElement('refresh-moderation').addEventListener('click',loadModerationHistory);
 ownerElement('refresh-reports').addEventListener('click',loadReports);
 teamApi('me').then(async data=>{if(!accessLost&&data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});

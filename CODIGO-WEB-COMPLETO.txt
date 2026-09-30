@@ -1,6 +1,6 @@
 DONDE SIEMPRE ESTUVISTE — CÓDIGO DE LA WEB
 
-Código actual de web-actual/. Fuente publicada: 63be28e2ad508adf673ecf1013f9589b2eaecf2f.
+Código actual de web-actual/. Fuente publicada: 83f9566068b18cd846fb92c159650aafa81712c3.
 El build activo es scripts/build-public.mjs; algunos módulos y pruebas históricos se conservan como archivo y no se sirven al público.
 Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene credenciales ni bases de datos de personas.
 
@@ -65,67 +65,69 @@ Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene crede
 58. web-actual/dist/tienda-demo.html
 59. web-actual/docs/amazon-comunidad-2026-09-30.md
 60. web-actual/docs/community-google-team-2026-09-30.md
-61. web-actual/docs/revision-general-2026-09-30.md
-62. web-actual/docs/revision-publicacion-comunidad-2026-09-30.md
-63. web-actual/drizzle.config.ts
-64. web-actual/drizzle/0000_cultured_mathemanic.sql
-65. web-actual/drizzle/0001_lonely_black_bolt.sql
-66. web-actual/drizzle/0002_cute_blazing_skull.sql
-67. web-actual/drizzle/0003_colossal_nehzno.sql
-68. web-actual/drizzle/0004_chunky_microchip.sql
-69. web-actual/drizzle/0005_flat_bullseye.sql
-70. web-actual/drizzle/0006_heavy_human_torch.sql
-71. web-actual/drizzle/0007_goofy_anthem.sql
-72. web-actual/drizzle/0008_spicy_mystique.sql
-73. web-actual/drizzle/meta/0000_snapshot.json
-74. web-actual/drizzle/meta/0001_snapshot.json
-75. web-actual/drizzle/meta/0002_snapshot.json
-76. web-actual/drizzle/meta/0003_snapshot.json
-77. web-actual/drizzle/meta/0004_snapshot.json
-78. web-actual/drizzle/meta/0005_snapshot.json
-79. web-actual/drizzle/meta/0006_snapshot.json
-80. web-actual/drizzle/meta/0007_snapshot.json
-81. web-actual/drizzle/meta/0008_snapshot.json
-82. web-actual/drizzle/meta/_journal.json
-83. web-actual/package.json
-84. web-actual/pnpm-lock.yaml
-85. web-actual/pnpm-workspace.yaml
-86. web-actual/scripts/backup-source.mjs
-87. web-actual/scripts/build-public.mjs
-88. web-actual/scripts/build.mjs
-89. web-actual/scripts/package.mjs
-90. web-actual/scripts/preview-admin.mjs
-91. web-actual/scripts/preview-public.mjs
-92. web-actual/serve.mjs
-93. web-actual/tests/admin-live.test.mjs
-94. web-actual/tests/admin-ui.test.mjs
-95. web-actual/tests/admin.test.mjs
-96. web-actual/tests/breathing.test.mjs
-97. web-actual/tests/cache.test.mjs
-98. web-actual/tests/cart.test.mjs
-99. web-actual/tests/community-team.test.mjs
-100. web-actual/tests/community-ui.test.mjs
-101. web-actual/tests/community.test.mjs
-102. web-actual/tests/customer-returns-ui.test.mjs
-103. web-actual/tests/customer-returns.test.mjs
-104. web-actual/tests/database.mjs
-105. web-actual/tests/demo-checkout.test.mjs
-106. web-actual/tests/demo.test.mjs
-107. web-actual/tests/management.test.mjs
-108. web-actual/tests/privacy-ui.test.mjs
-109. web-actual/tests/public-site.test.mjs
-110. web-actual/tests/search.test.mjs
-111. web-actual/tests/seo.test.mjs
-112. web-actual/tests/shared-demo-ui.test.mjs
-113. web-actual/tests/shared-demo.test.mjs
-114. web-actual/worker/community.mjs
-115. web-actual/worker/database.mjs
-116. web-actual/worker/demo.mjs
-117. web-actual/worker/index.mjs
-118. web-actual/worker/legacy-index.mjs
-119. web-actual/worker/metrics.mjs
-120. web-actual/worker/returns.mjs
-121. web-actual/worker/site.mjs
+61. web-actual/docs/estadisticas-del-titular.md
+62. web-actual/docs/revision-general-2026-09-30.md
+63. web-actual/docs/revision-publicacion-comunidad-2026-09-30.md
+64. web-actual/drizzle.config.ts
+65. web-actual/drizzle/0000_cultured_mathemanic.sql
+66. web-actual/drizzle/0001_lonely_black_bolt.sql
+67. web-actual/drizzle/0002_cute_blazing_skull.sql
+68. web-actual/drizzle/0003_colossal_nehzno.sql
+69. web-actual/drizzle/0004_chunky_microchip.sql
+70. web-actual/drizzle/0005_flat_bullseye.sql
+71. web-actual/drizzle/0006_heavy_human_torch.sql
+72. web-actual/drizzle/0007_goofy_anthem.sql
+73. web-actual/drizzle/0008_spicy_mystique.sql
+74. web-actual/drizzle/meta/0000_snapshot.json
+75. web-actual/drizzle/meta/0001_snapshot.json
+76. web-actual/drizzle/meta/0002_snapshot.json
+77. web-actual/drizzle/meta/0003_snapshot.json
+78. web-actual/drizzle/meta/0004_snapshot.json
+79. web-actual/drizzle/meta/0005_snapshot.json
+80. web-actual/drizzle/meta/0006_snapshot.json
+81. web-actual/drizzle/meta/0007_snapshot.json
+82. web-actual/drizzle/meta/0008_snapshot.json
+83. web-actual/drizzle/meta/_journal.json
+84. web-actual/package.json
+85. web-actual/pnpm-lock.yaml
+86. web-actual/pnpm-workspace.yaml
+87. web-actual/scripts/backup-source.mjs
+88. web-actual/scripts/build-public.mjs
+89. web-actual/scripts/build.mjs
+90. web-actual/scripts/package.mjs
+91. web-actual/scripts/preview-admin.mjs
+92. web-actual/scripts/preview-public.mjs
+93. web-actual/serve.mjs
+94. web-actual/tests/admin-live.test.mjs
+95. web-actual/tests/admin-ui.test.mjs
+96. web-actual/tests/admin.test.mjs
+97. web-actual/tests/breathing.test.mjs
+98. web-actual/tests/cache.test.mjs
+99. web-actual/tests/cart.test.mjs
+100. web-actual/tests/community-team.test.mjs
+101. web-actual/tests/community-ui.test.mjs
+102. web-actual/tests/community.test.mjs
+103. web-actual/tests/customer-returns-ui.test.mjs
+104. web-actual/tests/customer-returns.test.mjs
+105. web-actual/tests/database.mjs
+106. web-actual/tests/demo-checkout.test.mjs
+107. web-actual/tests/demo.test.mjs
+108. web-actual/tests/management.test.mjs
+109. web-actual/tests/metrics.test.mjs
+110. web-actual/tests/privacy-ui.test.mjs
+111. web-actual/tests/public-site.test.mjs
+112. web-actual/tests/search.test.mjs
+113. web-actual/tests/seo.test.mjs
+114. web-actual/tests/shared-demo-ui.test.mjs
+115. web-actual/tests/shared-demo.test.mjs
+116. web-actual/worker/community.mjs
+117. web-actual/worker/database.mjs
+118. web-actual/worker/demo.mjs
+119. web-actual/worker/index.mjs
+120. web-actual/worker/legacy-index.mjs
+121. web-actual/worker/metrics.mjs
+122. web-actual/worker/returns.mjs
+123. web-actual/worker/site.mjs
 
 
 ========================================================================
@@ -1992,6 +1994,62 @@ body.community-page #account-title{scroll-margin-top:18px}
   body.community-page .community-dialog .thread-tools button{font-size:.875rem}
 }
 
+/* Private, aggregate statistics: quiet surfaces, legible data and no chart library. */
+.owner-page .owner-stats{margin-block:40px 52px;padding-top:30px;border-top:1px solid var(--line);scroll-margin-top:20px}
+.owner-page .metrics-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.owner-page .metrics-heading h2{font:2rem/1.3 var(--serif);margin:0}
+.owner-page .metrics-heading p{margin:9px 0 0;color:var(--muted);line-height:1.6}
+.owner-page .metrics-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.owner-page .metrics-actions label{margin:0;font-size:.875rem;font-weight:600}
+.owner-page .metrics-actions select{min-height:44px;padding:10px 30px 10px 12px;border:1px solid #9d7e50;border-radius:4px;background:#fffef9;color:var(--ink);font:inherit}
+.owner-page .metrics-actions select:focus-visible{outline:3px solid #94631e;outline-offset:3px}
+.owner-page .metrics-status{margin:20px 0 8px;min-height:24px;font-size:.875rem;color:var(--muted);line-height:1.7}
+.owner-page .metrics-period{margin:0 0 22px;font-size:.875rem;color:var(--muted);line-height:1.7}
+.owner-page #metrics-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-block:1px solid var(--line);margin:0}
+.owner-page .metric-item{min-width:0;padding:24px 24px 24px 0}
+.owner-page #metrics-summary .metric-item+.metric-item{padding-left:24px;border-left:1px solid var(--line)}
+.owner-page .metric-item dt{font-size:.875rem;color:var(--muted);font-weight:500;line-height:1.6}
+.owner-page .metric-item dd{margin:8px 0 9px;font:600 2.15rem/1.15 var(--sans);font-variant-numeric:tabular-nums;color:var(--ink)}
+.owner-page #metrics-summary .metric-item p,.owner-page .metric-item p{padding:0;background:none;margin:0;font-size:.8125rem;line-height:1.6;color:#65441e}
+.owner-page .metrics-chart-section{margin-top:30px}
+.owner-page .owner-stats h3{font:600 1.125rem/1.5 var(--sans);margin:0 0 16px}
+.owner-page .metrics-figure{margin:0;padding:22px 24px;background:#f4ecdf;border-radius:12px}
+.owner-page .metrics-legend{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;font-size:.8125rem;font-weight:500}
+.owner-page .metrics-key{display:inline-flex;align-items:center;gap:9px}
+.owner-page .metrics-key::before{content:'';display:block;width:22px;border-top:2px solid var(--olive)}
+.owner-page .metrics-key.amazon::before{border-top-color:var(--ink);border-top-style:dashed}
+.owner-page .metrics-plot-grid{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:stretch}
+.owner-page .metrics-yaxis{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;padding-block:6px;font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted)}
+.owner-page .metrics-plot-grid svg{display:block;width:100%;height:200px;overflow:visible}
+.owner-page .metrics-gridline{stroke:#d9cbb6;stroke-width:1;vector-effect:non-scaling-stroke}
+.owner-page .metrics-series{stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.owner-page .metrics-series.view{stroke:var(--olive)}
+.owner-page .metrics-series.amazon{stroke:var(--ink);stroke-dasharray:5 4}
+.owner-page .metrics-point.view{fill:var(--olive)}
+.owner-page .metrics-point.amazon{fill:var(--ink)}
+.owner-page .metrics-xaxis{display:flex;justify-content:space-between;gap:8px;margin:12px 0 0 44px;font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted)}
+.owner-page .metrics-xaxis>span:only-child{margin-inline:auto}
+.owner-page .metrics-empty{margin:0;min-height:180px;padding:36px 24px;border-radius:12px;background:#f4ecdf;display:flex;align-items:center;max-width:none;line-height:1.8;color:var(--muted)}
+.owner-page .metrics-detail{margin-top:18px}
+.owner-page .metrics-detail summary{min-height:44px;padding:10px 0;cursor:pointer;font-size:.875rem;font-weight:500}
+.owner-page .metrics-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
+.owner-page .metrics-table{width:100%;border-collapse:collapse;font-size:.875rem;font-variant-numeric:tabular-nums;line-height:1.6}
+.owner-page .metrics-table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.owner-page .metrics-table th,.owner-page .metrics-table td{padding:12px 10px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+.owner-page .metrics-table th:first-child{padding-left:0;text-align:left}
+.owner-page .metrics-table thead th{color:var(--muted);font-size:.8125rem;font-weight:600}
+.owner-page .metrics-table tbody th{font-weight:500}
+.owner-page .metrics-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:36px}
+.owner-page .metrics-community{margin:0}
+.owner-page .metrics-community .metric-item{display:grid;grid-template-columns:1fr auto;gap:2px 16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.owner-page .metrics-community dt{align-self:center}
+.owner-page .metrics-community dd{font-size:1.35rem;margin:0;text-align:right}
+.owner-page .metrics-community p{grid-column:1/-1}
+.owner-page .metrics-note{font-size:.8125rem;line-height:1.8;color:var(--muted);max-width:85ch;margin:18px 0 0}
+.owner-page #metrics-summary .metric-comparison,.owner-page .metric-item .metric-comparison{padding:0;background:none;margin:0;font:400 .8125rem/1.6 var(--sans);color:#65441e;text-align:left;grid-column:1/-1}
+@media(max-width:800px){.owner-page .metrics-heading{align-items:flex-start}.owner-page .metrics-breakdown{grid-template-columns:1fr;gap:30px}.owner-page .metrics-actions{width:100%}}
+@media(max-width:560px){.owner-page #metrics-summary{grid-template-columns:1fr}.owner-page #metrics-summary .metric-item{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:18px 0;border:0}.owner-page #metrics-summary .metric-item+.metric-item{padding-left:0;border-left:0;border-top:1px solid var(--line)}.owner-page #metrics-summary dd{margin:0;font-size:1.75rem}.owner-page #metrics-summary dt{align-self:center}.owner-page #metrics-summary p{grid-column:1/-1}.owner-page .metrics-figure{padding:18px 14px}.owner-page .metrics-legend{gap:12px 18px}.owner-page .metrics-actions label{width:100%}.owner-page .metrics-actions select{flex:1;min-width:0}.owner-page .metrics-actions #export-metrics{width:100%}.owner-page .metrics-heading h2{font-size:1.7rem}}
+
 
 
 ========================================================================
@@ -2529,32 +2587,101 @@ ARCHIVO: web-actual/dist/owner.js
 const ownerElement=id=>document.getElementById(id);
 let accessVersion=0,accessLost=false,metricsVersion=0,historyVersion=0,reportsVersion=0,teamBusy=false;
 const resolutionDrafts=new Map(),resolutionInputs=new Map();
+let metricsData=null,metricsLoading=false,metricsExporting=false;
+const metricDayMs=86400000,metricPages=[['home','Portada'],['community','Comunidad'],['legal','Información legal']];
+const metricNumber=new Intl.NumberFormat('es-ES'),metricDecimal=new Intl.NumberFormat('es-ES',{maximumFractionDigits:1});
 function teamText(tag,value){const element=document.createElement(tag);element.textContent=value;return element;}
 function loseAccess(){
  accessLost=true;accessVersion++;metricsVersion++;historyVersion++;reportsVersion++;
  resolutionDrafts.clear();resolutionInputs.clear();
- for(const id of ['team-members','team-candidate','metrics-summary','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+ for(const id of ['team-members','team-candidate','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+ clearMetrics();metricsLoading=false;syncMetricsControls();
  ownerElement('team-section').hidden=true;
  for(const id of ['metrics-status','moderation-status','reports-status'])ownerElement(id).textContent='Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.';
 }
 async function ownerApi(url,body){
  const version=accessVersion;
  const response=await fetch(url,{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});
- let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Pulsa Actualizar para reintentar.');}
  if(response.status===401||response.status===403)loseAccess();
+ let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Pulsa Actualizar para reintentar.');}
  if(accessLost||version!==accessVersion)throw Error('Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.');
  if(!response.ok)throw Error(data.error||'No se ha podido completar la acción.');
  return data;
 }
 const teamApi=(path,body)=>ownerApi('/api/community/'+path,body);
 async function refreshMetrics(){
- const version=++metricsVersion,status=ownerElement('metrics-status'),button=ownerElement('refresh-metrics');button.disabled=true;status.textContent='Cargando estadísticas…';
+ if(accessLost)return;
+ const version=++metricsVersion,status=ownerElement('metrics-status'),days=[1,7,30].includes(Number(ownerElement('metrics-range').value))?Number(ownerElement('metrics-range').value):30;
+ metricsLoading=true;metricsData=null;syncMetricsControls();ownerElement('metrics-content').setAttribute('aria-busy','true');status.textContent='Cargando estadísticas…';
  try{
-  const data=await ownerApi('/api/site-metrics');if(version!==metricsVersion)return;
-  const totals={view:0,amazon:0};for(const row of data.rows)if(Object.hasOwn(totals,row.event)&&Number.isFinite(row.count))totals[row.event]+=row.count;
-  ownerElement('metrics-summary').replaceChildren(...[['Vistas registradas',totals.view],['Clics hacia Amazon',totals.amazon],['Tasa de clics a Amazon',totals.view?(100*totals.amazon/totals.view).toFixed(1)+' %':'Sin datos']].map(([title,value])=>teamText('p',title+': '+value)));
-  status.textContent=data.rows.length?'Datos actualizados.':'Todavía no hay eventos con consentimiento.';
- }catch(e){if(version===metricsVersion)status.textContent=e.message;}finally{button.disabled=false;}
+  const data=await ownerApi('/api/site-metrics?days='+days);if(version!==metricsVersion)return;
+  validateMetrics(data);if(data.days!==days)throw Error('El periodo recibido no coincide. Pulsa Actualizar.');renderMetrics(data);metricsData=data;
+  status.textContent='Actualizado a las '+new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit'}).format(new Date())+'.';
+ }catch(e){if(version===metricsVersion){clearMetrics();status.textContent=e.message;}}
+ finally{if(version===metricsVersion){metricsLoading=false;ownerElement('metrics-content').setAttribute('aria-busy','false');syncMetricsControls();}}
+}
+function clearMetrics(){metricsData=null;for(const id of ['metrics-summary','metrics-chart','metrics-days','metrics-pages','metrics-community','metrics-period'])ownerElement(id).replaceChildren();ownerElement('metrics-content').setAttribute('aria-busy','false');}
+function syncMetricsControls(){ownerElement('refresh-metrics').disabled=accessLost||metricsLoading;ownerElement('metrics-range').disabled=accessLost;ownerElement('export-metrics').disabled=accessLost||metricsLoading||metricsExporting||!metricsData;}
+function metricCount(value){return Number.isSafeInteger(value)&&value>=0?value:0;}
+function metricTime(day){const n=typeof day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(day)?Date.parse(day+'T00:00:00Z'):NaN;if(!Number.isFinite(n)||new Date(n).toISOString().slice(0,10)!==day)throw Error('No se han podido interpretar las fechas. Pulsa Actualizar.');return n;}
+function validateMetrics(data){
+ if(![1,7,30].includes(data.days)||!data.period||!data.community)throw Error('No se han podido leer las estadísticas. Pulsa Actualizar.');
+ const p=data.period,start=metricTime(p.start),end=metricTime(p.end),previousStart=metricTime(p.previousStart),previousEnd=metricTime(p.previousEnd);
+ if(end-start!==(data.days-1)*metricDayMs||previousEnd-previousStart!==(data.days-1)*metricDayMs||previousEnd+metricDayMs!==start)throw Error('El periodo recibido no es válido. Pulsa Actualizar.');
+ for(const [rows,from,to]of [[data.rows,p.start,p.end],[data.previousRows,p.previousStart,p.previousEnd]]){
+  if(!Array.isArray(rows)||rows.length>270)throw Error('No se han podido leer las estadísticas. Pulsa Actualizar.');
+  for(const row of rows){metricTime(row.day);if(!['view','amazon','whatsapp'].includes(row.event)||!metricPages.some(([key])=>key===row.page)||row.day<from||row.day>to||!Number.isSafeInteger(row.count)||row.count<0)throw Error('Las estadísticas recibidas no son válidas. Pulsa Actualizar.');}
+ }
+}
+function metricTotals(rows,page){const totals={view:0,amazon:0};for(const row of rows)if((!page||row.page===page)&&Object.hasOwn(totals,row.event))totals[row.event]+=row.count;return totals;}
+function metricDays(rows,start,days){const daily=Array.from({length:days},(_,i)=>({day:new Date(metricTime(start)+i*metricDayMs).toISOString().slice(0,10),view:0,amazon:0}));const byDate=new Map(daily.map(day=>[day.day,day]));for(const row of rows){const day=byDate.get(row.day);if(day&&Object.hasOwn(day,row.event))day[row.event]+=row.count;}return daily;}
+function metricDate(day){return new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(metricTime(day)));}
+function metricRange(start,end){return start===end?metricDate(start):metricDate(start)+' – '+metricDate(end);}
+function metricChange(current,previous,points=false){if(current===null||previous===null)return 'Sin base de comparación';if(current===previous)return 'Sin variación';if(!points&&previous===0)return 'Sin registros anteriores';const change=points?current-previous:100*(current-previous)/previous;return (change>0?'+':'')+metricDecimal.format(change)+(points?' puntos':' %')+' respecto al periodo anterior';}
+function metricItem(title,value,comparison){const group=teamText('div','');group.className='metric-item';const detail=teamText('dd',comparison);detail.className='metric-comparison';group.append(teamText('dt',title),teamText('dd',value),detail);return group;}
+function metricTable(caption,headings,rows){const table=teamText('table','');table.className='metrics-table';table.append(teamText('caption',caption));const head=teamText('thead',''),header=teamText('tr','');for(const title of headings){const cell=teamText('th',title);cell.setAttribute('scope','col');header.append(cell);}head.append(header);table.append(head);const body=teamText('tbody','');for(const row of rows){const tr=teamText('tr','');row.forEach((value,i)=>{const cell=teamText(i===0?'th':'td',typeof value==='number'?metricNumber.format(value):value);if(i===0)cell.setAttribute('scope','row');tr.append(cell);});body.append(tr);}table.append(body);return table;}
+function renderMetrics(data){
+ const totals=metricTotals(data.rows),previous=metricTotals(data.previousRows),rate=totals.view?100*totals.amazon/totals.view:null,previousRate=previous.view?100*previous.amazon/previous.view:null;
+ ownerElement('metrics-period').textContent=metricRange(data.period.start,data.period.end)+' · Comparado con '+metricRange(data.period.previousStart,data.period.previousEnd)+'. Días en UTC; hoy todavía está en curso.';
+ ownerElement('metrics-summary').replaceChildren(metricItem('Vistas registradas',metricNumber.format(totals.view),metricChange(totals.view,previous.view)),metricItem('Clics hacia Amazon',metricNumber.format(totals.amazon),metricChange(totals.amazon,previous.amazon)),metricItem('Relación clics / vistas',rate===null?'Sin datos':metricDecimal.format(rate)+' %',metricChange(rate,previousRate,true)));
+ const daily=metricDays(data.rows,data.period.start,data.days);renderMetricChart(daily);
+ ownerElement('metrics-days').replaceChildren(metricTable('Detalle diario del periodo seleccionado',['Día (UTC)','Vistas','Clics a Amazon'],daily.map(row=>[metricDate(row.day),row.view,row.amazon])));
+ ownerElement('metrics-pages').replaceChildren(metricTable('Vistas y clics por apartado',['Apartado','Vistas','Clics a Amazon'],metricPages.map(([key,name])=>{const count=metricTotals(data.rows,key);return[name,count.view,count.amazon];})));
+ const c=data.community,questions=metricCount(c.current?.questions),replies=metricCount(c.current?.replies),pendingQuestions=metricCount(c.pending?.questions),pendingReplies=metricCount(c.pending?.replies);
+ ownerElement('metrics-community').replaceChildren(metricItem('Preguntas publicadas',metricNumber.format(questions),metricChange(questions,metricCount(c.previous?.questions))),metricItem('Respuestas publicadas',metricNumber.format(replies),metricChange(replies,metricCount(c.previous?.replies))),metricItem('Esperando revisión ahora',metricNumber.format(pendingQuestions+pendingReplies),metricNumber.format(pendingQuestions)+' preguntas · '+metricNumber.format(pendingReplies)+' respuestas'));
+}
+function renderMetricChart(daily){
+ const root=ownerElement('metrics-chart');root.replaceChildren();
+ if(!daily.some(row=>row.view||row.amazon)){const empty=teamText('p','Todavía no hay vistas ni clics registrados en este periodo. Las visitas solo cuentan cuando se acepta la analítica.');empty.className='metrics-empty';root.append(empty);return;}
+ const figure=teamText('figure',''),legend=teamText('figcaption','');figure.className='metrics-figure';legend.className='metrics-legend';for(const [name,key]of [['Vistas registradas','view'],['Clics a Amazon','amazon']]){const label=teamText('span',name);label.className='metrics-key '+key;legend.append(label);}figure.append(legend);
+ const grid=teamText('div','');grid.className='metrics-plot-grid';const axis=teamText('div','');axis.className='metrics-yaxis';axis.setAttribute('aria-hidden','true');const maximum=Math.max(...daily.flatMap(row=>[row.view,row.amazon]));const ceiling=maximum<=4?Math.max(2,Math.ceil(maximum/2)*2):Math.ceil(maximum/4)*4;for(const n of [ceiling,ceiling/2,0])axis.append(teamText('span',metricNumber.format(n)));
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 640 200');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('role','img');svg.setAttribute('aria-label','Evolución diaria de vistas registradas y clics a Amazon. Los valores exactos están en el detalle diario.');
+ const shape=(tag,attrs)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));svg.append(node);return node;};
+ for(const y of [12,100,188])shape('line',{x1:0,x2:640,y1:y,y2:y,class:'metrics-gridline'});
+ const x=i=>daily.length===1?320:10+i*620/(daily.length-1),y=n=>188-176*n/ceiling;
+ for(const key of ['view','amazon']){shape('path',{d:daily.map((row,i)=>(i?'L':'M')+x(i)+' '+y(row[key])).join(' '),class:'metrics-series '+key,fill:'none'});daily.forEach((row,i)=>{const dot=shape('circle',{cx:x(i),cy:y(row[key]),r:daily.length>7?2.5:3.5,class:'metrics-point '+key});const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=metricDate(row.day)+': '+metricNumber.format(row[key])+(key==='view'?' vistas':' clics a Amazon');dot.append(title);});}
+ grid.append(axis,svg);figure.append(grid);const dates=teamText('div','');dates.className='metrics-xaxis';dates.setAttribute('aria-hidden','true');const indexes=daily.length===1?[0]:daily.length>2?[0,Math.floor((daily.length-1)/2),daily.length-1]:[0,daily.length-1];for(const i of indexes)dates.append(teamText('span',new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',timeZone:'UTC'}).format(new Date(metricTime(daily[i].day)))));figure.append(dates);root.append(figure);
+}
+function metricCsv(data){
+ const rows=[['tipo','periodo','fecha_utc','apartado','vistas','clics_amazon','preguntas_publicadas','respuestas_publicadas','pendientes_preguntas','pendientes_respuestas']];
+ for(const [period,events,start,counts]of [['actual',data.rows,data.period.start,data.community.current],['anterior',data.previousRows,data.period.previousStart,data.community.previous]]){
+  for(const day of metricDays(events,start,data.days))rows.push(['diario',period,day.day,'todos',day.view,day.amazon,'','','','']);
+  for(const [key,name]of metricPages){const total=metricTotals(events,key);rows.push(['apartado',period,'',name,total.view,total.amazon,'','','','']);}
+  rows.push(['comunidad',period,'','publicadas','','',metricCount(counts.questions),metricCount(counts.replies),'','']);
+ }
+ rows.push(['moderacion','ahora','','pendientes','','','','',metricCount(data.community.pending.questions),metricCount(data.community.pending.replies)]);
+ const cell=value=>{let text=String(value);if(/^[\s\u0000-\u001f]*[=+\-@]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};return '\uFEFF'+rows.map(row=>row.map(cell).join(';')).join('\r\n')+'\r\n';
+}
+async function exportMetrics(){
+ if(!metricsData||accessLost||metricsLoading||metricsExporting)return;
+ const version=metricsVersion,days=metricsData.days;metricsExporting=true;syncMetricsControls();
+ try{
+  const data=await ownerApi('/api/site-metrics?days='+days);if(version!==metricsVersion||accessLost)return;validateMetrics(data);
+  const blob=new Blob([metricCsv(data)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),link=teamText('a','');link.href=url;link.download='estadisticas-'+data.period.start+'-'+data.period.end+'.csv';document.body.append(link);
+  try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  ownerElement('metrics-status').textContent='CSV preparado: incluye solo cifras agregadas del periodo y su comparación.';
+ }catch(e){if(version===metricsVersion)ownerElement('metrics-status').textContent=e.message;}
+ finally{metricsExporting=false;syncMetricsControls();}
 }
 async function changeRole(member,grant){
  if(teamBusy||!confirm((grant?'Dar permisos de dueño a ':'Retirar permisos de dueño a ')+member.alias+' ('+member.email+')'+(grant?' permitirá moderar conversaciones y consultar estadísticas. ¿Continuar?':' impedirá su acceso privado. ¿Continuar?')))return;
@@ -2604,6 +2731,8 @@ async function loadReports(){
  }catch(e){if(version===reportsVersion)status.textContent=e.message;}
 }
 ownerElement('refresh-metrics').addEventListener('click',refreshMetrics);
+ownerElement('metrics-range').addEventListener('change',refreshMetrics);
+ownerElement('export-metrics').addEventListener('click',exportMetrics);
 ownerElement('refresh-moderation').addEventListener('click',loadModerationHistory);
 ownerElement('refresh-reports').addEventListener('click',loadReports);
 teamApi('me').then(async data=>{if(!accessLost&&data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});
@@ -2655,7 +2784,18 @@ ARCHIVO: web-actual/dist/privacy-controls.js
 ARCHIVO: web-actual/dist/propietario.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Espacio del titular · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"><script src="/owner.js" defer></script></head><body class="community-page"><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a class="header-cta" href="/comunidad">Comunidad</a></header><main id="contenido" class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO DEL TITULAR</p><h1>Comunidad y estadísticas</h1><p>Los pedidos y devoluciones se gestionan en Amazon.</p><section><h2>Tu cuenta de dueño</h2><p>Accedes con tu cuenta de Google. Desde aquí puedes moderar las conversaciones y consultar la actividad del libro.</p><a class="underlined-link" href="/comunidad">Gestionar la comunidad</a></section><section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports"></div><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section><section class="topic"><h2>Actividad de los últimos 30 días</h2><p>Solo incluye eventos de quienes aceptaron la analítica. Los clics hacia Amazon son interés de compra, no ventas confirmadas. La tasa de clics es clics dividido entre vistas registradas; no son personas únicas.</p><button id="refresh-metrics" class="secondary" type="button">Actualizar estadísticas</button><p id="metrics-status" role="status"></p><div id="metrics-summary"></div><div id="metrics-days"></div></section></main></body></html>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Espacio del titular · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"><script src="/owner.js" defer></script></head><body class="community-page owner-page"><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a class="header-cta" href="/comunidad">Comunidad</a></header><main id="contenido" class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO DEL TITULAR</p><h1>Comunidad y estadísticas</h1><p>Los pedidos y devoluciones se gestionan en Amazon.</p><section><h2>Tu cuenta de dueño</h2><p>Accedes con tu cuenta de Google. Desde aquí puedes moderar las conversaciones y consultar la actividad del libro.</p><a class="underlined-link" href="/comunidad">Gestionar la comunidad</a></section>
+<section id="statistics" class="owner-stats" aria-labelledby="metrics-title">
+ <div class="metrics-heading"><div><h2 id="metrics-title">Estadísticas de la web</h2><p>Cómo llega la lectura a más personas.</p></div><div class="metrics-actions"><label for="metrics-range">Periodo</label><select id="metrics-range"><option value="1">Hoy</option><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option></select><button id="refresh-metrics" class="secondary" type="button">Actualizar</button><button id="export-metrics" class="secondary" type="button" disabled>Descargar CSV</button></div></div>
+ <p id="metrics-status" class="metrics-status" role="status" aria-live="polite">Cargando estadísticas…</p>
+ <div id="metrics-content" aria-busy="true"><p id="metrics-period" class="metrics-period"></p><dl id="metrics-summary" class="metrics-summary"></dl>
+  <div class="metrics-chart-section"><h3>Evolución diaria</h3><div id="metrics-chart"></div><details class="metrics-detail"><summary>Ver cifras por día</summary><div id="metrics-days" class="metrics-table-scroll"></div></details></div>
+  <div class="metrics-breakdown"><section aria-labelledby="metrics-pages-title"><h3 id="metrics-pages-title">Por dónde pasan los lectores</h3><div id="metrics-pages" class="metrics-table-scroll"></div></section><section aria-labelledby="metrics-community-title"><h3 id="metrics-community-title">La conversación del libro</h3><dl id="metrics-community" class="metrics-community"></dl><p class="metrics-note">Preguntas y respuestas creadas en el periodo que están aprobadas actualmente. La cola pendiente muestra lo que espera revisión ahora.</p><a class="underlined-link" href="/comunidad?moderar=1">Ir a moderación</a></section></div>
+ </div>
+ <p class="metrics-note">Las vistas y los clics solo incluyen visitantes que aceptaron la analítica. Son eventos, no personas únicas; la relación clics / vistas puede superar el 100 %. Los clics no confirman ventas en Amazon.</p>
+ <noscript><p>Activa JavaScript para consultar y descargar tus estadísticas.</p></noscript>
+</section>
+<section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports"></div><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section></main></body></html>
 
 
 
@@ -3382,6 +3522,40 @@ ARCHIVO: web-actual/docs/community-google-team-2026-09-30.md
 4. Moderación: revisar pendientes en `/comunidad?moderar=1`; consultar avisos e historial en el panel.
 
 El estado de publicación del cliente OAuth en Google Cloud sigue siendo una configuración externa. No se cambia ni se prometen accesos de usuarios no habilitados en modo de pruebas.
+
+
+
+========================================================================
+ARCHIVO: web-actual/docs/estadisticas-del-titular.md
+========================================================================
+
+# Estadísticas del titular
+
+El panel privado `/propietario` muestra la actividad agregada de la web. El acceso y la descarga CSV requieren una sesión de Google con permisos de dueño; el servidor vuelve a comprobarlos al descargar.
+
+## Lectura de las cifras
+
+- Periodos: hoy, últimos 7 días y últimos 30 días, incluido hoy.
+- Comparación: el bloque inmediatamente anterior de igual duración. Hoy es un día incompleto; todas las fechas de agrupación están en UTC.
+- Vistas y clics: eventos de quienes aceptaron la analítica. No representan personas únicas. Los clics hacia Amazon no confirman compras.
+- Relación clics / vistas: clics hacia Amazon divididos entre todas las vistas registradas. Puede superar el 100 % si una persona pulsa varias veces. El cambio de esta relación se expresa en puntos porcentuales; los cambios de los recuentos se expresan en porcentaje.
+- Desglose: portada, comunidad e información legal, las categorías ya existentes. No se añaden identificadores de visitantes ni nuevas etiquetas de seguimiento.
+- Comunidad: preguntas y respuestas creadas en el periodo que están publicadas al consultar. Una aprobación posterior puede modificar el recuento de un periodo anterior. Los pendientes representan la cola actual completa, sin filtro de fechas.
+
+## CSV
+
+El archivo contiene el detalle diario de ambos periodos, el desglose por apartado y los recuentos de comunidad y moderación. Usa UTF-8 con BOM y separador de punto y coma para abrirse en Excel. No contiene nombres, correos, mensajes, direcciones IP ni identificadores de cuentas.
+
+## Verificación
+
+Revisión del 30 de septiembre de 2026:
+
+- 177 pruebas automáticas superadas, con regresiones de periodos, límites de fechas, pérdida de permisos, respuestas fuera de orden y CSV autorizado.
+- Navegador Edge en anchuras 320, 390, 768 y 1440 px; filtros de 1, 7 y 30 días, estado vacío, gráficos con cifras de muestra, descarga CSV y pérdida de acceso.
+- Sin errores JavaScript ni desbordamiento horizontal en las comprobaciones; axe no detectó infracciones WCAG A/AA en la sección de estadísticas.
+- Las cifras usadas para revisar el gráfico se simularon exclusivamente en la vista local. No se introdujeron registros de prueba en producción.
+
+La retención existente de métricas web es de 90 días; este cambio consulta como máximo los 60 días necesarios para comparar dos periodos de 30. No sustituye las estadísticas ni los informes de ventas de Amazon.
 
 
 
@@ -11999,16 +12173,23 @@ const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const pending=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const response=(data,status=200)=>({ok:status<400,status,json:async()=>data});
 const post=id=>({id,title:'Conversación '+id,author:'Lector',role:'reader',status:'published',body:'Un mensaje para conversar',version:0,createdAt:1,replyCount:0});
+const metricFixture=(days,views=0,clicks=0,previousViews=0)=>{
+ const end=Date.UTC(2026,8,30),iso=ms=>new Date(ms).toISOString().slice(0,10),start=end-(days-1)*86400000,previousEnd=start-86400000,previousStart=previousEnd-(days-1)*86400000;
+ return {days,period:{start:iso(start),end:iso(end),previousStart:iso(previousStart),previousEnd:iso(previousEnd),timeZone:'UTC',includesToday:true},rows:[{day:iso(end),event:'view',page:'home',count:views},{day:iso(end),event:'amazon',page:'home',count:clicks}],previousRows:[{day:iso(previousEnd),event:'view',page:'home',count:previousViews}],community:{current:{questions:2,replies:3},previous:{questions:1,replies:1},pending:{questions:4,replies:5}}};
+};
+const allText=node=>[node.textContent,...node.children.flatMap(allText)].join(' ');
 function browser(kind='community',intercept=()=>undefined){
- const nodes=new Map();
- function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){}};}
+ const nodes=new Map(),downloads=[],objectUrls=new Map();
+ function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){},click(){if(tag==='a')downloads.push({name:this.download,blob:objectUrls.get(this.href)});},remove(){}};}
  const html=readFileSync(new URL('../dist/'+(kind==='community'?'comunidad':'propietario')+'.html',import.meta.url),'utf8');
  for(const match of html.matchAll(/id="([^"]+)"/g))nodes.set(match[1],element());
- const normal=(url)=>url.includes('/site-metrics')?{rows:[]}:url.endsWith('/me')?{loginAvailable:true,user:{id:'owner',alias:'Owner',accepted_at:1,role:'owner'},canManageOwners:true}:url.endsWith('/team')?{members:[]}:url.endsWith('/moderation-history')?{events:[]}:url.endsWith('/reports')?{reports:[]}:url.includes('/posts?')?{posts:[post('one'),post('two')],hasMore:false}:url.includes('/posts/')?{post:post(url.split('/posts/')[1].split('?')[0]),replies:[],hasMore:false}:{ok:true};
+ if(kind==='owner')nodes.get('metrics-range').value='30';
+ const normal=(url)=>url.includes('/site-metrics')?{days:30,period:{start:'2026-09-01',end:'2026-09-30',previousStart:'2026-08-02',previousEnd:'2026-08-31',timeZone:'UTC',includesToday:true},rows:[],previousRows:[],community:{current:{questions:0,replies:0},previous:{questions:0,replies:0},pending:{questions:0,replies:0}}}:url.endsWith('/me')?{loginAvailable:true,user:{id:'owner',alias:'Owner',accepted_at:1,role:'owner'},canManageOwners:true}:url.endsWith('/team')?{members:[]}:url.endsWith('/moderation-history')?{events:[]}:url.endsWith('/reports')?{reports:[]}:url.includes('/posts?')?{posts:[post('one'),post('two')],hasMore:false}:url.includes('/posts/')?{post:post(url.split('/posts/')[1].split('?')[0]),replies:[],hasMore:false}:{ok:true};
  const fetch=async(url,options={})=>{const result=intercept(url,options);return result===undefined?response(normal(url)):await result;};
- vm.runInNewContext(readFileSync(new URL('../dist/'+(kind==='community'?'community':'owner')+'.js',import.meta.url),'utf8'),{document:{hidden:false,getElementById:id=>nodes.get(id),createElement:element,addEventListener(){}},location:{search:'',origin:'https://book.example',assign(){}},fetch,URL,URLSearchParams,Intl,Date,JSON,Map,Set,setInterval(){},clearInterval(){},setTimeout,clearTimeout,confirm:()=>true,navigator:{clipboard:{writeText:async()=>{}}},window:{addEventListener(){}}});
+ class TestURL extends URL{static createObjectURL(blob){const id='blob:test-'+(objectUrls.size+1);objectUrls.set(id,blob);return id;}static revokeObjectURL(id){objectUrls.delete(id);}}
+ vm.runInNewContext(readFileSync(new URL('../dist/'+(kind==='community'?'community':'owner')+'.js',import.meta.url),'utf8'),{document:{hidden:false,body:element('body'),getElementById:id=>nodes.get(id),createElement:element,createElementNS:(_ns,tag)=>element(tag),addEventListener(){}},location:{search:'',origin:'https://book.example',assign(){}},fetch,URL:TestURL,URLSearchParams,Blob,Intl,Date,JSON,Map,Set,setInterval(){},clearInterval(){},setTimeout,clearTimeout,confirm:()=>true,navigator:{clipboard:{writeText:async()=>{}}},window:{addEventListener(){}}});
  const find=(root,label)=>{for(const child of root.children){if(child.tag==='button'&&child.textContent===label)return child;const found=find(child,label);if(found)return found;}};
- return {get:id=>nodes.get(id),click:async(id,label)=>{const target=label?find(nodes.get(id),label):nodes.get(id);assert.ok(target,'Button exists: '+(label||id));await target.dispatch('click');await flush();},flush};
+ return {get:id=>nodes.get(id),downloads,click:async(id,label)=>{const target=label?find(nodes.get(id),label):nodes.get(id);assert.ok(target,'Button exists: '+(label||id));await target.dispatch('click');await flush();},flush};
 }
 test('reply drafts survive closing and reopening, isolated per conversation',async()=>{
  const b=browser();await flush();await b.click('topics','Conversación one');b.get('reply-body').value='Borrador de la primera';await b.click('close-thread');await b.click('topics','Conversación two');assert.equal(b.get('reply-body').value,'');await b.click('close-thread');await b.click('topics','Conversación one');assert.equal(b.get('reply-body').value,'Borrador de la primera');
@@ -12026,9 +12207,44 @@ test('refreshing reports preserves the written resolution',async()=>{
  const input=()=>form().children.find(el=>el.tag==='input');input().value='Resolución todavía sin enviar';await b.click('refresh-reports');assert.equal(input().value,'Resolución todavía sin enviar');
 });
 test('late private responses cannot repopulate the panel after permissions expire',async()=>{
- const reports=pending();const b=browser('owner',url=>url.endsWith('/reports')?reports.promise:url.endsWith('/site-metrics')?response({error:'Acceso privado'},403):undefined);await flush();
+ const reports=pending();const b=browser('owner',url=>url.endsWith('/reports')?reports.promise:url.includes('/site-metrics')?response({error:'Acceso privado'},403):undefined);await flush();
  reports.resolve(response({reports:[{id:'private',threadId:'one',reason:'Aviso privado',body:'Texto',reporter:'Reader',createdAt:1}]}));await flush();
  assert.equal(b.get('community-reports').children.length,0);assert.equal(b.get('team-members').children.length,0);assert.equal(b.get('metrics-summary').children.length,0);assert.equal(b.get('team-section').hidden,true);
+});
+test('changing metrics period ignores the earlier response and keeps current controls enabled',async()=>{
+ const old=pending(),b=browser('owner',url=>url.includes('/site-metrics?days=30')?old.promise:url.includes('/site-metrics?days=7')?response(metricFixture(7,7,2,3)):undefined);await flush();
+ b.get('metrics-range').value='7';await b.get('metrics-range').dispatch('change');await flush();
+ assert.match(allText(b.get('metrics-summary')),/7/);assert.equal(b.get('export-metrics').disabled,false);
+ old.resolve(response(metricFixture(30,300,100,200)));await flush();
+ assert.doesNotMatch(allText(b.get('metrics-summary')),/300/);assert.equal(b.get('refresh-metrics').disabled,false);assert.equal(b.get('export-metrics').disabled,false);
+});
+test('loss of owner permission clears displayed analytics and blocks export',async()=>{
+ let reads=0;const b=browser('owner',url=>url.includes('/site-metrics')?(++reads===1?response(metricFixture(30,12,3,7)):response({error:'Acceso privado'},403)):undefined);await flush();
+ assert.match(allText(b.get('metrics-summary')),/12/);assert.equal(b.get('export-metrics').disabled,false);
+ b.get('metrics-range').value='7';await b.get('metrics-range').dispatch('change');await flush();
+ for(const id of ['metrics-summary','metrics-chart','metrics-days','metrics-pages','metrics-community'])assert.equal(b.get(id).children.length,0,id);
+ assert.equal(b.get('export-metrics').disabled,true);assert.equal(b.get('metrics-range').disabled,true);assert.equal(b.downloads.length,0);
+});
+test('metrics display handles no prior views and no current views without invalid percentages',async()=>{
+ const b=browser('owner',url=>url.includes('/site-metrics')?response(metricFixture(30,0,2,0)):undefined);await flush();
+ const summary=allText(b.get('metrics-summary'));
+ assert.match(summary,/Sin datos/);assert.doesNotMatch(summary,/NaN|Infinity/);
+ assert.match(allText(b.get('metrics-community')),/2.*3.*9/);
+});
+test('CSV rechecks owner access and exports only aggregate figures',async()=>{
+ let reads=0;const b=browser('owner',url=>url.includes('/site-metrics')?(++reads===1?response(metricFixture(30,12,3,7)):response(metricFixture(30,14,4,7))):undefined);await flush();
+ await b.click('export-metrics');assert.equal(reads,2);assert.equal(b.downloads.length,1);assert.match(b.downloads[0].name,/^estadisticas-2026-09-01-2026-09-30\.csv$/);
+ const bytes=new Uint8Array(await b.downloads[0].blob.arrayBuffer());assert.deepEqual([...bytes.slice(0,3)],[0xef,0xbb,0xbf]);
+ const csv=await b.downloads[0].blob.text();assert.match(csv,/"fecha_utc";"apartado";"vistas"/);assert.match(csv,/"2026-09-30";"todos";"14";"4"/);assert.doesNotMatch(csv,/@|google_sub|community_users|cf-connecting-ip/i);
+});
+test('a server response for a different period cannot enable CSV',async()=>{
+ const b=browser('owner',url=>url.includes('/site-metrics?days=30')?response(metricFixture(7,12,3,7)):undefined);await flush();
+ assert.equal(b.get('metrics-summary').children.length,0);assert.equal(b.get('export-metrics').disabled,true);
+ assert.match(b.get('metrics-status').textContent,/periodo|estadísticas/i);
+});
+test('CSV does not download if a fresh permission check fails',async()=>{
+ let reads=0;const b=browser('owner',url=>url.includes('/site-metrics')?(++reads===1?response(metricFixture(30,12,3,7)):response({error:'Acceso privado'},403)):undefined);await flush();
+ await b.click('export-metrics');assert.equal(reads,2);assert.equal(b.downloads.length,0);assert.equal(b.get('export-metrics').disabled,true);assert.equal(b.get('metrics-summary').children.length,0);
 });
 test('moderation of a pending reply can open its original conversation',async()=>{
  const b=browser('community',url=>url.endsWith('/moderation')?response({posts:[{...post('reply'),parentId:'one',title:'',status:'pending'}]}):undefined);await flush();await b.click('moderation');await b.click('topics','Ver conversación original');assert.equal(b.get('thread-title').textContent,'Conversación one');
@@ -12778,6 +12994,95 @@ test('competing updates allow one winner and storage failures do not report succ
   env.DB.prepare=()=>{throw new Error('storage unavailable');};
   const failed=await app.fetch(new Request('https://book.example/api/admin/orders/one/notes',{method:'POST',headers:{...owner,origin:'https://book.example','content-type':'application/json','x-admin-action':'notes'},body:JSON.stringify({note:'C',expectedVersion:1})}),env);
   assert.equal(failed.status,503);assert.match(failed.headers.get('cache-control'),/no-store/);
+});
+
+
+
+========================================================================
+ARCHIVO: web-actual/tests/metrics.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {handleMetrics} from '../worker/metrics.mjs';
+import {communityHash} from '../worker/community.mjs';
+import {localDatabase} from './database.mjs';
+
+const DAY=86400000;
+const FIXED=Date.UTC(2026,8,30,18);
+const iso=offset=>new Date(FIXED+offset*DAY).toISOString().slice(0,10);
+const at=offset=>Date.UTC(2026,8,30+offset);
+const TOKEN='m'.repeat(43);
+const READER_TOKEN='r'.repeat(43);
+const get=(suffix='',cookie=TOKEN)=>new Request('https://book.example/api/site-metrics'+suffix,{headers:cookie?{Cookie:'__Host-community='+cookie}:{}});
+
+async function fixture(){
+ const DB=localDatabase(),sql=DB.sqlite;
+ sql.prepare('INSERT INTO community_users(id,google_sub,email,created_at) VALUES(?,?,?,?)').run('owner','sub-owner','owner-secret@example.test',1);
+ sql.prepare('INSERT INTO community_users(id,google_sub,email,created_at) VALUES(?,?,?,?)').run('reader','sub-reader','reader-secret@example.test',1);
+ sql.prepare('INSERT INTO community_owner(slot,user_id) VALUES(1,?)').run('owner');
+ sql.prepare('INSERT INTO community_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').run(await communityHash(TOKEN),'owner',FIXED+DAY);
+ sql.prepare('INSERT INTO community_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').run(await communityHash(READER_TOKEN),'reader',FIXED+DAY);
+ const metric=(offset,event='view',page='home',count=1)=>sql.prepare('INSERT INTO site_metrics(day,event,page,count) VALUES(?,?,?,?)').run(iso(offset),event,page,count);
+ let sequence=0;
+ const post=(offset,{reply=false,status='published'}={})=>{
+  const id='post-'+(++sequence);
+  sql.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)').run(id,reply?'parent':null,'reader','Private title','Private body '+sequence,status,at(offset));
+ };
+ return {env:{DB},metric,post};
+}
+
+test('metrics require an owner before validating dates and reject malformed periods',async t=>{
+ t.mock.method(Date,'now',()=>FIXED);
+ const {env}=await fixture();
+ for(const suffix of ['','?days=7','?days=999']){
+  const response=await handleMetrics(get(suffix,null),env);
+  assert.equal(response.status,403);
+  assert.match(response.headers.get('cache-control'),/no-store/);
+  assert.equal(response.headers.get('x-robots-tag'),'noindex');
+ }
+ assert.equal((await handleMetrics(get('?days=7',READER_TOKEN),env)).status,403);
+ for(const suffix of ['?days=0','?days=2','?days=07','?days=-1','?days=7&days=30','?days=7%20OR%201=1']){
+  assert.equal((await handleMetrics(get(suffix),env)).status,400,suffix);
+ }
+});
+
+test('UTC periods, daily rows and community counts exclude future and out-of-period data',async t=>{
+ t.mock.method(Date,'now',()=>FIXED);
+ const {env,metric,post}=await fixture();
+ for(const offset of [-60,-59,-30,-29,-14,-13,-8,-7,-6,-1,0,1])metric(offset,'view','home',2);
+ metric(0,'amazon','community',1);
+ post(-14);post(-13);post(-7);post(-6);post(0,{reply:true});post(1);
+ post(-6,{status:'hidden'});post(-40,{status:'pending'});post(2,{reply:true,status:'pending'});
+ const response=await handleMetrics(get('?days=7'),env);
+ assert.equal(response.status,200);
+ const data=await response.json();
+ assert.deepEqual(data.period,{start:iso(-6),end:iso(0),previousStart:iso(-13),previousEnd:iso(-7),timeZone:'UTC',includesToday:true});
+ assert.deepEqual(data.rows.map(row=>[row.day,row.event,row.page,row.count]),[[iso(0),'amazon','community',1],[iso(0),'view','home',2],[iso(-1),'view','home',2],[iso(-6),'view','home',2]]);
+ assert.deepEqual(data.previousRows.map(row=>row.day),[iso(-7),iso(-8),iso(-13)]);
+ assert.deepEqual(data.community,{current:{questions:1,replies:1},previous:{questions:2,replies:0},pending:{questions:1,replies:1}});
+ assert.match(data.note,/no son ventas/);
+ assert.doesNotMatch(JSON.stringify(data),/secret@example|Private|post-|sub-reader/);
+});
+
+test('one day means today against yesterday; thirty days compare with the prior thirty',async t=>{
+ t.mock.method(Date,'now',()=>FIXED);
+ const {env,metric,post}=await fixture();
+ for(const offset of [-60,-59,-30,-29,-1,0,1])metric(offset);
+ post(-59);post(-30);post(-29,{reply:true});post(-1);post(0);
+ const one=await(await handleMetrics(get('?days=1'),env)).json();
+ assert.deepEqual(one.period,{start:iso(0),end:iso(0),previousStart:iso(-1),previousEnd:iso(-1),timeZone:'UTC',includesToday:true});
+ assert.deepEqual(one.rows.map(row=>row.day),[iso(0)]);
+ assert.deepEqual(one.previousRows.map(row=>row.day),[iso(-1)]);
+ assert.deepEqual(one.community.current,{questions:1,replies:0});
+ assert.deepEqual(one.community.previous,{questions:1,replies:0});
+ const thirty=await(await handleMetrics(get(),env)).json();
+ assert.equal(thirty.days,30);
+ assert.deepEqual(thirty.period,{start:iso(-29),end:iso(0),previousStart:iso(-59),previousEnd:iso(-30),timeZone:'UTC',includesToday:true});
+ assert.deepEqual(thirty.rows.map(row=>row.day),[iso(0),iso(-1),iso(-29)]);
+ assert.deepEqual(thirty.previousRows.map(row=>row.day),[iso(-30),iso(-59)]);
+ assert.deepEqual(thirty.community.current,{questions:2,replies:1});
+ assert.deepEqual(thirty.community.previous,{questions:2,replies:0});
 });
 
 
@@ -13878,7 +14183,22 @@ export async function handleMetrics(request,env){
   const url=new URL(request.url);
   if(url.pathname==='/api/site-metrics'&&request.method==='GET'){
    if(!await communityIsOwner(request,env))return metricsJson({error:'Acceso privado.'},403);
-   const since=new Date(Date.now()-30*86400000).toISOString().slice(0,10);const data=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? ORDER BY day DESC,event,page').bind(since).all();return metricsJson({days:30,rows:data.results,note:'Eventos de visitantes que aceptaron la analítica. Los clics no son ventas confirmadas en Amazon.'});
+   const requestedDays=url.searchParams.getAll('days');
+   if(requestedDays.length>1||(requestedDays.length===1&&!['1','7','30'].includes(requestedDays[0])))return metricsJson({error:'Periodo no válido.'},400);
+   const days=Number(requestedDays[0]||30),dayMs=86400000;
+   const today=Math.floor(Date.now()/dayMs)*dayMs;
+   const date=millis=>new Date(millis).toISOString().slice(0,10);
+   const start=today-(days-1)*dayMs,previousStart=start-days*dayMs;
+   const period={start:date(start),end:date(today),previousStart:date(previousStart),previousEnd:date(start-dayMs),timeZone:'UTC',includesToday:true};
+   const current=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.start,period.end).all();
+   const previous=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.previousStart,period.previousEnd).all();
+   const published=async(from,to)=>{
+    const row=await env.DB.prepare("SELECT COUNT(CASE WHEN parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN parent_id IS NOT NULL THEN 1 END) replies FROM community_posts WHERE status='published' AND created_at>=? AND created_at<?").bind(from,to).first();
+    return {questions:row.questions,replies:row.replies};
+   };
+   const communityCurrent=await published(start,today+dayMs),communityPrevious=await published(previousStart,start);
+   const pending=await env.DB.prepare("SELECT COUNT(CASE WHEN parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN parent_id IS NOT NULL THEN 1 END) replies FROM community_posts WHERE status='pending'").first();
+   return metricsJson({days,period,rows:current.results,previousRows:previous.results,community:{current:communityCurrent,previous:communityPrevious,pending:{questions:pending.questions,replies:pending.replies}},note:'Eventos de visitantes que aceptaron la analítica. Los clics no son ventas confirmadas en Amazon.'});
   }
   if(url.pathname!=='/api/event'||request.method!=='POST')return metricsJson({error:'No encontrado.'},404);
   if(request.headers.get('origin')!==url.origin||request.headers.get('x-site-event')!=='1'||request.headers.get('sec-gpc')==='1'||request.headers.get('dnt')==='1'||!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||''))return metricsJson({error:'No permitido.'},403);

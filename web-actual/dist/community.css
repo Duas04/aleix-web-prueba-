@@ -163,3 +163,59 @@ body.community-page #account-title{scroll-margin-top:18px}
   body.community-page .community-dialog .thread-tools{gap:4px 14px}
   body.community-page .community-dialog .thread-tools button{font-size:.875rem}
 }
+
+/* Private, aggregate statistics: quiet surfaces, legible data and no chart library. */
+.owner-page .owner-stats{margin-block:40px 52px;padding-top:30px;border-top:1px solid var(--line);scroll-margin-top:20px}
+.owner-page .metrics-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.owner-page .metrics-heading h2{font:2rem/1.3 var(--serif);margin:0}
+.owner-page .metrics-heading p{margin:9px 0 0;color:var(--muted);line-height:1.6}
+.owner-page .metrics-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.owner-page .metrics-actions label{margin:0;font-size:.875rem;font-weight:600}
+.owner-page .metrics-actions select{min-height:44px;padding:10px 30px 10px 12px;border:1px solid #9d7e50;border-radius:4px;background:#fffef9;color:var(--ink);font:inherit}
+.owner-page .metrics-actions select:focus-visible{outline:3px solid #94631e;outline-offset:3px}
+.owner-page .metrics-status{margin:20px 0 8px;min-height:24px;font-size:.875rem;color:var(--muted);line-height:1.7}
+.owner-page .metrics-period{margin:0 0 22px;font-size:.875rem;color:var(--muted);line-height:1.7}
+.owner-page #metrics-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-block:1px solid var(--line);margin:0}
+.owner-page .metric-item{min-width:0;padding:24px 24px 24px 0}
+.owner-page #metrics-summary .metric-item+.metric-item{padding-left:24px;border-left:1px solid var(--line)}
+.owner-page .metric-item dt{font-size:.875rem;color:var(--muted);font-weight:500;line-height:1.6}
+.owner-page .metric-item dd{margin:8px 0 9px;font:600 2.15rem/1.15 var(--sans);font-variant-numeric:tabular-nums;color:var(--ink)}
+.owner-page #metrics-summary .metric-item p,.owner-page .metric-item p{padding:0;background:none;margin:0;font-size:.8125rem;line-height:1.6;color:#65441e}
+.owner-page .metrics-chart-section{margin-top:30px}
+.owner-page .owner-stats h3{font:600 1.125rem/1.5 var(--sans);margin:0 0 16px}
+.owner-page .metrics-figure{margin:0;padding:22px 24px;background:#f4ecdf;border-radius:12px}
+.owner-page .metrics-legend{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;font-size:.8125rem;font-weight:500}
+.owner-page .metrics-key{display:inline-flex;align-items:center;gap:9px}
+.owner-page .metrics-key::before{content:'';display:block;width:22px;border-top:2px solid var(--olive)}
+.owner-page .metrics-key.amazon::before{border-top-color:var(--ink);border-top-style:dashed}
+.owner-page .metrics-plot-grid{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:stretch}
+.owner-page .metrics-yaxis{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;padding-block:6px;font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted)}
+.owner-page .metrics-plot-grid svg{display:block;width:100%;height:200px;overflow:visible}
+.owner-page .metrics-gridline{stroke:#d9cbb6;stroke-width:1;vector-effect:non-scaling-stroke}
+.owner-page .metrics-series{stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.owner-page .metrics-series.view{stroke:var(--olive)}
+.owner-page .metrics-series.amazon{stroke:var(--ink);stroke-dasharray:5 4}
+.owner-page .metrics-point.view{fill:var(--olive)}
+.owner-page .metrics-point.amazon{fill:var(--ink)}
+.owner-page .metrics-xaxis{display:flex;justify-content:space-between;gap:8px;margin:12px 0 0 44px;font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted)}
+.owner-page .metrics-xaxis>span:only-child{margin-inline:auto}
+.owner-page .metrics-empty{margin:0;min-height:180px;padding:36px 24px;border-radius:12px;background:#f4ecdf;display:flex;align-items:center;max-width:none;line-height:1.8;color:var(--muted)}
+.owner-page .metrics-detail{margin-top:18px}
+.owner-page .metrics-detail summary{min-height:44px;padding:10px 0;cursor:pointer;font-size:.875rem;font-weight:500}
+.owner-page .metrics-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
+.owner-page .metrics-table{width:100%;border-collapse:collapse;font-size:.875rem;font-variant-numeric:tabular-nums;line-height:1.6}
+.owner-page .metrics-table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.owner-page .metrics-table th,.owner-page .metrics-table td{padding:12px 10px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+.owner-page .metrics-table th:first-child{padding-left:0;text-align:left}
+.owner-page .metrics-table thead th{color:var(--muted);font-size:.8125rem;font-weight:600}
+.owner-page .metrics-table tbody th{font-weight:500}
+.owner-page .metrics-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:36px}
+.owner-page .metrics-community{margin:0}
+.owner-page .metrics-community .metric-item{display:grid;grid-template-columns:1fr auto;gap:2px 16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.owner-page .metrics-community dt{align-self:center}
+.owner-page .metrics-community dd{font-size:1.35rem;margin:0;text-align:right}
+.owner-page .metrics-community p{grid-column:1/-1}
+.owner-page .metrics-note{font-size:.8125rem;line-height:1.8;color:var(--muted);max-width:85ch;margin:18px 0 0}
+.owner-page #metrics-summary .metric-comparison,.owner-page .metric-item .metric-comparison{padding:0;background:none;margin:0;font:400 .8125rem/1.6 var(--sans);color:#65441e;text-align:left;grid-column:1/-1}
+@media(max-width:800px){.owner-page .metrics-heading{align-items:flex-start}.owner-page .metrics-breakdown{grid-template-columns:1fr;gap:30px}.owner-page .metrics-actions{width:100%}}
+@media(max-width:560px){.owner-page #metrics-summary{grid-template-columns:1fr}.owner-page #metrics-summary .metric-item{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:18px 0;border:0}.owner-page #metrics-summary .metric-item+.metric-item{padding-left:0;border-left:0;border-top:1px solid var(--line)}.owner-page #metrics-summary dd{margin:0;font-size:1.75rem}.owner-page #metrics-summary dt{align-self:center}.owner-page #metrics-summary p{grid-column:1/-1}.owner-page .metrics-figure{padding:18px 14px}.owner-page .metrics-legend{gap:12px 18px}.owner-page .metrics-actions label{width:100%}.owner-page .metrics-actions select{flex:1;min-width:0}.owner-page .metrics-actions #export-metrics{width:100%}.owner-page .metrics-heading h2{font-size:1.7rem}}

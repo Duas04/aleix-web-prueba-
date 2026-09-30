@@ -6,7 +6,22 @@ export async function handleMetrics(request,env){
   const url=new URL(request.url);
   if(url.pathname==='/api/site-metrics'&&request.method==='GET'){
    if(!await communityIsOwner(request,env))return metricsJson({error:'Acceso privado.'},403);
-   const since=new Date(Date.now()-30*86400000).toISOString().slice(0,10);const data=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? ORDER BY day DESC,event,page').bind(since).all();return metricsJson({days:30,rows:data.results,note:'Eventos de visitantes que aceptaron la analítica. Los clics no son ventas confirmadas en Amazon.'});
+   const requestedDays=url.searchParams.getAll('days');
+   if(requestedDays.length>1||(requestedDays.length===1&&!['1','7','30'].includes(requestedDays[0])))return metricsJson({error:'Periodo no válido.'},400);
+   const days=Number(requestedDays[0]||30),dayMs=86400000;
+   const today=Math.floor(Date.now()/dayMs)*dayMs;
+   const date=millis=>new Date(millis).toISOString().slice(0,10);
+   const start=today-(days-1)*dayMs,previousStart=start-days*dayMs;
+   const period={start:date(start),end:date(today),previousStart:date(previousStart),previousEnd:date(start-dayMs),timeZone:'UTC',includesToday:true};
+   const current=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.start,period.end).all();
+   const previous=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.previousStart,period.previousEnd).all();
+   const published=async(from,to)=>{
+    const row=await env.DB.prepare("SELECT COUNT(CASE WHEN parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN parent_id IS NOT NULL THEN 1 END) replies FROM community_posts WHERE status='published' AND created_at>=? AND created_at<?").bind(from,to).first();
+    return {questions:row.questions,replies:row.replies};
+   };
+   const communityCurrent=await published(start,today+dayMs),communityPrevious=await published(previousStart,start);
+   const pending=await env.DB.prepare("SELECT COUNT(CASE WHEN parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN parent_id IS NOT NULL THEN 1 END) replies FROM community_posts WHERE status='pending'").first();
+   return metricsJson({days,period,rows:current.results,previousRows:previous.results,community:{current:communityCurrent,previous:communityPrevious,pending:{questions:pending.questions,replies:pending.replies}},note:'Eventos de visitantes que aceptaron la analítica. Los clics no son ventas confirmadas en Amazon.'});
   }
   if(url.pathname!=='/api/event'||request.method!=='POST')return metricsJson({error:'No encontrado.'},404);
   if(request.headers.get('origin')!==url.origin||request.headers.get('x-site-event')!=='1'||request.headers.get('sec-gpc')==='1'||request.headers.get('dnt')==='1'||!/^application\/json(?:;|$)/i.test(request.headers.get('content-type')||''))return metricsJson({error:'No permitido.'},403);
