@@ -1,6 +1,6 @@
 DONDE SIEMPRE ESTUVISTE — CÓDIGO DE LA WEB
 
-Código actual de web-actual/. Fuente publicada: c99fcf0d57ffba45f9efc4f26971981f07d75a19.
+Código actual de web-actual/. Fuente publicada: 63be28e2ad508adf673ecf1013f9589b2eaecf2f.
 El build activo es scripts/build-public.mjs; algunos módulos y pruebas históricos se conservan como archivo y no se sirven al público.
 Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene credenciales ni bases de datos de personas.
 
@@ -3006,6 +3006,17 @@ ARCHIVO: web-actual/dist/site-updates.css
 /* Ochre accents and natural image proportions preserve the editorial layout. */
 h1 em,h2 em,.closing p em{color:#805b28}.button-primary{background:#805b28;color:#fff}.button-primary:hover{background:#65441e}.hero-visual{height:auto;aspect-ratio:auto;overflow:hidden;background:#efe5d5;border-radius:70px 4px 4px 4px}.hero-visual .visual-label{position:static;margin:0;background:#f1e9dc;color:#6d563b;padding:18px 22px}.book-art{background:#efe5d5}.small-sun,.quiet-line span:nth-child(even),.closing-star{color:#805b28}.site-header nav{color:#6d563b}.pause-section{background:#594124}.pause-copy .eyebrow,.pause-copy>p:not(.eyebrow),.pause-copy>p.gentle-note,.breath-time,.reset-button{color:#f0e3ce}.pause-copy h2 em{color:#f1d39e}.breath-ring,.breath-ring:after{border-color:#bea272}.breath-orb{background:#99703b}.button-light{color:#594124;background:#fff8e9}.underlined-link{border-color:#a98d63}.faq-list summary:hover{color:#805b28}.community-dialog::backdrop{background:#302516b3}
 @media(max-width:580px){.hero-visual{border-top-left-radius:45px}.hero-visual .visual-label{padding:14px 18px;gap:6px;flex-direction:column}}
+
+/* Secondary navigation keeps the book's ochre tone and a generous touch target. */
+.header-community,.community-invitation>div>a{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:46px;padding:10px 18px;border:1px solid var(--olive);border-radius:999px;background:#f4e9d8;color:var(--olive);font-size:.9375rem;font-weight:600;line-height:1.5;text-decoration:none;white-space:nowrap;transition:background-color .18s,color .18s}
+.header-community::after,.community-invitation>div>a::after{content:'';width:6px;height:6px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;transform:rotate(45deg);flex-shrink:0}
+.header-community:hover,.community-invitation>div>a:hover{background:var(--olive);color:#fff}
+.header-community:active,.community-invitation>div>a:active{background:#65441e;color:#fff}
+.site-header nav a{display:inline-flex;align-items:center;min-height:44px;text-decoration-thickness:1px;text-underline-offset:6px}
+.site-header nav a:hover,.site-header nav a[aria-current=page]{color:var(--olive);text-decoration:underline}
+@media(max-width:580px){.site-header{grid-template-columns:minmax(0,1fr) auto}.site-header .wordmark{min-width:0;max-width:100%;font-size:clamp(1.15rem,4.7vw,1.35rem)}.header-community{padding:10px 12px;gap:10px;font-size:.875rem}.site-header nav{gap:4px 12px}}
+@media(max-width:420px){.site-header nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;row-gap:0;justify-items:start}}
+@media(prefers-reduced-motion:reduce){.header-community,.community-invitation>div>a{transition:none}}
 
 
 
