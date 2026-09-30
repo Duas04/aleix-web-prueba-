@@ -78,7 +78,7 @@ test('OAuth stores only allowed destinations and ignores external redirects',asy
  }
 });
 test('private owner access uses Google sessions and rejects platform-header privilege escalation',async()=>{
- const {env}=await setup(),worker=createPublicWorker({'@owner':{type:'text/html',data:btoa('<h1>Private</h1>')}});
+ const {env}=await setup(),worker=createPublicWorker({'@owner':{type:'text/html',data:btoa('<h1>Private</h1>')},'/acceso-restringido.html':{type:'text/html',data:btoa('<h1>Access denied</h1>')}});
  const headers={'oai-authenticated-user-id':'root','oai-authenticated-user-email':'root@example.test'};
  const request=(path,cookie)=>new Request('https://book.example'+path,{headers:{...headers,...(cookie?{Cookie:'__Host-community='+cookie.padEnd(43,'x')}:{})}});
  const anonymous=await worker.fetch(request('/propietario'),env);assert.equal(anonymous.status,302);assert.equal(anonymous.headers.get('location'),'/auth/google/start?return_to=%2Fpropietario');

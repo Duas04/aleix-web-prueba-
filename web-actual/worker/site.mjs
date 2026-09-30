@@ -15,10 +15,11 @@ export function createPublicWorker(assets){return {async fetch(request,env){
   if(path.startsWith('/api/'))return siteJson({error:'No encontrado.'},404);
   if(!['GET','HEAD'].includes(request.method))return siteJson({error:'Método no permitido.'},405);
   if(path==='/propietario'){
-   const user=await communitySession(request,env);if(!user){const redirect=siteRedirect('/auth/google/start?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}if(user.role!=='owner')return siteJson({error:'Tu cuenta de Google no tiene permisos de dueño. Vuelve a la comunidad para cambiar de cuenta.'},403);
+   const user=await communitySession(request,env);if(!user){const redirect=siteRedirect('/auth/google/start?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}if(user.role!=='owner')return siteAsset(assets['/acceso-restringido.html'],request,true,403);
    return siteAsset(assets['@owner'],request,true);
   }
   if(path==='/admin'||path==='/admin/')return siteRedirect('/propietario');
+  if(path==='/propietario/')return siteRedirect('/propietario'+url.search);
   if(['/devoluciones','/devoluciones/','/devoluciones.html'].includes(path))return siteRedirect('/condiciones-de-venta#amazon');
   if(path==='/demo'||path.startsWith('/demo/')||path==='/tienda-demo.html')return siteAsset(assets['/404.html'],request,false,410);
   if(path==='/'&&url.searchParams.has('demo')){url.searchParams.delete('demo');return siteRedirect(url.pathname+url.search);}

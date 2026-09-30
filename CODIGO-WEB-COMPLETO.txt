@@ -1,6 +1,6 @@
 DONDE SIEMPRE ESTUVISTE — CÓDIGO DE LA WEB
 
-Código actual de web-actual/. Fuente publicada: db347e1448873192f99283c7a68faaa19f27ced3.
+Código actual de web-actual/. Fuente publicada: b04a6a87f78df73daa3c017709bd2304921290e1.
 El build activo es scripts/build-public.mjs; algunos módulos y pruebas históricos se conservan como archivo y no se sirven al público.
 Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene credenciales ni bases de datos de personas.
 
@@ -29,99 +29,102 @@ Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene crede
 22. web-actual/admin/styles.css
 23. web-actual/db/schema.ts
 24. web-actual/dist/404.html
-25. web-actual/dist/app.js
-26. web-actual/dist/assets/fonts/dmsans-OFL.txt
-27. web-actual/dist/assets/fonts/manrope-OFL.txt
-28. web-actual/dist/assets/fonts/playfairdisplay-OFL.txt
-29. web-actual/dist/aviso-legal.html
-30. web-actual/dist/cart.js
-31. web-actual/dist/community.css
-32. web-actual/dist/community.js
-33. web-actual/dist/comunidad.html
-34. web-actual/dist/condiciones-de-venta.html
-35. web-actual/dist/cookies.html
-36. web-actual/dist/demo-checkout.js
-37. web-actual/dist/demo-session.css
-38. web-actual/dist/demo-session.js
-39. web-actual/dist/devoluciones.html
-40. web-actual/dist/favicon.svg
-41. web-actual/dist/fonts.css
-42. web-actual/dist/index.html
-43. web-actual/dist/legal.css
-44. web-actual/dist/normas-comunidad.html
-45. web-actual/dist/owner.js
-46. web-actual/dist/privacidad.html
-47. web-actual/dist/privacy-controls.js
-48. web-actual/dist/propietario.html
-49. web-actual/dist/returns.css
-50. web-actual/dist/returns.js
-51. web-actual/dist/robots.txt
-52. web-actual/dist/shop.css
-53. web-actual/dist/shop.js
-54. web-actual/dist/site-updates.css
-55. web-actual/dist/sitemap.xml
-56. web-actual/dist/styles.css
-57. web-actual/dist/tienda-demo.html
-58. web-actual/docs/amazon-comunidad-2026-09-30.md
-59. web-actual/docs/community-google-team-2026-09-30.md
-60. web-actual/drizzle.config.ts
-61. web-actual/drizzle/0000_cultured_mathemanic.sql
-62. web-actual/drizzle/0001_lonely_black_bolt.sql
-63. web-actual/drizzle/0002_cute_blazing_skull.sql
-64. web-actual/drizzle/0003_colossal_nehzno.sql
-65. web-actual/drizzle/0004_chunky_microchip.sql
-66. web-actual/drizzle/0005_flat_bullseye.sql
-67. web-actual/drizzle/0006_heavy_human_torch.sql
-68. web-actual/drizzle/0007_goofy_anthem.sql
-69. web-actual/drizzle/0008_spicy_mystique.sql
-70. web-actual/drizzle/meta/0000_snapshot.json
-71. web-actual/drizzle/meta/0001_snapshot.json
-72. web-actual/drizzle/meta/0002_snapshot.json
-73. web-actual/drizzle/meta/0003_snapshot.json
-74. web-actual/drizzle/meta/0004_snapshot.json
-75. web-actual/drizzle/meta/0005_snapshot.json
-76. web-actual/drizzle/meta/0006_snapshot.json
-77. web-actual/drizzle/meta/0007_snapshot.json
-78. web-actual/drizzle/meta/0008_snapshot.json
-79. web-actual/drizzle/meta/_journal.json
-80. web-actual/package.json
-81. web-actual/pnpm-lock.yaml
-82. web-actual/pnpm-workspace.yaml
-83. web-actual/scripts/backup-source.mjs
-84. web-actual/scripts/build-public.mjs
-85. web-actual/scripts/build.mjs
-86. web-actual/scripts/package.mjs
-87. web-actual/scripts/preview-admin.mjs
-88. web-actual/scripts/preview-public.mjs
-89. web-actual/serve.mjs
-90. web-actual/tests/admin-live.test.mjs
-91. web-actual/tests/admin-ui.test.mjs
-92. web-actual/tests/admin.test.mjs
-93. web-actual/tests/breathing.test.mjs
-94. web-actual/tests/cache.test.mjs
-95. web-actual/tests/cart.test.mjs
-96. web-actual/tests/community-team.test.mjs
-97. web-actual/tests/community.test.mjs
-98. web-actual/tests/customer-returns-ui.test.mjs
-99. web-actual/tests/customer-returns.test.mjs
-100. web-actual/tests/database.mjs
-101. web-actual/tests/demo-checkout.test.mjs
-102. web-actual/tests/demo.test.mjs
-103. web-actual/tests/management.test.mjs
-104. web-actual/tests/privacy-ui.test.mjs
-105. web-actual/tests/public-site.test.mjs
-106. web-actual/tests/search.test.mjs
-107. web-actual/tests/seo.test.mjs
-108. web-actual/tests/shared-demo-ui.test.mjs
-109. web-actual/tests/shared-demo.test.mjs
-110. web-actual/worker/community.mjs
-111. web-actual/worker/database.mjs
-112. web-actual/worker/demo.mjs
-113. web-actual/worker/index.mjs
-114. web-actual/worker/legacy-index.mjs
-115. web-actual/worker/metrics.mjs
-116. web-actual/worker/returns.mjs
-117. web-actual/worker/site.mjs
+25. web-actual/dist/acceso-restringido.html
+26. web-actual/dist/app.js
+27. web-actual/dist/assets/fonts/dmsans-OFL.txt
+28. web-actual/dist/assets/fonts/manrope-OFL.txt
+29. web-actual/dist/assets/fonts/playfairdisplay-OFL.txt
+30. web-actual/dist/aviso-legal.html
+31. web-actual/dist/cart.js
+32. web-actual/dist/community.css
+33. web-actual/dist/community.js
+34. web-actual/dist/comunidad.html
+35. web-actual/dist/condiciones-de-venta.html
+36. web-actual/dist/cookies.html
+37. web-actual/dist/demo-checkout.js
+38. web-actual/dist/demo-session.css
+39. web-actual/dist/demo-session.js
+40. web-actual/dist/devoluciones.html
+41. web-actual/dist/favicon.svg
+42. web-actual/dist/fonts.css
+43. web-actual/dist/index.html
+44. web-actual/dist/legal.css
+45. web-actual/dist/normas-comunidad.html
+46. web-actual/dist/owner.js
+47. web-actual/dist/privacidad.html
+48. web-actual/dist/privacy-controls.js
+49. web-actual/dist/propietario.html
+50. web-actual/dist/returns.css
+51. web-actual/dist/returns.js
+52. web-actual/dist/robots.txt
+53. web-actual/dist/shop.css
+54. web-actual/dist/shop.js
+55. web-actual/dist/site-updates.css
+56. web-actual/dist/sitemap.xml
+57. web-actual/dist/styles.css
+58. web-actual/dist/tienda-demo.html
+59. web-actual/docs/amazon-comunidad-2026-09-30.md
+60. web-actual/docs/community-google-team-2026-09-30.md
+61. web-actual/docs/revision-general-2026-09-30.md
+62. web-actual/drizzle.config.ts
+63. web-actual/drizzle/0000_cultured_mathemanic.sql
+64. web-actual/drizzle/0001_lonely_black_bolt.sql
+65. web-actual/drizzle/0002_cute_blazing_skull.sql
+66. web-actual/drizzle/0003_colossal_nehzno.sql
+67. web-actual/drizzle/0004_chunky_microchip.sql
+68. web-actual/drizzle/0005_flat_bullseye.sql
+69. web-actual/drizzle/0006_heavy_human_torch.sql
+70. web-actual/drizzle/0007_goofy_anthem.sql
+71. web-actual/drizzle/0008_spicy_mystique.sql
+72. web-actual/drizzle/meta/0000_snapshot.json
+73. web-actual/drizzle/meta/0001_snapshot.json
+74. web-actual/drizzle/meta/0002_snapshot.json
+75. web-actual/drizzle/meta/0003_snapshot.json
+76. web-actual/drizzle/meta/0004_snapshot.json
+77. web-actual/drizzle/meta/0005_snapshot.json
+78. web-actual/drizzle/meta/0006_snapshot.json
+79. web-actual/drizzle/meta/0007_snapshot.json
+80. web-actual/drizzle/meta/0008_snapshot.json
+81. web-actual/drizzle/meta/_journal.json
+82. web-actual/package.json
+83. web-actual/pnpm-lock.yaml
+84. web-actual/pnpm-workspace.yaml
+85. web-actual/scripts/backup-source.mjs
+86. web-actual/scripts/build-public.mjs
+87. web-actual/scripts/build.mjs
+88. web-actual/scripts/package.mjs
+89. web-actual/scripts/preview-admin.mjs
+90. web-actual/scripts/preview-public.mjs
+91. web-actual/serve.mjs
+92. web-actual/tests/admin-live.test.mjs
+93. web-actual/tests/admin-ui.test.mjs
+94. web-actual/tests/admin.test.mjs
+95. web-actual/tests/breathing.test.mjs
+96. web-actual/tests/cache.test.mjs
+97. web-actual/tests/cart.test.mjs
+98. web-actual/tests/community-team.test.mjs
+99. web-actual/tests/community-ui.test.mjs
+100. web-actual/tests/community.test.mjs
+101. web-actual/tests/customer-returns-ui.test.mjs
+102. web-actual/tests/customer-returns.test.mjs
+103. web-actual/tests/database.mjs
+104. web-actual/tests/demo-checkout.test.mjs
+105. web-actual/tests/demo.test.mjs
+106. web-actual/tests/management.test.mjs
+107. web-actual/tests/privacy-ui.test.mjs
+108. web-actual/tests/public-site.test.mjs
+109. web-actual/tests/search.test.mjs
+110. web-actual/tests/seo.test.mjs
+111. web-actual/tests/shared-demo-ui.test.mjs
+112. web-actual/tests/shared-demo.test.mjs
+113. web-actual/worker/community.mjs
+114. web-actual/worker/database.mjs
+115. web-actual/worker/demo.mjs
+116. web-actual/worker/index.mjs
+117. web-actual/worker/legacy-index.mjs
+118. web-actual/worker/metrics.mjs
+119. web-actual/worker/returns.mjs
+120. web-actual/worker/site.mjs
 
 
 ========================================================================
@@ -1315,6 +1318,16 @@ ARCHIVO: web-actual/dist/404.html
 
 
 ========================================================================
+ARCHIVO: web-actual/dist/acceso-restringido.html
+========================================================================
+
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Acceso reservado · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"></head>
+<body class="community-page"><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a href="/comunidad">Comunidad</a></header><main id="contenido" class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO</p><h1>Este espacio es para el equipo.</h1><p>Tu cuenta de Google no tiene permisos de dueño. Puedes seguir participando en la comunidad.</p><p>Si formas parte del equipo, pide al dueño principal que dé acceso al correo con el que has entrado.</p><a class="button button-primary" href="/comunidad">Volver a la comunidad</a><p>Para usar otra cuenta, cierra tu sesión desde la comunidad y vuelve a entrar con Google.</p></main></body></html>
+
+
+
+========================================================================
 ARCHIVO: web-actual/dist/app.js
 ========================================================================
 
@@ -1827,8 +1840,10 @@ ARCHIVO: web-actual/dist/community.js
 'use strict';
 (()=>{
 const byId=id=>document.getElementById(id);let account=null,mode='all',offset=0,listVersion=0,threadVersion=0,currentThread=null,replyOffset=0,saving=false,loginAvailable=false;
+const replyDrafts=new Map();let activeThreadId=null;
+function rememberReply(){if(activeThreadId){const value=byId('reply-body').value;if(value.trim())replyDrafts.set(activeThreadId,value);else replyDrafts.delete(activeThreadId);}}
 const access=new URLSearchParams(location.search).get('acceso');const accessNotice=access==='limite'?'Espera unos minutos antes de volver a iniciar sesión.':access==='pendiente'?'El acceso con Google está pendiente de configuración.':access?'No se pudo completar el acceso. Puedes intentarlo de nuevo.':'';
-function resetSession(){account=null;mode='all';offset=0;replyOffset=0;currentThread=null;listVersion++;threadVersion++;byId('account').hidden=true;byId('google-login').hidden=!loginAvailable;byId('compose').hidden=true;byId('my-topics').hidden=true;byId('moderation').hidden=true;byId('owner-panel').hidden=true;byId('reply-form').hidden=true;byId('more-topics').hidden=true;byId('more-topics').disabled=false;byId('more-replies').hidden=true;byId('more-replies').disabled=false;byId('topics').replaceChildren();byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('topics').setAttribute('aria-busy','false');for(const id of ['all-topics','my-topics','moderation'])byId(id).setAttribute('aria-pressed',String(id==='all-topics'));notice('thread-title','Sesión terminada');notice('reply-status','Conecta con Google para participar.');notice('login-note',loginAvailable?'Tu sesión ha terminado. Conecta con Google para participar.':'Tu sesión ha terminado. El acceso con Google no está disponible ahora.');notice('community-status','Tu sesión ha terminado. Puedes seguir leyendo las conversaciones públicas.');}
+function resetSession(){replyDrafts.clear();activeThreadId=null;byId('reply-body').value='';byId('search-form').hidden=false;account=null;mode='all';offset=0;replyOffset=0;currentThread=null;listVersion++;threadVersion++;byId('account').hidden=true;byId('google-login').hidden=!loginAvailable;byId('compose').hidden=true;byId('my-topics').hidden=true;byId('moderation').hidden=true;byId('owner-panel').hidden=true;byId('reply-form').hidden=true;byId('more-topics').hidden=true;byId('more-topics').disabled=false;byId('more-replies').hidden=true;byId('more-replies').disabled=false;byId('topics').replaceChildren();byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('topics').setAttribute('aria-busy','false');for(const id of ['all-topics','my-topics','moderation'])byId(id).setAttribute('aria-pressed',String(id==='all-topics'));notice('thread-title','Sesión terminada');notice('reply-status','Conecta con Google para participar.');notice('login-note',loginAvailable?'Tu sesión ha terminado. Conecta con Google para participar.':'Tu sesión ha terminado. El acceso con Google no está disponible ahora.');notice('community-status','Tu sesión ha terminado. Puedes seguir leyendo las conversaciones públicas.');}
 async function api(path,body){const response=await fetch('/api/community/'+path,{credentials:'same-origin',cache:'no-store',...(body!==undefined?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Inténtalo de nuevo.');}if(!response.ok){if(response.status===401)resetSession();if(response.status===403&&account?.role==='owner'){resetSession();loadAccount().catch(()=>{});}throw Error(data.error||'No se ha podido completar la acción.');}return data;}
 function text(tag,value,className){const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;return el;}
 function button(label,action){const el=text('button',label,'text-button');el.type='button';el.addEventListener('click',action);return el;}
@@ -1836,6 +1851,7 @@ function notice(id,value){byId(id).textContent=value;}
 function locked(value){saving=value;for(const id of ['topic-form','reply-form','profile-form'])for(const el of byId(id).elements)el.disabled=value;}
 function postElement(post,{preview=false,moderate=false}={}){
  const article=document.createElement('article');article.className='topic';const meta=document.createElement('div');meta.className='topic-meta';meta.append(text('span',post.author),text('span',post.role==='owner'?'Dueño':'Lector','rank '+(post.role==='owner'?'owner':'')),text('time',new Intl.DateTimeFormat('es-ES',{dateStyle:'medium',timeStyle:'short'}).format(new Date(post.createdAt))));article.append(meta);
+ if(post.parentId&&moderate)article.append(button('Ver conversación original',()=>openThread(post.parentId)));
  if(post.status!=='published')article.append(text('p',post.status==='pending'?'Pendiente de revisión':'Retirada','rank'));
  if(post.title){const heading=document.createElement('h3');if(preview&&post.status!=='hidden'){const open=button(post.title,()=>openThread(post.id));open.className='topic-open';heading.append(open);}else heading.textContent=post.title;article.append(heading);}
  article.append(text('p',preview&&post.body.length>240?post.body.slice(0,240)+'…':post.body,'topic-body'));
@@ -1857,20 +1873,21 @@ async function loadTopics(append=false){if(append&&byId('more-topics').disabled)
  if(!offset&&!result.posts.length){const empty=document.createElement('div');empty.className='community-empty';empty.append(text('h3',mode==='moderation'?'No hay aportaciones pendientes.':mode==='mine'?'Todavía no has abierto una conversación.':'Una primera pregunta puede abrir el camino.'),text('p',mode==='all'?'No hay conversaciones con estos filtros. Prueba otra búsqueda o comparte tu primera pregunta.':'Las publicaciones se mostrarán aquí cuando estén disponibles.'));byId('topics').append(empty);}
  byId('more-topics').hidden=!result.hasMore;notice('community-status',accessNotice||(mode==='moderation'?result.posts.length+' aportaciones pendientes en esta tanda.':''));
  }catch(e){if(version===listVersion)notice('community-status',(accessNotice?accessNotice+' ':'')+e.message+(append?' Pulsa Más conversaciones para reintentar.':' Usa Actualizar para reintentar.'));}finally{if(version===listVersion){byId('topics').setAttribute('aria-busy','false');byId('more-topics').disabled=false;}}}
-async function openThread(id,append=false,preserveDraft=false){if(saving||append&&byId('more-replies').disabled)return;const version=++threadVersion,requestedOffset=append?replyOffset+50:0;byId('more-replies').disabled=true;if(!append){currentThread=null;replyOffset=0;byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();if(!preserveDraft)byId('reply-body').value='';notice('thread-news','');notice('thread-title','Cargando conversación…');byId('reply-form').hidden=true;byId('more-replies').hidden=true;if(!byId('thread-dialog').open)byId('thread-dialog').showModal();}notice('reply-status','');try{
+async function openThread(id,append=false,preserveDraft=false){if(saving||append&&byId('more-replies').disabled)return;const version=++threadVersion,requestedOffset=append?replyOffset+50:0;byId('more-replies').disabled=true;if(!append){rememberReply();activeThreadId=id;currentThread=null;replyOffset=0;byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('reply-body').value=replyDrafts.get(id)||'';notice('thread-news','');notice('thread-title','Cargando conversación…');byId('reply-form').hidden=true;byId('more-replies').hidden=true;if(!byId('thread-dialog').open)byId('thread-dialog').showModal();}notice('reply-status','');try{
  const result=await api('posts/'+encodeURIComponent(id)+'?offset='+requestedOffset);if(version!==threadVersion||!byId('thread-dialog').open)return;replyOffset=requestedOffset;currentThread=result.post;threadSnapshot=JSON.stringify(result);notice('thread-title',result.post.title);if(!append){byId('thread-content').replaceChildren(postElement(result.post,{moderate:account?.role==='owner'}));byId('thread-title').focus();}for(const reply of result.replies)byId('thread-replies').append(postElement(reply,{moderate:account?.role==='owner'}));byId('more-replies').hidden=!result.hasMore;byId('reply-form').hidden=!account?.accepted_at||result.post.status!=='published';
  }catch(e){if(version===threadVersion){if(!append)notice('thread-title','No se ha podido abrir la conversación');notice('reply-status',e.message+(append?' Pulsa Más respuestas para reintentar.':''));}}finally{if(version===threadVersion)byId('more-replies').disabled=false;}}
 for(const [id,value]of [['all-topics','all'],['my-topics','mine'],['moderation','moderation']])byId(id).addEventListener('click',()=>{if(saving)return;mode=value;byId('search-form').hidden=mode==='moderation';for(const key of ['all-topics','my-topics','moderation'])byId(key).setAttribute('aria-pressed',String(key===id));loadTopics();});
 byId('reload-topics').addEventListener('click',()=>{if(!saving)loadTopics();});byId('more-topics').addEventListener('click',()=>loadTopics(true));byId('more-replies').addEventListener('click',()=>{if(currentThread)return openThread(currentThread.id,true);});
-byId('close-thread').addEventListener('click',()=>byId('thread-dialog').close());byId('thread-dialog').addEventListener('close',()=>{threadVersion++;currentThread=null;});
+byId('close-thread').addEventListener('click',()=>byId('thread-dialog').close());byId('thread-dialog').addEventListener('close',()=>{rememberReply();threadVersion++;currentThread=null;activeThreadId=null;});
 byId('profile-form').addEventListener('submit',async e=>{e.preventDefault();if(saving)return;const data={alias:byId('alias').value,accepted:byId('accept-rules').checked};locked(true);try{await api('profile',data);await loadAccount();notice('profile-status','Perfil guardado. Ya puedes enviar tu pregunta.');}catch(e){notice('profile-status',e.message);}finally{locked(false);}});
 byId('topic-form').addEventListener('submit',async e=>{e.preventDefault();if(saving)return;const data={title:byId('topic-title').value,body:byId('topic-body').value,website:byId('website').value};locked(true);try{await api('posts',data);byId('topic-form').reset();notice('topic-status',account?.role==='owner'?'Pregunta publicada.':'Pregunta recibida. Aparecerá cuando el equipo la revise.');await loadTopics();}catch(e){notice('topic-status',e.message+' Tu texto sigue aquí.');}finally{locked(false);}});
-byId('reply-form').addEventListener('submit',async e=>{e.preventDefault();if(saving||!currentThread)return;const id=currentThread.id,version=threadVersion,data={parentId:id,body:byId('reply-body').value};locked(true);try{const result=await api('posts',data);if(version!==threadVersion)return;byId('reply-body').value='';byId('thread-replies').append(postElement(result.post));notice('reply-status',account?.role==='owner'?'Respuesta publicada.':'Respuesta recibida. Solo tú y el equipo podéis verla mientras se revisa.');}catch(e){if(version===threadVersion)notice('reply-status',e.message+' Tu respuesta sigue aquí.');}finally{locked(false);}});
+byId('reply-form').addEventListener('submit',async e=>{e.preventDefault();if(saving||!currentThread)return;const id=currentThread.id,version=threadVersion,data={parentId:id,body:byId('reply-body').value};locked(true);try{const result=await api('posts',data);if(replyDrafts.get(id)===data.body)replyDrafts.delete(id);if(version!==threadVersion)return;byId('reply-body').value='';byId('thread-replies').append(postElement(result.post));notice('reply-status',account?.role==='owner'?'Respuesta publicada.':'Respuesta recibida. Solo tú y el equipo podéis verla mientras se revisa.');}catch(e){if(version===threadVersion)notice('reply-status',e.message+' Tu respuesta sigue aquí.');}finally{locked(false);}});
 byId('logout').addEventListener('click',async()=>{if(saving)return;try{await api('logout',{});location.assign('/comunidad');}catch(e){notice('profile-status',e.message);}});
-let reportPostId=null;
-function openReport(id){reportPostId=id;byId('report-form').hidden=!account;byId('report-login').hidden=!!account;byId('report-reason').value='';notice('report-status','');byId('report-dialog').showModal();if(account)byId('report-reason').focus();}
+let reportPostId=null,reportVersion=0;
+function openReport(id){reportVersion++;reportPostId=id;byId('send-report').disabled=false;byId('report-form').hidden=!account;byId('report-login').hidden=!!account;byId('report-reason').value='';notice('report-status','');byId('report-dialog').showModal();if(account)byId('report-reason').focus();}
 byId('close-report').addEventListener('click',()=>byId('report-dialog').close());
-byId('report-form').addEventListener('submit',async event=>{event.preventDefault();if(byId('send-report').disabled||!reportPostId)return;byId('send-report').disabled=true;try{await api('reports',{postId:reportPostId,reason:byId('report-reason').value});byId('report-form').hidden=true;notice('report-status','Aviso recibido. El equipo lo verá en su panel de moderación. Gracias por cuidar la comunidad.');}catch(e){notice('report-status',e.message);}finally{byId('send-report').disabled=false;}});
+byId('report-dialog').addEventListener('close',()=>{reportVersion++;reportPostId=null;});
+byId('report-form').addEventListener('submit',async event=>{event.preventDefault();if(byId('send-report').disabled||!reportPostId)return;const version=reportVersion;byId('send-report').disabled=true;try{await api('reports',{postId:reportPostId,reason:byId('report-reason').value});if(version!==reportVersion)return;byId('report-form').hidden=true;notice('report-status','Aviso recibido. El equipo lo verá en su panel de moderación. Gracias por cuidar la comunidad.');}catch(e){if(version===reportVersion)notice('report-status',e.message);}finally{if(version===reportVersion)byId('send-report').disabled=false;}});
 let threadSnapshot='',checkingNews=false;
 byId('search-form').addEventListener('submit',e=>{e.preventDefault();loadTopics();});
 byId('community-sort').addEventListener('change',()=>loadTopics());
@@ -2343,25 +2360,88 @@ ARCHIVO: web-actual/dist/owner.js
 ========================================================================
 
 'use strict';
-async function refreshMetrics(){const status=document.getElementById('metrics-status'),button=document.getElementById('refresh-metrics');button.disabled=true;status.textContent='Cargando estadísticas…';try{const response=await fetch('/api/site-metrics',{cache:'no-store'});const data=await response.json();if(!response.ok){document.getElementById('metrics-summary').replaceChildren();throw Error(data.error||'No disponible');}const totals={view:0,amazon:0,whatsapp:0};for(const row of data.rows)totals[row.event]+=row.count;const summary=document.getElementById('metrics-summary');summary.replaceChildren();for(const [title,value]of [['Vistas registradas',totals.view],['Clics hacia Amazon',totals.amazon],['Tasa de clics a Amazon',totals.view?(100*totals.amazon/totals.view).toFixed(1)+' %':'Sin datos']]){const p=document.createElement('p');p.textContent=title+': '+value;summary.append(p);}status.textContent=data.rows.length?'Datos actualizados.':'Todavía no hay eventos con consentimiento.';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}}
-document.getElementById('refresh-metrics').addEventListener('click',refreshMetrics);refreshMetrics();
-
 const ownerElement=id=>document.getElementById(id);
-async function teamApi(path,body){const response=await fetch('/api/community/'+path,{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});const data=await response.json();if(!response.ok){if(response.status===401||response.status===403){ownerElement('team-members').replaceChildren();ownerElement('team-candidate').replaceChildren();ownerElement('team-section').hidden=true;}throw Error(data.error||'No se ha podido completar la acción.');}return data;}
+let accessVersion=0,accessLost=false,metricsVersion=0,historyVersion=0,reportsVersion=0,teamBusy=false;
+const resolutionDrafts=new Map(),resolutionInputs=new Map();
 function teamText(tag,value){const element=document.createElement(tag);element.textContent=value;return element;}
-let teamBusy=false;
-async function changeRole(member,grant){if(teamBusy||!confirm((grant?'Dar permisos de dueño a ':'Retirar permisos de dueño a ')+member.alias+' ('+member.email+')'+(grant?' permitirá moderar conversaciones y consultar estadísticas. ¿Continuar?':' impedirá su acceso privado. ¿Continuar?')))return;teamBusy=true;try{await teamApi('team/'+(grant?'grant':'revoke'),{userId:member.id,email:member.email,confirmed:true});ownerElement('team-candidate').replaceChildren();await loadTeam();ownerElement('team-status').textContent=grant?'Nuevo dueño añadido. Ya puede entrar con Google.':'Permisos retirados.';}catch(e){ownerElement('team-status').textContent=e.message;}finally{teamBusy=false;}}
-function memberCard(member,grant=false){const card=teamText('div','');card.className='team-person';card.append(teamText('strong',member.alias),teamText('p',member.email));if(member.principal)card.append(teamText('p','Dueño principal · Cuenta protegida'));else{const button=teamText('button',grant?'Confirmar nuevo dueño':'Retirar permisos');button.type='button';button.className='secondary';button.addEventListener('click',()=>changeRole(member,grant));card.append(button);}return card;}
-async function loadTeam(){const data=await teamApi('team');ownerElement('team-members').replaceChildren(...data.members.map(member=>memberCard(member)));}
-ownerElement('team-form').addEventListener('submit',async event=>{event.preventDefault();if(teamBusy)return;teamBusy=true;ownerElement('team-candidate').replaceChildren();try{const data=await teamApi('team/lookup',{email:ownerElement('team-email').value.trim()});ownerElement('team-candidate').append(memberCard(data.member,true));ownerElement('team-status').textContent='Comprueba la cuenta antes de conceder acceso.';}catch(e){ownerElement('team-status').textContent=e.message;}finally{teamBusy=false;}});
-teamApi('me').then(async data=>{if(data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});
-
-async function loadModerationHistory(){try{const data=await teamApi('moderation-history');ownerElement('moderation-history').replaceChildren(...data.events.map(event=>{const item=teamText('div','');item.className='team-person';item.append(teamText('strong',event.action==='published'?'Aprobada':'Retirada'),teamText('p',event.actor+' · '+new Date(event.createdAt).toLocaleString('es-ES')),teamText('p',event.reason||'Aprobada conforme a las normas.'));return item;}));ownerElement('moderation-status').textContent=data.events.length?'Últimas '+data.events.length+' decisiones.':'Todavía no hay decisiones de moderación.';}catch(e){ownerElement('moderation-history').replaceChildren();ownerElement('moderation-status').textContent=e.message;}}
+function loseAccess(){
+ accessLost=true;accessVersion++;metricsVersion++;historyVersion++;reportsVersion++;
+ resolutionDrafts.clear();resolutionInputs.clear();
+ for(const id of ['team-members','team-candidate','metrics-summary','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+ ownerElement('team-section').hidden=true;
+ for(const id of ['metrics-status','moderation-status','reports-status'])ownerElement(id).textContent='Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.';
+}
+async function ownerApi(url,body){
+ const version=accessVersion;
+ const response=await fetch(url,{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});
+ let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Pulsa Actualizar para reintentar.');}
+ if(response.status===401||response.status===403)loseAccess();
+ if(accessLost||version!==accessVersion)throw Error('Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.');
+ if(!response.ok)throw Error(data.error||'No se ha podido completar la acción.');
+ return data;
+}
+const teamApi=(path,body)=>ownerApi('/api/community/'+path,body);
+async function refreshMetrics(){
+ const version=++metricsVersion,status=ownerElement('metrics-status'),button=ownerElement('refresh-metrics');button.disabled=true;status.textContent='Cargando estadísticas…';
+ try{
+  const data=await ownerApi('/api/site-metrics');if(version!==metricsVersion)return;
+  const totals={view:0,amazon:0};for(const row of data.rows)if(Object.hasOwn(totals,row.event)&&Number.isFinite(row.count))totals[row.event]+=row.count;
+  ownerElement('metrics-summary').replaceChildren(...[['Vistas registradas',totals.view],['Clics hacia Amazon',totals.amazon],['Tasa de clics a Amazon',totals.view?(100*totals.amazon/totals.view).toFixed(1)+' %':'Sin datos']].map(([title,value])=>teamText('p',title+': '+value)));
+  status.textContent=data.rows.length?'Datos actualizados.':'Todavía no hay eventos con consentimiento.';
+ }catch(e){if(version===metricsVersion)status.textContent=e.message;}finally{button.disabled=false;}
+}
+async function changeRole(member,grant){
+ if(teamBusy||!confirm((grant?'Dar permisos de dueño a ':'Retirar permisos de dueño a ')+member.alias+' ('+member.email+')'+(grant?' permitirá moderar conversaciones y consultar estadísticas. ¿Continuar?':' impedirá su acceso privado. ¿Continuar?')))return;
+ teamBusy=true;
+ try{await teamApi('team/'+(grant?'grant':'revoke'),{userId:member.id,email:member.email,confirmed:true});ownerElement('team-candidate').replaceChildren();await loadTeam();ownerElement('team-status').textContent=grant?'Nuevo dueño añadido. Ya puede entrar con Google.':'Permisos retirados.';}
+ catch(e){ownerElement('team-status').textContent=e.message;}finally{teamBusy=false;}
+}
+function memberCard(member,grant=false){
+ const card=teamText('div','');card.className='team-person';card.append(teamText('strong',member.alias),teamText('p',member.email));
+ if(member.principal)card.append(teamText('p','Dueño principal · Cuenta protegida'));
+ else{const button=teamText('button',grant?'Confirmar nuevo dueño':'Retirar permisos');button.type='button';button.className='secondary';button.addEventListener('click',()=>changeRole(member,grant));card.append(button);}
+ return card;
+}
+async function loadTeam(){const data=await teamApi('team');if(accessLost)return;ownerElement('team-members').replaceChildren(...data.members.map(member=>memberCard(member)));}
+ownerElement('team-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(teamBusy)return;teamBusy=true;ownerElement('team-candidate').replaceChildren();
+ try{const data=await teamApi('team/lookup',{email:ownerElement('team-email').value.trim()});if(accessLost)return;ownerElement('team-candidate').append(memberCard(data.member,true));ownerElement('team-status').textContent='Comprueba la cuenta antes de conceder acceso.';}
+ catch(e){ownerElement('team-status').textContent=e.message;}finally{teamBusy=false;}
+});
+async function loadModerationHistory(){
+ const version=++historyVersion;
+ try{const data=await teamApi('moderation-history');if(version!==historyVersion)return;
+  ownerElement('moderation-history').replaceChildren(...data.events.map(event=>{const item=teamText('div','');item.className='team-person';item.append(teamText('strong',event.action==='published'?'Aprobada':'Retirada'),teamText('p',event.actor+' · '+new Date(event.createdAt).toLocaleString('es-ES')),teamText('p',event.reason||'Aprobada conforme a las normas.'));return item;}));
+  ownerElement('moderation-status').textContent=data.events.length?'Últimas '+data.events.length+' decisiones.':'Todavía no hay decisiones de moderación.';
+ }catch(e){if(version===historyVersion)ownerElement('moderation-status').textContent=e.message;}
+}
+function rememberResolutions(){for(const [id,input]of resolutionInputs){if(input.value.trim())resolutionDrafts.set(id,input.value);else resolutionDrafts.delete(id);}}
+function reportCard(report){
+ const card=teamText('article','');card.className='team-person';
+ card.append(teamText('h4',report.title||'Aviso sobre una respuesta'),teamText('p','Aviso de '+report.reporter+' · '+new Date(report.createdAt).toLocaleString('es-ES')),teamText('p',report.reason),teamText('blockquote',report.body));
+ const link=teamText('a','Abrir conversación y moderar');link.href='/comunidad?conversacion='+encodeURIComponent(report.threadId);card.append(link);
+ const form=document.createElement('form'),label=teamText('label','Decisión sobre el aviso'),input=document.createElement('input');
+ input.id='resolution-'+report.id;label.htmlFor=input.id;input.name='resolution';input.required=true;input.minLength=3;input.maxLength=500;input.value=resolutionDrafts.get(report.id)||'';resolutionInputs.set(report.id,input);
+ const submit=teamText('button','Marcar como revisado');submit.className='secondary';submit.type='submit';form.append(label,input,submit);
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();if(submit.disabled)return;submit.disabled=true;reportsVersion++;
+  try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});resolutionDrafts.delete(report.id);resolutionInputs.delete(report.id);await loadReports();}
+  catch(error){ownerElement('reports-status').textContent=error.message;}finally{submit.disabled=false;}
+ });card.append(form);return card;
+}
+async function loadReports(){
+ const version=++reportsVersion,status=ownerElement('reports-status');rememberResolutions();
+ try{const data=await teamApi('reports');if(version!==reportsVersion)return;rememberResolutions();resolutionInputs.clear();
+  const active=new Set(data.reports.map(report=>report.id));for(const id of resolutionDrafts.keys())if(!active.has(id))resolutionDrafts.delete(id);
+  ownerElement('community-reports').replaceChildren(...data.reports.map(reportCard));
+  status.textContent=data.reports.length?data.reports.length+(data.reports.length===1?' aviso pendiente.':' avisos pendientes en esta tanda.'):'No hay avisos pendientes.';
+ }catch(e){if(version===reportsVersion)status.textContent=e.message;}
+}
+ownerElement('refresh-metrics').addEventListener('click',refreshMetrics);
 ownerElement('refresh-moderation').addEventListener('click',loadModerationHistory);
-loadModerationHistory();
-
-async function loadReports(){const status=ownerElement('reports-status');try{const data=await teamApi('reports');ownerElement('community-reports').replaceChildren(...data.reports.map(report=>{const card=teamText('article','');card.className='team-person';card.append(teamText('h4',report.title||'Aviso sobre una respuesta'),teamText('p','Aviso de '+report.reporter+' · '+new Date(report.createdAt).toLocaleString('es-ES')),teamText('p',report.reason),teamText('blockquote',report.body));const link=teamText('a','Abrir conversación y moderar');link.href='/comunidad?conversacion='+encodeURIComponent(report.threadId);card.append(link);const form=document.createElement('form'),label=teamText('label','Decisión sobre el aviso'),input=document.createElement('input');input.id='resolution-'+report.id;label.htmlFor=input.id;input.required=true;input.minLength=3;input.maxLength=500;const submit=teamText('button','Marcar como revisado');submit.className='secondary';submit.type='submit';form.append(label,input,submit);form.addEventListener('submit',async e=>{e.preventDefault();submit.disabled=true;try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});await loadReports();}catch(error){status.textContent=error.message;}finally{submit.disabled=false;}});card.append(form);return card;}));status.textContent=data.reports.length?data.reports.length+' avisos pendientes en esta tanda.':'No hay avisos pendientes.';}catch(e){ownerElement('community-reports').replaceChildren();status.textContent=e.message;}}
-ownerElement('refresh-reports').addEventListener('click',loadReports);loadReports();
+ownerElement('refresh-reports').addEventListener('click',loadReports);
+teamApi('me').then(async data=>{if(!accessLost&&data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});
+refreshMetrics();loadModerationHistory();loadReports();
 
 
 
@@ -2409,7 +2489,7 @@ ARCHIVO: web-actual/dist/privacy-controls.js
 ARCHIVO: web-actual/dist/propietario.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Espacio del titular · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"><script src="/owner.js" defer></script></head><body class="community-page"><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a class="header-cta" href="/comunidad">Comunidad</a></header><main class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO DEL TITULAR</p><h1>Comunidad y estadísticas</h1><p>Los pedidos y devoluciones se gestionan en Amazon.</p><section><h2>Tu cuenta de dueño</h2><p>Accedes con tu cuenta de Google. Desde aquí puedes moderar las conversaciones y consultar la actividad del libro.</p><a class="underlined-link" href="/comunidad">Gestionar la comunidad</a></section><section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports"></div><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section><section class="topic"><h2>Actividad de los últimos 30 días</h2><p>Solo incluye eventos de quienes aceptaron la analítica. Los clics hacia Amazon son interés de compra, no ventas confirmadas. La tasa de clics es clics dividido entre vistas registradas; no son personas únicas.</p><button id="refresh-metrics" class="secondary" type="button">Actualizar estadísticas</button><p id="metrics-status" role="status"></p><div id="metrics-summary"></div><div id="metrics-days"></div></section></main></body></html>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Espacio del titular · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"><script src="/owner.js" defer></script></head><body class="community-page"><a class="skip-link" href="#contenido">Saltar al contenido</a><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a class="header-cta" href="/comunidad">Comunidad</a></header><main id="contenido" class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO DEL TITULAR</p><h1>Comunidad y estadísticas</h1><p>Los pedidos y devoluciones se gestionan en Amazon.</p><section><h2>Tu cuenta de dueño</h2><p>Accedes con tu cuenta de Google. Desde aquí puedes moderar las conversaciones y consultar la actividad del libro.</p><a class="underlined-link" href="/comunidad">Gestionar la comunidad</a></section><section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports"></div><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section><section class="topic"><h2>Actividad de los últimos 30 días</h2><p>Solo incluye eventos de quienes aceptaron la analítica. Los clics hacia Amazon son interés de compra, no ventas confirmadas. La tasa de clics es clics dividido entre vistas registradas; no son personas únicas.</p><button id="refresh-metrics" class="secondary" type="button">Actualizar estadísticas</button><p id="metrics-status" role="status"></p><div id="metrics-summary"></div><div id="metrics-days"></div></section></main></body></html>
 
 
 
@@ -3125,6 +3205,41 @@ ARCHIVO: web-actual/docs/community-google-team-2026-09-30.md
 4. Moderación: revisar pendientes en `/comunidad?moderar=1`; consultar avisos e historial en el panel.
 
 El estado de publicación del cliente OAuth en Google Cloud sigue siendo una configuración externa. No se cambia ni se prometen accesos de usuarios no habilitados en modo de pruebas.
+
+
+
+========================================================================
+ARCHIVO: web-actual/docs/revision-general-2026-09-30.md
+========================================================================
+
+# Revisión general: web, comunidad y panel
+
+Revisión sobre la fuente db347e1448873192f99283c7a68faaa19f27ced3 y correcciones posteriores. Se conservan el diseño ocre y las funciones activas; la antigua tienda queda archivada.
+
+## Corregido
+
+- Los borradores de respuesta se conservan por conversación al cerrar y volver a abrir el diálogo, dentro de la pestaña. Se limpian al terminar la sesión; no se guardan en el dispositivo ni se prometen tras recargar.
+- Un envío tardío de aviso no puede confirmar ni ocultar otro formulario abierto después.
+- Las recargas antiguas de avisos no reemplazan resultados más recientes y se conservan las resoluciones que se están redactando al actualizar.
+- Si caducan la sesión o los permisos, el panel vacía sus datos privados e invalida respuestas pendientes para que no reaparezcan.
+- La moderación de respuestas pendientes permite abrir la conversación original.
+- El panel incluye acceso por teclado «Saltar al contenido». Una cuenta lectora que visite el panel recibe una página de acceso reservado con instrucciones, manteniendo HTTP 403 y no-store/noindex. `/propietario/` redirige a la URL canónica.
+
+## Evidencia
+
+- Suite completa: 167 pruebas pasaron. Se añadieron seis regresiones de interfaz que ejercitan el JavaScript real con un DOM de prueba y respuestas fuera de orden. Los cuatro primeros fallaban antes de corregirlos.
+- Edge: portada, comunidad, panel, privacidad y 404 revisados a 320, 390, 768 y 1440 px, sin desbordamiento horizontal. Axe no detectó incumplimientos WCAG A/AA en esas vistas. Esto no certifica accesibilidad completa.
+- Recorrido local con cuentas ficticias: enviar aviso, verlo en el panel, resolverlo, retirar una respuesta y conservar borrador al actualizar. Sin errores de JavaScript.
+- Tres revisiones independientes: interfaz/comunidad, pruebas públicas y seguridad de servidor. No se confirmó escalada de permisos, CSRF, inyección ni exposición de avisos privados en lo revisado.
+- Portada: imágenes, enlaces internos, sitemap, robots, metadatos, consentimiento de analítica y temporizador comprobados. Lighthouse generó datos pero falló al limpiar un temporal en Windows; no se presenta como ejecución completada.
+
+## Límites y dependencias
+
+- No se ha probado Safari/Firefox ni una nueva identidad Google real en esta revisión. OAuth usa pruebas de firma y flujo local; el modo público/pruebas de Google Cloud sigue siendo externo.
+- El enlace de Amazon es provisional, según la instrucción del titular. No mide ventas de Amazon.
+- Los límites por IP dependen de la cabecera confiable CF-Connecting-IP del hosting. Su ausencia en local agrupa visitantes sin IP; no se verificó esa ausencia en producción ni se trata como fallo confirmado del sitio.
+- No se han eliminado ni resuelto avisos o publicaciones reales del usuario. Las pruebas con escrituras utilizan datos locales ficticios.
+- No hay garantía de ausencia absoluta de errores ni auditoría legal externa. No se ejecutó Strix ni una prueba intrusiva contra producción.
 
 
 
@@ -11634,13 +11749,62 @@ test('OAuth stores only allowed destinations and ignores external redirects',asy
  }
 });
 test('private owner access uses Google sessions and rejects platform-header privilege escalation',async()=>{
- const {env}=await setup(),worker=createPublicWorker({'@owner':{type:'text/html',data:btoa('<h1>Private</h1>')}});
+ const {env}=await setup(),worker=createPublicWorker({'@owner':{type:'text/html',data:btoa('<h1>Private</h1>')},'/acceso-restringido.html':{type:'text/html',data:btoa('<h1>Access denied</h1>')}});
  const headers={'oai-authenticated-user-id':'root','oai-authenticated-user-email':'root@example.test'};
  const request=(path,cookie)=>new Request('https://book.example'+path,{headers:{...headers,...(cookie?{Cookie:'__Host-community='+cookie.padEnd(43,'x')}:{})}});
  const anonymous=await worker.fetch(request('/propietario'),env);assert.equal(anonymous.status,302);assert.equal(anonymous.headers.get('location'),'/auth/google/start?return_to=%2Fpropietario');
  assert.equal((await worker.fetch(request('/api/site-metrics'),env)).status,403);
  assert.equal((await worker.fetch(request('/propietario','reader'),env)).status,403);
  const owner=await worker.fetch(request('/propietario','root'),env);assert.equal(owner.status,200);assert.match(owner.headers.get('cache-control'),/no-store/);
+});
+
+
+
+========================================================================
+ARCHIVO: web-actual/tests/community-ui.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+const flush=()=>new Promise(resolve=>setImmediate(resolve));
+const pending=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+const response=(data,status=200)=>({ok:status<400,status,json:async()=>data});
+const post=id=>({id,title:'Conversación '+id,author:'Lector',role:'reader',status:'published',body:'Un mensaje para conversar',version:0,createdAt:1,replyCount:0});
+function browser(kind='community',intercept=()=>undefined){
+ const nodes=new Map();
+ function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){}};}
+ const html=readFileSync(new URL('../dist/'+(kind==='community'?'comunidad':'propietario')+'.html',import.meta.url),'utf8');
+ for(const match of html.matchAll(/id="([^"]+)"/g))nodes.set(match[1],element());
+ const normal=(url)=>url.includes('/site-metrics')?{rows:[]}:url.endsWith('/me')?{loginAvailable:true,user:{id:'owner',alias:'Owner',accepted_at:1,role:'owner'},canManageOwners:true}:url.endsWith('/team')?{members:[]}:url.endsWith('/moderation-history')?{events:[]}:url.endsWith('/reports')?{reports:[]}:url.includes('/posts?')?{posts:[post('one'),post('two')],hasMore:false}:url.includes('/posts/')?{post:post(url.split('/posts/')[1].split('?')[0]),replies:[],hasMore:false}:{ok:true};
+ const fetch=async(url,options={})=>{const result=intercept(url,options);return result===undefined?response(normal(url)):await result;};
+ vm.runInNewContext(readFileSync(new URL('../dist/'+(kind==='community'?'community':'owner')+'.js',import.meta.url),'utf8'),{document:{hidden:false,getElementById:id=>nodes.get(id),createElement:element,addEventListener(){}},location:{search:'',origin:'https://book.example',assign(){}},fetch,URL,URLSearchParams,Intl,Date,JSON,Map,Set,setInterval(){},clearInterval(){},setTimeout,clearTimeout,confirm:()=>true,navigator:{clipboard:{writeText:async()=>{}}},window:{addEventListener(){}}});
+ const find=(root,label)=>{for(const child of root.children){if(child.tag==='button'&&child.textContent===label)return child;const found=find(child,label);if(found)return found;}};
+ return {get:id=>nodes.get(id),click:async(id,label)=>{const target=label?find(nodes.get(id),label):nodes.get(id);assert.ok(target,'Button exists: '+(label||id));await target.dispatch('click');await flush();},flush};
+}
+test('reply drafts survive closing and reopening, isolated per conversation',async()=>{
+ const b=browser();await flush();await b.click('topics','Conversación one');b.get('reply-body').value='Borrador de la primera';await b.click('close-thread');await b.click('topics','Conversación two');assert.equal(b.get('reply-body').value,'');await b.click('close-thread');await b.click('topics','Conversación one');assert.equal(b.get('reply-body').value,'Borrador de la primera');
+});
+test('late report response does not hide or confirm another report form',async()=>{
+ const delayed=pending();const b=browser('community',(url,options)=>url.endsWith('/reports')&&options.method==='POST'?delayed.promise:undefined);await flush();
+ await b.click('topics','Avisar de un problema');b.get('report-reason').value='Motivo de aviso anterior';const sending=b.get('report-form').dispatch('submit');await flush();await b.click('close-report');await b.click('topics','Avisar de un problema');b.get('report-reason').value='Un nuevo borrador';delayed.resolve(response({ok:true}));await sending;assert.equal(b.get('report-form').hidden,false);assert.equal(b.get('report-status').textContent,'');assert.equal(b.get('report-reason').value,'Un nuevo borrador');
+});
+test('old report refresh cannot restore a stale queue after a newer refresh',async()=>{
+ const old=pending();let reads=0;const b=browser('owner',(url)=>url.endsWith('/reports')?(++reads===1?old.promise:response({reports:[]})):undefined);await flush();await b.click('refresh-reports');old.resolve(response({reports:[{id:'stale',postId:'one',threadId:'one',title:'Obsoleto',reason:'Aviso ya resuelto',body:'Texto',reporter:'Reader',createdAt:1}]}));await flush();assert.equal(b.get('community-reports').children.length,0);
+});
+test('refreshing reports preserves the written resolution',async()=>{
+ const b=browser('owner',url=>url.endsWith('/reports')?response({reports:[{id:'report-one',postId:'one',threadId:'one',title:'Pregunta',reason:'Un motivo válido',body:'Texto',reporter:'Reader',createdAt:1}]}):undefined);await flush();
+ const form=()=>b.get('community-reports').children[0].children.find(el=>el.tag==='form');
+ const input=()=>form().children.find(el=>el.tag==='input');input().value='Resolución todavía sin enviar';await b.click('refresh-reports');assert.equal(input().value,'Resolución todavía sin enviar');
+});
+test('late private responses cannot repopulate the panel after permissions expire',async()=>{
+ const reports=pending();const b=browser('owner',url=>url.endsWith('/reports')?reports.promise:url.endsWith('/site-metrics')?response({error:'Acceso privado'},403):undefined);await flush();
+ reports.resolve(response({reports:[{id:'private',threadId:'one',reason:'Aviso privado',body:'Texto',reporter:'Reader',createdAt:1}]}));await flush();
+ assert.equal(b.get('community-reports').children.length,0);assert.equal(b.get('team-members').children.length,0);assert.equal(b.get('metrics-summary').children.length,0);assert.equal(b.get('team-section').hidden,true);
+});
+test('moderation of a pending reply can open its original conversation',async()=>{
+ const b=browser('community',url=>url.endsWith('/moderation')?response({posts:[{...post('reply'),parentId:'one',title:'',status:'pending'}]}):undefined);await flush();await b.click('moderation');await b.click('topics','Ver conversación original');assert.equal(b.get('thread-title').textContent,'Conversación one');
 });
 
 
@@ -13714,10 +13878,11 @@ export function createPublicWorker(assets){return {async fetch(request,env){
   if(path.startsWith('/api/'))return siteJson({error:'No encontrado.'},404);
   if(!['GET','HEAD'].includes(request.method))return siteJson({error:'Método no permitido.'},405);
   if(path==='/propietario'){
-   const user=await communitySession(request,env);if(!user){const redirect=siteRedirect('/auth/google/start?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}if(user.role!=='owner')return siteJson({error:'Tu cuenta de Google no tiene permisos de dueño. Vuelve a la comunidad para cambiar de cuenta.'},403);
+   const user=await communitySession(request,env);if(!user){const redirect=siteRedirect('/auth/google/start?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}if(user.role!=='owner')return siteAsset(assets['/acceso-restringido.html'],request,true,403);
    return siteAsset(assets['@owner'],request,true);
   }
   if(path==='/admin'||path==='/admin/')return siteRedirect('/propietario');
+  if(path==='/propietario/')return siteRedirect('/propietario'+url.search);
   if(['/devoluciones','/devoluciones/','/devoluciones.html'].includes(path))return siteRedirect('/condiciones-de-venta#amazon');
   if(path==='/demo'||path.startsWith('/demo/')||path==='/tienda-demo.html')return siteAsset(assets['/404.html'],request,false,410);
   if(path==='/'&&url.searchParams.has('demo')){url.searchParams.delete('demo');return siteRedirect(url.pathname+url.search);}
