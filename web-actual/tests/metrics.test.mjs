@@ -20,10 +20,13 @@ async function fixture(){
  sql.prepare('INSERT INTO community_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').run(await communityHash(TOKEN),'owner',FIXED+DAY);
  sql.prepare('INSERT INTO community_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').run(await communityHash(READER_TOKEN),'reader',FIXED+DAY);
  const metric=(offset,event='view',page='home',count=1)=>sql.prepare('INSERT INTO site_metrics(day,event,page,count) VALUES(?,?,?,?)').run(iso(offset),event,page,count);
+ const parent=sql.prepare('INSERT INTO community_posts(id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?)');
+ parent.run('parent','reader','Older topic','Parent body','published',at(-100));
  let sequence=0;
- const post=(offset,{reply=false,status='published'}={})=>{
+ const post=(offset,{reply=false,status='published',parentId='parent'}={})=>{
   const id='post-'+(++sequence);
-  sql.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)').run(id,reply?'parent':null,'reader','Private title','Private body '+sequence,status,at(offset));
+  sql.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)').run(id,reply?parentId:null,'reader','Private title','Private body '+sequence,status,at(offset));
+  return id;
  };
  return {env:{DB},metric,post};
 }
@@ -79,4 +82,14 @@ test('one day means today against yesterday; thirty days compare with the prior 
  assert.deepEqual(thirty.previousRows.map(row=>row.day),[iso(-30),iso(-59)]);
  assert.deepEqual(thirty.community.current,{questions:2,replies:1});
  assert.deepEqual(thirty.community.previous,{questions:2,replies:0});
+});
+test('published metrics exclude replies behind hidden topics while pending remains the real queue',async t=>{
+ t.mock.method(Date,'now',()=>FIXED);
+ const {env,post}=await fixture();
+ const hidden=post(-1,{status:'hidden'});
+ post(0,{reply:true,parentId:hidden});
+ post(0,{reply:true,status:'pending',parentId:hidden});
+ const data=await(await handleMetrics(get('?days=1'),env)).json();
+ assert.deepEqual(data.community.current,{questions:0,replies:0});
+ assert.deepEqual(data.community.pending,{questions:0,replies:1});
 });

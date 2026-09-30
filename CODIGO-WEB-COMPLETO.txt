@@ -1,6 +1,6 @@
 DONDE SIEMPRE ESTUVISTE — CÓDIGO DE LA WEB
 
-Código actual de web-actual/. Fuente publicada: 36ac0bf60b192d05588f3c0b8ccfe2205c11eedd.
+Código actual de web-actual/. Fuente publicada: 35ac63d969a771ebe289d9098a7f9dda2f4c4ef0.
 El build activo es scripts/build-public.mjs; algunos módulos y pruebas históricos se conservan como archivo y no se sirven al público.
 Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene credenciales ni bases de datos de personas.
 
@@ -70,71 +70,72 @@ Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene crede
 63. web-actual/docs/revision-general-2026-09-30.md
 64. web-actual/docs/revision-profunda-2026-09-30.md
 65. web-actual/docs/revision-publicacion-comunidad-2026-09-30.md
-66. web-actual/drizzle.config.ts
-67. web-actual/drizzle/0000_cultured_mathemanic.sql
-68. web-actual/drizzle/0001_lonely_black_bolt.sql
-69. web-actual/drizzle/0002_cute_blazing_skull.sql
-70. web-actual/drizzle/0003_colossal_nehzno.sql
-71. web-actual/drizzle/0004_chunky_microchip.sql
-72. web-actual/drizzle/0005_flat_bullseye.sql
-73. web-actual/drizzle/0006_heavy_human_torch.sql
-74. web-actual/drizzle/0007_goofy_anthem.sql
-75. web-actual/drizzle/0008_spicy_mystique.sql
-76. web-actual/drizzle/0009_blue_nova.sql
-77. web-actual/drizzle/meta/0000_snapshot.json
-78. web-actual/drizzle/meta/0001_snapshot.json
-79. web-actual/drizzle/meta/0002_snapshot.json
-80. web-actual/drizzle/meta/0003_snapshot.json
-81. web-actual/drizzle/meta/0004_snapshot.json
-82. web-actual/drizzle/meta/0005_snapshot.json
-83. web-actual/drizzle/meta/0006_snapshot.json
-84. web-actual/drizzle/meta/0007_snapshot.json
-85. web-actual/drizzle/meta/0008_snapshot.json
-86. web-actual/drizzle/meta/0009_snapshot.json
-87. web-actual/drizzle/meta/_journal.json
-88. web-actual/package.json
-89. web-actual/pnpm-lock.yaml
-90. web-actual/pnpm-workspace.yaml
-91. web-actual/scripts/backup-source.mjs
-92. web-actual/scripts/build-public.mjs
-93. web-actual/scripts/build.mjs
-94. web-actual/scripts/package.mjs
-95. web-actual/scripts/preview-admin.mjs
-96. web-actual/scripts/preview-public.mjs
-97. web-actual/serve.mjs
-98. web-actual/tests/admin-live.test.mjs
-99. web-actual/tests/admin-ui.test.mjs
-100. web-actual/tests/admin.test.mjs
-101. web-actual/tests/breathing.test.mjs
-102. web-actual/tests/cache.test.mjs
-103. web-actual/tests/cart.test.mjs
-104. web-actual/tests/community-reads.test.mjs
-105. web-actual/tests/community-team.test.mjs
-106. web-actual/tests/community-ui.test.mjs
-107. web-actual/tests/community.test.mjs
-108. web-actual/tests/customer-returns-ui.test.mjs
-109. web-actual/tests/customer-returns.test.mjs
-110. web-actual/tests/database.mjs
-111. web-actual/tests/demo-checkout.test.mjs
-112. web-actual/tests/demo.test.mjs
-113. web-actual/tests/management.test.mjs
-114. web-actual/tests/metrics.test.mjs
-115. web-actual/tests/package.test.mjs
-116. web-actual/tests/privacy-ui.test.mjs
-117. web-actual/tests/public-site.test.mjs
-118. web-actual/tests/search.test.mjs
-119. web-actual/tests/seo.test.mjs
-120. web-actual/tests/shared-demo-ui.test.mjs
-121. web-actual/tests/shared-demo.test.mjs
-122. web-actual/tests/source-safety.test.mjs
-123. web-actual/worker/community.mjs
-124. web-actual/worker/database.mjs
-125. web-actual/worker/demo.mjs
-126. web-actual/worker/index.mjs
-127. web-actual/worker/legacy-index.mjs
-128. web-actual/worker/metrics.mjs
-129. web-actual/worker/returns.mjs
-130. web-actual/worker/site.mjs
+66. web-actual/docs/revision-web-2026-10-01.md
+67. web-actual/drizzle.config.ts
+68. web-actual/drizzle/0000_cultured_mathemanic.sql
+69. web-actual/drizzle/0001_lonely_black_bolt.sql
+70. web-actual/drizzle/0002_cute_blazing_skull.sql
+71. web-actual/drizzle/0003_colossal_nehzno.sql
+72. web-actual/drizzle/0004_chunky_microchip.sql
+73. web-actual/drizzle/0005_flat_bullseye.sql
+74. web-actual/drizzle/0006_heavy_human_torch.sql
+75. web-actual/drizzle/0007_goofy_anthem.sql
+76. web-actual/drizzle/0008_spicy_mystique.sql
+77. web-actual/drizzle/0009_blue_nova.sql
+78. web-actual/drizzle/meta/0000_snapshot.json
+79. web-actual/drizzle/meta/0001_snapshot.json
+80. web-actual/drizzle/meta/0002_snapshot.json
+81. web-actual/drizzle/meta/0003_snapshot.json
+82. web-actual/drizzle/meta/0004_snapshot.json
+83. web-actual/drizzle/meta/0005_snapshot.json
+84. web-actual/drizzle/meta/0006_snapshot.json
+85. web-actual/drizzle/meta/0007_snapshot.json
+86. web-actual/drizzle/meta/0008_snapshot.json
+87. web-actual/drizzle/meta/0009_snapshot.json
+88. web-actual/drizzle/meta/_journal.json
+89. web-actual/package.json
+90. web-actual/pnpm-lock.yaml
+91. web-actual/pnpm-workspace.yaml
+92. web-actual/scripts/backup-source.mjs
+93. web-actual/scripts/build-public.mjs
+94. web-actual/scripts/build.mjs
+95. web-actual/scripts/package.mjs
+96. web-actual/scripts/preview-admin.mjs
+97. web-actual/scripts/preview-public.mjs
+98. web-actual/serve.mjs
+99. web-actual/tests/admin-live.test.mjs
+100. web-actual/tests/admin-ui.test.mjs
+101. web-actual/tests/admin.test.mjs
+102. web-actual/tests/breathing.test.mjs
+103. web-actual/tests/cache.test.mjs
+104. web-actual/tests/cart.test.mjs
+105. web-actual/tests/community-reads.test.mjs
+106. web-actual/tests/community-team.test.mjs
+107. web-actual/tests/community-ui.test.mjs
+108. web-actual/tests/community.test.mjs
+109. web-actual/tests/customer-returns-ui.test.mjs
+110. web-actual/tests/customer-returns.test.mjs
+111. web-actual/tests/database.mjs
+112. web-actual/tests/demo-checkout.test.mjs
+113. web-actual/tests/demo.test.mjs
+114. web-actual/tests/management.test.mjs
+115. web-actual/tests/metrics.test.mjs
+116. web-actual/tests/package.test.mjs
+117. web-actual/tests/privacy-ui.test.mjs
+118. web-actual/tests/public-site.test.mjs
+119. web-actual/tests/search.test.mjs
+120. web-actual/tests/seo.test.mjs
+121. web-actual/tests/shared-demo-ui.test.mjs
+122. web-actual/tests/shared-demo.test.mjs
+123. web-actual/tests/source-safety.test.mjs
+124. web-actual/worker/community.mjs
+125. web-actual/worker/database.mjs
+126. web-actual/worker/demo.mjs
+127. web-actual/worker/index.mjs
+128. web-actual/worker/legacy-index.mjs
+129. web-actual/worker/metrics.mjs
+130. web-actual/worker/returns.mjs
+131. web-actual/worker/site.mjs
 
 
 ========================================================================
@@ -2128,8 +2129,8 @@ async function loadTopics(append=false){if(append&&byId('more-topics').disabled)
  for(const post of result.posts)byId('topics').append(postElement(post,{preview:mode!=='moderation',moderate:account?.role==='owner'}));
  if(!offset&&!result.posts.length){const empty=document.createElement('div');empty.className='community-empty';empty.append(text('h3',mode==='moderation'?'No hay aportaciones pendientes.':mode==='mine'?'Todavía no has abierto una conversación.':'Una primera pregunta puede abrir el camino.'),text('p',mode==='all'?'No hay conversaciones con estos filtros. Prueba otra búsqueda o comparte tu primera pregunta.':'Las publicaciones se mostrarán aquí cuando estén disponibles.'));byId('topics').append(empty);}
  byId('more-topics').hidden=!result.hasMore;byId('more-topics').textContent=mode==='moderation'?'Más aportaciones':'Más conversaciones';notice('community-status',accessNotice||(mode==='moderation'?(requestedOffset+result.posts.length)+' aportaciones pendientes mostradas.':''));
- }catch(e){if(version===listVersion)notice('community-status',(accessNotice?accessNotice+' ':'')+e.message+(append?' Pulsa Más conversaciones para reintentar.':' Usa Actualizar para reintentar.'));}finally{if(version===listVersion){byId('topics').setAttribute('aria-busy','false');byId('more-topics').disabled=false;}}}
-async function openThread(id,append=false,preserveDraft=false){if(saving||append&&byId('more-replies').disabled)return;const version=++threadVersion,requestedOffset=append?replyOffset+50:0;byId('more-replies').disabled=true;if(!append){rememberReply();activeThreadId=id;currentThread=null;replyOffset=0;byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('reply-body').value=replyDrafts.get(id)||'';notice('thread-news','');notice('thread-title','Cargando conversación…');byId('reply-form').hidden=true;byId('more-replies').hidden=true;if(!byId('thread-dialog').open)byId('thread-dialog').showModal();}notice('reply-status','');try{
+ }catch(e){if(version===listVersion)notice('community-status',(accessNotice?accessNotice+' ':'')+e.message+(append?' Pulsa '+(mode==='moderation'?'Más aportaciones':'Más conversaciones')+' para reintentar.':' Usa Actualizar para reintentar.'));}finally{if(version===listVersion){byId('topics').setAttribute('aria-busy','false');byId('more-topics').disabled=false;}}}
+async function openThread(id,append=false,preserveDraft=false){if(saving||append&&byId('more-replies').disabled)return;const version=++threadVersion,requestedOffset=append?replyOffset+20:0;byId('more-replies').disabled=true;if(!append){rememberReply();activeThreadId=id;currentThread=null;replyOffset=0;byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('reply-body').value=replyDrafts.get(id)||'';notice('thread-news','');notice('thread-title','Cargando conversación…');byId('reply-form').hidden=true;byId('more-replies').hidden=true;if(!byId('thread-dialog').open)byId('thread-dialog').showModal();}notice('reply-status','');try{
  const result=await api('posts/'+encodeURIComponent(id)+'?offset='+requestedOffset);if(version!==threadVersion||!byId('thread-dialog').open)return;replyOffset=requestedOffset;currentThread=result.post;threadSnapshot=JSON.stringify(result);notice('thread-title',result.post.title);if(!append){byId('thread-content').replaceChildren(postElement(result.post,{moderate:account?.role==='owner'}));byId('thread-title').focus();}for(const reply of result.replies)byId('thread-replies').append(postElement(reply,{moderate:account?.role==='owner'}));byId('more-replies').hidden=!result.hasMore;byId('reply-form').hidden=!account?.accepted_at||result.post.status!=='published';
  }catch(e){if(version===threadVersion){if(!append)notice('thread-title','No se ha podido abrir la conversación');notice('reply-status',e.message+(append?' Pulsa Más respuestas para reintentar.':''));}}finally{if(version===threadVersion)byId('more-replies').disabled=false;}}
 for(const [id,value]of [['all-topics','all'],['my-topics','mine'],['moderation','moderation']])byId(id).addEventListener('click',()=>{if(saving)return;mode=value;byId('search-form').hidden=mode==='moderation';for(const key of ['all-topics','my-topics','moderation'])byId(key).setAttribute('aria-pressed',String(key===id));loadTopics();});
@@ -2619,6 +2620,7 @@ ARCHIVO: web-actual/dist/owner.js
 'use strict';
 const ownerElement=id=>document.getElementById(id);
 let accessVersion=0,accessLost=false,metricsVersion=0,historyVersion=0,reportsVersion=0,teamBusy=false;
+let reportsCursor=null,reportsPages=0,reportsLoading=false;const loadedReportIds=new Set();
 const resolutionDrafts=new Map(),resolutionInputs=new Map();
 let metricsData=null,metricsLoading=false,metricsExporting=false;
 const metricDayMs=86400000,metricPages=[['home','Portada'],['community','Comunidad'],['legal','Información legal']];
@@ -2627,7 +2629,8 @@ function teamText(tag,value){const element=document.createElement(tag);element.t
 function loseAccess(){
  accessLost=true;accessVersion++;metricsVersion++;historyVersion++;reportsVersion++;
  resolutionDrafts.clear();resolutionInputs.clear();
- for(const id of ['team-members','team-candidate','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+  for(const id of ['team-members','team-candidate','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+  reportsCursor=null;reportsPages=0;reportsLoading=false;loadedReportIds.clear();ownerElement('more-reports').hidden=true;ownerElement('more-reports').disabled=true;ownerElement('community-reports').setAttribute('aria-busy','false');
  clearMetrics();metricsLoading=false;syncMetricsControls();
  ownerElement('team-section').hidden=true;
  for(const id of ['metrics-status','moderation-status','reports-status'])ownerElement(id).textContent='Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.';
@@ -2750,24 +2753,34 @@ function reportCard(report){
  input.id='resolution-'+report.id;label.htmlFor=input.id;input.name='resolution';input.required=true;input.minLength=3;input.maxLength=500;input.value=resolutionDrafts.get(report.id)||'';resolutionInputs.set(report.id,input);
  const submit=teamText('button','Marcar como revisado');submit.className='secondary';submit.type='submit';form.append(label,input,submit);
  form.addEventListener('submit',async e=>{
-  e.preventDefault();if(submit.disabled)return;submit.disabled=true;reportsVersion++;
-  try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});resolutionDrafts.delete(report.id);resolutionInputs.delete(report.id);await loadReports();}
+   e.preventDefault();if(submit.disabled)return;submit.disabled=true;reportsVersion++;reportsLoading=false;ownerElement('community-reports').setAttribute('aria-busy','false');ownerElement('more-reports').disabled=accessLost||!reportsCursor;ownerElement('reports-status').textContent='Guardando decisión…';
+   try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});resolutionDrafts.delete(report.id);resolutionInputs.delete(report.id);card.remove();loadedReportIds.delete(report.id);await loadReports(false,Math.max(1,reportsPages));}
   catch(error){ownerElement('reports-status').textContent=error.message;}finally{submit.disabled=false;}
  });card.append(form);return card;
 }
-async function loadReports(){
- const version=++reportsVersion,status=ownerElement('reports-status');rememberResolutions();
- try{const data=await teamApi('reports');if(version!==reportsVersion)return;rememberResolutions();resolutionInputs.clear();
-  const active=new Set(data.reports.map(report=>report.id));for(const id of resolutionDrafts.keys())if(!active.has(id))resolutionDrafts.delete(id);
-  ownerElement('community-reports').replaceChildren(...data.reports.map(reportCard));
-  status.textContent=data.reports.length?data.reports.length+(data.reports.length===1?' aviso pendiente.':' avisos pendientes en esta tanda.'):'No hay avisos pendientes.';
- }catch(e){if(version===reportsVersion)status.textContent=e.message;}
+async function loadReports(append=false,pagesToLoad=1){
+ if(accessLost||append&&(!reportsCursor||reportsLoading))return;
+ const version=++reportsVersion,status=ownerElement('reports-status'),root=ownerElement('community-reports'),more=ownerElement('more-reports');
+ rememberResolutions();reportsLoading=true;root.setAttribute('aria-busy','true');more.disabled=true;status.textContent=append?'Cargando más avisos…':'Cargando avisos…';
+ try{
+  let cursor=append?reportsCursor:null,pages=0,hasMore=false;const received=[];
+  do{const data=await teamApi('reports'+(cursor?'?cursor='+encodeURIComponent(cursor):''));if(version!==reportsVersion)return;
+   if(!Array.isArray(data.reports))throw Error('No se han podido leer los avisos. Pulsa Actualizar avisos.');
+   received.push(...data.reports);pages++;hasMore=!!data.hasMore;cursor=hasMore&&typeof data.nextCursor==='string'?data.nextCursor:null;
+  }while(!append&&pages<pagesToLoad&&cursor);
+  rememberResolutions();if(!append){resolutionInputs.clear();loadedReportIds.clear();root.replaceChildren();}
+  for(const report of received)if(!loadedReportIds.has(report.id)){loadedReportIds.add(report.id);root.append(reportCard(report));}
+  reportsCursor=cursor;reportsPages=append?reportsPages+pages:pages;more.hidden=!reportsCursor;
+  status.textContent=loadedReportIds.size?loadedReportIds.size+(loadedReportIds.size===1?' aviso pendiente mostrado.':' avisos pendientes mostrados.'):'No hay avisos pendientes.';
+ }catch(e){if(version===reportsVersion)status.textContent=e.message+(append?' Pulsa Más avisos para reintentar.':' Usa Actualizar avisos para reintentar.');}
+ finally{if(version===reportsVersion){reportsLoading=false;root.setAttribute('aria-busy','false');more.disabled=accessLost||!reportsCursor;}}
 }
 ownerElement('refresh-metrics').addEventListener('click',refreshMetrics);
 ownerElement('metrics-range').addEventListener('change',refreshMetrics);
 ownerElement('export-metrics').addEventListener('click',exportMetrics);
 ownerElement('refresh-moderation').addEventListener('click',loadModerationHistory);
-ownerElement('refresh-reports').addEventListener('click',loadReports);
+ownerElement('refresh-reports').addEventListener('click',()=>loadReports());
+ownerElement('more-reports').addEventListener('click',()=>loadReports(true));
 teamApi('me').then(async data=>{if(!accessLost&&data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});
 refreshMetrics();loadModerationHistory();loadReports();
 
@@ -2805,7 +2818,7 @@ ARCHIVO: web-actual/dist/privacy-controls.js
  panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon, sin perfiles personales.'));
  const actions=document.createElement('div');actions.className='privacy-actions';
  for(const [label,value]of [['Solo necesarias','essential'],['Aceptar analítica','analytics']]){const button=node('button',label);button.type='button';button.className='privacy-choice';button.addEventListener('click',()=>{choice=value;try{localStorage.setItem(key,JSON.stringify({choice:value,at:Date.now()}));}catch{}panel.hidden=true;track('view');const content=document.querySelector('main'),target=returnFocus||content||settings;if(target===content){target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}else target.focus();returnFocus=null;});actions.append(button);}
- const more=node('a','Ver política de cookies');more.href='/cookies';actions.append(more);panel.append(actions);document.body.append(panel);
+ const more=node('a','Ver política de cookies');more.href='/cookies';actions.append(more);panel.append(actions);const skip=document.querySelector('.skip-link');if(skip)skip.after(panel);else document.body.prepend(panel);
  const settings=node('button','Preferencias de privacidad');settings.type='button';settings.className='privacy-settings';settings.addEventListener('click',()=>{returnFocus=settings;panel.hidden=false;panel.querySelector('button').focus();});(document.querySelector('footer')||document.body).append(settings);
  function track(event){if(choice!=='analytics'||blocked||event==='view'&&sent)return;if(event==='view')sent=true;const page=location.pathname==='/'?'home':location.pathname.startsWith('/comunidad')?'community':'legal';fetch('/api/event',{method:'POST',credentials:'omit',keepalive:true,headers:{'Content-Type':'application/json','X-Site-Event':'1'},body:JSON.stringify({event,page,consent:true})}).catch(()=>{});}
  document.addEventListener('click',event=>{const link=event.target.closest?.('a[data-track]');if(link&&['amazon','whatsapp'].includes(link.dataset.track))track(link.dataset.track);});track('view');
@@ -2828,7 +2841,7 @@ ARCHIVO: web-actual/dist/propietario.html
  <p class="metrics-note">Las vistas y los clics solo incluyen visitantes que aceptaron la analítica. Son eventos, no personas únicas; la relación clics / vistas puede superar el 100 %. Los clics no confirman ventas en Amazon.</p>
  <noscript><p>Activa JavaScript para consultar y descargar tus estadísticas.</p></noscript>
 </section>
-<section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports"></div><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section></main></body></html>
+<section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports" aria-busy="true"></div><button id="more-reports" class="secondary" type="button" hidden>Más avisos</button><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section></main></body></html>
 
 
 
@@ -3725,6 +3738,41 @@ El libro se compra en Amazon. No hay checkout, cobros, formulario de contacto o 
 - Correo con dominio propio, contratos de tratamiento, garantías de transferencias, plazos de conservación del historial de moderación y permisos para participación de menores requieren validación del responsable. No se garantiza cumplimiento legal completo por pasar pruebas técnicas.
 
 Referencia para revisar consentimiento y cookies: [Guía de la AEPD](https://www.aepd.es/guias/guia-cookies.pdf). La política identifica a los proveedores reales del alojamiento. No se han borrado datos de personas ni contenido real de la comunidad.
+
+
+
+========================================================================
+ARCHIVO: web-actual/docs/revision-web-2026-10-01.md
+========================================================================
+
+# Revisión de código y web · 1 de octubre de 2026
+
+Base revisada: `36ac0bf60b192d05588f3c0b8ccfe2205c11eedd`. Esta revisión continúa la auditoría del 30 de septiembre y conserva el diseño ocre, la venta mediante Amazon y la comunidad con Google. No modifica los permisos del titular ni la base de datos de producción.
+
+## Correcciones y mejoras
+
+- **Avisos de moderación:** el panel antes recuperaba únicamente los primeros 50. Ahora muestra tandas de 20 con «Más avisos» y un cursor estable por fecha e identificador. Resolver un aviso anterior no salta los siguientes. Tras resolver, recupera las páginas que estaban abiertas. Conserva los borradores, evita duplicados y permite reintentar errores sin vaciar las tarjetas. La pérdida de permisos limpia el contenido privado.
+- **Carga del panel:** mensajes de carga, `aria-busy` y controles coherentes cuando coinciden una carga y una decisión. Los errores ofrecen un reintento sin presentar una lista vacía como resultado correcto.
+- **Conversaciones:** respuestas de 20 en 20, en lugar de 50 cuerpos por petición. El cliente usa el mismo tamaño. Los offsets superiores a 10.000 se rechazan de forma explícita; la última página permitida no anuncia una siguiente que repetiría los mismos datos.
+- **Estadísticas:** las respuestas publicadas bajo una pregunta retirada ya no cuentan como conversación pública. La cola de moderación conserva su significado propio.
+- **Privacidad con teclado:** el aviso aparece en el orden del documento inmediatamente después de «Saltar al contenido». No roba el foco al cargar. Su primera elección mantiene el foco en el contenido sin desplazar la página; la reapertura conserva el retorno al botón de preferencias.
+- **Copias del código:** inspección, nombre del ZIP, manifiesto y archivo usan el mismo commit capturado. Una prueba reprodujo que, si cambiaba `HEAD` entre la inspección y el archivado, antes se podían copiar archivos distintos de los examinados. Ahora toda la operación queda ligada al SHA inspeccionado. Esto protege las copias de código; no constituye una copia de la base de datos de producción.
+
+## Verificación
+
+- `node --test tests/*.test.mjs`: **213 pruebas aprobadas**, sin fallos ni omisiones. Incluye pruebas históricas archivadas; no significa que la antigua tienda vuelva a publicarse.
+- `node scripts/build-public.mjs`: Worker público generado con 37 recursos; tienda, demos y devoluciones excluidas.
+- `git diff --check`: correcto.
+- Revisión independiente de seguridad de OAuth, sesiones, roles, publicaciones, avisos, estadísticas, rutas, CSP y empaquetado; revisión adicional de las nuevas carreras y cursores. No se encontró un bypass reproducible en los cambios revisados. No es una garantía de ausencia de vulnerabilidades.
+- Inspección visual de la portada y comunidad publicadas. Prueba del build local en Edge a 320, 390, 768 y 1440 píxeles para portada, comunidad, propietario, privacidad, cookies, aviso legal, información de Amazon, normas y 404: 36 combinaciones, sin desbordamientos horizontales ni errores JavaScript; sin incidencias detectadas por axe en las reglas WCAG A/AA utilizadas. La 404 respondió con su estado correcto.
+- Prueba funcional en una base local sintética: 22 respuestas se recuperan en páginas de 20 y 2; un aviso nuevo llega al panel, que permite recorrer 52 avisos, resolver uno y conservar otro borrador. El total final es 51. No se enviaron avisos ni decisiones a producción.
+- Teclado en navegador: primero el enlace de salto, luego «Solo necesarias»; después de elegir, foco en `MAIN` y desplazamiento cero.
+
+## Alcance y límites
+
+No se ejecutaron compras reales: el enlace de Amazon sigue siendo provisional y la venta ocurre fuera de esta web. El acceso real con Google, su consola, los correos, las copias de datos del alojamiento y las alertas externas no se reconfiguraron en esta revisión. No se verificaron Safari ni Firefox, ni se obtuvo una medición de Core Web Vitals de visitantes reales. Las comprobaciones de accesibilidad automáticas no sustituyen una revisión humana completa.
+
+El endpoint privado de avisos añade `hasMore` y `nextCursor`, conserva `reports` y comprueba el rol en cada petición. Se publica junto con el cliente que entiende este contrato; no requiere migraciones ni nuevos secretos.
 
 
 
@@ -12757,8 +12805,8 @@ function unsafeContent(text){
  for(const match of text.matchAll(/["']client_secret["']\s*:\s*["']([^"']+)["']/gi))if(match[1].length>=16&&!placeholder(match[1]))return true;
  return false;
 }
-function checkCommittedSource(cwd){
- const tree=execFileSync('git',['ls-tree','-rz','HEAD'],{cwd,encoding:'buffer'}).toString('utf8');
+function checkCommittedSource(cwd,sha){
+ const tree=execFileSync('git',['ls-tree','-rz',sha],{cwd,encoding:'buffer'}).toString('utf8');
  for(const entry of tree.split('\0')){
   if(!entry)continue;
   const parsed=entry.match(/^\d+ blob ([a-f0-9]{40,64})\t([\s\S]+)$/);
@@ -12786,12 +12834,12 @@ if(existsSync(manifestPath)){
  for(const [label,cwd]of [['site',root],['github',path.join(root,'..','github-fumada-xxl')]]){
   if(!existsSync(path.join(cwd,'.git'))){if(label==='site')throw Error('Source repository missing');continue;}
   const sha=run(['rev-parse','HEAD'],cwd);
-  checkCommittedSource(cwd);
+  checkCommittedSource(cwd,sha);
   sources.push({label,cwd,sha});
  }
  for(const {label,cwd,sha} of sources){
   const name=`${date}-${label}-${sha.slice(0,12)}.zip`,file=path.join(destination,name);
-  run(['archive','--format=zip','--output='+file,'HEAD'],cwd);
+  run(['archive','--format=zip','--output='+file,sha],cwd);
   const bytes=readFileSync(file);files.push({name,commit:sha,size:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
  }
  writeFileSync(manifestPath,JSON.stringify({version,date,scope,files},null,2)+'\n');
@@ -13505,7 +13553,7 @@ async function fixture(){
  const env={DB,GOOGLE_CLIENT_ID:'test-client',GOOGLE_CLIENT_SECRET:'test-secret',COMMUNITY_ORIGIN:origin};
  const insert=DB.sqlite.prepare('INSERT INTO community_posts(id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?)');
  insert.run('public','owner','Public question','Readable body','published',1);
- return {DB,insert,call:(path,{ip='192.0.2.1',owner=false}={})=>handleCommunity(new Request(origin+path,{headers:{'CF-Connecting-IP':ip,...(owner?{Cookie:'__Host-community='+token}:{})}}),env)};
+ return {DB,insert,call:(path,{ip='192.0.2.1',owner=false,method='GET',body}={})=>handleCommunity(new Request(origin+path,{method,headers:{'CF-Connecting-IP':ip,...(owner?{Cookie:'__Host-community='+token}:{}),...(body?{'Content-Type':'application/json',Origin:origin,'X-Community-Action':'write'}:{})},...(body?{body:JSON.stringify(body)}:{})}),env)};
 }
 test('public list and thread reads share a bounded IP budget, recover and isolate other visitors',async t=>{
  let now=Date.now();t.mock.method(Date,'now',()=>now);
@@ -13533,6 +13581,46 @@ test('moderation exposes all pending contributions in bounded pages, with privac
   ids.push(...result.posts.map(post=>post.id));assert.ok(result.posts.every(post=>post.status==='pending'));
  }
  assert.equal(new Set(ids).size,51);assert.equal(ids[0],'pending-00');assert.equal(ids.at(-1),'pending-50');
+});
+test('offsets beyond 10000 fail clearly for topics, moderation and replies',async t=>{
+ const {DB,call}=await fixture();t.after(()=>DB.sqlite.close());
+ for(const path of ['/api/community/posts?offset=10020','/api/community/moderation?offset=10020','/api/community/posts/public?offset=10050']){
+  const response=await call(path,{owner:true});assert.equal(response.status,400,path);assert.match((await response.json()).error,/10.?000|límite/i);
+ }
+});
+test('the last allowed topic page does not promise an unreachable next page',async t=>{
+ const {DB,insert,call}=await fixture();t.after(()=>DB.sqlite.close());
+ DB.sqlite.exec('BEGIN');for(let i=0;i<10021;i++)insert.run('bulk-'+String(i).padStart(5,'0'),'owner','Topic '+i,'Body','published',i+2);DB.sqlite.exec('COMMIT');
+ const result=await(await call('/api/community/posts?sort=new&offset=10000')).json();
+ assert.equal(result.posts.length,20);assert.equal(result.hasMore,false);
+});
+test('thread replies are returned in pages of twenty',async t=>{
+ const {DB,call}=await fixture();t.after(()=>DB.sqlite.close());
+ const insert=DB.sqlite.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)');
+ for(let i=0;i<21;i++)insert.run('reply-'+i,'public','owner','','Reply '+i,'published',i+2);
+ const first=await(await call('/api/community/posts/public')).json();
+ assert.equal(first.replies.length,20);assert.equal(first.hasMore,true);
+ const second=await(await call('/api/community/posts/public?offset=20')).json();
+ assert.equal(second.replies.length,1);assert.equal(second.hasMore,false);
+});
+test('owner reports paginate through 51 notices without skipping after resolving an earlier notice',async t=>{
+ const {DB,call}=await fixture();t.after(()=>DB.sqlite.close());
+ const insert=DB.sqlite.prepare('INSERT INTO community_reports(id,post_id,reporter_id,reason,created_at) VALUES(?,?,?,?,?)');
+ for(let i=0;i<51;i++)insert.run('report-'+String(i).padStart(2,'0'),'public','owner','Reason '+i,10+Math.floor(i/2));
+ assert.equal((await call('/api/community/reports')).status,403);
+ const first=await(await call('/api/community/reports',{owner:true})).json();
+ assert.deepEqual(first.reports.map(row=>row.id),Array.from({length:20},(_,i)=>'report-'+String(i).padStart(2,'0')));
+ assert.equal(first.hasMore,true);assert.match(first.nextCursor,/^[A-Za-z0-9_-]+$/);
+ const resolved=await call('/api/community/reports/resolve',{owner:true,method:'POST',body:{id:'report-00',resolution:'Revisado'}});assert.equal(resolved.status,200);
+ const second=await(await call('/api/community/reports?cursor='+encodeURIComponent(first.nextCursor),{owner:true})).json();
+ assert.deepEqual(second.reports.map(row=>row.id),Array.from({length:20},(_,i)=>'report-'+String(i+20).padStart(2,'0')));
+ assert.equal(second.hasMore,true);
+ const third=await(await call('/api/community/reports?cursor='+encodeURIComponent(second.nextCursor),{owner:true})).json();
+ assert.deepEqual(third.reports.map(row=>row.id),Array.from({length:11},(_,i)=>'report-'+String(i+40).padStart(2,'0')));
+ assert.equal(third.hasMore,false);assert.equal(third.nextCursor,null);
+ for(const cursor of ['%%%','e30','a'.repeat(257)]){
+  const response=await call('/api/community/reports?cursor='+encodeURIComponent(cursor),{owner:true});assert.equal(response.status,400,cursor);
+ }
 });
 
 
@@ -13644,6 +13732,7 @@ const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const pending=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const response=(data,status=200)=>({ok:status<400,status,json:async()=>data});
 const post=id=>({id,title:'Conversación '+id,author:'Lector',role:'reader',status:'published',body:'Un mensaje para conversar',version:0,createdAt:1,replyCount:0});
+const report=id=>({id,postId:'one',threadId:'one',title:'Pregunta',reason:'Un motivo válido',body:'Texto',reporter:'Reader',createdAt:1});
 const metricFixture=(days,views=0,clicks=0,previousViews=0)=>{
  const end=Date.UTC(2026,8,30),iso=ms=>new Date(ms).toISOString().slice(0,10),start=end-(days-1)*86400000,previousEnd=start-86400000,previousStart=previousEnd-(days-1)*86400000;
  return {days,period:{start:iso(start),end:iso(end),previousStart:iso(previousStart),previousEnd:iso(previousEnd),timeZone:'UTC',includesToday:true},rows:[{day:iso(end),event:'view',page:'home',count:views},{day:iso(end),event:'amazon',page:'home',count:clicks}],previousRows:[{day:iso(previousEnd),event:'view',page:'home',count:previousViews}],community:{current:{questions:2,replies:3},previous:{questions:1,replies:1},pending:{questions:4,replies:5}}};
@@ -13651,7 +13740,7 @@ const metricFixture=(days,views=0,clicks=0,previousViews=0)=>{
 const allText=node=>[node.textContent,...node.children.flatMap(allText)].join(' ');
 function browser(kind='community',intercept=()=>undefined){
  const nodes=new Map(),downloads=[],objectUrls=new Map();
- function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){},click(){if(tag==='a')downloads.push({name:this.download,blob:objectUrls.get(this.href)});},remove(){}};}
+ function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){for(const item of items){item.parent=this;this.children.push(item);}},replaceChildren(...items){for(const item of this.children)item.parent=null;this.children=[];this.append(...items);},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){},click(){if(tag==='a')downloads.push({name:this.download,blob:objectUrls.get(this.href)});},remove(){if(this.parent){this.parent.children=this.parent.children.filter(item=>item!==this);this.parent=null;}}};}
  const html=readFileSync(new URL('../dist/'+(kind==='community'?'comunidad':'propietario')+'.html',import.meta.url),'utf8');
  for(const match of html.matchAll(/id="([^"]+)"/g))nodes.set(match[1],element());
  if(kind==='owner')nodes.get('metrics-range').value='30';
@@ -13750,6 +13839,52 @@ test('moderation loads 20 at a time and announces the total displayed',async()=>
  await b.click('moderation');assert.equal(b.get('topics').children.length,20);assert.equal(b.get('more-topics').textContent,'Más aportaciones');assert.equal(b.get('more-topics').hidden,false);
  await b.click('more-topics');assert.equal(b.get('topics').children.length,40);assert.equal(b.get('more-topics').hidden,true);assert.match(b.get('community-status').textContent,/40 aportaciones/);
  assert.deepEqual(requests,['/api/community/moderation?offset=0','/api/community/moderation?offset=20']);
+});
+test('thread replies use the server page size of 20',async()=>{
+ const requests=[];const b=browser('community',url=>{if(!url.includes('/posts/one?'))return undefined;requests.push(url);const offset=Number(new URL(url,'https://book.example').searchParams.get('offset'));return response({post:post('one'),replies:Array.from({length:20},(_,i)=>({...post('reply-'+(offset+i)),parentId:'one',title:''})),hasMore:offset===0});});await flush();
+ await b.click('topics','Conversación one');await b.click('more-replies');
+ assert.equal(b.get('thread-replies').children.length,40);
+ assert.deepEqual(requests,['/api/community/posts/one?offset=0','/api/community/posts/one?offset=20']);
+});
+test('owner reports announce loading and expose all cursor pages',async()=>{
+ const first=pending(),requests=[];const b=browser('owner',url=>{if(!url.includes('/reports'))return undefined;requests.push(url);const cursor=new URL(url,'https://book.example').searchParams.get('cursor');return cursor==='second'?response({reports:Array.from({length:20},(_,i)=>report('r'+(i+21))),hasMore:true,nextCursor:'third'}):cursor==='third'?response({reports:Array.from({length:11},(_,i)=>report('r'+(i+41))),hasMore:false,nextCursor:null}):first.promise;});
+ assert.match(b.get('reports-status').textContent,/Cargando avisos/);assert.equal(b.get('community-reports').attributes['aria-busy'],'true');
+ first.resolve(response({reports:Array.from({length:20},(_,i)=>report('r'+(i+1))),hasMore:true,nextCursor:'second'}));await flush();
+ await b.click('more-reports');await b.click('more-reports');
+ assert.equal(b.get('community-reports').children.length,51);assert.equal(b.get('more-reports').hidden,true);assert.match(b.get('reports-status').textContent,/51 avisos/);
+ assert.deepEqual(requests,['/api/community/reports','/api/community/reports?cursor=second','/api/community/reports?cursor=third']);
+});
+test('failed report pagination retains rows, draft and retry cursor',async()=>{
+ let reads=0;const b=browser('owner',url=>url.includes('/reports?cursor=next')?(++reads===1?response({error:'Fallo temporal'},503):response({reports:[report('r2')],hasMore:false,nextCursor:null})):url.endsWith('/reports')?response({reports:[report('r1')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ const input=b.get('community-reports').children[0].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input');input.value='Borrador en la primera página';
+ await b.click('more-reports');assert.equal(b.get('community-reports').children.length,1);assert.equal(input.value,'Borrador en la primera página');assert.equal(b.get('more-reports').hidden,false);assert.match(b.get('reports-status').textContent,/Fallo temporal/);
+ await b.click('more-reports');assert.equal(reads,2);assert.equal(b.get('community-reports').children.length,2);assert.equal(input.value,'Borrador en la primera página');
+});
+test('report refresh failure leaves visible rows and resolution drafts intact',async()=>{
+ let reads=0;const b=browser('owner',url=>url.endsWith('/reports')?(++reads===1?response({reports:[report('r1')],hasMore:false,nextCursor:null}):response({error:'Red no disponible'},503)):undefined);await flush();
+ const input=b.get('community-reports').children[0].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input');input.value='Decisión aún sin enviar';
+ await b.click('refresh-reports');assert.equal(b.get('community-reports').children.length,1);assert.equal(input.value,'Decisión aún sin enviar');assert.match(b.get('reports-status').textContent,/Red no disponible/);assert.equal(b.get('community-reports').attributes['aria-busy'],'false');
+});
+test('overlapping cursor pages do not show the same report twice',async()=>{
+ const b=browser('owner',url=>url.includes('/reports?cursor=next')?response({reports:[report('r2'),report('r3')],hasMore:false,nextCursor:null}):url.endsWith('/reports')?response({reports:[report('r1'),report('r2')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ await b.click('more-reports');assert.equal(b.get('community-reports').children.length,3);
+});
+test('losing owner access during report pagination clears private rows and disables loading more',async()=>{
+ const b=browser('owner',url=>url.includes('/reports?cursor=next')?response({error:'Acceso privado'},403):url.endsWith('/reports')?response({reports:[report('r1')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ await b.click('more-reports');assert.equal(b.get('community-reports').children.length,0);assert.equal(b.get('more-reports').hidden,true);assert.equal(b.get('more-reports').disabled,true);assert.match(b.get('reports-status').textContent,/sesión|permisos/);
+});
+test('failed resolution during pagination restores report controls and ignores the stale page',async()=>{
+ const delayed=pending();const b=browser('owner',(url,options)=>url.includes('/reports?cursor=next')?delayed.promise:url.endsWith('/reports/resolve')&&options.method==='POST'?response({error:'Conflicto de moderación'},409):url.endsWith('/reports')?response({reports:[report('r1')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ const pagination=b.get('more-reports').dispatch('click');await flush();
+ const form=b.get('community-reports').children[0].children.find(el=>el.tag==='form');form.children.find(el=>el.tag==='input').value='Decisión aún sin enviar';await form.dispatch('submit');await flush();
+ assert.equal(b.get('community-reports').attributes['aria-busy'],'false');assert.equal(b.get('more-reports').disabled,false);assert.match(b.get('reports-status').textContent,/Conflicto de moderación/);
+ delayed.resolve(response({reports:[report('stale')],hasMore:false,nextCursor:null}));await pagination;assert.equal(b.get('community-reports').children.length,1);
+});
+test('resolving a report refreshes the queue without losing other resolution drafts',async()=>{
+ let resolved=false;const b=browser('owner',(url,options)=>url.endsWith('/reports/resolve')&&options.method==='POST'?(resolved=true,response({ok:true})):url.endsWith('/reports')?response({reports:resolved?[report('r2')]:[report('r1'),report('r2')],hasMore:false,nextCursor:null}):undefined);await flush();
+ const cards=b.get('community-reports').children,form=cards[0].children.find(el=>el.tag==='form'),otherInput=cards[1].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input');
+ form.children.find(el=>el.tag==='input').value='Decisión final';otherInput.value='Borrador de otro aviso';await form.dispatch('submit');await flush();
+ assert.equal(b.get('community-reports').children.length,1);assert.equal(b.get('community-reports').children[0].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input').value,'Borrador de otro aviso');
 });
 
 
@@ -14526,10 +14661,13 @@ async function fixture(){
  sql.prepare('INSERT INTO community_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').run(await communityHash(TOKEN),'owner',FIXED+DAY);
  sql.prepare('INSERT INTO community_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').run(await communityHash(READER_TOKEN),'reader',FIXED+DAY);
  const metric=(offset,event='view',page='home',count=1)=>sql.prepare('INSERT INTO site_metrics(day,event,page,count) VALUES(?,?,?,?)').run(iso(offset),event,page,count);
+ const parent=sql.prepare('INSERT INTO community_posts(id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?)');
+ parent.run('parent','reader','Older topic','Parent body','published',at(-100));
  let sequence=0;
- const post=(offset,{reply=false,status='published'}={})=>{
+ const post=(offset,{reply=false,status='published',parentId='parent'}={})=>{
   const id='post-'+(++sequence);
-  sql.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)').run(id,reply?'parent':null,'reader','Private title','Private body '+sequence,status,at(offset));
+  sql.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)').run(id,reply?parentId:null,'reader','Private title','Private body '+sequence,status,at(offset));
+  return id;
  };
  return {env:{DB},metric,post};
 }
@@ -14586,6 +14724,16 @@ test('one day means today against yesterday; thirty days compare with the prior 
  assert.deepEqual(thirty.community.current,{questions:2,replies:1});
  assert.deepEqual(thirty.community.previous,{questions:2,replies:0});
 });
+test('published metrics exclude replies behind hidden topics while pending remains the real queue',async t=>{
+ t.mock.method(Date,'now',()=>FIXED);
+ const {env,post}=await fixture();
+ const hidden=post(-1,{status:'hidden'});
+ post(0,{reply:true,parentId:hidden});
+ post(0,{reply:true,status:'pending',parentId:hidden});
+ const data=await(await handleMetrics(get('?days=1'),env)).json();
+ assert.deepEqual(data.community.current,{questions:0,replies:0});
+ assert.deepEqual(data.community.pending,{questions:0,replies:1});
+});
 
 
 
@@ -14625,11 +14773,11 @@ const source=readFileSync(new URL('../dist/privacy-controls.js',import.meta.url)
 function browser({saved=null,dnt=false,gpc=false,storageFails=false}={}){
  const all=[],events=new Map(),requests=[],storage=new Map(saved?[['lectura_privacy_v1',JSON.stringify(saved)]]:[]);
  let focused=null;
- const node=tag=>{const el={tag,children:[],events:new Map(),hidden:false,textContent:'',setAttribute(){},append(...items){this.children.push(...items);},addEventListener(type,fn){this.events.set(type,fn);},querySelector(tag){return all.find(e=>e.tag===tag);},focus(options){focused={element:this,options};}};all.push(el);return el;};
- const main=node('main');
- const document={body:node('body'),createElement:node,querySelector:selector=>selector==='main'?main:null,addEventListener:(type,fn)=>events.set(type,fn)};
+ const node=tag=>{const el={tag,children:[],events:new Map(),hidden:false,textContent:'',setAttribute(){},append(...items){this.children.push(...items);},prepend(item){this.children.unshift(item);},after(item){const index=body.children.indexOf(this);body.children.splice(index+1,0,item);},addEventListener(type,fn){this.events.set(type,fn);},querySelector(tag){return all.find(e=>e.tag===tag);},focus(options){focused={element:this,options};}};all.push(el);return el;};
+ const body=node('body'),skip=node('a'),main=node('main'),footer=node('footer');body.append(skip,main,footer);
+ const document={body,createElement:node,querySelector:selector=>selector==='main'?main:selector==='.skip-link'?skip:selector==='footer'?footer:null,addEventListener:(type,fn)=>events.set(type,fn)};
  vm.runInNewContext(source,{document,navigator:{doNotTrack:dnt?'1':'0',globalPrivacyControl:gpc},location:{pathname:'/'},localStorage:{getItem:key=>storage.get(key),removeItem:key=>{if(storageFails)throw Error();storage.delete(key);},setItem:(key,val)=>{if(storageFails)throw Error();storage.set(key,val);}},fetch:(url,options)=>{requests.push({url,options,body:JSON.parse(options.body)});return Promise.resolve();}});
- return {requests,all,storage,get focused(){return focused;},choose(label){all.find(e=>e.tag==='button'&&e.textContent===label).events.get('click')();},click(kind){events.get('click')({target:{closest:()=>({dataset:{track:kind}})}});}};
+ return {requests,all,body,storage,get focused(){return focused;},choose(label){all.find(e=>e.tag==='button'&&e.textContent===label).events.get('click')();},click(kind){events.get('click')({target:{closest:()=>({dataset:{track:kind}})}});}};
 }
 test('analytics stays off before a choice, after rejection and after withdrawal',()=>{
  const b=browser();b.click('amazon');assert.equal(b.requests.length,0);b.choose('Solo necesarias');b.click('whatsapp');assert.equal(b.requests.length,0);
@@ -14645,6 +14793,11 @@ test('initial privacy choice returns to content, while settings return to their 
  const b=browser();b.choose('Solo necesarias');assert.equal(b.focused.element.tag,'main');
  b.choose('Preferencias de privacidad');b.choose('Solo necesarias');assert.equal(b.focused.element.textContent,'Preferencias de privacidad');
  assert.notEqual(b.focused.options?.preventScroll,true,'footer opener may scroll into view');
+});
+test('initial privacy choices follow the skip link in keyboard order without stealing focus',()=>{
+ const b=browser(),panel=b.all.find(node=>node.tag==='section');
+ assert.equal(b.body.children[1],panel);assert.equal(panel.hidden,false);assert.equal(b.focused,null);
+ const saved=browser({saved:{choice:'essential',at:Date.now()}});assert.equal(saved.all.find(node=>node.tag==='section').hidden,true);
 });
 
 
@@ -14978,10 +15131,10 @@ ARCHIVO: web-actual/tests/source-safety.test.mjs
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,mkdirSync,writeFileSync,copyFileSync,existsSync,readdirSync,rmSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,copyFileSync,existsSync,readdirSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 
@@ -15079,6 +15232,28 @@ test('a tracked blob with a newline in its path is still scanned',()=>{
  }finally{f.cleanup();}
 });
 
+test('archive contents and manifest stay pinned to the inspected commit when HEAD moves',()=>{
+ const f=fixture();try{
+  writeFileSync(path.join(f.root,'public.txt'),'inspected version');f.git('add','public.txt');f.git('commit','-qm','inspected');
+  const first=spawnSync('git',['rev-parse','HEAD'],{cwd:f.root,encoding:'utf8'}).stdout.trim();
+  writeFileSync(path.join(f.root,'client_secret.json'),'private content in later commit');f.git('add','client_secret.json');f.git('commit','-qm','later');
+  const later=spawnSync('git',['rev-parse','HEAD'],{cwd:f.root,encoding:'utf8'}).stdout.trim();
+  f.git('update-ref','HEAD',first);
+  const preload=path.join(f.base,'move-head.mjs');
+  writeFileSync(preload,`import child from 'node:child_process';\nimport {syncBuiltinESMExports} from 'node:module';\nconst original=child.execFileSync;let moved=false;\nchild.execFileSync=(file,args,options)=>{const output=original(file,args,options);if(!moved&&file==='git'&&args?.[0]==='ls-tree'&&options?.cwd===process.env.TEST_REPO){moved=true;original('git',['update-ref','HEAD',process.env.TEST_NEXT_SHA],{cwd:options.cwd});}return output;};\nsyncBuiltinESMExports();\n`);
+  const result=spawnSync(process.execPath,['--import',pathToFileURL(preload).href,'scripts/backup-source.mjs'],{cwd:f.root,encoding:'utf8',env:{...process.env,TEST_REPO:f.root,TEST_NEXT_SHA:later}});
+  assert.equal(result.status,0,result.stderr);
+  const manifest=JSON.parse(readFileSync(path.join(f.base,'copias-codigo',date()+'.json'),'utf8'));
+  assert.equal(manifest.files[0].commit,first);
+  assert.equal(manifest.files[0].name,`${date()}-site-${first.slice(0,12)}.zip`);
+  const actual=path.join(f.base,'copias-codigo',manifest.files[0].name),expected=path.join(f.base,'expected.zip');
+  const archive=spawnSync('git',['archive','--format=zip','--output='+expected,first],{cwd:f.root,encoding:'utf8'});
+  assert.equal(archive.status,0,archive.stderr);
+  assert.deepEqual(readFileSync(actual),readFileSync(expected));
+  assert.equal(spawnSync('git',['rev-parse','HEAD'],{cwd:f.root,encoding:'utf8'}).stdout.trim(),later);
+ }finally{f.cleanup();}
+});
+
 
 
 ========================================================================
@@ -15152,6 +15327,11 @@ function communityPublicPost(post,user){const {authorId,...safe}=post;return {..
 async function communityReadPost(env,id){return env.DB.prepare(communitySelect+' WHERE p.id=?').bind(id).first();}
 function communityVisible(post,user){return post&&(post.status==='published'||user?.role==='owner'||post.authorId===user?.id);}
 function communityFold(column){let expression=column;for(const [from,to] of Object.entries({'Á':'a','á':'a','É':'e','é':'e','Í':'i','í':'i','Ó':'o','ó':'o','Ú':'u','ú':'u','Ü':'u','ü':'u','Ñ':'n','ñ':'n'}))expression="replace("+expression+",'"+from+"','"+to+"')";return 'lower('+expression+')';}
+function communityOffset(url){const offset=Math.floor(Math.max(0,Number(url.searchParams.get('offset'))||0));return offset>10000?null:offset;}
+function communityReportCursor(value){
+ if(!/^[A-Za-z0-9_-]{1,256}$/.test(value))return null;
+ try{const decoded=new TextDecoder('utf-8',{fatal:true}).decode(communityDecode(value));if(communityBase64(communityBytes(decoded))!==value)return null;const parts=JSON.parse(decoded);return Array.isArray(parts)&&parts.length===2&&Number.isSafeInteger(parts[0])&&parts[0]>=0&&typeof parts[1]==='string'&&/^[A-Za-z0-9-]{1,80}$/.test(parts[1])?parts:null;}catch{return null;}
+}
 export async function handleCommunity(request,env){
  const url=new URL(request.url),p=url.pathname;
  try{
@@ -15169,17 +15349,20 @@ export async function handleCommunity(request,env){
    return communityJson({members:rows.results});
   }
   if(p==='/api/community/posts'&&request.method==='GET'){
-   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));const mine=url.searchParams.get('mine')==='1';
+   const offset=communityOffset(url);if(offset===null)return communityJson({error:'El límite de paginación es 10.000. Ajusta la búsqueda.'},400);const mine=url.searchParams.get('mine')==='1';
    const query=(url.searchParams.get('q')||'').slice(0,120).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
    const search=query?" AND instr("+communityFold("p.title || ' ' || p.body || ' ' || u.alias")+",?)>0":'';
    const order=url.searchParams.get('sort')==='new'?'p.created_at':'max(p.created_at,coalesce((SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status=\'published\'),p.created_at))';
    const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?"p.author_id=? AND p.status!='hidden'":"p.status='published'")+search+" ORDER BY "+order+" DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),...(query?[query]:[]),offset).all();
-   return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
+   return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:offset<10000&&rows.results.length>20});
   }
   if(p==='/api/community/reports'&&request.method==='GET'){
    if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
-   const rows=await env.DB.prepare("SELECT r.id,r.reason,r.created_at createdAt,p.id postId,coalesce(p.parent_id,p.id) threadId,p.title,p.body,p.status,p.version,u.alias reporter FROM community_reports r JOIN community_posts p ON p.id=r.post_id JOIN community_users u ON u.id=r.reporter_id WHERE r.resolved_at IS NULL ORDER BY r.created_at,r.id LIMIT 50").all();
-   return communityJson({reports:rows.results});
+   const values=url.searchParams.getAll('cursor');if(values.length>1)return communityJson({error:'Cursor de avisos no válido.'},400);
+   const cursor=values.length?communityReportCursor(values[0]):undefined;if(values.length&&!cursor)return communityJson({error:'Cursor de avisos no válido.'},400);
+   const sql="SELECT r.id,r.reason,r.created_at createdAt,p.id postId,coalesce(p.parent_id,p.id) threadId,p.title,p.body,p.status,p.version,u.alias reporter FROM community_reports r JOIN community_posts p ON p.id=r.post_id JOIN community_users u ON u.id=r.reporter_id WHERE r.resolved_at IS NULL"+(cursor?' AND (r.created_at>? OR (r.created_at=? AND r.id>?))':'')+' ORDER BY r.created_at,r.id LIMIT 21';
+   const rows=await env.DB.prepare(sql).bind(...(cursor?[cursor[0],cursor[0],cursor[1]]:[])).all();const reports=rows.results.slice(0,20),hasMore=rows.results.length>20;
+   const last=reports.at(-1);return communityJson({reports,hasMore,nextCursor:hasMore?communityBase64(communityBytes(JSON.stringify([last.createdAt,last.id]))):null});
   }
   if(p==='/api/community/moderation-history'&&request.method==='GET'){
    if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
@@ -15189,15 +15372,15 @@ export async function handleCommunity(request,env){
   if(p==='/api/community/moderation'&&request.method==='GET'){
 
    if(user?.role!=='owner')return communityJson({error:'Solo el dueño puede moderar.'},403);
-   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));
-   const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(offset).all();return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
+   const offset=communityOffset(url);if(offset===null)return communityJson({error:'El límite de paginación es 10.000. Ajusta la búsqueda.'},400);
+   const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(offset).all();return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:offset<10000&&rows.results.length>20});
   }
   const match=/^\/api\/community\/posts\/([a-zA-Z0-9-]{1,80})(?:\/(moderate|delete))?$/.exec(p);
   if(match&&!match[2]&&request.method==='GET'){
    const post=await communityReadPost(env,match[1]);if(!communityVisible(post,user)||post.status==='hidden'||post.parentId)return communityJson({error:'Conversación no disponible.'},404);
-   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));
-   const replies=await env.DB.prepare(communitySelect+" WHERE p.parent_id=? AND (p.status='published' OR p.author_id=? OR ?=1) AND p.status!='hidden' ORDER BY p.created_at,p.id LIMIT 51 OFFSET ?").bind(post.id,user?.id||'',user?.role==='owner'?1:0,offset).all();
-   return communityJson({post:communityPublicPost(post,user),replies:replies.results.slice(0,50).map(row=>communityPublicPost(row,user)),hasMore:replies.results.length>50});
+   const offset=communityOffset(url);if(offset===null)return communityJson({error:'El límite de paginación es 10.000. Ajusta la búsqueda.'},400);
+   const replies=await env.DB.prepare(communitySelect+" WHERE p.parent_id=? AND (p.status='published' OR p.author_id=? OR ?=1) AND p.status!='hidden' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(post.id,user?.id||'',user?.role==='owner'?1:0,offset).all();
+   return communityJson({post:communityPublicPost(post,user),replies:replies.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:offset<10000&&replies.results.length>20});
   }
   if(request.method!=='POST')return communityJson({error:'No encontrado.'},404);
   if(!configured)return communityJson({error:'La comunidad aún no está activada.'},503);
@@ -15842,7 +16025,7 @@ export async function handleMetrics(request,env){
    const current=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.start,period.end).all();
    const previous=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.previousStart,period.previousEnd).all();
    const published=async(from,to)=>{
-    const row=await env.DB.prepare("SELECT COUNT(CASE WHEN parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN parent_id IS NOT NULL THEN 1 END) replies FROM community_posts WHERE status='published' AND created_at>=? AND created_at<?").bind(from,to).first();
+    const row=await env.DB.prepare("SELECT COUNT(CASE WHEN p.parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN p.parent_id IS NOT NULL AND parent.status='published' THEN 1 END) replies FROM community_posts p LEFT JOIN community_posts parent ON parent.id=p.parent_id WHERE p.status='published' AND p.created_at>=? AND p.created_at<?").bind(from,to).first();
     return {questions:row.questions,replies:row.replies};
    };
    const communityCurrent=await published(start,today+dayMs),communityPrevious=await published(previousStart,start);

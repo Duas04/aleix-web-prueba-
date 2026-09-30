@@ -16,7 +16,7 @@ export async function handleMetrics(request,env){
    const current=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.start,period.end).all();
    const previous=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? AND day<=? ORDER BY day DESC,event,page').bind(period.previousStart,period.previousEnd).all();
    const published=async(from,to)=>{
-    const row=await env.DB.prepare("SELECT COUNT(CASE WHEN parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN parent_id IS NOT NULL THEN 1 END) replies FROM community_posts WHERE status='published' AND created_at>=? AND created_at<?").bind(from,to).first();
+    const row=await env.DB.prepare("SELECT COUNT(CASE WHEN p.parent_id IS NULL THEN 1 END) questions,COUNT(CASE WHEN p.parent_id IS NOT NULL AND parent.status='published' THEN 1 END) replies FROM community_posts p LEFT JOIN community_posts parent ON parent.id=p.parent_id WHERE p.status='published' AND p.created_at>=? AND p.created_at<?").bind(from,to).first();
     return {questions:row.questions,replies:row.replies};
    };
    const communityCurrent=await published(start,today+dayMs),communityPrevious=await published(previousStart,start);

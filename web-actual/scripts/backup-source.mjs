@@ -16,8 +16,8 @@ function unsafeContent(text){
  for(const match of text.matchAll(/["']client_secret["']\s*:\s*["']([^"']+)["']/gi))if(match[1].length>=16&&!placeholder(match[1]))return true;
  return false;
 }
-function checkCommittedSource(cwd){
- const tree=execFileSync('git',['ls-tree','-rz','HEAD'],{cwd,encoding:'buffer'}).toString('utf8');
+function checkCommittedSource(cwd,sha){
+ const tree=execFileSync('git',['ls-tree','-rz',sha],{cwd,encoding:'buffer'}).toString('utf8');
  for(const entry of tree.split('\0')){
   if(!entry)continue;
   const parsed=entry.match(/^\d+ blob ([a-f0-9]{40,64})\t([\s\S]+)$/);
@@ -45,12 +45,12 @@ if(existsSync(manifestPath)){
  for(const [label,cwd]of [['site',root],['github',path.join(root,'..','github-fumada-xxl')]]){
   if(!existsSync(path.join(cwd,'.git'))){if(label==='site')throw Error('Source repository missing');continue;}
   const sha=run(['rev-parse','HEAD'],cwd);
-  checkCommittedSource(cwd);
+  checkCommittedSource(cwd,sha);
   sources.push({label,cwd,sha});
  }
  for(const {label,cwd,sha} of sources){
   const name=`${date}-${label}-${sha.slice(0,12)}.zip`,file=path.join(destination,name);
-  run(['archive','--format=zip','--output='+file,'HEAD'],cwd);
+  run(['archive','--format=zip','--output='+file,sha],cwd);
   const bytes=readFileSync(file);files.push({name,commit:sha,size:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
  }
  writeFileSync(manifestPath,JSON.stringify({version,date,scope,files},null,2)+'\n');

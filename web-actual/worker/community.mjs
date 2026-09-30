@@ -65,6 +65,11 @@ function communityPublicPost(post,user){const {authorId,...safe}=post;return {..
 async function communityReadPost(env,id){return env.DB.prepare(communitySelect+' WHERE p.id=?').bind(id).first();}
 function communityVisible(post,user){return post&&(post.status==='published'||user?.role==='owner'||post.authorId===user?.id);}
 function communityFold(column){let expression=column;for(const [from,to] of Object.entries({'Á':'a','á':'a','É':'e','é':'e','Í':'i','í':'i','Ó':'o','ó':'o','Ú':'u','ú':'u','Ü':'u','ü':'u','Ñ':'n','ñ':'n'}))expression="replace("+expression+",'"+from+"','"+to+"')";return 'lower('+expression+')';}
+function communityOffset(url){const offset=Math.floor(Math.max(0,Number(url.searchParams.get('offset'))||0));return offset>10000?null:offset;}
+function communityReportCursor(value){
+ if(!/^[A-Za-z0-9_-]{1,256}$/.test(value))return null;
+ try{const decoded=new TextDecoder('utf-8',{fatal:true}).decode(communityDecode(value));if(communityBase64(communityBytes(decoded))!==value)return null;const parts=JSON.parse(decoded);return Array.isArray(parts)&&parts.length===2&&Number.isSafeInteger(parts[0])&&parts[0]>=0&&typeof parts[1]==='string'&&/^[A-Za-z0-9-]{1,80}$/.test(parts[1])?parts:null;}catch{return null;}
+}
 export async function handleCommunity(request,env){
  const url=new URL(request.url),p=url.pathname;
  try{
@@ -82,17 +87,20 @@ export async function handleCommunity(request,env){
    return communityJson({members:rows.results});
   }
   if(p==='/api/community/posts'&&request.method==='GET'){
-   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));const mine=url.searchParams.get('mine')==='1';
+   const offset=communityOffset(url);if(offset===null)return communityJson({error:'El límite de paginación es 10.000. Ajusta la búsqueda.'},400);const mine=url.searchParams.get('mine')==='1';
    const query=(url.searchParams.get('q')||'').slice(0,120).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
    const search=query?" AND instr("+communityFold("p.title || ' ' || p.body || ' ' || u.alias")+",?)>0":'';
    const order=url.searchParams.get('sort')==='new'?'p.created_at':'max(p.created_at,coalesce((SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status=\'published\'),p.created_at))';
    const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?"p.author_id=? AND p.status!='hidden'":"p.status='published'")+search+" ORDER BY "+order+" DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),...(query?[query]:[]),offset).all();
-   return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
+   return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:offset<10000&&rows.results.length>20});
   }
   if(p==='/api/community/reports'&&request.method==='GET'){
    if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
-   const rows=await env.DB.prepare("SELECT r.id,r.reason,r.created_at createdAt,p.id postId,coalesce(p.parent_id,p.id) threadId,p.title,p.body,p.status,p.version,u.alias reporter FROM community_reports r JOIN community_posts p ON p.id=r.post_id JOIN community_users u ON u.id=r.reporter_id WHERE r.resolved_at IS NULL ORDER BY r.created_at,r.id LIMIT 50").all();
-   return communityJson({reports:rows.results});
+   const values=url.searchParams.getAll('cursor');if(values.length>1)return communityJson({error:'Cursor de avisos no válido.'},400);
+   const cursor=values.length?communityReportCursor(values[0]):undefined;if(values.length&&!cursor)return communityJson({error:'Cursor de avisos no válido.'},400);
+   const sql="SELECT r.id,r.reason,r.created_at createdAt,p.id postId,coalesce(p.parent_id,p.id) threadId,p.title,p.body,p.status,p.version,u.alias reporter FROM community_reports r JOIN community_posts p ON p.id=r.post_id JOIN community_users u ON u.id=r.reporter_id WHERE r.resolved_at IS NULL"+(cursor?' AND (r.created_at>? OR (r.created_at=? AND r.id>?))':'')+' ORDER BY r.created_at,r.id LIMIT 21';
+   const rows=await env.DB.prepare(sql).bind(...(cursor?[cursor[0],cursor[0],cursor[1]]:[])).all();const reports=rows.results.slice(0,20),hasMore=rows.results.length>20;
+   const last=reports.at(-1);return communityJson({reports,hasMore,nextCursor:hasMore?communityBase64(communityBytes(JSON.stringify([last.createdAt,last.id]))):null});
   }
   if(p==='/api/community/moderation-history'&&request.method==='GET'){
    if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
@@ -102,15 +110,15 @@ export async function handleCommunity(request,env){
   if(p==='/api/community/moderation'&&request.method==='GET'){
 
    if(user?.role!=='owner')return communityJson({error:'Solo el dueño puede moderar.'},403);
-   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));
-   const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(offset).all();return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
+   const offset=communityOffset(url);if(offset===null)return communityJson({error:'El límite de paginación es 10.000. Ajusta la búsqueda.'},400);
+   const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(offset).all();return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:offset<10000&&rows.results.length>20});
   }
   const match=/^\/api\/community\/posts\/([a-zA-Z0-9-]{1,80})(?:\/(moderate|delete))?$/.exec(p);
   if(match&&!match[2]&&request.method==='GET'){
    const post=await communityReadPost(env,match[1]);if(!communityVisible(post,user)||post.status==='hidden'||post.parentId)return communityJson({error:'Conversación no disponible.'},404);
-   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));
-   const replies=await env.DB.prepare(communitySelect+" WHERE p.parent_id=? AND (p.status='published' OR p.author_id=? OR ?=1) AND p.status!='hidden' ORDER BY p.created_at,p.id LIMIT 51 OFFSET ?").bind(post.id,user?.id||'',user?.role==='owner'?1:0,offset).all();
-   return communityJson({post:communityPublicPost(post,user),replies:replies.results.slice(0,50).map(row=>communityPublicPost(row,user)),hasMore:replies.results.length>50});
+   const offset=communityOffset(url);if(offset===null)return communityJson({error:'El límite de paginación es 10.000. Ajusta la búsqueda.'},400);
+   const replies=await env.DB.prepare(communitySelect+" WHERE p.parent_id=? AND (p.status='published' OR p.author_id=? OR ?=1) AND p.status!='hidden' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(post.id,user?.id||'',user?.role==='owner'?1:0,offset).all();
+   return communityJson({post:communityPublicPost(post,user),replies:replies.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:offset<10000&&replies.results.length>20});
   }
   if(request.method!=='POST')return communityJson({error:'No encontrado.'},404);
   if(!configured)return communityJson({error:'La comunidad aún no está activada.'},503);

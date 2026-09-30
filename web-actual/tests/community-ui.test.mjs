@@ -6,6 +6,7 @@ const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const pending=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const response=(data,status=200)=>({ok:status<400,status,json:async()=>data});
 const post=id=>({id,title:'Conversación '+id,author:'Lector',role:'reader',status:'published',body:'Un mensaje para conversar',version:0,createdAt:1,replyCount:0});
+const report=id=>({id,postId:'one',threadId:'one',title:'Pregunta',reason:'Un motivo válido',body:'Texto',reporter:'Reader',createdAt:1});
 const metricFixture=(days,views=0,clicks=0,previousViews=0)=>{
  const end=Date.UTC(2026,8,30),iso=ms=>new Date(ms).toISOString().slice(0,10),start=end-(days-1)*86400000,previousEnd=start-86400000,previousStart=previousEnd-(days-1)*86400000;
  return {days,period:{start:iso(start),end:iso(end),previousStart:iso(previousStart),previousEnd:iso(previousEnd),timeZone:'UTC',includesToday:true},rows:[{day:iso(end),event:'view',page:'home',count:views},{day:iso(end),event:'amazon',page:'home',count:clicks}],previousRows:[{day:iso(previousEnd),event:'view',page:'home',count:previousViews}],community:{current:{questions:2,replies:3},previous:{questions:1,replies:1},pending:{questions:4,replies:5}}};
@@ -13,7 +14,7 @@ const metricFixture=(days,views=0,clicks=0,previousViews=0)=>{
 const allText=node=>[node.textContent,...node.children.flatMap(allText)].join(' ');
 function browser(kind='community',intercept=()=>undefined){
  const nodes=new Map(),downloads=[],objectUrls=new Map();
- function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){this.children.push(...items);},replaceChildren(...items){this.children=items;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){},click(){if(tag==='a')downloads.push({name:this.download,blob:objectUrls.get(this.href)});},remove(){}};}
+ function element(tag='div'){return {tag,children:[],events:{},value:'',textContent:'',hidden:false,disabled:false,open:false,elements:[],attributes:{},append(...items){for(const item of items){item.parent=this;this.children.push(item);}},replaceChildren(...items){for(const item of this.children)item.parent=null;this.children=[];this.append(...items);},setAttribute(k,v){this.attributes[k]=v;},addEventListener(type,fn){(this.events[type]??=[]).push(fn);},async dispatch(type,event={}){for(const fn of this.events[type]||[])await fn({preventDefault(){},...event});},showModal(){this.open=true;},close(){this.open=false;void this.dispatch('close');},focus(){},reset(){},setCustomValidity(){},reportValidity(){},click(){if(tag==='a')downloads.push({name:this.download,blob:objectUrls.get(this.href)});},remove(){if(this.parent){this.parent.children=this.parent.children.filter(item=>item!==this);this.parent=null;}}};}
  const html=readFileSync(new URL('../dist/'+(kind==='community'?'comunidad':'propietario')+'.html',import.meta.url),'utf8');
  for(const match of html.matchAll(/id="([^"]+)"/g))nodes.set(match[1],element());
  if(kind==='owner')nodes.get('metrics-range').value='30';
@@ -112,4 +113,50 @@ test('moderation loads 20 at a time and announces the total displayed',async()=>
  await b.click('moderation');assert.equal(b.get('topics').children.length,20);assert.equal(b.get('more-topics').textContent,'Más aportaciones');assert.equal(b.get('more-topics').hidden,false);
  await b.click('more-topics');assert.equal(b.get('topics').children.length,40);assert.equal(b.get('more-topics').hidden,true);assert.match(b.get('community-status').textContent,/40 aportaciones/);
  assert.deepEqual(requests,['/api/community/moderation?offset=0','/api/community/moderation?offset=20']);
+});
+test('thread replies use the server page size of 20',async()=>{
+ const requests=[];const b=browser('community',url=>{if(!url.includes('/posts/one?'))return undefined;requests.push(url);const offset=Number(new URL(url,'https://book.example').searchParams.get('offset'));return response({post:post('one'),replies:Array.from({length:20},(_,i)=>({...post('reply-'+(offset+i)),parentId:'one',title:''})),hasMore:offset===0});});await flush();
+ await b.click('topics','Conversación one');await b.click('more-replies');
+ assert.equal(b.get('thread-replies').children.length,40);
+ assert.deepEqual(requests,['/api/community/posts/one?offset=0','/api/community/posts/one?offset=20']);
+});
+test('owner reports announce loading and expose all cursor pages',async()=>{
+ const first=pending(),requests=[];const b=browser('owner',url=>{if(!url.includes('/reports'))return undefined;requests.push(url);const cursor=new URL(url,'https://book.example').searchParams.get('cursor');return cursor==='second'?response({reports:Array.from({length:20},(_,i)=>report('r'+(i+21))),hasMore:true,nextCursor:'third'}):cursor==='third'?response({reports:Array.from({length:11},(_,i)=>report('r'+(i+41))),hasMore:false,nextCursor:null}):first.promise;});
+ assert.match(b.get('reports-status').textContent,/Cargando avisos/);assert.equal(b.get('community-reports').attributes['aria-busy'],'true');
+ first.resolve(response({reports:Array.from({length:20},(_,i)=>report('r'+(i+1))),hasMore:true,nextCursor:'second'}));await flush();
+ await b.click('more-reports');await b.click('more-reports');
+ assert.equal(b.get('community-reports').children.length,51);assert.equal(b.get('more-reports').hidden,true);assert.match(b.get('reports-status').textContent,/51 avisos/);
+ assert.deepEqual(requests,['/api/community/reports','/api/community/reports?cursor=second','/api/community/reports?cursor=third']);
+});
+test('failed report pagination retains rows, draft and retry cursor',async()=>{
+ let reads=0;const b=browser('owner',url=>url.includes('/reports?cursor=next')?(++reads===1?response({error:'Fallo temporal'},503):response({reports:[report('r2')],hasMore:false,nextCursor:null})):url.endsWith('/reports')?response({reports:[report('r1')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ const input=b.get('community-reports').children[0].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input');input.value='Borrador en la primera página';
+ await b.click('more-reports');assert.equal(b.get('community-reports').children.length,1);assert.equal(input.value,'Borrador en la primera página');assert.equal(b.get('more-reports').hidden,false);assert.match(b.get('reports-status').textContent,/Fallo temporal/);
+ await b.click('more-reports');assert.equal(reads,2);assert.equal(b.get('community-reports').children.length,2);assert.equal(input.value,'Borrador en la primera página');
+});
+test('report refresh failure leaves visible rows and resolution drafts intact',async()=>{
+ let reads=0;const b=browser('owner',url=>url.endsWith('/reports')?(++reads===1?response({reports:[report('r1')],hasMore:false,nextCursor:null}):response({error:'Red no disponible'},503)):undefined);await flush();
+ const input=b.get('community-reports').children[0].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input');input.value='Decisión aún sin enviar';
+ await b.click('refresh-reports');assert.equal(b.get('community-reports').children.length,1);assert.equal(input.value,'Decisión aún sin enviar');assert.match(b.get('reports-status').textContent,/Red no disponible/);assert.equal(b.get('community-reports').attributes['aria-busy'],'false');
+});
+test('overlapping cursor pages do not show the same report twice',async()=>{
+ const b=browser('owner',url=>url.includes('/reports?cursor=next')?response({reports:[report('r2'),report('r3')],hasMore:false,nextCursor:null}):url.endsWith('/reports')?response({reports:[report('r1'),report('r2')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ await b.click('more-reports');assert.equal(b.get('community-reports').children.length,3);
+});
+test('losing owner access during report pagination clears private rows and disables loading more',async()=>{
+ const b=browser('owner',url=>url.includes('/reports?cursor=next')?response({error:'Acceso privado'},403):url.endsWith('/reports')?response({reports:[report('r1')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ await b.click('more-reports');assert.equal(b.get('community-reports').children.length,0);assert.equal(b.get('more-reports').hidden,true);assert.equal(b.get('more-reports').disabled,true);assert.match(b.get('reports-status').textContent,/sesión|permisos/);
+});
+test('failed resolution during pagination restores report controls and ignores the stale page',async()=>{
+ const delayed=pending();const b=browser('owner',(url,options)=>url.includes('/reports?cursor=next')?delayed.promise:url.endsWith('/reports/resolve')&&options.method==='POST'?response({error:'Conflicto de moderación'},409):url.endsWith('/reports')?response({reports:[report('r1')],hasMore:true,nextCursor:'next'}):undefined);await flush();
+ const pagination=b.get('more-reports').dispatch('click');await flush();
+ const form=b.get('community-reports').children[0].children.find(el=>el.tag==='form');form.children.find(el=>el.tag==='input').value='Decisión aún sin enviar';await form.dispatch('submit');await flush();
+ assert.equal(b.get('community-reports').attributes['aria-busy'],'false');assert.equal(b.get('more-reports').disabled,false);assert.match(b.get('reports-status').textContent,/Conflicto de moderación/);
+ delayed.resolve(response({reports:[report('stale')],hasMore:false,nextCursor:null}));await pagination;assert.equal(b.get('community-reports').children.length,1);
+});
+test('resolving a report refreshes the queue without losing other resolution drafts',async()=>{
+ let resolved=false;const b=browser('owner',(url,options)=>url.endsWith('/reports/resolve')&&options.method==='POST'?(resolved=true,response({ok:true})):url.endsWith('/reports')?response({reports:resolved?[report('r2')]:[report('r1'),report('r2')],hasMore:false,nextCursor:null}):undefined);await flush();
+ const cards=b.get('community-reports').children,form=cards[0].children.find(el=>el.tag==='form'),otherInput=cards[1].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input');
+ form.children.find(el=>el.tag==='input').value='Decisión final';otherInput.value='Borrador de otro aviso';await form.dispatch('submit');await flush();
+ assert.equal(b.get('community-reports').children.length,1);assert.equal(b.get('community-reports').children[0].children.find(el=>el.tag==='form').children.find(el=>el.tag==='input').value,'Borrador de otro aviso');
 });

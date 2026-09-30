@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,mkdirSync,writeFileSync,copyFileSync,existsSync,readdirSync,rmSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,copyFileSync,existsSync,readdirSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 
@@ -98,5 +98,27 @@ test('a tracked blob with a newline in its path is still scanned',()=>{
   const result=f.run();assert.notEqual(result.status,0);
   assert.deepEqual(readdirSync(path.join(f.base,'copias-codigo')),[]);
   assert.doesNotMatch(result.stderr,/synthetic-private-value/);
+ }finally{f.cleanup();}
+});
+
+test('archive contents and manifest stay pinned to the inspected commit when HEAD moves',()=>{
+ const f=fixture();try{
+  writeFileSync(path.join(f.root,'public.txt'),'inspected version');f.git('add','public.txt');f.git('commit','-qm','inspected');
+  const first=spawnSync('git',['rev-parse','HEAD'],{cwd:f.root,encoding:'utf8'}).stdout.trim();
+  writeFileSync(path.join(f.root,'client_secret.json'),'private content in later commit');f.git('add','client_secret.json');f.git('commit','-qm','later');
+  const later=spawnSync('git',['rev-parse','HEAD'],{cwd:f.root,encoding:'utf8'}).stdout.trim();
+  f.git('update-ref','HEAD',first);
+  const preload=path.join(f.base,'move-head.mjs');
+  writeFileSync(preload,`import child from 'node:child_process';\nimport {syncBuiltinESMExports} from 'node:module';\nconst original=child.execFileSync;let moved=false;\nchild.execFileSync=(file,args,options)=>{const output=original(file,args,options);if(!moved&&file==='git'&&args?.[0]==='ls-tree'&&options?.cwd===process.env.TEST_REPO){moved=true;original('git',['update-ref','HEAD',process.env.TEST_NEXT_SHA],{cwd:options.cwd});}return output;};\nsyncBuiltinESMExports();\n`);
+  const result=spawnSync(process.execPath,['--import',pathToFileURL(preload).href,'scripts/backup-source.mjs'],{cwd:f.root,encoding:'utf8',env:{...process.env,TEST_REPO:f.root,TEST_NEXT_SHA:later}});
+  assert.equal(result.status,0,result.stderr);
+  const manifest=JSON.parse(readFileSync(path.join(f.base,'copias-codigo',date()+'.json'),'utf8'));
+  assert.equal(manifest.files[0].commit,first);
+  assert.equal(manifest.files[0].name,`${date()}-site-${first.slice(0,12)}.zip`);
+  const actual=path.join(f.base,'copias-codigo',manifest.files[0].name),expected=path.join(f.base,'expected.zip');
+  const archive=spawnSync('git',['archive','--format=zip','--output='+expected,first],{cwd:f.root,encoding:'utf8'});
+  assert.equal(archive.status,0,archive.stderr);
+  assert.deepEqual(readFileSync(actual),readFileSync(expected));
+  assert.equal(spawnSync('git',['rev-parse','HEAD'],{cwd:f.root,encoding:'utf8'}).stdout.trim(),later);
  }finally{f.cleanup();}
 });

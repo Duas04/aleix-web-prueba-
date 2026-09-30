@@ -1,6 +1,7 @@
 'use strict';
 const ownerElement=id=>document.getElementById(id);
 let accessVersion=0,accessLost=false,metricsVersion=0,historyVersion=0,reportsVersion=0,teamBusy=false;
+let reportsCursor=null,reportsPages=0,reportsLoading=false;const loadedReportIds=new Set();
 const resolutionDrafts=new Map(),resolutionInputs=new Map();
 let metricsData=null,metricsLoading=false,metricsExporting=false;
 const metricDayMs=86400000,metricPages=[['home','Portada'],['community','Comunidad'],['legal','Información legal']];
@@ -9,7 +10,8 @@ function teamText(tag,value){const element=document.createElement(tag);element.t
 function loseAccess(){
  accessLost=true;accessVersion++;metricsVersion++;historyVersion++;reportsVersion++;
  resolutionDrafts.clear();resolutionInputs.clear();
- for(const id of ['team-members','team-candidate','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+  for(const id of ['team-members','team-candidate','moderation-history','community-reports'])ownerElement(id).replaceChildren();
+  reportsCursor=null;reportsPages=0;reportsLoading=false;loadedReportIds.clear();ownerElement('more-reports').hidden=true;ownerElement('more-reports').disabled=true;ownerElement('community-reports').setAttribute('aria-busy','false');
  clearMetrics();metricsLoading=false;syncMetricsControls();
  ownerElement('team-section').hidden=true;
  for(const id of ['metrics-status','moderation-status','reports-status'])ownerElement(id).textContent='Tu sesión o tus permisos han cambiado. Vuelve a entrar con Google desde la comunidad.';
@@ -132,23 +134,33 @@ function reportCard(report){
  input.id='resolution-'+report.id;label.htmlFor=input.id;input.name='resolution';input.required=true;input.minLength=3;input.maxLength=500;input.value=resolutionDrafts.get(report.id)||'';resolutionInputs.set(report.id,input);
  const submit=teamText('button','Marcar como revisado');submit.className='secondary';submit.type='submit';form.append(label,input,submit);
  form.addEventListener('submit',async e=>{
-  e.preventDefault();if(submit.disabled)return;submit.disabled=true;reportsVersion++;
-  try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});resolutionDrafts.delete(report.id);resolutionInputs.delete(report.id);await loadReports();}
+   e.preventDefault();if(submit.disabled)return;submit.disabled=true;reportsVersion++;reportsLoading=false;ownerElement('community-reports').setAttribute('aria-busy','false');ownerElement('more-reports').disabled=accessLost||!reportsCursor;ownerElement('reports-status').textContent='Guardando decisión…';
+   try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});resolutionDrafts.delete(report.id);resolutionInputs.delete(report.id);card.remove();loadedReportIds.delete(report.id);await loadReports(false,Math.max(1,reportsPages));}
   catch(error){ownerElement('reports-status').textContent=error.message;}finally{submit.disabled=false;}
  });card.append(form);return card;
 }
-async function loadReports(){
- const version=++reportsVersion,status=ownerElement('reports-status');rememberResolutions();
- try{const data=await teamApi('reports');if(version!==reportsVersion)return;rememberResolutions();resolutionInputs.clear();
-  const active=new Set(data.reports.map(report=>report.id));for(const id of resolutionDrafts.keys())if(!active.has(id))resolutionDrafts.delete(id);
-  ownerElement('community-reports').replaceChildren(...data.reports.map(reportCard));
-  status.textContent=data.reports.length?data.reports.length+(data.reports.length===1?' aviso pendiente.':' avisos pendientes en esta tanda.'):'No hay avisos pendientes.';
- }catch(e){if(version===reportsVersion)status.textContent=e.message;}
+async function loadReports(append=false,pagesToLoad=1){
+ if(accessLost||append&&(!reportsCursor||reportsLoading))return;
+ const version=++reportsVersion,status=ownerElement('reports-status'),root=ownerElement('community-reports'),more=ownerElement('more-reports');
+ rememberResolutions();reportsLoading=true;root.setAttribute('aria-busy','true');more.disabled=true;status.textContent=append?'Cargando más avisos…':'Cargando avisos…';
+ try{
+  let cursor=append?reportsCursor:null,pages=0,hasMore=false;const received=[];
+  do{const data=await teamApi('reports'+(cursor?'?cursor='+encodeURIComponent(cursor):''));if(version!==reportsVersion)return;
+   if(!Array.isArray(data.reports))throw Error('No se han podido leer los avisos. Pulsa Actualizar avisos.');
+   received.push(...data.reports);pages++;hasMore=!!data.hasMore;cursor=hasMore&&typeof data.nextCursor==='string'?data.nextCursor:null;
+  }while(!append&&pages<pagesToLoad&&cursor);
+  rememberResolutions();if(!append){resolutionInputs.clear();loadedReportIds.clear();root.replaceChildren();}
+  for(const report of received)if(!loadedReportIds.has(report.id)){loadedReportIds.add(report.id);root.append(reportCard(report));}
+  reportsCursor=cursor;reportsPages=append?reportsPages+pages:pages;more.hidden=!reportsCursor;
+  status.textContent=loadedReportIds.size?loadedReportIds.size+(loadedReportIds.size===1?' aviso pendiente mostrado.':' avisos pendientes mostrados.'):'No hay avisos pendientes.';
+ }catch(e){if(version===reportsVersion)status.textContent=e.message+(append?' Pulsa Más avisos para reintentar.':' Usa Actualizar avisos para reintentar.');}
+ finally{if(version===reportsVersion){reportsLoading=false;root.setAttribute('aria-busy','false');more.disabled=accessLost||!reportsCursor;}}
 }
 ownerElement('refresh-metrics').addEventListener('click',refreshMetrics);
 ownerElement('metrics-range').addEventListener('change',refreshMetrics);
 ownerElement('export-metrics').addEventListener('click',exportMetrics);
 ownerElement('refresh-moderation').addEventListener('click',loadModerationHistory);
-ownerElement('refresh-reports').addEventListener('click',loadReports);
+ownerElement('refresh-reports').addEventListener('click',()=>loadReports());
+ownerElement('more-reports').addEventListener('click',()=>loadReports(true));
 teamApi('me').then(async data=>{if(!accessLost&&data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});
 refreshMetrics();loadModerationHistory();loadReports();
