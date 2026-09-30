@@ -1,0 +1,1 @@
+CREATE INDEX `community_posts_parent_status_created` ON `community_posts` (`parent_id`,`status`,`created_at`,`id`);

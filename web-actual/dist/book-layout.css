@@ -1,0 +1,19 @@
+/* Shared public layout. Historical checkout styling stays in the archive. */
+.shop-section{background:#f4ecdf;border-top:1px solid var(--line);padding-block:80px 64px}
+.shop-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:38px}
+.shop-heading .eyebrow{color:var(--olive);margin-bottom:18px}
+.shop-heading>p{font-size:1rem;line-height:1.8;color:var(--muted);margin:0 0 7px}
+.shop-links{display:flex;flex-wrap:wrap;gap:14px 26px;font-size:.875rem}
+.shop-links a,.legal-links a{text-decoration:underline;text-underline-offset:4px}
+.text-link,.legal-back,.legal-toc a{min-height:44px;display:inline-flex;align-items:center}
+.shop-links a{min-height:44px;display:inline-flex;align-items:center}
+.privacy-actions a{min-height:44px;display:inline-flex;align-items:center}
+.site-footer{display:block}
+.footer-line{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap}
+.footer-line>a:last-child{font-size:.875rem}
+.footer-line a,.legal-links a{display:inline-flex;align-items:center;min-height:44px}
+.legal-links{display:flex;gap:8px 26px;flex-wrap:wrap;margin-top:24px;padding-top:22px;border-top:1px solid var(--line);font-size:.875rem;line-height:1.7;color:var(--muted)}
+.site-footer>.legal-links:first-child{margin-top:0;padding-top:0;border-top:0}
+@media(max-width:800px){.shop-heading{align-items:flex-start;flex-direction:column;gap:20px}}
+@media(max-width:580px){.shop-section{padding-block:55px 45px}.shop-heading{margin-bottom:28px}.shop-links{gap:14px 20px}.footer-line{align-items:flex-start;flex-direction:column;gap:10px}.legal-links{gap:8px 18px}}
+@media print{.site-header nav,.header-cta,.legal-links{display:none!important}}

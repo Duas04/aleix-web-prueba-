@@ -80,5 +80,36 @@ test('CSV does not download if a fresh permission check fails',async()=>{
  await b.click('export-metrics');assert.equal(reads,2);assert.equal(b.downloads.length,0);assert.equal(b.get('export-metrics').disabled,true);assert.equal(b.get('metrics-summary').children.length,0);
 });
 test('moderation of a pending reply can open its original conversation',async()=>{
- const b=browser('community',url=>url.endsWith('/moderation')?response({posts:[{...post('reply'),parentId:'one',title:'',status:'pending'}]}):undefined);await flush();await b.click('moderation');await b.click('topics','Ver conversación original');assert.equal(b.get('thread-title').textContent,'Conversación one');
+ const b=browser('community',url=>url.includes('/moderation?')?response({posts:[{...post('reply'),parentId:'one',title:'',status:'pending'}],hasMore:false}):undefined);await flush();await b.click('moderation');await b.click('topics','Ver conversación original');assert.equal(b.get('thread-title').textContent,'Conversación one');
+});
+test('public conversations remain readable when account lookup fails',async()=>{
+ const b=browser('community',url=>url.endsWith('/me')?response({error:'Cuenta temporalmente inaccesible'},503):undefined);await flush();
+ assert.equal(b.get('topics').children.length,2);
+ assert.match(b.get('login-note').textContent,/Cuenta temporalmente inaccesible/);
+ assert.doesNotMatch(b.get('community-status').textContent,/No se ha podido cargar la comunidad/);
+});
+test('a failed new filter does not leave old conversations under its selected label',async()=>{
+ const delayed=pending();const b=browser('community',url=>url.includes('mine=1')?delayed.promise:url.includes('/posts?')?response({posts:[post('one'),post('two')],hasMore:true}):undefined);await flush();
+ assert.equal(b.get('topics').children.length,2);
+ const loading=b.get('my-topics').dispatch('click');await flush();
+ assert.equal(b.get('topics').children.length,0);assert.equal(b.get('more-topics').hidden,true);
+ delayed.resolve(response({error:'No disponible'},503));await loading;await flush();
+ assert.equal(b.get('topics').children.length,0);assert.match(b.get('community-status').textContent,/No disponible/);
+});
+test('a failed additional page retains the loaded conversations and retry control',async()=>{
+ const b=browser('community',url=>url.includes('offset=20')?response({error:'No disponible'},503):url.includes('/posts?')?response({posts:[post('one'),post('two')],hasMore:true}):undefined);await flush();
+ await b.click('more-topics');assert.equal(b.get('topics').children.length,2);assert.equal(b.get('more-topics').hidden,false);assert.equal(b.get('more-topics').disabled,false);
+ assert.match(b.get('community-status').textContent,/reintentar/);
+});
+test('a failed thread can be refreshed with its requested id and draft intact',async()=>{
+ let reads=0;const b=browser('community',url=>url.includes('/posts/one?')?(++reads===1?response({error:'Fallo temporal'},503):response({post:post('one'),replies:[],hasMore:false})):undefined);await flush();
+ await b.click('topics','Conversación one');assert.match(b.get('thread-title').textContent,/No se ha podido abrir/);
+ b.get('reply-body').value='Borrador conservado';await b.click('refresh-thread');
+ assert.equal(reads,2);assert.equal(b.get('thread-title').textContent,'Conversación one');assert.equal(b.get('reply-body').value,'Borrador conservado');
+});
+test('moderation loads 20 at a time and announces the total displayed',async()=>{
+ const requests=[];const b=browser('community',url=>{if(!url.includes('/moderation?'))return undefined;requests.push(url);const offset=Number(new URL(url,'https://book.example').searchParams.get('offset'));return response({posts:Array.from({length:20},(_,i)=>({...post(String(offset+i)),status:'pending'})),hasMore:offset===0});});await flush();
+ await b.click('moderation');assert.equal(b.get('topics').children.length,20);assert.equal(b.get('more-topics').textContent,'Más aportaciones');assert.equal(b.get('more-topics').hidden,false);
+ await b.click('more-topics');assert.equal(b.get('topics').children.length,40);assert.equal(b.get('more-topics').hidden,true);assert.match(b.get('community-status').textContent,/40 aportaciones/);
+ assert.deepEqual(requests,['/api/community/moderation?offset=0','/api/community/moderation?offset=20']);
 });

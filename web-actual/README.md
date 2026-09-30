@@ -18,7 +18,7 @@ Abrir http://127.0.0.1:4188/. La opción `--owner` abre otra vista en el puerto 
 
 - `worker/site.mjs`: único router publicado, HTTPS, URL canónica, caché, páginas y permisos.
 - `worker/community.mjs`: Google OAuth, sesiones, alias, conversaciones, moderación y límites contra abuso.
-- `worker/metrics.mjs`: contadores agregados voluntarios; clics hacia Amazon y WhatsApp, no ventas confirmadas.
+- `worker/metrics.mjs`: contadores agregados voluntarios de vistas y clics hacia Amazon; no ventas confirmadas.
 - `scripts/build-public.mjs`: compila recursos seleccionados; excluye tienda, demo, devoluciones y panel antiguo. Fuentes e imágenes con huella de contenido y caché duradera.
 - `db/schema.ts` y `drizzle/`: esquema y migraciones aditivas. No editar migraciones ya publicadas.
 - `dist/`: fuentes HTML/CSS/JS, imágenes comprimidas y licencias de las tipografías. Las páginas privadas se sirven a través del Worker, no mediante un alojamiento estático.
@@ -27,9 +27,9 @@ Los archivos de la venta directa y sus pruebas se conservan para archivo y mante
 
 ## Activar Google
 
-En este momento faltan las credenciales del titular; la web indica que la participación está pendiente. En Google Cloud configurar un cliente OAuth de tipo aplicación web, pantalla de consentimiento y origen `https://prueba-aleix.com`, con retorno exacto `https://prueba-aleix.com/auth/google/callback`. Configurar `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (secreto) y `COMMUNITY_ORIGIN` en el alojamiento, nunca en GitHub. El origen ya está preparado en Sites. Volver a desplegar para aplicar cambios y comprobar el acceso real.
+El acceso usa Google OAuth. Para configurar o trasladar el servicio: cliente OAuth de tipo aplicación web, pantalla de consentimiento y origen `https://prueba-aleix.com`, con retorno exacto `https://prueba-aleix.com/auth/google/callback`. `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (secreto) y `COMMUNITY_ORIGIN` se configuran en el alojamiento, nunca en GitHub. Si faltan, la comunidad indica que el acceso no está disponible. Tras cambiar la configuración, desplegar y comprobar el acceso real.
 
-El dueño debe iniciar sesión con la identidad ya autorizada por Sites en `/propietario` y con su Google en `/comunidad`, y pulsar Vincular mi cuenta como dueño. Se fija un único identificador estable en servidor. Iniciar sesión como lector o usar el alias Aleix no concede permisos. La identidad de Sites no se sustituye ni se crea una nueva cuenta de dueño por correo desde el navegador. `ADMIN_OWNER_EMAIL` sigue siendo secreto del alojamiento.
+El dueño accede con Google desde `/propietario`. Su identidad estable debe estar previamente provisionada en `community_owner` de D1; una instalación nueva necesita esa operación administrativa verificada antes de abrir la moderación. No existe una vinculación pública ni se concede el rol por correo, alias o cabeceras de Sites. El principal puede buscar una cuenta que ya haya entrado con Google y conceder o revocar colaboradores desde el panel; los colaboradores pueden moderar y consultar estadísticas, pero no gestionar al equipo.
 
 ## Operación y pendientes
 

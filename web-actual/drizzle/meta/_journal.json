@@ -64,6 +64,13 @@
       "when": 1790778974465,
       "tag": "0008_spicy_mystique",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1790801869125,
+      "tag": "0009_blue_nova",
+      "breakpoints": true
     }
   ]
 }

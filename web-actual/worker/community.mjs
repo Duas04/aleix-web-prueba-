@@ -1,7 +1,7 @@
 
 
 const communityHeaders={'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex','Vary':'Cookie'};
-const communityJson=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:communityHeaders});
+const communityJson=(value,status=200,headers={})=>new Response(JSON.stringify(value),{status,headers:{...communityHeaders,...headers}});
 const communityBytes=value=>new TextEncoder().encode(value);
 const communityBase64=bytes=>btoa(String.fromCharCode(...new Uint8Array(bytes))).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
 const communityRandom=()=>communityBase64(crypto.getRandomValues(new Uint8Array(32)));
@@ -69,6 +69,11 @@ export async function handleCommunity(request,env){
  const url=new URL(request.url),p=url.pathname;
  try{
   if(p.startsWith('/auth/google/'))return request.method==='GET'?await communityOAuth(request,env,url):communityJson({error:'Método no permitido.'},405);
+  if(request.method==='GET'&&(p==='/api/community/posts'||/^\/api\/community\/posts\/[a-zA-Z0-9-]{1,80}$/.test(p))){
+   const ip=request.headers.get('cf-connecting-ip')||'unknown';
+   if(!await communityLimit(env,'read:'+ip,120,60000))return communityJson({error:'Has consultado muchas conversaciones. Espera un minuto y vuelve a intentarlo.'},429,{'Retry-After':'60'});
+   if(p==='/api/community/posts'&&(url.searchParams.get('q')||'').trim()&&!await communityLimit(env,'search:'+ip,30,60000))return communityJson({error:'Has realizado muchas búsquedas. Espera un minuto antes de buscar otra vez.'},429,{'Retry-After':'60'});
+  }
   const user=await communitySession(request,env),configured=communityConfigured(env);
   if(p==='/api/community/me'&&request.method==='GET')return communityJson({loginAvailable:configured,user,canManageOwners:!!user?.principal});
   if(p==='/api/community/team'&&request.method==='GET'){
@@ -79,9 +84,9 @@ export async function handleCommunity(request,env){
   if(p==='/api/community/posts'&&request.method==='GET'){
    const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));const mine=url.searchParams.get('mine')==='1';
    const query=(url.searchParams.get('q')||'').slice(0,120).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-   const search=" AND (?='' OR instr("+communityFold("p.title || ' ' || p.body || ' ' || u.alias")+",?)>0)";
+   const search=query?" AND instr("+communityFold("p.title || ' ' || p.body || ' ' || u.alias")+",?)>0":'';
    const order=url.searchParams.get('sort')==='new'?'p.created_at':'max(p.created_at,coalesce((SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status=\'published\'),p.created_at))';
-   const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?"p.author_id=? AND p.status!='hidden'":"p.status='published'")+search+" ORDER BY "+order+" DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),query,query,offset).all();
+   const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?"p.author_id=? AND p.status!='hidden'":"p.status='published'")+search+" ORDER BY "+order+" DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),...(query?[query]:[]),offset).all();
    return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
   }
   if(p==='/api/community/reports'&&request.method==='GET'){
@@ -97,7 +102,8 @@ export async function handleCommunity(request,env){
   if(p==='/api/community/moderation'&&request.method==='GET'){
 
    if(user?.role!=='owner')return communityJson({error:'Solo el dueño puede moderar.'},403);
-   const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 50").all();return communityJson({posts:rows.results.map(row=>communityPublicPost(row,user))});
+   const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));
+   const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 21 OFFSET ?").bind(offset).all();return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
   }
   const match=/^\/api\/community\/posts\/([a-zA-Z0-9-]{1,80})(?:\/(moderate|delete))?$/.exec(p);
   if(match&&!match[2]&&request.method==='GET'){

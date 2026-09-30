@@ -5,7 +5,7 @@ const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8'
 const assets={};
 // Only approved public resources enter the bundle. A stray export or secret in
 // dist must never become a publicly accessible asset.
-const publicFiles=new Set(['index.html','404.html','acceso-restringido.html','comunidad.html','aviso-legal.html','privacidad.html','cookies.html','condiciones-de-venta.html','normas-comunidad.html','app.js','community.js','owner.js','privacy-controls.js','styles.css','community.css','shop.css','legal.css','site-updates.css','fonts.css','favicon.svg','robots.txt','sitemap.xml']);
+const publicFiles=new Set(['index.html','404.html','acceso-restringido.html','comunidad.html','aviso-legal.html','privacidad.html','cookies.html','condiciones-de-venta.html','normas-comunidad.html','app.js','community.js','owner.js','privacy-controls.js','styles.css','community.css','book-layout.css','legal.css','site-updates.css','fonts.css','favicon.svg','robots.txt','sitemap.xml']);
 const publicAsset=key=>publicFiles.has(key.slice(1))||/^\/assets\/donde-siempre-estuviste-(?:\d+-[a-f0-9]{12}\.webp|social-[a-f0-9]{12}\.jpg)$/.test(key)||/^\/assets\/fonts\/(?:font-[1-7]\.woff2|(?:playfairdisplay|manrope|dmsans)-OFL\.txt)$/.test(key);
 async function walk(dir,prefix=''){for(const ent of await readdir(dir,{withFileTypes:true})){
  if(['server','.openai'].includes(ent.name))continue;

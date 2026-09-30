@@ -9,8 +9,8 @@
 - Comunidad adaptable: alias, temas, respuestas, avisos, moderación previa, insignia Dueño y retirada de aportaciones. No hay mensajes de demostración publicados ni distintivos falsos de compra verificada.
 - Autenticación preparada: Google OAuth con PKCE, state de un uso ligado al navegador, nonce, firma/emisor/audiencia/caducidad comprobados. Sesiones HttpOnly/Secure con hash en D1. Vinculación de dueño solo desde una identidad titular ya autorizada y sesión Google. El correo y el identificador Google nunca se muestran al público.
 - Formularios con validación de tamaños, protección de origen, honeypot y cuotas por cuenta/IP; máximo atómico de cinco aportaciones pendientes por lector. Errores de paginación conservan página y borradores. Los errores de acceso siguen visibles.
-- Analítica propia voluntaria: contadores diarios de vistas y clics Amazon/WhatsApp, retirada de consentimiento, DNT/GPC, retención de 90 días con limpieza al recibir tráfico. No mide ventas ni personas únicas. Estadísticas solo en el área privada.
-- Aviso legal, privacidad, cookies, información de compra externa y normas de comunidad adaptados. Correo/teléfono tocables, acceso a WhatsApp, redes marcadas Próximamente sin inventar perfiles.
+- Analítica propia voluntaria: contadores diarios de vistas y clics hacia Amazon, retirada de consentimiento, DNT/GPC, retención de 90 días con limpieza al recibir tráfico. No mide ventas ni personas únicas. Estadísticas solo en el área privada.
+- Aviso legal, privacidad, cookies, información de compra externa y normas de comunidad adaptados. Correo/teléfono tocables y redes marcadas Próximamente sin inventar perfiles. El titular pidió retirar los botones de contacto por WhatsApp; se conserva la imagen de vista previa al compartir.
 - SEO: títulos/descripciones, Book y WebSite sin ofertas inventadas, canonical, sitemap, robots, favicon y vista previa al compartir. Páginas públicas indexables; controles privados y errores noindex.
 - HTTPS y dominio canónico; redirecciones permanentes de duplicados conocidos. 404 personalizada. La demo devuelve 410; devoluciones redirige a información de Amazon; admin redirige al nuevo espacio privado. Las antiguas API de venta/dev/demo no se incluyen en el Worker.
 - Recursos locales, imágenes responsivas, fuentes comprimidas con nombre versionado, ETag/304 y caché larga para recursos inmutables. Cabeceras CSP, HSTS, no-sniff y no-store para datos privados.
@@ -20,7 +20,7 @@
 
 | Elemento | Situación y siguiente paso |
 | --- | --- |
-| Google para la comunidad | Faltan ID y secreto del cliente Google. Origen de producción configurado; participación bloqueada hasta activarlos. Validar consentimiento de Google y un inicio de sesión real. |
+| Google para la comunidad | La configuración se incorporó posteriormente y el titular comunicó haber iniciado sesión. Esta auditoría usa identidades ficticias y OAuth simulado; no vuelve a comprobar la consola de Google ni una cuenta externa. |
 | Amazon | Falta URL de la ficha. El botón provisional es deliberado. |
 | Search Console / Bing Webmaster | No se ha verificado la propiedad en esas cuentas. Requieren acceso del titular y token/registro DNS emitido por cada servicio. Sitemap preparado; no afirmar que se ha enviado. |
 | Ficha de Google | No crear una ubicación ficticia. Google exige atención presencial para una ficha de empresa; una actividad solo online no cumple ese criterio. Confirmar elegibilidad con el titular. |

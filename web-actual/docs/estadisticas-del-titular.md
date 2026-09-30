@@ -7,6 +7,7 @@ El panel privado `/propietario` muestra la actividad agregada de la web. El acce
 - Periodos: hoy, últimos 7 días y últimos 30 días, incluido hoy.
 - Comparación: el bloque inmediatamente anterior de igual duración. Hoy es un día incompleto; todas las fechas de agrupación están en UTC.
 - Vistas y clics: eventos de quienes aceptaron la analítica. No representan personas únicas. Los clics hacia Amazon no confirman compras.
+- Son señales orientativas: el tráfico automatizado puede alterar los recuentos. Los límites de frecuencia reducen el abuso, pero no certifican que cada evento corresponda a una persona.
 - Relación clics / vistas: clics hacia Amazon divididos entre todas las vistas registradas. Puede superar el 100 % si una persona pulsa varias veces. El cambio de esta relación se expresa en puntos porcentuales; los cambios de los recuentos se expresan en porcentaje.
 - Desglose: portada, comunidad e información legal, las categorías ya existentes. No se añaden identificadores de visitantes ni nuevas etiquetas de seguimiento.
 - Comunidad: preguntas y respuestas creadas en el periodo que están publicadas al consultar. Una aprobación posterior puede modificar el recuento de un periodo anterior. Los pendientes representan la cola actual completa, sin filtro de fechas.

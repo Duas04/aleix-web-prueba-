@@ -71,7 +71,7 @@ export const communityPosts = sqliteTable('community_posts', {
   id: text('id').primaryKey(), parentId: text('parent_id'), authorId: text('author_id').notNull().references(()=>communityUsers.id),
   title: text('title').notNull().default(''), body: text('body').notNull(), status: text('status').notNull().default('pending'),
   createdAt: integer('created_at').notNull(), version: integer('version').notNull().default(0),
-},t=>[index('community_posts_parent_created').on(t.parentId,t.createdAt,t.id),index('community_posts_status').on(t.status,t.createdAt),check('community_post_status',sql`${t.status} IN ('pending','published','hidden')`)]);
+},t=>[index('community_posts_parent_created').on(t.parentId,t.createdAt,t.id),index('community_posts_parent_status_created').on(t.parentId,t.status,t.createdAt,t.id),index('community_posts_status').on(t.status,t.createdAt),check('community_post_status',sql`${t.status} IN ('pending','published','hidden')`)]);
 export const communityLimits = sqliteTable('community_limits', {
   key: text('key').primaryKey(), count: integer('count').notNull(), expiresAt: integer('expires_at').notNull(),
 },t=>[index('community_limit_expiry').on(t.expiresAt)]);
