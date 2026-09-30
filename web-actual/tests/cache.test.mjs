@@ -59,7 +59,7 @@ test('built public assets have content-derived validators, including binary font
   const fontPath=new URL(fontUrl,'https://book.example/fonts.css').pathname;
   assert.match(fontPath,/-[a-f0-9]{12}\.woff2$/);
   assert.match((await builtWorker.fetch(request(fontPath),{})).headers.get('cache-control'),/immutable/);
-  for(const path of ['/','/app.js',fontPath]) {
+  for(const path of ['/fonts.css','/app.js',fontPath]) {
     const first=await builtWorker.fetch(request(path),{});
     assert.equal(first.status,200);
     const bytes=Buffer.from(await first.arrayBuffer());

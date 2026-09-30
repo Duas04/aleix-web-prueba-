@@ -33,9 +33,13 @@ export function createPublicWorker(assets){return {async fetch(request,env){
 }};}
 function siteAsset(asset,request,privatePage=false,status=200){
  if(!asset)return siteJson({error:'No encontrado.'},404);
+ const isHtml=asset.type.includes('text/html');
  const headers={...siteSecurityHeaders,'Content-Type':asset.type,...(privatePage?sitePrivateHeaders:{'Cache-Control':asset.immutable?'public, max-age=31536000, immutable':'public, max-age=0, must-revalidate'})};
+ // The hosting edge adds its own security script using the CSP nonce. Never
+ // cache or revalidate HTML with a nonce from an earlier response.
+ if(isHtml)headers['Cache-Control']=privatePage?'private, no-store':'no-store';
  if(status!==200){headers['Cache-Control']='no-store';headers['X-Robots-Tag']='noindex, nofollow';}
- if(!privatePage&&status===200&&asset.etag){headers.ETag=asset.etag;const tag=asset.etag.replace(/^W\//,'');if(request.headers.get('if-none-match')?.split(',').some(v=>v.trim()==='*'||v.trim().replace(/^W\//,'')===tag))return new Response(null,{status:304,headers});}
- if(asset.type.includes('text/html'))headers['Content-Security-Policy']="default-src 'self'; script-src 'self' 'sha256-"+asset.jsonLdHash+"'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";
+ if(!privatePage&&!isHtml&&status===200&&asset.etag){headers.ETag=asset.etag;const tag=asset.etag.replace(/^W\//,'');if(request.headers.get('if-none-match')?.split(',').some(v=>v.trim()==='*'||v.trim().replace(/^W\//,'')===tag))return new Response(null,{status:304,headers});}
+ if(isHtml){const nonce=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));headers['Content-Security-Policy']="default-src 'self'; script-src 'self' 'nonce-"+nonce+"' 'sha256-"+asset.jsonLdHash+"'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self' https://chatgpt.com https://*.chatgpt.com";}
  return new Response(request.method==='HEAD'?null:Uint8Array.from(atob(asset.data),c=>c.charCodeAt(0)),{status,headers});
 }

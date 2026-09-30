@@ -11,3 +11,9 @@ test('health detects database failure without exposing internal errors',async()=
  const ready=await worker.fetch(new Request('https://book.example/health'),{DB:localDatabase()});assert.equal(ready.status,200);assert.deepEqual(await ready.json(),{ok:true});
  const failed=await worker.fetch(new Request('https://book.example/health'),{DB:{prepare(){throw Error('private database details');}}});assert.equal(failed.status,503);assert.match(failed.headers.get('cache-control'),/no-store/);assert.doesNotMatch(await failed.text(),/private database/);
 });
+
+test('HTML uses a fresh security nonce without accepting arbitrary inline scripts or stale validators',async()=>{
+ const call=()=>worker.fetch(new Request('https://book.example/',{headers:{'If-None-Match':'*'}}),{});
+ const a=await call(),b=await call();for(const r of [a,b]){assert.equal(r.status,200);assert.equal(r.headers.get('etag'),null);assert.match(r.headers.get('cache-control'),/no-store/);assert.doesNotMatch(r.headers.get('content-security-policy'),/unsafe-inline|unsafe-eval/);}
+ const nonce=r=>r.headers.get('content-security-policy').match(/'nonce-([^']+)'/)[1];assert.equal(Buffer.from(nonce(a),'base64').length,18);assert.notEqual(nonce(a),nonce(b));
+});

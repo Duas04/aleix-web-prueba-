@@ -48,7 +48,7 @@ GitHub mantiene `presentacion/` y `web/` como versiones históricas. `web-actual
 
 ### Resultado de la comprobación local
 
-- 154 pruebas automatizadas aprobadas, incluidas las de privacidad, seguridad, OAuth simulado y rutas activas.
+- 155 pruebas automatizadas aprobadas, incluidas las de privacidad, seguridad, OAuth simulado y rutas activas.
 - Edge: portada, comunidad y privacidad sin desbordamiento en anchos 320, 390, 768 y 1440 px. Axe (WCAG 2 A/AA y 2.1 AA) sin incidencias detectadas en esas tres páginas a 1440 px. Esto no sustituye una auditoría manual completa.
 - Publicación/respuesta y conservación del borrador tras error comprobados con identidad ficticia en base local separada.
 - Navegación adicional revisada en el navegador integrado de Codex (Chromium). Se intentó Firefox con Playwright, pero Windows no permitió iniciar su ejecutable; Firefox y Safari quedan sin verificar.
@@ -64,3 +64,9 @@ El dominio principal tiene SSL activo. Se ha solicitado el alias `www.prueba-ale
 | TXT | _cf-custom-hostname.www | 681f3b72-ce18-41ad-a0f5-cdd8c29947d0 |
 
 Si existe un registro A de www, se sustituye por ese CNAME; los TXT anteriores son datos de validación del dominio, no contraseñas. Tras guardarlos, comprobar el estado del alias y SSL en Sites. El dominio principal funciona independientemente de este alias.
+
+### Compatibilidad de seguridad del alojamiento
+
+La comprobación publicada detectó que Cloudflare añade su script de protección contra bots después del Worker. Se incorpora un nonce CSP aleatorio por respuesta para que Cloudflare pueda autorizar únicamente su inyección documentada. No se usa unsafe-inline ni unsafe-eval. El HTML no se reutiliza mediante caché o respuestas 304; fuentes, imágenes y recursos estáticos conservan su caché. Referencia: https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/#if-you-have-a-content-security-policy-csp.
+
+La política de cookies identifica también la comprobación de seguridad de Cloudflare y su posible cookie técnica cf_clearance, sin inventar una duración que depende del proveedor.

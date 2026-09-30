@@ -22,7 +22,7 @@ test('sitemap contains the canonical public page and robots lets noindex pages b
  const demo=await call('/propietario');assert.match(demo.headers.get('x-robots-tag'),/noindex/);
  assert.match(demo.headers.get('cache-control'),/no-store/);assert.equal(demo.headers.get('etag'),null);
  for(const path of ['/comunidad','/privacidad','/condiciones-de-venta']){
-  const response=await call(path,{'if-none-match':'*'});assert.equal(response.status,304);assert.equal(response.headers.get('x-robots-tag'),null);
+  const response=await call(path,{'if-none-match':'*'});assert.equal(response.status,200);assert.equal(response.headers.get('x-robots-tag'),null);assert.match(response.headers.get('cache-control'),/no-store/);
  }
 });
 test('only known duplicate routes redirect, preserving queries and private access',async()=>{
