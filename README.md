@@ -1,10 +1,10 @@
 # Donde siempre estuviste · Aleix
 
-Código de la web del libro, con las versiones anteriores conservadas. El nombre Fumada XXL era provisional. Fuente activa: `cf0952aa37b88af773fd590acc40222f63fe8a5b`, 30 de septiembre de 2026.
+Código de la web del libro, con las versiones anteriores conservadas. El nombre Fumada XXL era provisional. Fuente activa: `db347e1448873192f99283c7a68faaa19f27ced3`, 30 de septiembre de 2026.
 
 | Carpeta | Estado | Contenido |
 | --- | --- | --- |
-| [web-actual](web-actual/) | Actual | Presentación ocre, enlace provisional a Amazon, comunidad Google preparada y zona privada de moderación/estadísticas. |
+| [web-actual](web-actual/) | Actual | Presentación ocre, enlace provisional a Amazon, comunidad con Google, gestión de dueños, avisos privados y moderación/estadísticas. |
 | [web](web/) | Archivo | Versión anterior de venta directa, carrito, pedidos y devoluciones. No se publica ni acepta cobros. |
 | [presentacion](presentacion/) | Archivo | Demostración con pedidos, reembolsos y direcciones ficticias. Solo para ejecutar localmente. |
 
@@ -25,7 +25,7 @@ Abrir http://127.0.0.1:4188/. `node scripts/preview-public.mjs --owner` abre una
 
 ## Pendientes reales
 
-Falta la ficha final de Amazon y configurar las credenciales Google para activar la participación. Search Console, Bing, redes sociales y el alias www requieren verificación o datos del titular. La copia de código y vigilancia local no sustituyen una copia restaurable de la base D1.
+Falta la ficha final de Amazon. Google ya está configurado; su modo de publicación en Google Cloud puede limitar qué usuarios entran. Search Console, Bing, redes sociales y el alias www requieren verificación o datos del titular. La copia de código y vigilancia local no sustituyen una copia restaurable de la base D1.
 
 Consulta [revisión y checklist](web-actual/docs/amazon-comunidad-2026-09-30.md) para las comprobaciones realizadas y las instrucciones de DNS. El código de acceso bloquea los permisos en servidor y no confía en alias ni roles del navegador.
 

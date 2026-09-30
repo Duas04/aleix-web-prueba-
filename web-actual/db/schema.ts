@@ -64,6 +64,7 @@ export const communitySessions = sqliteTable('community_sessions', {
   expiresAt: integer('expires_at').notNull(),
 },t=>[index('community_session_expiry').on(t.expiresAt)]);
 export const communityOauth = sqliteTable('community_oauth', {
+  returnPath: text('return_path').notNull().default('/comunidad'),
   stateHash: text('state_hash').primaryKey(), verifier: text('verifier').notNull(), nonce: text('nonce').notNull(), expiresAt: integer('expires_at').notNull(),
 },t=>[index('community_oauth_expiry').on(t.expiresAt)]);
 export const communityPosts = sqliteTable('community_posts', {
@@ -81,3 +82,18 @@ export const communityModeration = sqliteTable('community_moderation', {
 export const siteMetrics = sqliteTable('site_metrics', {
   day: text('day').notNull(), event: text('event').notNull(), page: text('page').notNull(), count: integer('count').notNull().default(0),
 },t=>[primaryKey({columns:[t.day,t.event,t.page]})]);
+export const communityCoowners = sqliteTable('community_coowners', {
+ userId: text('user_id').primaryKey().references(()=>communityUsers.id),
+ grantedBy: text('granted_by').notNull().references(()=>communityUsers.id),
+ createdAt: integer('created_at').notNull(),
+});
+export const communityRoleEvents = sqliteTable('community_role_events', {
+ id: text('id').primaryKey(), actorId: text('actor_id').notNull(), targetId: text('target_id').notNull(),
+ action: text('action').notNull(), createdAt: integer('created_at').notNull(),
+});
+export const communityReports = sqliteTable('community_reports', {
+ id: text('id').primaryKey(), postId: text('post_id').notNull().references(()=>communityPosts.id),
+ reporterId: text('reporter_id').notNull().references(()=>communityUsers.id),
+ reason: text('reason').notNull(), createdAt: integer('created_at').notNull(),
+ resolvedAt: integer('resolved_at'), resolvedBy: text('resolved_by'), resolution: text('resolution').notNull().default(''),
+},t=>[index('community_reports_pending').on(t.resolvedAt,t.createdAt)]);

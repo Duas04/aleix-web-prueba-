@@ -1,5 +1,4 @@
-import {authorizeOwner} from './database.mjs';
-import {handleCommunity,communityIsOwner} from './community.mjs';
+import {handleCommunity,communitySession} from './community.mjs';
 import {handleMetrics} from './metrics.mjs';
 const sitePrivateHeaders={'Cache-Control':'private, no-store','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer'};
 const siteSecurityHeaders={'X-Content-Type-Options':'nosniff','Strict-Transport-Security':'max-age=31536000','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()'};
@@ -16,7 +15,7 @@ export function createPublicWorker(assets){return {async fetch(request,env){
   if(path.startsWith('/api/'))return siteJson({error:'No encontrado.'},404);
   if(!['GET','HEAD'].includes(request.method))return siteJson({error:'Método no permitido.'},405);
   if(path==='/propietario'){
-   const allowed=await authorizeOwner(request,env);if(allowed!==200&&!await communityIsOwner(request,env)){if(allowed!==401)return siteJson({error:'Solo la cuenta titular puede acceder.'},403);const redirect=siteRedirect('/signin-with-chatgpt?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}
+   const user=await communitySession(request,env);if(!user){const redirect=siteRedirect('/auth/google/start?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}if(user.role!=='owner')return siteJson({error:'Tu cuenta de Google no tiene permisos de dueño. Vuelve a la comunidad para cambiar de cuenta.'},403);
    return siteAsset(assets['@owner'],request,true);
   }
   if(path==='/admin'||path==='/admin/')return siteRedirect('/propietario');

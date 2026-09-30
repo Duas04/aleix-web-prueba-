@@ -4,7 +4,7 @@
  try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&['essential','analytics'].includes(saved.choice)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<lifetime)choice=saved.choice;}catch{}
  function node(tag,value){const el=document.createElement(tag);el.textContent=value;return el;}
  const panel=document.createElement('section');panel.className='privacy-panel';panel.setAttribute('aria-label','Preferencias de privacidad');panel.hidden=!!choice;
- panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon y WhatsApp, sin perfiles personales.'));
+ panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon, sin perfiles personales.'));
  const actions=document.createElement('div');actions.className='privacy-actions';
  for(const [label,value]of [['Solo necesarias','essential'],['Aceptar analítica','analytics']]){const button=node('button',label);button.type='button';button.className='privacy-choice';button.addEventListener('click',()=>{choice=value;try{localStorage.setItem(key,JSON.stringify({choice:value,at:Date.now()}));}catch{}panel.hidden=true;track('view');settings.focus({preventScroll:true});});actions.append(button);}
  const more=node('a','Ver política de cookies');more.href='/cookies';actions.append(more);panel.append(actions);document.body.append(panel);

@@ -1,4 +1,4 @@
-import {authorizeOwner} from './database.mjs';
+
 
 const communityHeaders={'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex','Vary':'Cookie'};
 const communityJson=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:communityHeaders});
@@ -11,7 +11,7 @@ function communityReadCookie(request,name){return request.headers.get('cookie')?
 function communityConfigured(env){try{return !!env.GOOGLE_CLIENT_ID&&!!env.GOOGLE_CLIENT_SECRET&&new URL(env.COMMUNITY_ORIGIN).origin===env.COMMUNITY_ORIGIN&&env.COMMUNITY_ORIGIN.startsWith('https://');}catch{return false;}}
 function communityRedirect(location,cookie){return new Response(null,{status:303,headers:{...communityHeaders,Location:location,...(cookie?{'Set-Cookie':cookie}:{})}});}
 async function communityLimit(env,key,max,windowMs){const now=Date.now();const hash=await communityHash(key);const row=await env.DB.prepare('INSERT INTO community_limits(key,count,expires_at) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN expires_at<=? THEN 1 ELSE count+1 END, expires_at=CASE WHEN expires_at<=? THEN ? ELSE expires_at END RETURNING count').bind(hash,now+windowMs,now,now,now+windowMs).first();await env.DB.prepare('DELETE FROM community_limits WHERE expires_at<?').bind(now-86400000).run();return row.count<=max;}
-async function communitySession(request,env){const token=communityReadCookie(request,'__Host-community');if(!/^[A-Za-z0-9_-]{43}$/.test(token))return null;return env.DB.prepare("SELECT u.id,u.alias,u.accepted_at,CASE WHEN o.user_id=u.id THEN 'owner' ELSE 'reader' END role FROM community_sessions s JOIN community_users u ON u.id=s.user_id LEFT JOIN community_owner o ON o.slot=1 WHERE s.token_hash=? AND s.expires_at>?").bind(await communityHash(token),Date.now()).first();}
+export async function communitySession(request,env){const token=communityReadCookie(request,'__Host-community');if(!/^[A-Za-z0-9_-]{43}$/.test(token))return null;return env.DB.prepare("SELECT u.id,u.alias,u.accepted_at,CASE WHEN o.user_id=u.id THEN 1 ELSE 0 END principal,CASE WHEN o.user_id=u.id OR EXISTS(SELECT 1 FROM community_coowners c WHERE c.user_id=u.id) THEN 'owner' ELSE 'reader' END role FROM community_sessions s JOIN community_users u ON u.id=s.user_id LEFT JOIN community_owner o ON o.slot=1 WHERE s.token_hash=? AND s.expires_at>?").bind(await communityHash(token),Date.now()).first();}
 function communityDecode(value){return Uint8Array.from(atob(value.replaceAll('-','+').replaceAll('_','/')),c=>c.charCodeAt(0));}
 export async function communityVerifyIdToken(jwt,client,nonce,fetcher=fetch){
  if(typeof jwt!=='string'||jwt.length>16000)throw Error('Invalid token');const parts=jwt.split('.');if(parts.length!==3)throw Error('Invalid token');
@@ -33,7 +33,7 @@ async function communityOAuth(request,env,url){
   if(!await communityLimit(env,'login:'+request.headers.get('cf-connecting-ip'),10,900000))return communityRedirect('/comunidad?acceso=limite');
   const state=communityRandom(),verifier=communityRandom(),nonce=communityRandom();
   await env.DB.prepare('DELETE FROM community_oauth WHERE expires_at<=?').bind(Date.now()).run();
-  await env.DB.prepare('INSERT INTO community_oauth VALUES(?,?,?,?)').bind(await communityHash(state),verifier,nonce,Date.now()+600000).run();
+  await env.DB.prepare('INSERT INTO community_oauth(state_hash,verifier,nonce,expires_at,return_path) VALUES(?,?,?,?,?)').bind(await communityHash(state),verifier,nonce,Date.now()+600000,url.searchParams.get('return_to')==='/propietario'?'/propietario':'/comunidad').run();
   const login=new URL('https://accounts.google.com/o/oauth2/v2/auth');login.search=new URLSearchParams({client_id:env.GOOGLE_CLIENT_ID,redirect_uri:callback,response_type:'code',scope:'openid email',state,nonce,code_challenge:await communityHash(verifier),code_challenge_method:'S256',prompt:'select_account'}).toString();
   return communityRedirect(login.href,communityCookie('__Host-community-oauth',state,600));
  }
@@ -52,7 +52,7 @@ async function communityOAuth(request,env,url){
   const token=communityRandom(),old=communityReadCookie(request,'__Host-community');
   await env.DB.prepare('DELETE FROM community_sessions WHERE token_hash=? OR expires_at<=?').bind(await communityHash(old),Date.now()).run();
   await env.DB.prepare('INSERT INTO community_sessions VALUES(?,?,?)').bind(await communityHash(token),user.id,Date.now()+7*86400000).run();
-  const result=communityRedirect('/comunidad',communityCookie('__Host-community',token,604800));result.headers.append('Set-Cookie',communityCookie('__Host-community-oauth','',0));return result;
+  const result=communityRedirect(transaction.return_path==='/propietario'?'/propietario':'/comunidad',communityCookie('__Host-community',token,604800));result.headers.append('Set-Cookie',communityCookie('__Host-community-oauth','',0));return result;
  }catch{return failed();}
 }
 async function communityBody(request){
@@ -60,22 +60,42 @@ async function communityBody(request){
  const reader=request.body?.getReader();if(!reader)return null;let size=0,text='';const decoder=new TextDecoder();try{while(true){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>20000){await reader.cancel();return null;}text+=decoder.decode(part.value,{stream:true});}const body=JSON.parse(text+decoder.decode());return body&&typeof body==='object'&&!Array.isArray(body)?body:null;}catch{return null;}finally{reader.releaseLock();}
 }
 const communityValid=(text,min,max)=>typeof text==='string'&&text.trim().length>=min&&text.length<=max&&!/[\x00-\x08\x0b-\x1f\x7f]/.test(text);
-const communitySelect="SELECT p.id,p.parent_id parentId,p.title,p.body,p.status,p.created_at createdAt,p.version,u.alias author,CASE WHEN o.user_id=p.author_id THEN 'owner' ELSE 'reader' END role,p.author_id authorId FROM community_posts p JOIN community_users u ON u.id=p.author_id LEFT JOIN community_owner o ON o.slot=1";
+const communitySelect="SELECT p.id,p.parent_id parentId,p.title,p.body,p.status,p.created_at createdAt,p.version,(SELECT count(*) FROM community_posts r WHERE r.parent_id=p.id AND r.status='published') replyCount,(SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status='published') lastReplyAt,u.alias author,CASE WHEN o.user_id=p.author_id OR EXISTS(SELECT 1 FROM community_coowners c WHERE c.user_id=p.author_id) THEN 'owner' ELSE 'reader' END role,p.author_id authorId FROM community_posts p JOIN community_users u ON u.id=p.author_id LEFT JOIN community_owner o ON o.slot=1";
 function communityPublicPost(post,user){const {authorId,...safe}=post;return {...safe,mine:authorId===user?.id};}
 async function communityReadPost(env,id){return env.DB.prepare(communitySelect+' WHERE p.id=?').bind(id).first();}
 function communityVisible(post,user){return post&&(post.status==='published'||user?.role==='owner'||post.authorId===user?.id);}
+function communityFold(column){let expression=column;for(const [from,to] of Object.entries({'Á':'a','á':'a','É':'e','é':'e','Í':'i','í':'i','Ó':'o','ó':'o','Ú':'u','ú':'u','Ü':'u','ü':'u','Ñ':'n','ñ':'n'}))expression="replace("+expression+",'"+from+"','"+to+"')";return 'lower('+expression+')';}
 export async function handleCommunity(request,env){
  const url=new URL(request.url),p=url.pathname;
  try{
   if(p.startsWith('/auth/google/'))return request.method==='GET'?await communityOAuth(request,env,url):communityJson({error:'Método no permitido.'},405);
   const user=await communitySession(request,env),configured=communityConfigured(env);
-  if(p==='/api/community/me'&&request.method==='GET')return communityJson({loginAvailable:configured,user,canLinkOwner:!!user&&await authorizeOwner(request,env)===200});
+  if(p==='/api/community/me'&&request.method==='GET')return communityJson({loginAvailable:configured,user,canManageOwners:!!user?.principal});
+  if(p==='/api/community/team'&&request.method==='GET'){
+   if(!user?.principal)return communityJson({error:'Solo el dueño principal puede gestionar permisos.'},403);
+   const rows=await env.DB.prepare("SELECT u.id,u.alias,u.email,CASE WHEN o.user_id=u.id THEN 1 ELSE 0 END principal FROM community_users u LEFT JOIN community_owner o ON o.slot=1 WHERE o.user_id=u.id OR EXISTS(SELECT 1 FROM community_coowners c WHERE c.user_id=u.id) ORDER BY principal DESC,u.alias,u.id").all();
+   return communityJson({members:rows.results});
+  }
   if(p==='/api/community/posts'&&request.method==='GET'){
    const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));const mine=url.searchParams.get('mine')==='1';
-   const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?'p.author_id=?':"p.status='published'")+" ORDER BY p.created_at DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),offset).all();
+   const query=(url.searchParams.get('q')||'').slice(0,120).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+   const search=" AND (?='' OR instr("+communityFold("p.title || ' ' || p.body || ' ' || u.alias")+",?)>0)";
+   const order=url.searchParams.get('sort')==='new'?'p.created_at':'max(p.created_at,coalesce((SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status=\'published\'),p.created_at))';
+   const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?"p.author_id=? AND p.status!='hidden'":"p.status='published'")+search+" ORDER BY "+order+" DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),query,query,offset).all();
    return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
   }
+  if(p==='/api/community/reports'&&request.method==='GET'){
+   if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
+   const rows=await env.DB.prepare("SELECT r.id,r.reason,r.created_at createdAt,p.id postId,coalesce(p.parent_id,p.id) threadId,p.title,p.body,p.status,p.version,u.alias reporter FROM community_reports r JOIN community_posts p ON p.id=r.post_id JOIN community_users u ON u.id=r.reporter_id WHERE r.resolved_at IS NULL ORDER BY r.created_at,r.id LIMIT 50").all();
+   return communityJson({reports:rows.results});
+  }
+  if(p==='/api/community/moderation-history'&&request.method==='GET'){
+   if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
+   const rows=await env.DB.prepare('SELECT m.post_id postId,m.action,m.reason,m.created_at createdAt,u.alias actor FROM community_moderation m LEFT JOIN community_users u ON u.id=m.actor_id ORDER BY m.created_at DESC,m.id DESC LIMIT 50').all();
+   return communityJson({events:rows.results});
+  }
   if(p==='/api/community/moderation'&&request.method==='GET'){
+
    if(user?.role!=='owner')return communityJson({error:'Solo el dueño puede moderar.'},403);
    const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 50").all();return communityJson({posts:rows.results.map(row=>communityPublicPost(row,user))});
   }
@@ -92,13 +112,44 @@ export async function handleCommunity(request,env){
   if(url.origin!==env.COMMUNITY_ORIGIN||request.headers.get('origin')!==url.origin||request.headers.get('x-community-action')!=='write')return communityJson({error:'Solicitud no permitida.'},403);
   const body=await communityBody(request);if(!body)return communityJson({error:'Datos no válidos o demasiado grandes.'},400);
   if(p==='/api/community/logout'){await env.DB.prepare('DELETE FROM community_sessions WHERE token_hash=?').bind(await communityHash(communityReadCookie(request,'__Host-community'))).run();const response=communityJson({ok:true});response.headers.set('Set-Cookie',communityCookie('__Host-community','',0));return response;}
-  if(p==='/api/community/owner'){
-   if(await authorizeOwner(request,env)!==200)return communityJson({error:'Vincula la cuenta desde la sesión privada del titular.'},403);
-   await env.DB.prepare('INSERT INTO community_owner VALUES(1,?) ON CONFLICT(slot) DO NOTHING').bind(user.id).run();
-   const owner=await env.DB.prepare('SELECT user_id FROM community_owner WHERE slot=1').first();return owner.user_id===user.id?communityJson({ok:true}):communityJson({error:'Ya existe una cuenta de dueño vinculada.'},409);
-  }
+  if(p==='/api/community/owner')return communityJson({error:'La vinculación inicial ya no está disponible.'},410);
   if(!await communityLimit(env,'write:'+user.id,30,3600000))return communityJson({error:'Has enviado muchas acciones. Inténtalo más tarde.'},429);
+  if(p.startsWith('/api/community/team/')){
+   if(!user.principal)return communityJson({error:'Solo el dueño principal puede gestionar permisos.'},403);
+   if(p==='/api/community/team/lookup'){
+    if(typeof body.email!=='string'||body.email.length>320)return communityJson({error:'Indica un correo válido.'},400);
+    const rows=await env.DB.prepare('SELECT id,alias,email FROM community_users WHERE lower(email)=lower(?) LIMIT 2').bind(body.email.trim()).all();
+    if(rows.results.length!==1)return communityJson({error:'No se encuentra una única cuenta. Esa persona debe entrar primero con Google.'},404);
+    return communityJson({member:rows.results[0]});
+   }
+   if(!['/api/community/team/grant','/api/community/team/revoke'].includes(p))return communityJson({error:'No encontrado.'},404);
+   if(typeof body.userId!=='string'||typeof body.email!=='string'||body.confirmed!==true)return communityJson({error:'Confirma la cuenta y el cambio de permisos.'},400);
+   if(body.userId===user.id)return communityJson({error:'La cuenta principal está protegida.'},409);
+   const target=await env.DB.prepare('SELECT id FROM community_users WHERE id=? AND email=?').bind(body.userId,body.email).first();
+   if(!target)return communityJson({error:'La cuenta cambió. Vuelve a buscarla.'},409);
+   const grant=p.endsWith('/grant');
+   const results=await env.DB.batch([
+    grant?env.DB.prepare('INSERT INTO community_coowners(user_id,granted_by,created_at) VALUES(?,?,?) ON CONFLICT(user_id) DO NOTHING RETURNING user_id').bind(target.id,user.id,Date.now()):env.DB.prepare('DELETE FROM community_coowners WHERE user_id=? RETURNING user_id').bind(target.id),
+    env.DB.prepare('INSERT INTO community_role_events(id,actor_id,target_id,action,created_at) SELECT ?,?,?,?,? WHERE changes()=1').bind(crypto.randomUUID(),user.id,target.id,grant?'grant':'revoke',Date.now())
+   ]);
+   return communityJson({ok:true,changed:!!results[0].results?.length});
+  }
+  if(p==='/api/community/reports'){
+   if(!communityValid(body.reason,10,1000)||typeof body.postId!=='string'||body.postId.length>80)return communityJson({error:'Describe el problema entre 10 y 1000 caracteres.'},400);
+   const post=await communityReadPost(env,body.postId);if(!post||post.status!=='published')return communityJson({error:'La publicación no está disponible.'},404);
+   if(post.parentId){const parent=await communityReadPost(env,post.parentId);if(!parent||parent.status!=='published')return communityJson({error:'La conversación no está disponible.'},404);}
+   if(!await communityLimit(env,'reports:'+user.id,5,3600000))return communityJson({error:'Has enviado varios avisos. Espera una hora antes de enviar otro.'},429);
+   await env.DB.prepare('INSERT INTO community_reports(id,post_id,reporter_id,reason,created_at) SELECT ?,?,?,?,? WHERE NOT EXISTS(SELECT 1 FROM community_reports WHERE post_id=? AND reporter_id=? AND resolved_at IS NULL)').bind(crypto.randomUUID(),post.id,user.id,body.reason.trim(),Date.now(),post.id,user.id).run();
+   return communityJson({ok:true},201);
+  }
+  if(p==='/api/community/reports/resolve'){
+   if(user.role!=='owner')return communityJson({error:'Acceso privado.'},403);
+   if(typeof body.id!=='string'||!communityValid(body.resolution,3,500))return communityJson({error:'Explica la decisión para cerrar el aviso.'},400);
+   const row=await env.DB.prepare('UPDATE community_reports SET resolved_at=?,resolved_by=?,resolution=? WHERE id=? AND resolved_at IS NULL RETURNING id').bind(Date.now(),user.id,body.resolution.trim(),body.id).first();
+   return row?communityJson({ok:true}):communityJson({error:'Este aviso ya se ha cerrado. Actualiza la lista.'},409);
+  }
   if(p==='/api/community/profile'){
+
    if(!communityValid(body.alias,2,40)||body.accepted!==true)return communityJson({error:'Elige un nombre público y acepta las normas de participación.'},400);
    await env.DB.prepare('UPDATE community_users SET alias=?,accepted_at=? WHERE id=?').bind(body.alias.trim(),Date.now(),user.id).run();return communityJson({ok:true});
   }

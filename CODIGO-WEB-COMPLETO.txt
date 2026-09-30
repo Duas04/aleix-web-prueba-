@@ -1,6 +1,6 @@
 DONDE SIEMPRE ESTUVISTE — CÓDIGO DE LA WEB
 
-Código actual de web-actual/. Fuente publicada: cf0952aa37b88af773fd590acc40222f63fe8a5b.
+Código actual de web-actual/. Fuente publicada: db347e1448873192f99283c7a68faaa19f27ced3.
 El build activo es scripts/build-public.mjs; algunos módulos y pruebas históricos se conservan como archivo y no se sirven al público.
 Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene credenciales ni bases de datos de personas.
 
@@ -63,59 +63,65 @@ Este TXT es para leer o adjuntar a otra IA: no ejecuta la web. No contiene crede
 56. web-actual/dist/styles.css
 57. web-actual/dist/tienda-demo.html
 58. web-actual/docs/amazon-comunidad-2026-09-30.md
-59. web-actual/drizzle.config.ts
-60. web-actual/drizzle/0000_cultured_mathemanic.sql
-61. web-actual/drizzle/0001_lonely_black_bolt.sql
-62. web-actual/drizzle/0002_cute_blazing_skull.sql
-63. web-actual/drizzle/0003_colossal_nehzno.sql
-64. web-actual/drizzle/0004_chunky_microchip.sql
-65. web-actual/drizzle/0005_flat_bullseye.sql
-66. web-actual/drizzle/0006_heavy_human_torch.sql
-67. web-actual/drizzle/meta/0000_snapshot.json
-68. web-actual/drizzle/meta/0001_snapshot.json
-69. web-actual/drizzle/meta/0002_snapshot.json
-70. web-actual/drizzle/meta/0003_snapshot.json
-71. web-actual/drizzle/meta/0004_snapshot.json
-72. web-actual/drizzle/meta/0005_snapshot.json
-73. web-actual/drizzle/meta/0006_snapshot.json
-74. web-actual/drizzle/meta/_journal.json
-75. web-actual/package.json
-76. web-actual/pnpm-lock.yaml
-77. web-actual/pnpm-workspace.yaml
-78. web-actual/scripts/backup-source.mjs
-79. web-actual/scripts/build-public.mjs
-80. web-actual/scripts/build.mjs
-81. web-actual/scripts/package.mjs
-82. web-actual/scripts/preview-admin.mjs
-83. web-actual/scripts/preview-public.mjs
-84. web-actual/serve.mjs
-85. web-actual/tests/admin-live.test.mjs
-86. web-actual/tests/admin-ui.test.mjs
-87. web-actual/tests/admin.test.mjs
-88. web-actual/tests/breathing.test.mjs
-89. web-actual/tests/cache.test.mjs
-90. web-actual/tests/cart.test.mjs
-91. web-actual/tests/community.test.mjs
-92. web-actual/tests/customer-returns-ui.test.mjs
-93. web-actual/tests/customer-returns.test.mjs
-94. web-actual/tests/database.mjs
-95. web-actual/tests/demo-checkout.test.mjs
-96. web-actual/tests/demo.test.mjs
-97. web-actual/tests/management.test.mjs
-98. web-actual/tests/privacy-ui.test.mjs
-99. web-actual/tests/public-site.test.mjs
-100. web-actual/tests/search.test.mjs
-101. web-actual/tests/seo.test.mjs
-102. web-actual/tests/shared-demo-ui.test.mjs
-103. web-actual/tests/shared-demo.test.mjs
-104. web-actual/worker/community.mjs
-105. web-actual/worker/database.mjs
-106. web-actual/worker/demo.mjs
-107. web-actual/worker/index.mjs
-108. web-actual/worker/legacy-index.mjs
-109. web-actual/worker/metrics.mjs
-110. web-actual/worker/returns.mjs
-111. web-actual/worker/site.mjs
+59. web-actual/docs/community-google-team-2026-09-30.md
+60. web-actual/drizzle.config.ts
+61. web-actual/drizzle/0000_cultured_mathemanic.sql
+62. web-actual/drizzle/0001_lonely_black_bolt.sql
+63. web-actual/drizzle/0002_cute_blazing_skull.sql
+64. web-actual/drizzle/0003_colossal_nehzno.sql
+65. web-actual/drizzle/0004_chunky_microchip.sql
+66. web-actual/drizzle/0005_flat_bullseye.sql
+67. web-actual/drizzle/0006_heavy_human_torch.sql
+68. web-actual/drizzle/0007_goofy_anthem.sql
+69. web-actual/drizzle/0008_spicy_mystique.sql
+70. web-actual/drizzle/meta/0000_snapshot.json
+71. web-actual/drizzle/meta/0001_snapshot.json
+72. web-actual/drizzle/meta/0002_snapshot.json
+73. web-actual/drizzle/meta/0003_snapshot.json
+74. web-actual/drizzle/meta/0004_snapshot.json
+75. web-actual/drizzle/meta/0005_snapshot.json
+76. web-actual/drizzle/meta/0006_snapshot.json
+77. web-actual/drizzle/meta/0007_snapshot.json
+78. web-actual/drizzle/meta/0008_snapshot.json
+79. web-actual/drizzle/meta/_journal.json
+80. web-actual/package.json
+81. web-actual/pnpm-lock.yaml
+82. web-actual/pnpm-workspace.yaml
+83. web-actual/scripts/backup-source.mjs
+84. web-actual/scripts/build-public.mjs
+85. web-actual/scripts/build.mjs
+86. web-actual/scripts/package.mjs
+87. web-actual/scripts/preview-admin.mjs
+88. web-actual/scripts/preview-public.mjs
+89. web-actual/serve.mjs
+90. web-actual/tests/admin-live.test.mjs
+91. web-actual/tests/admin-ui.test.mjs
+92. web-actual/tests/admin.test.mjs
+93. web-actual/tests/breathing.test.mjs
+94. web-actual/tests/cache.test.mjs
+95. web-actual/tests/cart.test.mjs
+96. web-actual/tests/community-team.test.mjs
+97. web-actual/tests/community.test.mjs
+98. web-actual/tests/customer-returns-ui.test.mjs
+99. web-actual/tests/customer-returns.test.mjs
+100. web-actual/tests/database.mjs
+101. web-actual/tests/demo-checkout.test.mjs
+102. web-actual/tests/demo.test.mjs
+103. web-actual/tests/management.test.mjs
+104. web-actual/tests/privacy-ui.test.mjs
+105. web-actual/tests/public-site.test.mjs
+106. web-actual/tests/search.test.mjs
+107. web-actual/tests/seo.test.mjs
+108. web-actual/tests/shared-demo-ui.test.mjs
+109. web-actual/tests/shared-demo.test.mjs
+110. web-actual/worker/community.mjs
+111. web-actual/worker/database.mjs
+112. web-actual/worker/demo.mjs
+113. web-actual/worker/index.mjs
+114. web-actual/worker/legacy-index.mjs
+115. web-actual/worker/metrics.mjs
+116. web-actual/worker/returns.mjs
+117. web-actual/worker/site.mjs
 
 
 ========================================================================
@@ -1241,6 +1247,7 @@ export const communitySessions = sqliteTable('community_sessions', {
   expiresAt: integer('expires_at').notNull(),
 },t=>[index('community_session_expiry').on(t.expiresAt)]);
 export const communityOauth = sqliteTable('community_oauth', {
+  returnPath: text('return_path').notNull().default('/comunidad'),
   stateHash: text('state_hash').primaryKey(), verifier: text('verifier').notNull(), nonce: text('nonce').notNull(), expiresAt: integer('expires_at').notNull(),
 },t=>[index('community_oauth_expiry').on(t.expiresAt)]);
 export const communityPosts = sqliteTable('community_posts', {
@@ -1258,6 +1265,21 @@ export const communityModeration = sqliteTable('community_moderation', {
 export const siteMetrics = sqliteTable('site_metrics', {
   day: text('day').notNull(), event: text('event').notNull(), page: text('page').notNull(), count: integer('count').notNull().default(0),
 },t=>[primaryKey({columns:[t.day,t.event,t.page]})]);
+export const communityCoowners = sqliteTable('community_coowners', {
+ userId: text('user_id').primaryKey().references(()=>communityUsers.id),
+ grantedBy: text('granted_by').notNull().references(()=>communityUsers.id),
+ createdAt: integer('created_at').notNull(),
+});
+export const communityRoleEvents = sqliteTable('community_role_events', {
+ id: text('id').primaryKey(), actorId: text('actor_id').notNull(), targetId: text('target_id').notNull(),
+ action: text('action').notNull(), createdAt: integer('created_at').notNull(),
+});
+export const communityReports = sqliteTable('community_reports', {
+ id: text('id').primaryKey(), postId: text('post_id').notNull().references(()=>communityPosts.id),
+ reporterId: text('reporter_id').notNull().references(()=>communityUsers.id),
+ reason: text('reason').notNull(), createdAt: integer('created_at').notNull(),
+ resolvedAt: integer('resolved_at'), resolvedBy: text('resolved_by'), resolution: text('resolution').notNull().default(''),
+},t=>[index('community_reports_pending').on(t.resolvedAt,t.createdAt)]);
 
 
 
@@ -1792,6 +1814,10 @@ ARCHIVO: web-actual/dist/community.css
 
 .community-shell{padding-block:55px 85px}.community-heading{max-width:800px;margin-bottom:50px}.community-heading h1{font:clamp(2.6rem,5vw,4.7rem)/1.1 var(--serif);font-weight:400;margin:18px 0}.community-heading h1 em{color:var(--olive)}.community-heading>p:last-child{font-size:1.125rem;line-height:1.8;max-width:620px;color:#6d563b}.community-layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:64px}.community-account{border-top:2px solid var(--olive);padding-top:20px;align-self:start}.community-account h2,.community-discussions h2{font:1.6rem/1.3 var(--serif);margin:0 0 18px}.community-account p,.community-rules{font-size:.9375rem;line-height:1.7}.community-account a:not(.button),.community-dialog a,.community-rules a{ text-decoration:underline;text-underline-offset:3px}.community-account .button{width:100%;padding:16px;font-size:.9375rem}.community-rules{border-top:1px solid var(--line);margin-top:28px;padding-top:20px}.community-rules h3{font:1.15rem var(--serif)}.community-page label{display:block;margin:18px 0 8px;line-height:1.6}.community-page input:not([type=checkbox]),.community-page textarea{font:1rem/1.6 var(--sans);width:100%;padding:12px;border:1px solid #9d7e50;border-radius:4px;background:#fffef9;color:var(--ink)}.community-page textarea{resize:vertical}.community-page input:focus-visible,.community-page textarea:focus-visible{outline:3px solid #94631e;outline-offset:3px}.community-page input[type=checkbox]{width:20px;height:20px;accent-color:var(--olive)}.check-row{font-size:.875rem}.secondary,.text-button{font:inherit;color:var(--ink);min-height:44px;cursor:pointer}.secondary{border:1px solid #9d7e50;border-radius:4px;background:transparent;padding:10px 15px}.text-button{border:0;background:none;text-decoration:underline;text-underline-offset:4px;padding:10px 2px}.community-toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px}.community-toolbar h2{margin:0}.community-filters{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.community-filters [aria-pressed=true]{background:var(--olive);color:#fff}.topic{padding:24px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}.topic h3{font:1.4rem/1.5 var(--serif);margin:8px 0}.topic-open{border:0;padding:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer;min-height:44px}.topic-open:hover{text-decoration:underline}.topic-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.875rem;color:#6d563b}.rank{display:inline-block;border:1px solid var(--line);padding:2px 8px;border-radius:3px;font:500 .8rem/1.5 var(--sans);background:#f1e8d8;color:#503c22}.rank.owner{background:var(--olive);color:#fff;border-color:var(--olive)}.topic-body{white-space:pre-wrap;line-height:1.85;overflow-wrap:anywhere}.topic-actions{display:flex;flex-wrap:wrap;gap:12px}.community-empty{padding:34px 20px;border-block:1px solid var(--line);line-height:1.8}.community-empty h3{font:1.5rem var(--serif)}#compose{border-top:2px solid var(--olive);margin-top:35px;padding-top:24px}#compose summary{min-height:44px;cursor:pointer;font:1.5rem var(--serif)}#publish-help{line-height:1.6;color:#6d563b;font-size:.9375rem}.spam-field{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.community-dialog{border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);padding:30px;width:min(740px,calc(100% - 24px));max-height:90dvh}.community-dialog::backdrop{background:#1f291cb3}.community-dialog h2{font:2rem/1.3 var(--serif);overflow-wrap:anywhere}.close-thread{display:block;margin-left:auto}.community-dialog .topic{padding-block:18px}.community-dialog .button{margin-top:14px}.community-page [hidden]{display:none!important}.community-page button:disabled{opacity:.55;cursor:wait}.community-page .legal-links{display:flex;gap:20px;flex-wrap:wrap;font-size:.875rem;line-height:1.8}@media(max-width:800px){.community-layout{grid-template-columns:1fr;gap:35px}.community-account{display:grid;grid-template-columns:1fr;max-width:none}.community-heading{margin-bottom:30px}.community-shell{padding-block:35px}.community-dialog{padding:20px}.community-heading h1{font-size:2.7rem}.community-page .site-header .header-cta{display:inline-flex}}@media(prefers-reduced-motion:reduce){.community-page *{scroll-behavior:auto}}
 
+.community-search{border-block:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}.search-row{display:flex;gap:10px}.search-row input{min-width:0}.community-search select{font:inherit;padding:10px;border:1px solid #9d7e50;background:var(--paper);color:var(--ink);border-radius:4px}.community-account details summary{cursor:pointer;min-height:44px;padding:10px 0}.thread-tools{display:flex;gap:18px;flex-wrap:wrap;align-items:center}#thread-news:empty{display:none}#thread-news{padding:12px;background:#f1e8d8;border-left:3px solid var(--olive)}#thread-replies .topic{margin:16px 0 16px 20px;padding:20px;background:#f6efdf;border:0;border-left:2px solid #b28a43;border-radius:0 8px 8px 0}.owner-card{padding:24px;background:#fffaf1;border:1px solid var(--line);border-radius:8px;margin-block:24px}.owner-card h2{font:1.8rem var(--serif)}.team-person{padding:18px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}.team-person p{margin:6px 0}.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.owner-grid .owner-card{min-width:0}#metrics-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}#metrics-summary p{padding:16px;background:#f1e8d8;border-radius:6px}#owner-panel{display:inline-block;text-decoration:none;margin-top:10px}@media(max-width:800px){.owner-grid{grid-template-columns:1fr;gap:0}.community-heading h1{font-size:2.4rem}.community-dialog{width:calc(100% - 16px);max-height:94dvh;padding:18px}#thread-replies .topic{margin-left:8px;padding:16px}.community-layout{gap:24px}}
+
+.moderation-tools{width:100%;padding:10px 12px;border:1px dashed #9d7e50;border-radius:4px}.moderation-tools summary{cursor:pointer;min-height:44px;display:list-item;padding-top:10px}.moderation-tools .text-button{margin-right:18px}.owner-card summary{cursor:pointer;min-height:44px;padding-top:14px}
+
 
 
 ========================================================================
@@ -1802,8 +1828,8 @@ ARCHIVO: web-actual/dist/community.js
 (()=>{
 const byId=id=>document.getElementById(id);let account=null,mode='all',offset=0,listVersion=0,threadVersion=0,currentThread=null,replyOffset=0,saving=false,loginAvailable=false;
 const access=new URLSearchParams(location.search).get('acceso');const accessNotice=access==='limite'?'Espera unos minutos antes de volver a iniciar sesión.':access==='pendiente'?'El acceso con Google está pendiente de configuración.':access?'No se pudo completar el acceso. Puedes intentarlo de nuevo.':'';
-function resetSession(){account=null;mode='all';offset=0;replyOffset=0;currentThread=null;listVersion++;threadVersion++;byId('account').hidden=true;byId('google-login').hidden=!loginAvailable;byId('compose').hidden=true;byId('my-topics').hidden=true;byId('moderation').hidden=true;byId('link-owner').hidden=true;byId('owner-note').hidden=true;byId('reply-form').hidden=true;byId('more-topics').hidden=true;byId('more-topics').disabled=false;byId('more-replies').hidden=true;byId('more-replies').disabled=false;byId('topics').replaceChildren();byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('topics').setAttribute('aria-busy','false');for(const id of ['all-topics','my-topics','moderation'])byId(id).setAttribute('aria-pressed',String(id==='all-topics'));notice('thread-title','Sesión terminada');notice('reply-status','Conecta con Google para participar.');notice('login-note',loginAvailable?'Tu sesión ha terminado. Conecta con Google para participar.':'Tu sesión ha terminado. El acceso con Google no está disponible ahora.');notice('community-status','Tu sesión ha terminado. Puedes seguir leyendo las conversaciones públicas.');}
-async function api(path,body){const response=await fetch('/api/community/'+path,{credentials:'same-origin',cache:'no-store',...(body!==undefined?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Inténtalo de nuevo.');}if(!response.ok){if(response.status===401)resetSession();throw Error(data.error||'No se ha podido completar la acción.');}return data;}
+function resetSession(){account=null;mode='all';offset=0;replyOffset=0;currentThread=null;listVersion++;threadVersion++;byId('account').hidden=true;byId('google-login').hidden=!loginAvailable;byId('compose').hidden=true;byId('my-topics').hidden=true;byId('moderation').hidden=true;byId('owner-panel').hidden=true;byId('reply-form').hidden=true;byId('more-topics').hidden=true;byId('more-topics').disabled=false;byId('more-replies').hidden=true;byId('more-replies').disabled=false;byId('topics').replaceChildren();byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('topics').setAttribute('aria-busy','false');for(const id of ['all-topics','my-topics','moderation'])byId(id).setAttribute('aria-pressed',String(id==='all-topics'));notice('thread-title','Sesión terminada');notice('reply-status','Conecta con Google para participar.');notice('login-note',loginAvailable?'Tu sesión ha terminado. Conecta con Google para participar.':'Tu sesión ha terminado. El acceso con Google no está disponible ahora.');notice('community-status','Tu sesión ha terminado. Puedes seguir leyendo las conversaciones públicas.');}
+async function api(path,body){const response=await fetch('/api/community/'+path,{credentials:'same-origin',cache:'no-store',...(body!==undefined?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});let data;try{data=await response.json();}catch{throw Error('No se ha podido conectar. Inténtalo de nuevo.');}if(!response.ok){if(response.status===401)resetSession();if(response.status===403&&account?.role==='owner'){resetSession();loadAccount().catch(()=>{});}throw Error(data.error||'No se ha podido completar la acción.');}return data;}
 function text(tag,value,className){const el=document.createElement(tag);el.textContent=value;if(className)el.className=className;return el;}
 function button(label,action){const el=text('button',label,'text-button');el.type='button';el.addEventListener('click',action);return el;}
 function notice(id,value){byId(id).textContent=value;}
@@ -1813,36 +1839,46 @@ function postElement(post,{preview=false,moderate=false}={}){
  if(post.status!=='published')article.append(text('p',post.status==='pending'?'Pendiente de revisión':'Retirada','rank'));
  if(post.title){const heading=document.createElement('h3');if(preview&&post.status!=='hidden'){const open=button(post.title,()=>openThread(post.id));open.className='topic-open';heading.append(open);}else heading.textContent=post.title;article.append(heading);}
  article.append(text('p',preview&&post.body.length>240?post.body.slice(0,240)+'…':post.body,'topic-body'));
+ if(preview&&post.status==='published')article.append(button((post.replyCount||0)+' '+(post.replyCount===1?'respuesta':'respuestas')+' · Leer conversación',()=>openThread(post.id)));
  const actions=document.createElement('div');actions.className='topic-actions';
  if(post.mine&&post.status!=='hidden')actions.append(button('Retirar mi publicación',async()=>{if(saving||!confirm('¿Retirar esta publicación? Si inicia una conversación, también dejarán de verse sus respuestas.'))return;locked(true);try{await api('posts/'+post.id+'/delete',{version:post.version});byId('thread-dialog').close();await loadTopics();}catch(e){notice('community-status',e.message);notice('reply-status',e.message);}finally{locked(false);}}));
- if(moderate){const reason=document.createElement('input');reason.maxLength=500;reason.placeholder='Motivo si retiras el contenido';reason.setAttribute('aria-label','Motivo de moderación');actions.append(reason);for(const [label,status]of [['Publicar','published'],['Retirar','hidden']])actions.append(button(label,async()=>{if(saving)return;locked(true);try{await api('posts/'+post.id+'/moderate',{version:post.version,status,reason:reason.value});await loadTopics();}catch(e){notice('community-status',e.message);}finally{locked(false);}}));}
- if(post.status==='published'){const report=document.createElement('a');report.href='mailto:theshoz@gmail.com?subject='+encodeURIComponent('Aviso sobre publicación '+post.id);report.textContent='Avisar de un problema';report.className='text-button';actions.append(report);}article.append(actions);return article;
+ if(moderate){const tools=document.createElement('details');tools.className='moderation-tools';tools.open=post.status==='pending';tools.append(text('summary','Moderar publicación'));const reason=document.createElement('input');reason.maxLength=500;reason.placeholder='Motivo obligatorio al retirar';reason.setAttribute('aria-label','Motivo de moderación');tools.append(reason);const choices=post.status==='pending'?[['Aprobar','published'],['Rechazar','hidden']]:[['Retirar contenido','hidden']];for(const [label,status]of choices)tools.append(button(label,async()=>{if(saving)return;if(status==='hidden'&&reason.value.trim().length<3){reason.setCustomValidity('Escribe el motivo de la retirada (al menos 3 caracteres).');reason.reportValidity();return;}reason.setCustomValidity('');locked(true);try{await api('posts/'+post.id+'/moderate',{version:post.version,status,reason:reason.value});if(byId('thread-dialog').open)byId('thread-dialog').close();await loadTopics();notice('community-status',status==='published'?'Publicación aprobada.':'Contenido retirado. La decisión ha quedado registrada.');}catch(e){notice('community-status',e.message);notice('reply-status',e.message);}finally{locked(false);}}));reason.addEventListener('input',()=>reason.setCustomValidity(''));actions.append(tools);}
+ if(post.status==='published')actions.append(button('Avisar de un problema',()=>openReport(post.id)));article.append(actions);return article;
 }
 async function loadAccount(){
  const result=await api('me');account=result.user;loginAvailable=result.loginAvailable;byId('google-login').hidden=!!account||!loginAvailable;byId('account').hidden=!account;
  notice('login-note',account?'Tu correo es privado. Solo se muestra el nombre público que elijas.':result.loginAvailable?'Puedes leer sin cuenta. Conecta con Google para participar.':'Estamos preparando el acceso con Google. La comunidad todavía no admite publicaciones.');
- byId('compose').hidden=!account?.accepted_at;byId('my-topics').hidden=!account;byId('moderation').hidden=account?.role!=='owner';byId('link-owner').hidden=!result.canLinkOwner||account?.role==='owner';byId('owner-note').hidden=byId('link-owner').hidden;
+ byId('compose').hidden=!account?.accepted_at;byId('my-topics').hidden=!account;byId('moderation').hidden=account?.role!=='owner';byId('owner-panel').hidden=account?.role!=='owner';byId('profile-details').open=!!account&&!account.accepted_at;
  if(account){notice('profile-name',account.alias);notice('profile-role',account.role==='owner'?'Dueño':'Lector');byId('profile-role').className='rank '+(account.role==='owner'?'owner':'');byId('alias').value=account.alias;byId('accept-rules').checked=!!account.accepted_at;}
 }
 async function loadTopics(append=false){if(append&&byId('more-topics').disabled)return;const version=++listVersion,requestedOffset=append?offset+20:0;byId('topics').setAttribute('aria-busy','true');byId('more-topics').disabled=true;notice('community-status',accessNotice||'Cargando conversaciones…');try{
- const path=mode==='moderation'?'moderation':'posts?offset='+requestedOffset+(mode==='mine'?'&mine=1':'');const result=await api(path);if(version!==listVersion)return;offset=requestedOffset;
- if(!append)byId('topics').replaceChildren();for(const post of result.posts)byId('topics').append(postElement(post,{preview:mode!=='moderation',moderate:mode==='moderation'}));
- if(!offset&&!result.posts.length){const empty=document.createElement('div');empty.className='community-empty';empty.append(text('h3',mode==='moderation'?'No hay aportaciones pendientes.':mode==='mine'?'Todavía no has abierto una conversación.':'Una primera pregunta puede abrir el camino.'),text('p',mode==='all'?'Cuando la comunidad esté activa, aquí aparecerán las preguntas y respuestas aprobadas.':'Las publicaciones se mostrarán aquí cuando estén disponibles.'));byId('topics').append(empty);}
- byId('more-topics').hidden=!result.hasMore;notice('community-status',accessNotice);
+ const path=mode==='moderation'?'moderation':'posts?offset='+requestedOffset+(mode==='mine'?'&mine=1':'')+'&q='+encodeURIComponent(byId('community-search').value)+'&sort='+byId('community-sort').value;const result=await api(path);if(version!==listVersion)return;offset=requestedOffset;
+ if(!append)byId('topics').replaceChildren();for(const post of result.posts)byId('topics').append(postElement(post,{preview:mode!=='moderation',moderate:account?.role==='owner'}));
+ if(!offset&&!result.posts.length){const empty=document.createElement('div');empty.className='community-empty';empty.append(text('h3',mode==='moderation'?'No hay aportaciones pendientes.':mode==='mine'?'Todavía no has abierto una conversación.':'Una primera pregunta puede abrir el camino.'),text('p',mode==='all'?'No hay conversaciones con estos filtros. Prueba otra búsqueda o comparte tu primera pregunta.':'Las publicaciones se mostrarán aquí cuando estén disponibles.'));byId('topics').append(empty);}
+ byId('more-topics').hidden=!result.hasMore;notice('community-status',accessNotice||(mode==='moderation'?result.posts.length+' aportaciones pendientes en esta tanda.':''));
  }catch(e){if(version===listVersion)notice('community-status',(accessNotice?accessNotice+' ':'')+e.message+(append?' Pulsa Más conversaciones para reintentar.':' Usa Actualizar para reintentar.'));}finally{if(version===listVersion){byId('topics').setAttribute('aria-busy','false');byId('more-topics').disabled=false;}}}
-async function openThread(id,append=false){if(saving||append&&byId('more-replies').disabled)return;const version=++threadVersion,requestedOffset=append?replyOffset+50:0;byId('more-replies').disabled=true;if(!append){currentThread=null;replyOffset=0;byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();byId('reply-body').value='';notice('thread-title','Cargando conversación…');byId('reply-form').hidden=true;byId('more-replies').hidden=true;if(!byId('thread-dialog').open)byId('thread-dialog').showModal();}notice('reply-status','');try{
- const result=await api('posts/'+encodeURIComponent(id)+'?offset='+requestedOffset);if(version!==threadVersion||!byId('thread-dialog').open)return;replyOffset=requestedOffset;currentThread=result.post;notice('thread-title',result.post.title);if(!append){byId('thread-content').replaceChildren(postElement(result.post));byId('thread-title').focus();}for(const reply of result.replies)byId('thread-replies').append(postElement(reply));byId('more-replies').hidden=!result.hasMore;byId('reply-form').hidden=!account?.accepted_at||result.post.status!=='published';
+async function openThread(id,append=false,preserveDraft=false){if(saving||append&&byId('more-replies').disabled)return;const version=++threadVersion,requestedOffset=append?replyOffset+50:0;byId('more-replies').disabled=true;if(!append){currentThread=null;replyOffset=0;byId('thread-content').replaceChildren();byId('thread-replies').replaceChildren();if(!preserveDraft)byId('reply-body').value='';notice('thread-news','');notice('thread-title','Cargando conversación…');byId('reply-form').hidden=true;byId('more-replies').hidden=true;if(!byId('thread-dialog').open)byId('thread-dialog').showModal();}notice('reply-status','');try{
+ const result=await api('posts/'+encodeURIComponent(id)+'?offset='+requestedOffset);if(version!==threadVersion||!byId('thread-dialog').open)return;replyOffset=requestedOffset;currentThread=result.post;threadSnapshot=JSON.stringify(result);notice('thread-title',result.post.title);if(!append){byId('thread-content').replaceChildren(postElement(result.post,{moderate:account?.role==='owner'}));byId('thread-title').focus();}for(const reply of result.replies)byId('thread-replies').append(postElement(reply,{moderate:account?.role==='owner'}));byId('more-replies').hidden=!result.hasMore;byId('reply-form').hidden=!account?.accepted_at||result.post.status!=='published';
  }catch(e){if(version===threadVersion){if(!append)notice('thread-title','No se ha podido abrir la conversación');notice('reply-status',e.message+(append?' Pulsa Más respuestas para reintentar.':''));}}finally{if(version===threadVersion)byId('more-replies').disabled=false;}}
-for(const [id,value]of [['all-topics','all'],['my-topics','mine'],['moderation','moderation']])byId(id).addEventListener('click',()=>{if(saving)return;mode=value;for(const key of ['all-topics','my-topics','moderation'])byId(key).setAttribute('aria-pressed',String(key===id));loadTopics();});
+for(const [id,value]of [['all-topics','all'],['my-topics','mine'],['moderation','moderation']])byId(id).addEventListener('click',()=>{if(saving)return;mode=value;byId('search-form').hidden=mode==='moderation';for(const key of ['all-topics','my-topics','moderation'])byId(key).setAttribute('aria-pressed',String(key===id));loadTopics();});
 byId('reload-topics').addEventListener('click',()=>{if(!saving)loadTopics();});byId('more-topics').addEventListener('click',()=>loadTopics(true));byId('more-replies').addEventListener('click',()=>{if(currentThread)return openThread(currentThread.id,true);});
 byId('close-thread').addEventListener('click',()=>byId('thread-dialog').close());byId('thread-dialog').addEventListener('close',()=>{threadVersion++;currentThread=null;});
 byId('profile-form').addEventListener('submit',async e=>{e.preventDefault();if(saving)return;const data={alias:byId('alias').value,accepted:byId('accept-rules').checked};locked(true);try{await api('profile',data);await loadAccount();notice('profile-status','Perfil guardado. Ya puedes enviar tu pregunta.');}catch(e){notice('profile-status',e.message);}finally{locked(false);}});
-byId('topic-form').addEventListener('submit',async e=>{e.preventDefault();if(saving)return;const data={title:byId('topic-title').value,body:byId('topic-body').value,website:byId('website').value};locked(true);try{await api('posts',data);byId('topic-form').reset();notice('topic-status',account?.role==='owner'?'Pregunta publicada.':'Pregunta recibida. Aparecerá cuando Aleix la revise.');await loadTopics();}catch(e){notice('topic-status',e.message+' Tu texto sigue aquí.');}finally{locked(false);}});
-byId('reply-form').addEventListener('submit',async e=>{e.preventDefault();if(saving||!currentThread)return;const id=currentThread.id,version=threadVersion,data={parentId:id,body:byId('reply-body').value};locked(true);try{const result=await api('posts',data);if(version!==threadVersion)return;byId('reply-body').value='';byId('thread-replies').append(postElement(result.post));notice('reply-status',account?.role==='owner'?'Respuesta publicada.':'Respuesta recibida. Solo tú y Aleix podéis verla mientras se revisa.');}catch(e){if(version===threadVersion)notice('reply-status',e.message+' Tu respuesta sigue aquí.');}finally{locked(false);}});
+byId('topic-form').addEventListener('submit',async e=>{e.preventDefault();if(saving)return;const data={title:byId('topic-title').value,body:byId('topic-body').value,website:byId('website').value};locked(true);try{await api('posts',data);byId('topic-form').reset();notice('topic-status',account?.role==='owner'?'Pregunta publicada.':'Pregunta recibida. Aparecerá cuando el equipo la revise.');await loadTopics();}catch(e){notice('topic-status',e.message+' Tu texto sigue aquí.');}finally{locked(false);}});
+byId('reply-form').addEventListener('submit',async e=>{e.preventDefault();if(saving||!currentThread)return;const id=currentThread.id,version=threadVersion,data={parentId:id,body:byId('reply-body').value};locked(true);try{const result=await api('posts',data);if(version!==threadVersion)return;byId('reply-body').value='';byId('thread-replies').append(postElement(result.post));notice('reply-status',account?.role==='owner'?'Respuesta publicada.':'Respuesta recibida. Solo tú y el equipo podéis verla mientras se revisa.');}catch(e){if(version===threadVersion)notice('reply-status',e.message+' Tu respuesta sigue aquí.');}finally{locked(false);}});
 byId('logout').addEventListener('click',async()=>{if(saving)return;try{await api('logout',{});location.assign('/comunidad');}catch(e){notice('profile-status',e.message);}});
-byId('link-owner').addEventListener('click',async()=>{if(saving||!confirm('¿Vincular esta cuenta de Google como dueño de la comunidad?'))return;locked(true);try{await api('owner',{});await loadAccount();notice('profile-status','Cuenta de dueño vinculada.');}catch(e){notice('profile-status',e.message);}finally{locked(false);}});
+let reportPostId=null;
+function openReport(id){reportPostId=id;byId('report-form').hidden=!account;byId('report-login').hidden=!!account;byId('report-reason').value='';notice('report-status','');byId('report-dialog').showModal();if(account)byId('report-reason').focus();}
+byId('close-report').addEventListener('click',()=>byId('report-dialog').close());
+byId('report-form').addEventListener('submit',async event=>{event.preventDefault();if(byId('send-report').disabled||!reportPostId)return;byId('send-report').disabled=true;try{await api('reports',{postId:reportPostId,reason:byId('report-reason').value});byId('report-form').hidden=true;notice('report-status','Aviso recibido. El equipo lo verá en su panel de moderación. Gracias por cuidar la comunidad.');}catch(e){notice('report-status',e.message);}finally{byId('send-report').disabled=false;}});
+let threadSnapshot='',checkingNews=false;
+byId('search-form').addEventListener('submit',e=>{e.preventDefault();loadTopics();});
+byId('community-sort').addEventListener('change',()=>loadTopics());
+byId('refresh-thread').addEventListener('click',()=>{if(currentThread)openThread(currentThread.id,false,true);});
+byId('share-thread').addEventListener('click',async()=>{if(!currentThread)return;const url=new URL('/comunidad',location.origin);url.searchParams.set('conversacion',currentThread.id);try{await navigator.clipboard.writeText(url.href);notice('thread-news','Enlace copiado.');}catch{notice('thread-news','Enlace: '+url.href);}});
+setInterval(async()=>{if(document.hidden||!byId('thread-dialog').open||!currentThread||saving||checkingNews||replyOffset)return;checkingNews=true;const id=currentThread.id,version=threadVersion;try{const result=await api('posts/'+encodeURIComponent(id)+'?offset=0');if(version===threadVersion&&threadSnapshot!==JSON.stringify(result))notice('thread-news','Hay novedades. Pulsa Actualizar conversación; tu borrador se conservará.');}catch{}finally{checkingNews=false;}},30000);
 if(accessNotice)notice('community-status',accessNotice);
-loadAccount().then(()=>loadTopics()).catch(e=>{notice('login-note',e.message);notice('community-status',(accessNotice?accessNotice+' ':'')+'No se ha podido cargar la comunidad. Usa Actualizar para reintentar.');byId('topics').setAttribute('aria-busy','false');});
+loadAccount().then(async()=>{if(account?.role==='owner'&&new URLSearchParams(location.search).get('moderar')==='1'){mode='moderation';byId('all-topics').setAttribute('aria-pressed','false');byId('moderation').setAttribute('aria-pressed','true');byId('search-form').hidden=true;}await loadTopics();const id=new URLSearchParams(location.search).get('conversacion');if(id&&/^[a-zA-Z0-9-]{1,80}$/.test(id))await openThread(id);}).catch(e=>{notice('login-note',e.message);notice('community-status',(accessNotice?accessNotice+' ':'')+'No se ha podido cargar la comunidad. Usa Actualizar para reintentar.');byId('topics').setAttribute('aria-busy','false');});
 })();
 
 
@@ -1858,15 +1894,15 @@ ARCHIVO: web-actual/dist/comunidad.html
 <main id="contenido" class="community-shell wrap">
  <div class="community-heading"><p class="eyebrow">UN ESPACIO ENTRE LECTORES</p><h1>La lectura sigue<br><em>en la conversación.</em></h1><p>Preguntas sobre el libro, pequeñas ideas y distintas formas de empezar. Compártelas con calma.</p></div>
  <div class="community-layout"><aside class="community-account" aria-labelledby="account-title"><h2 id="account-title">Tu lugar aquí</h2><p id="login-note" role="status">Comprobando el acceso…</p><a id="google-login" class="button button-primary" href="/auth/google/start" target="_top" hidden>Continuar con Google</a><noscript><p>Activa JavaScript para consultar las conversaciones y el estado de tu cuenta.</p></noscript>
- <section id="account" hidden><p><strong id="profile-name"></strong> <span id="profile-role" class="rank"></span></p><form id="profile-form"><label for="alias">Nombre público</label><input id="alias" name="alias" required minlength="2" maxlength="40" autocomplete="nickname"><label class="check-row"><input id="accept-rules" type="checkbox" required> Acepto las <a href="/normas-comunidad">normas de la comunidad</a> y he leído la <a href="/privacidad">privacidad</a>.</label><button type="submit" class="secondary">Guardar perfil</button></form><button id="logout" class="text-button" type="button">Cerrar sesión</button><p id="profile-status" role="status"></p></section>
- <button id="link-owner" class="secondary" type="button" hidden>Vincular mi cuenta como dueño</button><p id="owner-note" hidden>Esta acción vincula tu cuenta de Google actual al titular ya autorizado en el área privada.</p>
- <div class="community-rules"><h3>Una conversación cuidada</h3><p>Las aportaciones se revisan antes de aparecer. Usa un alias y evita datos de salud, direcciones o números de pedido.</p><p>La insignia <span class="rank owner">Dueño</span> identifica la cuenta autorizada de Aleix. Iniciar sesión no verifica una compra de Amazon.</p><a href="/normas-comunidad">Normas y avisos de contenido</a></div></aside>
+ <section id="account" hidden><p><strong id="profile-name"></strong> <span id="profile-role" class="rank"></span></p><details id="profile-details"><summary>Editar mi perfil</summary><form id="profile-form"><label for="alias">Nombre público</label><input id="alias" name="alias" required minlength="2" maxlength="40" autocomplete="nickname"><label class="check-row"><input id="accept-rules" type="checkbox" required> Acepto las <a href="/normas-comunidad">normas de la comunidad</a> y he leído la <a href="/privacidad">privacidad</a>.</label><button type="submit" class="secondary">Guardar perfil</button></form></details><button id="logout" class="text-button" type="button">Cerrar sesión</button><p id="profile-status" role="status"></p></section>
+ <a id="owner-panel" class="secondary" href="/propietario" hidden>Gestionar comunidad y equipo</a>
+ <div class="community-rules"><h3>Una conversación cuidada</h3><p>Las aportaciones se revisan antes de aparecer. Usa un alias y evita datos de salud, direcciones o números de pedido.</p><p>La insignia <span class="rank owner">Dueño</span> identifica al equipo autorizado por Aleix. Iniciar sesión no verifica una compra de Amazon.</p><a href="/normas-comunidad">Normas y avisos de contenido</a></div></aside>
  <section class="community-discussions" aria-labelledby="discussion-title"><div class="community-toolbar"><h2 id="discussion-title">Conversaciones</h2><button id="reload-topics" class="text-button" type="button">Actualizar</button></div><div class="community-filters"><button id="all-topics" class="secondary" type="button" aria-pressed="true">Todas</button><button id="my-topics" class="secondary" type="button" hidden aria-pressed="false">Mis preguntas</button><button id="moderation" class="secondary" type="button" hidden aria-pressed="false">Moderación</button></div>
- <p id="community-status" role="status" aria-live="polite"></p><div id="topics" aria-busy="true"></div><button id="more-topics" class="secondary" type="button" hidden>Más conversaciones</button>
- <details id="compose" hidden><summary>Plantear una pregunta</summary><form id="topic-form"><label for="topic-title">¿Sobre qué quieres conversar?</label><input id="topic-title" required minlength="3" maxlength="120"><label for="topic-body">Tu mensaje</label><textarea id="topic-body" required minlength="3" maxlength="4000" rows="5" aria-describedby="publish-help"></textarea><div class="spam-field" aria-hidden="true"><label for="website">Deja este campo vacío</label><input id="website" tabindex="-1" autocomplete="off"></div><p id="publish-help">Tu alias y mensaje serán públicos cuando Aleix los apruebe. No compartas información privada.</p><button class="button button-primary" type="submit">Enviar para revisión</button><p id="topic-status" role="status"></p></form></details>
+ <form id="search-form" class="community-search" role="search"><label for="community-search">Buscar una conversación</label><div class="search-row"><input id="community-search" type="search" maxlength="120" placeholder="Una pregunta, una idea…"><button class="secondary" type="submit">Buscar</button></div><label for="community-sort">Ordenar por</label><select id="community-sort"><option value="activity">Actividad reciente</option><option value="new">Preguntas nuevas</option></select></form><p id="community-status" role="status" aria-live="polite"></p><div id="topics" aria-busy="true"></div><button id="more-topics" class="secondary" type="button" hidden>Más conversaciones</button>
+ <details id="compose" hidden><summary>Plantear una pregunta</summary><form id="topic-form"><label for="topic-title">¿Sobre qué quieres conversar?</label><input id="topic-title" required minlength="3" maxlength="120"><label for="topic-body">Tu mensaje</label><textarea id="topic-body" required minlength="3" maxlength="4000" rows="5" aria-describedby="publish-help"></textarea><div class="spam-field" aria-hidden="true"><label for="website">Deja este campo vacío</label><input id="website" tabindex="-1" autocomplete="off"></div><p id="publish-help">Tu alias y mensaje serán públicos cuando el equipo los apruebe. No compartas información privada.</p><button class="button button-primary" type="submit">Enviar para revisión</button><p id="topic-status" role="status"></p></form></details>
  </section></div>
- <dialog id="thread-dialog" class="community-dialog" aria-labelledby="thread-title"><button id="close-thread" class="text-button close-thread" type="button">Cerrar conversación</button><h2 id="thread-title" tabindex="-1"></h2><div id="thread-content"></div><div id="thread-replies"></div><button id="more-replies" type="button" class="secondary" hidden>Más respuestas</button><form id="reply-form" hidden><label for="reply-body">Tu respuesta</label><textarea id="reply-body" required minlength="3" maxlength="4000" rows="4"></textarea><button class="button button-primary" type="submit">Enviar respuesta</button></form><p id="reply-status" role="status"></p></dialog>
-</main><footer class="site-footer wrap"><nav class="legal-links" aria-label="Información y ayuda"><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/normas-comunidad">Normas de la comunidad</a><a href="mailto:theshoz@gmail.com">Contacto</a></nav></footer></body></html>
+ <dialog id="thread-dialog" class="community-dialog" aria-labelledby="thread-title"><button id="close-thread" class="text-button close-thread" type="button">Cerrar conversación</button><h2 id="thread-title" tabindex="-1"></h2><div class="thread-tools"><button id="share-thread" type="button" class="text-button">Copiar enlace</button><button id="refresh-thread" type="button" class="secondary">Actualizar conversación</button></div><p id="thread-news" role="status" aria-live="polite"></p><div id="thread-content"></div><div id="thread-replies"></div><button id="more-replies" type="button" class="secondary" hidden>Más respuestas</button><form id="reply-form" hidden><label for="reply-body">Tu respuesta</label><textarea id="reply-body" required minlength="3" maxlength="4000" rows="4"></textarea><button class="button button-primary" type="submit">Enviar respuesta</button></form><p id="reply-status" role="status"></p></dialog>
+<dialog id="report-dialog" class="community-dialog" aria-labelledby="report-title"><button id="close-report" class="text-button close-thread" type="button">Cerrar aviso</button><h2 id="report-title">Avisar de un problema</h2><p>El aviso es privado y lo revisará el equipo de moderación. No incluyas datos sensibles.</p><p id="report-login" hidden>Para enviar el aviso desde aquí, <a href="/auth/google/start" target="_top">entra con Google</a>. También puedes escribir a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>.</p><form id="report-form"><label for="report-reason">¿Qué ocurre con esta publicación?</label><textarea id="report-reason" required minlength="10" maxlength="1000" rows="4" placeholder="Explica qué contenido consideras inapropiado y por qué."></textarea><button id="send-report" class="button button-primary" type="submit">Enviar aviso</button></form><p id="report-status" role="status" aria-live="polite"></p></dialog></main><footer class="site-footer wrap"><nav class="legal-links" aria-label="Información y ayuda"><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/normas-comunidad">Normas de la comunidad</a><a href="mailto:theshoz@gmail.com">Contacto</a></nav></footer></body></html>
 
 
 
@@ -1905,7 +1941,7 @@ ARCHIVO: web-actual/dist/cookies.html
       <a href="/#preguntas">Preguntas</a>
     </nav>
     <a class="header-community" href="/comunidad">Comunidad</a>
-  </header><main id="contenido" class="legal-shell wrap"><p class="eyebrow">DONDE SIEMPRE ESTUVISTE · ALEIX</p><h1>Cookies y privacidad del navegador</h1><p class="legal-meta">Actualizado el 30 de septiembre de 2026</p><section><h2>Tu elección</h2><p>El aviso permite aceptar analítica o continuar solo con lo necesario, con la misma facilidad. La analítica opcional no se envía antes de aceptar. Puedes revisar o retirar la elección mediante Preferencias de privacidad al pie de cada página. Respetamos las señales del navegador Do Not Track y Global Privacy Control para no enviar analítica.</p></section><section><h2>Almacenamiento utilizado</h2><div class="legal-table-wrap"><table class="legal-table"><thead><tr><th>Nombre</th><th>Finalidad</th><th>Duración</th></tr></thead><tbody><tr><td>lectura_privacy_v1 (almacenamiento local)</td><td>Recordar necesarias o analítica</td><td>180 días</td></tr><tr><td>__Host-community</td><td>Mantener una sesión solicitada de la comunidad; cookie HttpOnly y Secure</td><td>7 días</td></tr><tr><td>__Host-community-oauth</td><td>Proteger el intento de inicio con Google</td><td>10 minutos</td></tr><tr><td>__Host-appgarden-visitor (Sites)</td><td>Identificador de visitante generado por la plataforma de alojamiento</td><td>90 días observados</td></tr><tr><td>__cf_bm (Cloudflare)</td><td>Protección frente a tráfico automatizado</td><td>30 minutos de inactividad</td></tr><tr><td>cf_clearance (Cloudflare)</td><td>Recordar el resultado de una comprobación de seguridad</td><td>Hasta un año observado, según la configuración del proveedor</td></tr></tbody></table></div><p>Las dos cookies de cuenta solo se utilizan al iniciar sesión. La analítica propia no necesita una cookie identificativa y registra únicamente contadores diarios. El alojamiento utiliza comprobaciones de seguridad de Cloudflare, que pueden guardar la cookie técnica cf_clearance para recordar el resultado y reducir verificaciones repetidas. Las cookies del alojamiento y las duraciones indicadas se observaron el 30 de septiembre de 2026. La configuración del proveedor puede cambiar; puedes consultar su caducidad en el almacenamiento del navegador. No forma parte de nuestra analítica opcional. Consulta la <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">información de cookies de Cloudflare</a>. El acceso del titular mediante el alojamiento puede requerir además sus propias cookies de sesión.</p></section><section><h2>Servicios externos</h2><p>Google, Amazon o WhatsApp pueden utilizar su propio almacenamiento al abrir sus páginas. No incorporamos sus píxeles publicitarios. Si en el futuro se añaden servicios no necesarios, deberán documentarse y obtener el consentimiento que corresponda antes de cargarlos.</p></section><section><h2>Control y consultas</h2><p>También puedes borrar o bloquear almacenamiento desde tu navegador. Bloquear lo necesario puede cerrar la sesión o impedir recordar tu elección. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">guía de cookies de la AEPD</a>.</p></section></main><footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Donde siempre estuviste</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/comunidad">Comunidad</a><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/condiciones-de-venta">Comprar en Amazon</a><a href="/propietario" rel="nofollow">Acceso del titular</a></nav><p class="social-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>Redes de Aleix · Próximamente</p></footer></body></html>
+  </header><main id="contenido" class="legal-shell wrap"><p class="eyebrow">DONDE SIEMPRE ESTUVISTE · ALEIX</p><h1>Cookies y privacidad del navegador</h1><p class="legal-meta">Actualizado el 30 de septiembre de 2026</p><section><h2>Tu elección</h2><p>El aviso permite aceptar analítica o continuar solo con lo necesario, con la misma facilidad. La analítica opcional no se envía antes de aceptar. Puedes revisar o retirar la elección mediante Preferencias de privacidad al pie de cada página. Respetamos las señales del navegador Do Not Track y Global Privacy Control para no enviar analítica.</p></section><section><h2>Almacenamiento utilizado</h2><div class="legal-table-wrap"><table class="legal-table"><thead><tr><th>Nombre</th><th>Finalidad</th><th>Duración</th></tr></thead><tbody><tr><td>lectura_privacy_v1 (almacenamiento local)</td><td>Recordar necesarias o analítica</td><td>180 días</td></tr><tr><td>__Host-community</td><td>Mantener una sesión solicitada de la comunidad; cookie HttpOnly y Secure</td><td>7 días</td></tr><tr><td>__Host-community-oauth</td><td>Proteger el intento de inicio con Google</td><td>10 minutos</td></tr><tr><td>__Host-appgarden-visitor (Sites)</td><td>Identificador de visitante generado por la plataforma de alojamiento</td><td>90 días observados</td></tr><tr><td>__cf_bm (Cloudflare)</td><td>Protección frente a tráfico automatizado</td><td>30 minutos de inactividad</td></tr><tr><td>cf_clearance (Cloudflare)</td><td>Recordar el resultado de una comprobación de seguridad</td><td>Hasta un año observado, según la configuración del proveedor</td></tr></tbody></table></div><p>Las dos cookies de cuenta solo se utilizan al iniciar sesión. La analítica propia no necesita una cookie identificativa y registra únicamente contadores diarios. El alojamiento utiliza comprobaciones de seguridad de Cloudflare, que pueden guardar la cookie técnica cf_clearance para recordar el resultado y reducir verificaciones repetidas. Las cookies del alojamiento y las duraciones indicadas se observaron el 30 de septiembre de 2026. La configuración del proveedor puede cambiar; puedes consultar su caducidad en el almacenamiento del navegador. No forma parte de nuestra analítica opcional. Consulta la <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/">información de cookies de Cloudflare</a>. El acceso del titular mediante el alojamiento puede requerir además sus propias cookies de sesión.</p></section><section><h2>Servicios externos</h2><p>Google, Amazon pueden utilizar su propio almacenamiento al abrir sus páginas. No incorporamos sus píxeles publicitarios. Si en el futuro se añaden servicios no necesarios, deberán documentarse y obtener el consentimiento que corresponda antes de cargarlos.</p></section><section><h2>Control y consultas</h2><p>También puedes borrar o bloquear almacenamiento desde tu navegador. Bloquear lo necesario puede cerrar la sesión o impedir recordar tu elección. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Referencia: <a href="https://www.aepd.es/guias/guia-cookies.pdf">guía de cookies de la AEPD</a>.</p></section></main><footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Donde siempre estuviste</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/comunidad">Comunidad</a><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/condiciones-de-venta">Comprar en Amazon</a><a href="/propietario" rel="nofollow">Acceso del titular</a></nav><p class="social-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>Redes de Aleix · Próximamente</p></footer></body></html>
 
 
 ========================================================================
@@ -2299,7 +2335,7 @@ ARCHIVO: web-actual/dist/normas-comunidad.html
       <a href="/#preguntas">Preguntas</a>
     </nav>
     <a class="header-community" href="/comunidad">Comunidad</a>
-  </header><main id="contenido" class="legal-shell wrap"><p class="eyebrow">DONDE SIEMPRE ESTUVISTE · ALEIX</p><h1>Normas de la comunidad</h1><p class="legal-meta">Actualizado el 30 de septiembre de 2026</p><section><h2>Para conversar sobre el libro</h2><p>Elige un alias y participa con respeto. Este espacio admite preguntas sobre el libro y experiencias generales de lectura. No es un servicio sanitario ni un canal de soporte de pedidos de Amazon. No publiques datos médicos, direcciones, datos de pago, información privada de otras personas ni contenidos sobre los que no tengas derechos.</p></section><section><h2>Publicación y moderación</h2><p>Los lectores envían preguntas y respuestas para revisión. El dueño puede aprobarlas o retirarlas. No se admiten amenazas, acoso, suplantaciones, publicidad no solicitada, contenidos ilícitos ni instrucciones peligrosas. Las decisiones se basan en estas normas; no se promete una respuesta inmediata.</p><p>El distintivo Dueño identifica la cuenta vinculada por el titular, no una compra verificada. El nombre de usuario por sí solo no acredita identidad. Puedes retirar tus aportaciones; retirar una pregunta también deja de mostrar su conversación. Para corregir un texto, retirarlo y reenviarlo, o solicitar la supresión de tu cuenta, utiliza los controles disponibles o escribe al titular.</p></section><section><h2>Comunicar contenido y solicitar revisión</h2><p>Utiliza Avisar de un problema junto al mensaje o escribe a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> con el enlace o identificador de la publicación, el motivo, una explicación de por qué consideras que vulnera tus derechos o la ley y un medio de respuesta. El titular revisará el aviso y podrá retirar contenido cuando corresponda. También puedes solicitar explicación o revisión de una decisión por ese correo. No incluyas datos personales innecesarios.</p><p>Estas normas no limitan los derechos legales, las reclamaciones ante las autoridades ni los recursos disponibles. El titular debe atender diligentemente los avisos y las obligaciones aplicables al alojamiento de contenido.</p></section><section><h2>Tus contenidos</h2><p>Conservas tus derechos. Al enviar un mensaje autorizas su alojamiento y visualización dentro de esta comunidad para prestar el servicio, sin ceder de forma general tus derechos para otros fines. La <a href="/privacidad">política de privacidad</a> explica el tratamiento de los datos.</p></section></main><footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Donde siempre estuviste</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/comunidad">Comunidad</a><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/condiciones-de-venta">Comprar en Amazon</a><a href="/propietario" rel="nofollow">Acceso del titular</a></nav><p class="social-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>Redes de Aleix · Próximamente</p></footer></body></html>
+  </header><main id="contenido" class="legal-shell wrap"><p class="eyebrow">DONDE SIEMPRE ESTUVISTE · ALEIX</p><h1>Normas de la comunidad</h1><p class="legal-meta">Actualizado el 30 de septiembre de 2026</p><section><h2>Para conversar sobre el libro</h2><p>Elige un alias y participa con respeto. Este espacio admite preguntas sobre el libro y experiencias generales de lectura. No es un servicio sanitario ni un canal de soporte de pedidos de Amazon. No publiques datos médicos, direcciones, datos de pago, información privada de otras personas ni contenidos sobre los que no tengas derechos.</p></section><section><h2>Publicación y moderación</h2><p>Los lectores envían preguntas y respuestas para revisión. Los dueños autorizados pueden aprobarlas o retirarlas; las decisiones quedan registradas con su fecha y motivo. No se admiten amenazas, acoso, suplantaciones, publicidad no solicitada, contenidos ilícitos ni instrucciones peligrosas. Las decisiones se basan en estas normas; no se promete una respuesta inmediata.</p><p>El distintivo Dueño identifica al equipo autorizado por el titular, no una compra verificada. El nombre de usuario por sí solo no acredita identidad. Puedes retirar tus aportaciones; retirar una pregunta también deja de mostrar su conversación. Para corregir un texto, retirarlo y reenviarlo, o solicitar la supresión de tu cuenta, utiliza los controles disponibles o escribe al titular.</p></section><section><h2>Comunicar contenido y solicitar revisión</h2><p>Con tu cuenta de Google, utiliza Avisar de un problema junto al mensaje para enviar un aviso privado al equipo. También puedes escribir a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a> con el enlace o identificador de la publicación, el motivo, una explicación de por qué consideras que vulnera tus derechos o la ley y un medio de respuesta. El titular revisará el aviso y podrá retirar contenido cuando corresponda. También puedes solicitar explicación o revisión de una decisión por ese correo. No incluyas datos personales innecesarios.</p><p>Estas normas no limitan los derechos legales, las reclamaciones ante las autoridades ni los recursos disponibles. El titular debe atender diligentemente los avisos y las obligaciones aplicables al alojamiento de contenido.</p></section><section><h2>Tus contenidos</h2><p>Conservas tus derechos. Al enviar un mensaje autorizas su alojamiento y visualización dentro de esta comunidad para prestar el servicio, sin ceder de forma general tus derechos para otros fines. La <a href="/privacidad">política de privacidad</a> explica el tratamiento de los datos.</p></section></main><footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Donde siempre estuviste</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/comunidad">Comunidad</a><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/condiciones-de-venta">Comprar en Amazon</a><a href="/propietario" rel="nofollow">Acceso del titular</a></nav><p class="social-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>Redes de Aleix · Próximamente</p></footer></body></html>
 
 
 ========================================================================
@@ -2307,8 +2343,25 @@ ARCHIVO: web-actual/dist/owner.js
 ========================================================================
 
 'use strict';
-async function refreshMetrics(){const status=document.getElementById('metrics-status'),button=document.getElementById('refresh-metrics');button.disabled=true;status.textContent='Cargando estadísticas…';try{const response=await fetch('/api/site-metrics',{cache:'no-store'});const data=await response.json();if(!response.ok)throw Error(data.error||'No disponible');const totals={view:0,amazon:0,whatsapp:0};for(const row of data.rows)totals[row.event]+=row.count;const summary=document.getElementById('metrics-summary');summary.replaceChildren();for(const [title,value]of [['Vistas registradas',totals.view],['Clics hacia Amazon',totals.amazon],['Clics a WhatsApp',totals.whatsapp],['Tasa de clics a Amazon',totals.view?(100*totals.amazon/totals.view).toFixed(1)+' %':'Sin datos']]){const p=document.createElement('p');p.textContent=title+': '+value;summary.append(p);}status.textContent=data.rows.length?'Datos actualizados.':'Todavía no hay eventos con consentimiento.';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}}
+async function refreshMetrics(){const status=document.getElementById('metrics-status'),button=document.getElementById('refresh-metrics');button.disabled=true;status.textContent='Cargando estadísticas…';try{const response=await fetch('/api/site-metrics',{cache:'no-store'});const data=await response.json();if(!response.ok){document.getElementById('metrics-summary').replaceChildren();throw Error(data.error||'No disponible');}const totals={view:0,amazon:0,whatsapp:0};for(const row of data.rows)totals[row.event]+=row.count;const summary=document.getElementById('metrics-summary');summary.replaceChildren();for(const [title,value]of [['Vistas registradas',totals.view],['Clics hacia Amazon',totals.amazon],['Tasa de clics a Amazon',totals.view?(100*totals.amazon/totals.view).toFixed(1)+' %':'Sin datos']]){const p=document.createElement('p');p.textContent=title+': '+value;summary.append(p);}status.textContent=data.rows.length?'Datos actualizados.':'Todavía no hay eventos con consentimiento.';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}}
 document.getElementById('refresh-metrics').addEventListener('click',refreshMetrics);refreshMetrics();
+
+const ownerElement=id=>document.getElementById(id);
+async function teamApi(path,body){const response=await fetch('/api/community/'+path,{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json','X-Community-Action':'write'},body:JSON.stringify(body)}:{})});const data=await response.json();if(!response.ok){if(response.status===401||response.status===403){ownerElement('team-members').replaceChildren();ownerElement('team-candidate').replaceChildren();ownerElement('team-section').hidden=true;}throw Error(data.error||'No se ha podido completar la acción.');}return data;}
+function teamText(tag,value){const element=document.createElement(tag);element.textContent=value;return element;}
+let teamBusy=false;
+async function changeRole(member,grant){if(teamBusy||!confirm((grant?'Dar permisos de dueño a ':'Retirar permisos de dueño a ')+member.alias+' ('+member.email+')'+(grant?' permitirá moderar conversaciones y consultar estadísticas. ¿Continuar?':' impedirá su acceso privado. ¿Continuar?')))return;teamBusy=true;try{await teamApi('team/'+(grant?'grant':'revoke'),{userId:member.id,email:member.email,confirmed:true});ownerElement('team-candidate').replaceChildren();await loadTeam();ownerElement('team-status').textContent=grant?'Nuevo dueño añadido. Ya puede entrar con Google.':'Permisos retirados.';}catch(e){ownerElement('team-status').textContent=e.message;}finally{teamBusy=false;}}
+function memberCard(member,grant=false){const card=teamText('div','');card.className='team-person';card.append(teamText('strong',member.alias),teamText('p',member.email));if(member.principal)card.append(teamText('p','Dueño principal · Cuenta protegida'));else{const button=teamText('button',grant?'Confirmar nuevo dueño':'Retirar permisos');button.type='button';button.className='secondary';button.addEventListener('click',()=>changeRole(member,grant));card.append(button);}return card;}
+async function loadTeam(){const data=await teamApi('team');ownerElement('team-members').replaceChildren(...data.members.map(member=>memberCard(member)));}
+ownerElement('team-form').addEventListener('submit',async event=>{event.preventDefault();if(teamBusy)return;teamBusy=true;ownerElement('team-candidate').replaceChildren();try{const data=await teamApi('team/lookup',{email:ownerElement('team-email').value.trim()});ownerElement('team-candidate').append(memberCard(data.member,true));ownerElement('team-status').textContent='Comprueba la cuenta antes de conceder acceso.';}catch(e){ownerElement('team-status').textContent=e.message;}finally{teamBusy=false;}});
+teamApi('me').then(async data=>{if(data.canManageOwners){ownerElement('team-section').hidden=false;await loadTeam();}}).catch(e=>{ownerElement('metrics-status').textContent=e.message;});
+
+async function loadModerationHistory(){try{const data=await teamApi('moderation-history');ownerElement('moderation-history').replaceChildren(...data.events.map(event=>{const item=teamText('div','');item.className='team-person';item.append(teamText('strong',event.action==='published'?'Aprobada':'Retirada'),teamText('p',event.actor+' · '+new Date(event.createdAt).toLocaleString('es-ES')),teamText('p',event.reason||'Aprobada conforme a las normas.'));return item;}));ownerElement('moderation-status').textContent=data.events.length?'Últimas '+data.events.length+' decisiones.':'Todavía no hay decisiones de moderación.';}catch(e){ownerElement('moderation-history').replaceChildren();ownerElement('moderation-status').textContent=e.message;}}
+ownerElement('refresh-moderation').addEventListener('click',loadModerationHistory);
+loadModerationHistory();
+
+async function loadReports(){const status=ownerElement('reports-status');try{const data=await teamApi('reports');ownerElement('community-reports').replaceChildren(...data.reports.map(report=>{const card=teamText('article','');card.className='team-person';card.append(teamText('h4',report.title||'Aviso sobre una respuesta'),teamText('p','Aviso de '+report.reporter+' · '+new Date(report.createdAt).toLocaleString('es-ES')),teamText('p',report.reason),teamText('blockquote',report.body));const link=teamText('a','Abrir conversación y moderar');link.href='/comunidad?conversacion='+encodeURIComponent(report.threadId);card.append(link);const form=document.createElement('form'),label=teamText('label','Decisión sobre el aviso'),input=document.createElement('input');input.id='resolution-'+report.id;label.htmlFor=input.id;input.required=true;input.minLength=3;input.maxLength=500;const submit=teamText('button','Marcar como revisado');submit.className='secondary';submit.type='submit';form.append(label,input,submit);form.addEventListener('submit',async e=>{e.preventDefault();submit.disabled=true;try{await teamApi('reports/resolve',{id:report.id,resolution:input.value});await loadReports();}catch(error){status.textContent=error.message;}finally{submit.disabled=false;}});card.append(form);return card;}));status.textContent=data.reports.length?data.reports.length+' avisos pendientes en esta tanda.':'No hay avisos pendientes.';}catch(e){ownerElement('community-reports').replaceChildren();status.textContent=e.message;}}
+ownerElement('refresh-reports').addEventListener('click',loadReports);loadReports();
 
 
 
@@ -2328,7 +2381,7 @@ ARCHIVO: web-actual/dist/privacidad.html
       <a href="/#preguntas">Preguntas</a>
     </nav>
     <a class="header-community" href="/comunidad">Comunidad</a>
-  </header><main id="contenido" class="legal-shell wrap"><p class="eyebrow">DONDE SIEMPRE ESTUVISTE · ALEIX</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el 30 de septiembre de 2026</p><section><h2>Responsable y contacto</h2><p>Alex Rivera Mosquera, Camí Ral de Cardona, 5, 08600 Berga, Barcelona, España. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. La identificación completa figura en el <a href="/aviso-legal">aviso legal</a>.</p></section><section><h2>Datos, finalidad y base del tratamiento</h2><ul><li><strong>Cuenta Google, cuando se active:</strong> identificador estable y correo verificado para autenticarte y gestionar tu participación a petición tuya, sobre la base de la ejecución de las condiciones del servicio. No se solicita acceso a Gmail, contactos o archivos. El correo no se publica.</li><li><strong>Comunidad:</strong> alias, mensajes, fecha, estado y decisiones de moderación para ofrecer y mantener la conversación y aplicar sus normas. Los mensajes aprobados y el alias son públicos. No publiques datos sensibles, información de salud o datos de terceros.</li><li><strong>Seguridad:</strong> sesiones con caducidad, controles de acceso y límites de frecuencia para proteger el servicio, basados en el interés legítimo de prevenir abusos. Se usan claves derivadas de IP para límites técnicos; no se incluyen en las estadísticas agregadas.</li><li><strong>Contacto:</strong> datos que facilites por correo o WhatsApp para responder a tu solicitud, sobre la base de medidas solicitadas por ti o del interés legítimo de atender consultas, según el caso.</li><li><strong>Analítica opcional:</strong> solo si aceptas, recuentos diarios de páginas y clics en Amazon o WhatsApp. No incluyen identificadores de visitante, correos, consultas URL ni perfiles personales. Puedes retirar el consentimiento desde Preferencias de privacidad. No mide ventas completadas en Amazon.</li></ul></section><section><h2>Conservación y controles</h2><p>Las sesiones de la comunidad caducan a los siete días; los intentos de acceso, a los diez minutos. Los registros caducados se limpian al utilizar las funciones correspondientes. Los límites de frecuencia se eliminan como máximo 24 horas después de caducar cuando vuelve a usarse el servicio. Las estadísticas agregadas se conservan durante 90 días, con limpieza al recibir nuevos eventos.</p><p>El perfil y las publicaciones se conservan mientras se mantenga la cuenta y la conversación. Puedes retirar tus publicaciones o solicitar la supresión de la cuenta por correo; el titular deberá atender y verificar esa solicitud. Los registros de moderación necesarios para gestionar reclamaciones no tienen todavía un borrado programado; el titular debe limitar su conservación a lo necesario y revisar los plazos antes de activar la comunidad.</p><p>No se conservan tokens de acceso a servicios de Google; la aplicación mantiene su propia sesión. No hay publicidad personalizada ni decisiones automatizadas con efectos jurídicos.</p></section><section><h2>Proveedores y destinatarios</h2><p>Sites de OpenAI y Cloudflare intervienen en el alojamiento, almacenamiento y seguridad. Google autentica la cuenta cuando esa opción esté habilitada. El correo usa Gmail y WhatsApp es un canal externo opcional. La navegación ordinaria no carga Google Fonts ni un píxel externo de analítica.</p><p>Consulta las políticas de <a href="https://openai.com/policies/eu-privacy-policy/">OpenAI</a>, <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a>, <a href="https://policies.google.com/privacy?hl=es">Google</a> y <a href="https://www.whatsapp.com/legal/privacy-policy-eea">WhatsApp</a>. Antes de activar las cuentas, el titular debe comprobar los contratos de tratamiento, ubicaciones y garantías aplicables a posibles transferencias fuera del EEE. No se afirma que todos los datos permanezcan en España. Amazon aplica su propia política al visitar o comprar en su servicio.</p></section><section><h2>Tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación y portabilidad cuando procedan a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Puedes retirar el consentimiento de analítica en cualquier momento. La retirada no afecta a la licitud del tratamiento anterior. Las solicitudes se atienden en los plazos del RGPD, normalmente un mes. Solo se solicitarán datos adicionales para verificar la identidad cuando resulte necesario.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>. Para la participación de menores se deberá disponer de las autorizaciones que legalmente correspondan; esta versión no incorpora un proceso para recabar autorización de representantes.</p></section></main><footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Donde siempre estuviste</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/comunidad">Comunidad</a><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/condiciones-de-venta">Comprar en Amazon</a><a href="/propietario" rel="nofollow">Acceso del titular</a></nav><p class="social-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>Redes de Aleix · Próximamente</p></footer></body></html>
+  </header><main id="contenido" class="legal-shell wrap"><p class="eyebrow">DONDE SIEMPRE ESTUVISTE · ALEIX</p><h1>Política de privacidad</h1><p class="legal-meta">Actualizado el 30 de septiembre de 2026</p><section><h2>Responsable y contacto</h2><p>Alex Rivera Mosquera, Camí Ral de Cardona, 5, 08600 Berga, Barcelona, España. Contacto: <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. La identificación completa figura en el <a href="/aviso-legal">aviso legal</a>.</p></section><section><h2>Datos, finalidad y base del tratamiento</h2><ul><li><strong>Cuenta Google:</strong> identificador estable y correo verificado para autenticarte y gestionar tu participación a petición tuya, sobre la base de la ejecución de las condiciones del servicio. No se solicita acceso a Gmail, contactos o archivos. El correo no se publica. El dueño principal puede buscar una cuenta por su correo para conceder o retirar permisos de gestión; estos cambios quedan registrados.</li><li><strong>Comunidad:</strong> alias, mensajes, fecha, estado, avisos de contenido y decisiones de moderación para ofrecer y mantener la conversación y aplicar sus normas. Los mensajes aprobados y el alias son públicos. Los avisos sobre contenido y su resolución solo están disponibles para el equipo autorizado. No publiques datos sensibles, información de salud o datos de terceros.</li><li><strong>Seguridad:</strong> sesiones con caducidad, controles de acceso y límites de frecuencia para proteger el servicio, basados en el interés legítimo de prevenir abusos. Se usan claves derivadas de IP para límites técnicos; no se incluyen en las estadísticas agregadas.</li><li><strong>Contacto:</strong> datos que facilites por correo para responder a tu solicitud, sobre la base de medidas solicitadas por ti o del interés legítimo de atender consultas, según el caso.</li><li><strong>Analítica opcional:</strong> solo si aceptas, recuentos diarios de páginas y clics en Amazon. No incluyen identificadores de visitante, correos, consultas URL ni perfiles personales. Puedes retirar el consentimiento desde Preferencias de privacidad. No mide ventas completadas en Amazon.</li></ul></section><section><h2>Conservación y controles</h2><p>Las sesiones de la comunidad caducan a los siete días; los intentos de acceso, a los diez minutos. Los registros caducados se limpian al utilizar las funciones correspondientes. Los límites de frecuencia se eliminan como máximo 24 horas después de caducar cuando vuelve a usarse el servicio. Las estadísticas agregadas se conservan durante 90 días, con limpieza al recibir nuevos eventos.</p><p>El perfil y las publicaciones se conservan mientras se mantenga la cuenta y la conversación. Puedes retirar tus publicaciones o solicitar la supresión de la cuenta por correo; el titular deberá atender y verificar esa solicitud. Los registros de cambios de permisos y de moderación necesarios para gestionar reclamaciones no tienen todavía un borrado programado; el titular debe limitar su conservación a lo necesario y revisar los plazos antes de activar la comunidad.</p><p>No se conservan tokens de acceso a servicios de Google; la aplicación mantiene su propia sesión. No hay publicidad personalizada ni decisiones automatizadas con efectos jurídicos.</p></section><section><h2>Proveedores y destinatarios</h2><p>Sites de OpenAI y Cloudflare intervienen en el alojamiento, almacenamiento y seguridad. Google autentica la cuenta. El correo usa Gmail. La navegación ordinaria no carga Google Fonts ni un píxel externo de analítica.</p><p>Consulta las políticas de <a href="https://openai.com/policies/eu-privacy-policy/">OpenAI</a>, <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a>, <a href="https://policies.google.com/privacy?hl=es">Google</a>. Antes de activar las cuentas, el titular debe comprobar los contratos de tratamiento, ubicaciones y garantías aplicables a posibles transferencias fuera del EEE. No se afirma que todos los datos permanezcan en España. Amazon aplica su propia política al visitar o comprar en su servicio.</p></section><section><h2>Tus derechos</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación y portabilidad cuando procedan a <a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a>. Puedes retirar el consentimiento de analítica en cualquier momento. La retirada no afecta a la licitud del tratamiento anterior. Las solicitudes se atienden en los plazos del RGPD, normalmente un mes. Solo se solicitarán datos adicionales para verificar la identidad cuando resulte necesario.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>. Para la participación de menores se deberá disponer de las autorizaciones que legalmente correspondan; esta versión no incorpora un proceso para recabar autorización de representantes.</p></section></main><footer class="site-footer wrap"><div class="footer-line"><a href="/#inicio" class="footer-brand">Donde siempre estuviste</a><p>Un libro. Un respiro. Tu propio ritmo.</p><a href="mailto:theshoz@gmail.com">theshoz@gmail.com</a></div><nav class="legal-links" aria-label="Información legal"><a href="/comunidad">Comunidad</a><a href="/aviso-legal">Aviso legal</a><a href="/privacidad">Privacidad</a><a href="/cookies">Cookies</a><a href="/condiciones-de-venta">Comprar en Amazon</a><a href="/propietario" rel="nofollow">Acceso del titular</a></nav><p class="social-pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>Redes de Aleix · Próximamente</p></footer></body></html>
 
 
 ========================================================================
@@ -2341,7 +2394,7 @@ ARCHIVO: web-actual/dist/privacy-controls.js
  try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&['essential','analytics'].includes(saved.choice)&&Number.isFinite(saved.at)&&saved.at<=Date.now()&&Date.now()-saved.at<lifetime)choice=saved.choice;}catch{}
  function node(tag,value){const el=document.createElement(tag);el.textContent=value;return el;}
  const panel=document.createElement('section');panel.className='privacy-panel';panel.setAttribute('aria-label','Preferencias de privacidad');panel.hidden=!!choice;
- panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon y WhatsApp, sin perfiles personales.'));
+ panel.append(node('h2','Tu privacidad, con calma'),node('p','Usamos almacenamiento necesario para recordar esta elección y, al entrar en la comunidad, mantener tu sesión. Si aceptas la analítica, contaremos visitas y clics hacia Amazon, sin perfiles personales.'));
  const actions=document.createElement('div');actions.className='privacy-actions';
  for(const [label,value]of [['Solo necesarias','essential'],['Aceptar analítica','analytics']]){const button=node('button',label);button.type='button';button.className='privacy-choice';button.addEventListener('click',()=>{choice=value;try{localStorage.setItem(key,JSON.stringify({choice:value,at:Date.now()}));}catch{}panel.hidden=true;track('view');settings.focus({preventScroll:true});});actions.append(button);}
  const more=node('a','Ver política de cookies');more.href='/cookies';actions.append(more);panel.append(actions);document.body.append(panel);
@@ -2356,7 +2409,7 @@ ARCHIVO: web-actual/dist/privacy-controls.js
 ARCHIVO: web-actual/dist/propietario.html
 ========================================================================
 
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Espacio del titular · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"><script src="/owner.js" defer></script></head><body class="community-page"><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a class="header-cta" href="/comunidad">Comunidad</a></header><main class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO DEL TITULAR</p><h1>Comunidad y estadísticas</h1><p>Los pedidos y devoluciones se gestionan en Amazon.</p><section><h2>Tu cuenta de dueño</h2><p>Conecta tu cuenta de Google en la comunidad. Cuando estés también identificado aquí como titular, allí aparecerá el botón para vincularla como dueño.</p><a class="underlined-link" href="/comunidad">Gestionar la comunidad</a></section><section class="topic"><h2>Actividad de los últimos 30 días</h2><p>Solo incluye eventos de quienes aceptaron la analítica. Los clics hacia Amazon son interés de compra, no ventas confirmadas. La tasa de clics es clics dividido entre vistas registradas; no son personas únicas.</p><button id="refresh-metrics" class="secondary" type="button">Actualizar estadísticas</button><p id="metrics-status" role="status"></p><div id="metrics-summary"></div><div id="metrics-days"></div></section></main></body></html>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Espacio del titular · Donde siempre estuviste</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/community.css"><link rel="stylesheet" href="/site-updates.css"><script src="/owner.js" defer></script></head><body class="community-page"><header class="site-header wrap"><a class="wordmark" href="/">Donde siempre estuviste</a><a class="header-cta" href="/comunidad">Comunidad</a></header><main class="community-shell wrap"><p class="eyebrow">ESPACIO PRIVADO DEL TITULAR</p><h1>Comunidad y estadísticas</h1><p>Los pedidos y devoluciones se gestionan en Amazon.</p><section><h2>Tu cuenta de dueño</h2><p>Accedes con tu cuenta de Google. Desde aquí puedes moderar las conversaciones y consultar la actividad del libro.</p><a class="underlined-link" href="/comunidad">Gestionar la comunidad</a></section><section class="owner-card"><h2>Moderación</h2><p>Las preguntas y respuestas de los lectores esperan tu revisión. Aprueba las aportaciones respetuosas y explica el motivo cuando retires una.</p><a class="underlined-link" href="/comunidad?moderar=1">Revisar publicaciones pendientes</a><h3>Avisos de la comunidad</h3><button id="refresh-reports" class="secondary" type="button">Actualizar avisos</button><p id="reports-status" role="status"></p><div id="community-reports"></div><details><summary>Últimas decisiones</summary><button id="refresh-moderation" class="text-button" type="button">Actualizar historial</button><div id="moderation-history"></div><p id="moderation-status" role="status"></p></details></section><section id="team-section" class="owner-card" hidden><h2>Tu equipo de dueños</h2><p>Tu cuenta principal conserva el control de los permisos. Los demás dueños podrán moderar la comunidad y consultar estadísticas.</p><div id="team-members"></div><form id="team-form"><label for="team-email">Correo de Google de la persona</label><input id="team-email" type="email" required maxlength="320" autocomplete="off"><p>Debe haber entrado al menos una vez en la comunidad con esa cuenta.</p><button class="secondary" type="submit">Buscar cuenta</button></form><div id="team-candidate"></div><p id="team-status" role="status"></p></section><section class="topic"><h2>Actividad de los últimos 30 días</h2><p>Solo incluye eventos de quienes aceptaron la analítica. Los clics hacia Amazon son interés de compra, no ventas confirmadas. La tasa de clics es clics dividido entre vistas registradas; no son personas únicas.</p><button id="refresh-metrics" class="secondary" type="button">Actualizar estadísticas</button><p id="metrics-status" role="status"></p><div id="metrics-summary"></div><div id="metrics-days"></div></section></main></body></html>
 
 
 
@@ -3050,6 +3103,32 @@ Por aclaración del titular, se retiran el botón flotante y los enlaces de cont
 
 
 ========================================================================
+ARCHIVO: web-actual/docs/community-google-team-2026-09-30.md
+========================================================================
+
+# Comunidad, equipo y moderación
+
+- Acceso privado mediante sesión Google; las cabeceras de identidad de la plataforma ya no autorizan el panel ni las estadísticas.
+- La cuenta principal ya vinculada conserva sus permisos. Solo ella concede o retira permisos de dueño a cuentas que hayan entrado con Google. Confirmación de identidad y registro de cambios. Los demás dueños moderan y consultan estadísticas, pero no delegan acceso.
+- Migraciones Drizzle aditivas 0007 y 0008: equipo, auditoría de permisos, destino OAuth limitado y avisos privados. Conservan usuarios, sesiones, publicaciones y datos existentes.
+- Búsqueda con tildes, actividad reciente, contador de respuestas públicas, enlaces a conversaciones y aviso de novedades cada 30 segundos mientras el hilo esté abierto y visible. Actualizar conserva el borrador.
+- Preguntas y respuestas de lectores requieren revisión previa. Los dueños aprueban o retiran con motivo. Se conserva historial privado.
+- Avisar de un problema abre un formulario interno. Requiere sesión Google; el visitante sin cuenta ve instrucciones y el contacto alternativo. Avisos privados, límite de frecuencia, sin duplicar avisos pendientes de una misma cuenta sobre el mismo mensaje. Los dueños revisan y cierran con una decisión.
+- Pruebas automatizadas: permisos, CSRF, identidad Google, retornos OAuth, revocación inmediata, búsqueda, privacidad de avisos, resolución e historial. Verificación local con Edge: móvil 390px, envío/revisión de avisos, retirada de respuesta, concesión y retirada de permisos, conservación de borradores.
+- Las pruebas de interfaz usan exclusivamente cuentas y publicaciones sintéticas del servidor local; no se incorporan al Worker publicado.
+
+## Uso
+
+1. Entrar con Google en `/comunidad`.
+2. Dueño: abrir «Gestionar comunidad y equipo» o `/propietario`.
+3. Principal: buscar el correo de una cuenta existente y confirmar «nuevo dueño». No se conceden permisos a correos que todavía no hayan entrado.
+4. Moderación: revisar pendientes en `/comunidad?moderar=1`; consultar avisos e historial en el panel.
+
+El estado de publicación del cliente OAuth en Google Cloud sigue siendo una configuración externa. No se cambia ni se prometen accesos de usuarios no habilitados en modo de pruebas.
+
+
+
+========================================================================
 ARCHIVO: web-actual/drizzle.config.ts
 ========================================================================
 
@@ -3262,6 +3341,49 @@ CREATE TABLE `site_metrics` (
 	PRIMARY KEY(`day`, `event`, `page`)
 );
 
+
+
+========================================================================
+ARCHIVO: web-actual/drizzle/0007_goofy_anthem.sql
+========================================================================
+
+CREATE TABLE `community_coowners` (
+	`user_id` text PRIMARY KEY NOT NULL,
+	`granted_by` text NOT NULL,
+	`created_at` integer NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `community_users`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`granted_by`) REFERENCES `community_users`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `community_role_events` (
+	`id` text PRIMARY KEY NOT NULL,
+	`actor_id` text NOT NULL,
+	`target_id` text NOT NULL,
+	`action` text NOT NULL,
+	`created_at` integer NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE `community_oauth` ADD `return_path` text DEFAULT '/comunidad' NOT NULL;
+
+
+========================================================================
+ARCHIVO: web-actual/drizzle/0008_spicy_mystique.sql
+========================================================================
+
+CREATE TABLE `community_reports` (
+	`id` text PRIMARY KEY NOT NULL,
+	`post_id` text NOT NULL,
+	`reporter_id` text NOT NULL,
+	`reason` text NOT NULL,
+	`created_at` integer NOT NULL,
+	`resolved_at` integer,
+	`resolved_by` text,
+	`resolution` text DEFAULT '' NOT NULL,
+	FOREIGN KEY (`post_id`) REFERENCES `community_posts`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`reporter_id`) REFERENCES `community_users`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE INDEX `community_reports_pending` ON `community_reports` (`resolved_at`,`created_at`);
 
 
 ========================================================================
@@ -7445,6 +7567,2455 @@ ARCHIVO: web-actual/drizzle/meta/0006_snapshot.json
 
 
 ========================================================================
+ARCHIVO: web-actual/drizzle/meta/0007_snapshot.json
+========================================================================
+
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "62c1ea8e-963f-4500-a9c3-39a93b8f2b2c",
+  "prevId": "723eafa3-ee89-4163-9057-b09d58768635",
+  "tables": {
+    "community_coowners": {
+      "name": "community_coowners",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "granted_by": {
+          "name": "granted_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "community_coowners_user_id_community_users_id_fk": {
+          "name": "community_coowners_user_id_community_users_id_fk",
+          "tableFrom": "community_coowners",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "community_coowners_granted_by_community_users_id_fk": {
+          "name": "community_coowners_granted_by_community_users_id_fk",
+          "tableFrom": "community_coowners",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "granted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_limits": {
+      "name": "community_limits",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_limit_expiry": {
+          "name": "community_limit_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_moderation": {
+      "name": "community_moderation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_oauth": {
+      "name": "community_oauth",
+      "columns": {
+        "return_path": {
+          "name": "return_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'/comunidad'"
+        },
+        "state_hash": {
+          "name": "state_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "verifier": {
+          "name": "verifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "nonce": {
+          "name": "nonce",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_oauth_expiry": {
+          "name": "community_oauth_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_owner": {
+      "name": "community_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "community_owner_user_id_community_users_id_fk": {
+          "name": "community_owner_user_id_community_users_id_fk",
+          "tableFrom": "community_owner",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "community_one_owner": {
+          "name": "community_one_owner",
+          "value": "\"community_owner\".\"slot\" = 1"
+        }
+      }
+    },
+    "community_posts": {
+      "name": "community_posts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "community_posts_parent_created": {
+          "name": "community_posts_parent_created",
+          "columns": [
+            "parent_id",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "community_posts_status": {
+          "name": "community_posts_status",
+          "columns": [
+            "status",
+            "created_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "community_posts_author_id_community_users_id_fk": {
+          "name": "community_posts_author_id_community_users_id_fk",
+          "tableFrom": "community_posts",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "community_post_status": {
+          "name": "community_post_status",
+          "value": "\"community_posts\".\"status\" IN ('pending','published','hidden')"
+        }
+      }
+    },
+    "community_role_events": {
+      "name": "community_role_events",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "target_id": {
+          "name": "target_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_sessions": {
+      "name": "community_sessions",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_session_expiry": {
+          "name": "community_session_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "community_sessions_user_id_community_users_id_fk": {
+          "name": "community_sessions_user_id_community_users_id_fk",
+          "tableFrom": "community_sessions",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_users": {
+      "name": "community_users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "google_sub": {
+          "name": "google_sub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "alias": {
+          "name": "alias",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'Lector'"
+        },
+        "accepted_at": {
+          "name": "accepted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_users_google_sub_unique": {
+          "name": "community_users_google_sub_unique",
+          "columns": [
+            "google_sub"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "demo_sessions": {
+      "name": "demo_sessions",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revision": {
+          "name": "revision",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "demo_sessions_expiry": {
+          "name": "demo_sessions_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "order_items": {
+      "name": "order_items",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "order_items_order_id_edition_pk": {
+          "columns": [
+            "order_id",
+            "edition"
+          ],
+          "name": "order_items_order_id_edition_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "item_edition": {
+          "name": "item_edition",
+          "value": "\"order_items\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "item_quantity": {
+          "name": "item_quantity",
+          "value": "\"order_items\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "item_unit_price": {
+          "name": "item_unit_price",
+          "value": "\"order_items\".\"unit_price\" >= 0"
+        }
+      }
+    },
+    "orders": {
+      "name": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_name": {
+          "name": "customer_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address1": {
+          "name": "address1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address2": {
+          "name": "address2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shipping": {
+          "name": "shipping",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total": {
+          "name": "total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fulfillment_status": {
+          "name": "fulfillment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shipped_at": {
+          "name": "shipped_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tracking": {
+          "name": "tracking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "carrier": {
+          "name": "carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "private_note": {
+          "name": "private_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "note_updated_at": {
+          "name": "note_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_status": {
+          "name": "return_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "return_reason": {
+          "name": "return_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_resolution": {
+          "name": "return_resolution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_updated_at": {
+          "name": "return_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "management_version": {
+          "name": "management_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "portal_requested_at": {
+          "name": "portal_requested_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "customer_reply": {
+          "name": "customer_reply",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_kind": {
+          "name": "return_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_code": {
+          "name": "return_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_carrier": {
+          "name": "return_carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_label_key": {
+          "name": "return_label_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_type": {
+          "name": "return_label_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_size": {
+          "name": "return_label_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_submitted_at": {
+          "name": "return_submitted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "orders_created": {
+          "name": "orders_created",
+          "columns": [
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_payment_fulfillment_created": {
+          "name": "orders_payment_fulfillment_created",
+          "columns": [
+            "payment_status",
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_fulfillment_created": {
+          "name": "orders_fulfillment_created",
+          "columns": [
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "order_edition": {
+          "name": "order_edition",
+          "value": "\"orders\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "order_quantity": {
+          "name": "order_quantity",
+          "value": "\"orders\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "order_payment": {
+          "name": "order_payment",
+          "value": "\"orders\".\"payment_status\" IN ('pending','paid','failed','refunded','partially_refunded')"
+        },
+        "order_fulfillment": {
+          "name": "order_fulfillment",
+          "value": "\"orders\".\"fulfillment_status\" IN ('pending','shipped')"
+        },
+        "order_total": {
+          "name": "order_total",
+          "value": "\"orders\".\"total\" = \"orders\".\"subtotal\" + \"orders\".\"shipping\" AND \"orders\".\"shipping\" >= 0 AND \"orders\".\"subtotal\" >= 0"
+        }
+      }
+    },
+    "admin_owner": {
+      "name": "admin_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "one_owner": {
+          "name": "one_owner",
+          "value": "\"admin_owner\".\"slot\" = 1"
+        }
+      }
+    },
+    "return_access": {
+      "name": "return_access",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_access_token_hash_unique": {
+          "name": "return_access_token_hash_unique",
+          "columns": [
+            "token_hash"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "return_access_order_id_orders_id_fk": {
+          "name": "return_access_order_id_orders_id_fk",
+          "tableFrom": "return_access",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "return_rate_limits": {
+      "name": "return_rate_limits",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "window_start": {
+          "name": "window_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_rate_window": {
+          "name": "return_rate_window",
+          "columns": [
+            "window_start"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "site_metrics": {
+      "name": "site_metrics",
+      "columns": {
+        "day": {
+          "name": "day",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "event": {
+          "name": "event",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "page": {
+          "name": "page",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "site_metrics_day_event_page_pk": {
+          "columns": [
+            "day",
+            "event",
+            "page"
+          ],
+          "name": "site_metrics_day_event_page_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+========================================================================
+ARCHIVO: web-actual/drizzle/meta/0008_snapshot.json
+========================================================================
+
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "c0053152-e250-442d-b2e0-d793ed76ce2d",
+  "prevId": "62c1ea8e-963f-4500-a9c3-39a93b8f2b2c",
+  "tables": {
+    "community_coowners": {
+      "name": "community_coowners",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "granted_by": {
+          "name": "granted_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "community_coowners_user_id_community_users_id_fk": {
+          "name": "community_coowners_user_id_community_users_id_fk",
+          "tableFrom": "community_coowners",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "community_coowners_granted_by_community_users_id_fk": {
+          "name": "community_coowners_granted_by_community_users_id_fk",
+          "tableFrom": "community_coowners",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "granted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_limits": {
+      "name": "community_limits",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_limit_expiry": {
+          "name": "community_limit_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_moderation": {
+      "name": "community_moderation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_oauth": {
+      "name": "community_oauth",
+      "columns": {
+        "return_path": {
+          "name": "return_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'/comunidad'"
+        },
+        "state_hash": {
+          "name": "state_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "verifier": {
+          "name": "verifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "nonce": {
+          "name": "nonce",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_oauth_expiry": {
+          "name": "community_oauth_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_owner": {
+      "name": "community_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "community_owner_user_id_community_users_id_fk": {
+          "name": "community_owner_user_id_community_users_id_fk",
+          "tableFrom": "community_owner",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "community_one_owner": {
+          "name": "community_one_owner",
+          "value": "\"community_owner\".\"slot\" = 1"
+        }
+      }
+    },
+    "community_posts": {
+      "name": "community_posts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "community_posts_parent_created": {
+          "name": "community_posts_parent_created",
+          "columns": [
+            "parent_id",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "community_posts_status": {
+          "name": "community_posts_status",
+          "columns": [
+            "status",
+            "created_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "community_posts_author_id_community_users_id_fk": {
+          "name": "community_posts_author_id_community_users_id_fk",
+          "tableFrom": "community_posts",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "community_post_status": {
+          "name": "community_post_status",
+          "value": "\"community_posts\".\"status\" IN ('pending','published','hidden')"
+        }
+      }
+    },
+    "community_reports": {
+      "name": "community_reports",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reporter_id": {
+          "name": "reporter_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "resolved_at": {
+          "name": "resolved_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "resolved_by": {
+          "name": "resolved_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "resolution": {
+          "name": "resolution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        }
+      },
+      "indexes": {
+        "community_reports_pending": {
+          "name": "community_reports_pending",
+          "columns": [
+            "resolved_at",
+            "created_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "community_reports_post_id_community_posts_id_fk": {
+          "name": "community_reports_post_id_community_posts_id_fk",
+          "tableFrom": "community_reports",
+          "tableTo": "community_posts",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "community_reports_reporter_id_community_users_id_fk": {
+          "name": "community_reports_reporter_id_community_users_id_fk",
+          "tableFrom": "community_reports",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "reporter_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_role_events": {
+      "name": "community_role_events",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "target_id": {
+          "name": "target_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_sessions": {
+      "name": "community_sessions",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_session_expiry": {
+          "name": "community_session_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "community_sessions_user_id_community_users_id_fk": {
+          "name": "community_sessions_user_id_community_users_id_fk",
+          "tableFrom": "community_sessions",
+          "tableTo": "community_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "community_users": {
+      "name": "community_users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "google_sub": {
+          "name": "google_sub",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "alias": {
+          "name": "alias",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'Lector'"
+        },
+        "accepted_at": {
+          "name": "accepted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "community_users_google_sub_unique": {
+          "name": "community_users_google_sub_unique",
+          "columns": [
+            "google_sub"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "demo_sessions": {
+      "name": "demo_sessions",
+      "columns": {
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revision": {
+          "name": "revision",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "demo_sessions_expiry": {
+          "name": "demo_sessions_expiry",
+          "columns": [
+            "expires_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "order_items": {
+      "name": "order_items",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "order_items_order_id_edition_pk": {
+          "columns": [
+            "order_id",
+            "edition"
+          ],
+          "name": "order_items_order_id_edition_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "item_edition": {
+          "name": "item_edition",
+          "value": "\"order_items\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "item_quantity": {
+          "name": "item_quantity",
+          "value": "\"order_items\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "item_unit_price": {
+          "name": "item_unit_price",
+          "value": "\"order_items\".\"unit_price\" >= 0"
+        }
+      }
+    },
+    "orders": {
+      "name": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "customer_name": {
+          "name": "customer_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address1": {
+          "name": "address1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address2": {
+          "name": "address2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "city": {
+          "name": "city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "edition": {
+          "name": "edition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shipping": {
+          "name": "shipping",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total": {
+          "name": "total",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fulfillment_status": {
+          "name": "fulfillment_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shipped_at": {
+          "name": "shipped_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tracking": {
+          "name": "tracking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "carrier": {
+          "name": "carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "private_note": {
+          "name": "private_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "note_updated_at": {
+          "name": "note_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_status": {
+          "name": "return_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'none'"
+        },
+        "return_reason": {
+          "name": "return_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_resolution": {
+          "name": "return_resolution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_updated_at": {
+          "name": "return_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "management_version": {
+          "name": "management_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "portal_requested_at": {
+          "name": "portal_requested_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "customer_reply": {
+          "name": "customer_reply",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_kind": {
+          "name": "return_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_code": {
+          "name": "return_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_carrier": {
+          "name": "return_carrier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "return_label_key": {
+          "name": "return_label_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_type": {
+          "name": "return_label_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_label_size": {
+          "name": "return_label_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "return_submitted_at": {
+          "name": "return_submitted_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "orders_created": {
+          "name": "orders_created",
+          "columns": [
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_payment_fulfillment_created": {
+          "name": "orders_payment_fulfillment_created",
+          "columns": [
+            "payment_status",
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        },
+        "orders_fulfillment_created": {
+          "name": "orders_fulfillment_created",
+          "columns": [
+            "fulfillment_status",
+            "created_at",
+            "id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "order_edition": {
+          "name": "order_edition",
+          "value": "\"orders\".\"edition\" IN ('paperback','hardcover')"
+        },
+        "order_quantity": {
+          "name": "order_quantity",
+          "value": "\"orders\".\"quantity\" BETWEEN 1 AND 10"
+        },
+        "order_payment": {
+          "name": "order_payment",
+          "value": "\"orders\".\"payment_status\" IN ('pending','paid','failed','refunded','partially_refunded')"
+        },
+        "order_fulfillment": {
+          "name": "order_fulfillment",
+          "value": "\"orders\".\"fulfillment_status\" IN ('pending','shipped')"
+        },
+        "order_total": {
+          "name": "order_total",
+          "value": "\"orders\".\"total\" = \"orders\".\"subtotal\" + \"orders\".\"shipping\" AND \"orders\".\"shipping\" >= 0 AND \"orders\".\"subtotal\" >= 0"
+        }
+      }
+    },
+    "admin_owner": {
+      "name": "admin_owner",
+      "columns": {
+        "slot": {
+          "name": "slot",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "one_owner": {
+          "name": "one_owner",
+          "value": "\"admin_owner\".\"slot\" = 1"
+        }
+      }
+    },
+    "return_access": {
+      "name": "return_access",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_access_token_hash_unique": {
+          "name": "return_access_token_hash_unique",
+          "columns": [
+            "token_hash"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "return_access_order_id_orders_id_fk": {
+          "name": "return_access_order_id_orders_id_fk",
+          "tableFrom": "return_access",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "return_rate_limits": {
+      "name": "return_rate_limits",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "window_start": {
+          "name": "window_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "return_rate_window": {
+          "name": "return_rate_window",
+          "columns": [
+            "window_start"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "site_metrics": {
+      "name": "site_metrics",
+      "columns": {
+        "day": {
+          "name": "day",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "event": {
+          "name": "event",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "page": {
+          "name": "page",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "site_metrics_day_event_page_pk": {
+          "columns": [
+            "day",
+            "event",
+            "page"
+          ],
+          "name": "site_metrics_day_event_page_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
+
+
+========================================================================
 ARCHIVO: web-actual/drizzle/meta/_journal.json
 ========================================================================
 
@@ -7499,6 +10070,20 @@ ARCHIVO: web-actual/drizzle/meta/_journal.json
       "version": "6",
       "when": 1790748358379,
       "tag": "0006_heavy_human_torch",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1790778546934,
+      "tag": "0007_goofy_anthem",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1790778974465,
+      "tag": "0008_spicy_mystique",
       "breakpoints": true
     }
   ]
@@ -8459,11 +11044,14 @@ import {localDatabase} from '../tests/database.mjs';
 import {communityHash} from '../worker/community.mjs';
 const worker=(await import(pathToFileURL(process.cwd()+'/dist/server/index.js'))).default;
 const DB=localDatabase();
-const previewOwner=process.argv.includes('--owner');const port=previewOwner?4189:4188;
+const previewOwner=process.argv.includes('--owner');const port=Number(process.env.PREVIEW_PORT)||(previewOwner?4189:4188);
 const base={DB,ADMIN_OWNER_EMAIL:'owner@example.test'};
 DB.sqlite.prepare('INSERT INTO community_users(id,google_sub,email,alias,accepted_at,created_at) VALUES(?,?,?,?,?,?)').run('preview-owner','preview-google','preview@example.invalid','Aleix',Date.now(),Date.now());
 DB.sqlite.prepare('INSERT INTO community_owner VALUES(1,?)').run('preview-owner');
 DB.sqlite.prepare('INSERT INTO community_sessions VALUES(?,?,?)').run(await communityHash('p'.repeat(43)),'preview-owner',Date.now()+86400000);
+DB.sqlite.prepare('INSERT INTO community_users(id,google_sub,email,alias,accepted_at,created_at) VALUES(?,?,?,?,?,?)').run('preview-reader','reader-google','reader@example.invalid','Lector de prueba',Date.now(),Date.now());
+DB.sqlite.prepare('INSERT INTO community_posts(id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?)').run('preview-question','preview-owner','Una pausa entre páginas','¿Qué pequeña idea del libro te ha acompañado hoy? Comparte tu lectura con calma.','published',Date.now());
+DB.sqlite.prepare('INSERT INTO community_posts(id,parent_id,author_id,body,status,created_at) VALUES(?,?,?,?,?,?)').run('preview-reply','preview-question','preview-reader','Me quedo con la idea de reservar un momento para mí.','published',Date.now());
 http.createServer(async(req,res)=>{try{
  const origin='http://127.0.0.1:'+port,url=new URL(req.url,origin);
  if(url.pathname==='/__mobile'){res.writeHead(200,{'Content-Type':'text/html'});res.end('<!doctype html><meta charset="utf-8"><title>Vista móvil 390px</title><style>body{margin:0;background:#dedbd4}iframe{display:block;width:390px;height:844px;margin:12px auto;border:1px solid #888}</style><iframe title="Vista móvil" src="'+(url.searchParams.get('page')==='/comunidad'?'/comunidad':'/')+'"></iframe>');return;}
@@ -8963,6 +11551,101 @@ test('corrupt, oversized, future, or unavailable storage fails safely',()=>{
 
 
 ========================================================================
+ARCHIVO: web-actual/tests/community-team.test.mjs
+========================================================================
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {localDatabase} from './database.mjs';
+import {handleCommunity,communityHash} from '../worker/community.mjs';
+import {createPublicWorker} from '../worker/site.mjs';
+async function setup(){
+ const env={DB:localDatabase(),GOOGLE_CLIENT_ID:'test',GOOGLE_CLIENT_SECRET:'test',COMMUNITY_ORIGIN:'https://book.example'};
+ for(const id of ['root','reader','other']){env.DB.sqlite.prepare('INSERT INTO community_users(id,google_sub,email,alias,accepted_at,created_at) VALUES(?,?,?,?,?,?)').run(id,id,id+'@example.test',id,1,1);env.DB.sqlite.prepare('INSERT INTO community_sessions VALUES(?,?,?)').run(await communityHash(id.padEnd(43,'x')),id,Date.now()+60000);}
+ env.DB.sqlite.prepare('INSERT INTO community_owner VALUES(1,?)').run('root');
+ const call=(path,user,body,headers={})=>handleCommunity(new Request('https://book.example/api/community/'+path,{method:body?'POST':'GET',headers:{Cookie:'__Host-community='+user.padEnd(43,'x'),Origin:'https://book.example','Content-Type':'application/json','X-Community-Action':'write',...headers},...(body?{body:JSON.stringify(body)}:{})}),env);
+ return {call,env};
+}
+test('only principal grants existing Google users; revoke applies to an existing session and logs changes',async()=>{
+ const {call,env}=await setup(),body={userId:'reader',email:'reader@example.test',confirmed:true};
+ assert.equal((await call('team','reader')).status,403);
+ assert.equal((await call('team/grant','reader',body)).status,403);
+ assert.equal((await call('team/grant','root',body,{Origin:'https://evil.example'})).status,403);
+ assert.equal((await call('team/grant','root',{...body,confirmed:false})).status,400);
+ assert.equal((await call('team/grant','root',{...body,email:'other@example.test'})).status,409);
+ assert.equal((await call('team/lookup','root',{email:'absent@example.test'})).status,404);
+ assert.equal((await call('team/grant','root',body)).status,200);
+ assert.equal((await(await call('me','reader')).json()).user.role,'owner');
+ assert.equal((await call('moderation','reader')).status,200);
+ assert.equal((await call('team/grant','reader',{userId:'other',email:'other@example.test',confirmed:true})).status,403);
+ assert.equal((await call('team/revoke','root',{userId:'root',email:'root@example.test',confirmed:true})).status,409);
+ assert.equal((await call('team/revoke','root',body)).status,200);
+ assert.equal((await call('moderation','reader')).status,403);
+ assert.equal((await(await call('me','reader')).json()).user.role,'reader');
+ assert.equal(env.DB.sqlite.prepare('SELECT count(*) n FROM community_role_events').get().n,2);
+});
+test('conversation search folds Spanish accents, counts published replies only and sorts activity',async()=>{
+ const {env,call}=await setup();
+ const insert=env.DB.sqlite.prepare('INSERT INTO community_posts(id,parent_id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?,?)');
+ insert.run('old',null,'root','Ánimo y meditación','Un descanso','published',1);
+ insert.run('new',null,'root','Nueva conversación','Otra pausa','published',2);
+ insert.run('reply','old','reader','','Respuesta pública','published',3);
+ insert.run('private','new','reader','','Secreto privado','pending',10);
+ const all=await(await call('posts','reader')).json();assert.equal(all.posts[0].id,'old');assert.equal(all.posts[0].replyCount,1);
+ const found=await(await call('posts?q=animo','reader')).json();assert.equal(found.posts.length,1);
+ assert.equal((await(await call('posts?q=Secreto','root')).json()).posts.length,0);
+ assert.equal((await(await call('posts?sort=new','reader')).json()).posts[0].id,'new');
+});
+test('reports stay private, deduplicate, require a reason and can only be resolved by owners',async()=>{
+ const {call,env}=await setup();
+ env.DB.sqlite.prepare('INSERT INTO community_posts(id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?)').run('reported','reader','Pregunta','Contenido de ejemplo','published',1);
+ assert.equal((await call('reports','reader',{postId:'reported',reason:'corto'})).status,400);
+ const body={postId:'reported',reason:'Este mensaje contiene publicidad no solicitada.'};
+ assert.equal((await call('reports','reader',body,{Origin:'https://other.example'})).status,403);
+ assert.equal((await call('reports','reader',body)).status,201);
+ assert.equal((await call('reports','reader',body)).status,201);
+ assert.equal((await call('reports','reader')).status,403);
+ assert.doesNotMatch(await(await call('posts','reader')).text(),/publicidad no solicitada/);
+ const {reports}=await(await call('reports','root')).json();assert.equal(reports.length,1);
+ assert.equal((await call('reports/resolve','reader',{id:reports[0].id,resolution:'Revisado'})).status,403);
+ assert.equal((await call('reports/resolve','root',{id:reports[0].id,resolution:'x'})).status,400);
+ assert.equal((await call('reports/resolve','root',{id:reports[0].id,resolution:'Revisado; cumple las normas'})).status,200);
+ assert.equal((await(await call('reports','root')).json()).reports.length,0);
+ assert.equal((await call('reports/resolve','root',{id:reports[0].id,resolution:'Otra revisión'})).status,409);
+ assert.equal(env.DB.sqlite.prepare('SELECT resolved_by FROM community_reports').get().resolved_by,'root');
+});
+test('moderation decisions are audited and their history is owner-only',async()=>{
+ const {call,env}=await setup();
+ env.DB.sqlite.prepare('INSERT INTO community_posts(id,author_id,title,body,status,created_at) VALUES(?,?,?,?,?,?)').run('moderated','reader','Pregunta','Contenido de ejemplo','pending',1);
+ assert.equal((await call('posts/moderated/moderate','root',{status:'hidden',version:0,reason:''})).status,400);
+ assert.equal((await call('posts/moderated/moderate','root',{status:'published',version:0,reason:''})).status,200);
+ assert.equal((await call('posts/moderated/moderate','root',{status:'hidden',version:1,reason:'Publicidad no solicitada'})).status,200);
+ assert.equal((await call('moderation-history','reader')).status,403);
+ assert.equal((await(await call('moderation-history','root')).json()).events.length,2);
+ assert.equal((await call('posts/moderated','reader')).status,404);
+});
+test('OAuth stores only allowed destinations and ignores external redirects',async()=>{
+ const {env}=await setup();
+ for(const returnTo of ['/propietario','https://evil.example']){
+ const r=await handleCommunity(new Request('https://book.example/auth/google/start?return_to='+encodeURIComponent(returnTo)),env);
+ const state=new URL(r.headers.get('location')).searchParams.get('state');
+ const row=env.DB.sqlite.prepare('SELECT return_path FROM community_oauth WHERE state_hash=?').get(await communityHash(state));
+ assert.equal(row.return_path,returnTo==='/propietario'?returnTo:'/comunidad');
+ }
+});
+test('private owner access uses Google sessions and rejects platform-header privilege escalation',async()=>{
+ const {env}=await setup(),worker=createPublicWorker({'@owner':{type:'text/html',data:btoa('<h1>Private</h1>')}});
+ const headers={'oai-authenticated-user-id':'root','oai-authenticated-user-email':'root@example.test'};
+ const request=(path,cookie)=>new Request('https://book.example'+path,{headers:{...headers,...(cookie?{Cookie:'__Host-community='+cookie.padEnd(43,'x')}:{})}});
+ const anonymous=await worker.fetch(request('/propietario'),env);assert.equal(anonymous.status,302);assert.equal(anonymous.headers.get('location'),'/auth/google/start?return_to=%2Fpropietario');
+ assert.equal((await worker.fetch(request('/api/site-metrics'),env)).status,403);
+ assert.equal((await worker.fetch(request('/propietario','reader'),env)).status,403);
+ const owner=await worker.fetch(request('/propietario','root'),env);assert.equal(owner.status,200);assert.match(owner.headers.get('cache-control'),/no-store/);
+});
+
+
+
+========================================================================
 ARCHIVO: web-actual/tests/community.test.mjs
 ========================================================================
 
@@ -8978,7 +11661,7 @@ async function setup(){
  return {env,call,tokens};
 }
 test('unconfigured Google stays unavailable and cannot accept posts',async()=>{const {env,call}=await setup();delete env.GOOGLE_CLIENT_SECRET;assert.equal((await(await call('/api/community/me')).json()).loginAvailable,false);assert.equal((await call('/auth/google/start')).status,303);assert.equal((await call('/api/community/posts',{user:'reader',body:{title:'Pregunta',body:'Texto'}})).status,503);});
-test('owner needs both Google session and previously authorized platform identity',async()=>{const {call}=await setup();assert.equal((await call('/api/community/owner',{user:'reader',body:{}})).status,403);assert.equal((await call('/api/community/owner',{user:'owner',body:{},headers:{'oai-authenticated-user-id':'site-owner','oai-authenticated-user-email':'owner@example.test'}})).status,200);assert.equal((await(await call('/api/community/me',{user:'owner'})).json()).user.role,'owner');assert.equal((await call('/api/community/owner',{user:'other',body:{},headers:{'oai-authenticated-user-id':'site-owner'}})).status,409);});
+test('retired bootstrap cannot grant owners',async()=>{const {call}=await setup();assert.equal((await call('/api/community/owner',{user:'owner',body:{},headers:{'oai-authenticated-user-id':'site-owner','oai-authenticated-user-email':'owner@example.test'}})).status,410);assert.equal((await(await call('/api/community/me',{user:'owner'})).json()).user.role,'reader');});
 test('posts are moderated, private data stays private and forged roles do not grant access',async()=>{
  const {env,call}=await setup();env.DB.sqlite.prepare('INSERT INTO community_owner VALUES(1,?)').run('owner');
  const created=await call('/api/community/posts',{user:'reader',body:{title:'Mi pregunta',body:'¿Cómo empezar?',role:'owner',status:'published'}});assert.equal(created.status,201);const {post}=await created.json();assert.equal(post.status,'pending');assert.equal((await(await call('/api/community/posts')).json()).posts.length,0);
@@ -9741,13 +12424,14 @@ ARCHIVO: web-actual/tests/public-site.test.mjs
 ========================================================================
 
 import test from 'node:test';
+import {communityHash} from '../worker/community.mjs';
 import assert from 'node:assert/strict';
 import worker from '../dist/server/index.js';
 import {localDatabase} from './database.mjs';
 test('Amazon landing has one purchase destination and no checkout or demo assets',async()=>{const html=await(await worker.fetch(new Request('https://book.example/'),{})).text();assert.match(html,/Donde siempre estuviste/);assert.doesNotMatch(html,/Fumada|order-dialog|cart-open|demo-session|demo-checkout|shop\.js|href="\/devoluciones"|href="\/demo"/);assert.equal([...html.matchAll(/data-track="amazon"/g)].length,2);assert.match(html,/ficha del libro/);for(const path of ['/api/admin/orders','/api/returns/case','/api/demo/session','/admin/app.js','/shop.js','/returns.js','/tienda-demo.html']){const r=await worker.fetch(new Request('https://book.example'+path),{});assert.ok([404,410].includes(r.status),path);}for(const [path,to]of [['/devoluciones','/condiciones-de-venta#amazon'],['/admin','/propietario'],['/?demo=1','/']]){const r=await worker.fetch(new Request('https://book.example'+path),{});assert.equal(r.status,301);assert.equal(r.headers.get('location'),to);}});
 test('canonical HTTPS host, clean routes and correct private access',async()=>{for(const from of ['http://prueba-aleix.com/','https://www.prueba-aleix.com/','https://fumada-xxl-aleix.scroll-magenta-7y.chatgpt.site/']){const r=await worker.fetch(new Request(from),{});assert.equal(r.status,301);assert.equal(r.headers.get('location'),'https://prueba-aleix.com/');}assert.equal((await worker.fetch(new Request('https://book.example/propietario'),{})).status,302);assert.equal((await worker.fetch(new Request('https://book.example/propietario.html'),{})).status,404);for(const route of ['comunidad','privacidad','cookies','aviso-legal','condiciones-de-venta','normas-comunidad']){const r=await worker.fetch(new Request('https://book.example/'+route),{});assert.equal(r.status,200);assert.equal(r.headers.get('x-robots-tag'),null);assert.match(r.headers.get('strict-transport-security'),/max-age/);assert.equal((await worker.fetch(new Request('https://book.example/'+route+'.html'),{})).headers.get('location'),'/'+route);}});
 test('all same-origin page assets and links resolve without broken pages',async()=>{for(const path of ['/','/comunidad','/privacidad','/cookies','/aviso-legal','/condiciones-de-venta','/normas-comunidad']){const html=await(await worker.fetch(new Request('https://book.example'+path),{})).text();for(const [,raw]of html.matchAll(/(?:href|src)="([^"]+)"/g)){const url=new URL(raw,'https://book.example'+path);if(url.origin!=='https://book.example'||url.pathname.startsWith('/auth/'))continue;const r=await worker.fetch(new Request(url),{});assert.ok(r.status>=200&&r.status<400,raw+' on '+path+' = '+r.status);}}});
-test('analytics accepts only consented bounded events and owner-only aggregate stats',async()=>{const env={DB:localDatabase(),ADMIN_OWNER_EMAIL:'owner@example.test'},call=(body,headers={})=>worker.fetch(new Request('https://book.example/api/event',{method:'POST',headers:{Origin:'https://book.example','Content-Type':'application/json','X-Site-Event':'1','CF-Connecting-IP':'test-ip',...headers},body:JSON.stringify(body)}),env);assert.equal((await call({consent:false,event:'view',page:'home'})).status,400);assert.equal((await call({consent:true,event:'view',page:'home'},{Origin:'https://other.test'})).status,403);assert.equal((await call({consent:true,event:'view',page:'home'},{DNT:'1'})).status,403);assert.equal((await call({consent:true,event:'view',page:'home'})).status,204);assert.equal((await call({consent:true,event:'amazon',page:'home'})).status,204);assert.equal((await call({consent:true,event:'amazon',page:'email@example.test'})).status,400);assert.equal((await worker.fetch(new Request('https://book.example/api/site-metrics'),env)).status,403);const stats=await worker.fetch(new Request('https://book.example/api/site-metrics',{headers:{'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'owner@example.test'}}),env);assert.equal(stats.status,200);const data=await stats.json();assert.equal(data.rows.length,2);assert.equal(data.rows.reduce((n,r)=>n+r.count,0),2);assert.doesNotMatch(JSON.stringify(data),/test-ip|@example/);});
+test('analytics accepts only consented bounded events and owner-only aggregate stats',async()=>{const env={DB:localDatabase(),ADMIN_OWNER_EMAIL:'owner@example.test'},call=(body,headers={})=>worker.fetch(new Request('https://book.example/api/event',{method:'POST',headers:{Origin:'https://book.example','Content-Type':'application/json','X-Site-Event':'1','CF-Connecting-IP':'test-ip',...headers},body:JSON.stringify(body)}),env);assert.equal((await call({consent:false,event:'view',page:'home'})).status,400);assert.equal((await call({consent:true,event:'view',page:'home'},{Origin:'https://other.test'})).status,403);assert.equal((await call({consent:true,event:'view',page:'home'},{DNT:'1'})).status,403);assert.equal((await call({consent:true,event:'view',page:'home'})).status,204);assert.equal((await call({consent:true,event:'amazon',page:'home'})).status,204);assert.equal((await call({consent:true,event:'amazon',page:'email@example.test'})).status,400);assert.equal((await worker.fetch(new Request('https://book.example/api/site-metrics'),env)).status,403);env.DB.sqlite.prepare('INSERT INTO community_users(id,google_sub,email,created_at) VALUES(?,?,?,?)').run('owner','google-owner','owner@example.test',1);env.DB.sqlite.prepare('INSERT INTO community_owner VALUES(1,?)').run('owner');env.DB.sqlite.prepare('INSERT INTO community_sessions VALUES(?,?,?)').run(await communityHash('x'.repeat(43)),'owner',Date.now()+60000);const stats=await worker.fetch(new Request('https://book.example/api/site-metrics',{headers:{Cookie:'__Host-community='+'x'.repeat(43)}}),env);assert.equal(stats.status,200);const data=await stats.json();assert.equal(data.rows.length,2);assert.equal(data.rows.reduce((n,r)=>n+r.count,0),2);assert.doesNotMatch(JSON.stringify(data),/test-ip|@example/);});
 
 test('health detects database failure without exposing internal errors',async()=>{
  const ready=await worker.fetch(new Request('https://book.example/health'),{DB:localDatabase()});assert.equal(ready.status,200);assert.deepEqual(await ready.json(),{ok:true});
@@ -10053,7 +12737,7 @@ test('concurrent duplicate purchases create one ID and one new row in the sessio
 ARCHIVO: web-actual/worker/community.mjs
 ========================================================================
 
-import {authorizeOwner} from './database.mjs';
+
 
 const communityHeaders={'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex','Vary':'Cookie'};
 const communityJson=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:communityHeaders});
@@ -10066,7 +12750,7 @@ function communityReadCookie(request,name){return request.headers.get('cookie')?
 function communityConfigured(env){try{return !!env.GOOGLE_CLIENT_ID&&!!env.GOOGLE_CLIENT_SECRET&&new URL(env.COMMUNITY_ORIGIN).origin===env.COMMUNITY_ORIGIN&&env.COMMUNITY_ORIGIN.startsWith('https://');}catch{return false;}}
 function communityRedirect(location,cookie){return new Response(null,{status:303,headers:{...communityHeaders,Location:location,...(cookie?{'Set-Cookie':cookie}:{})}});}
 async function communityLimit(env,key,max,windowMs){const now=Date.now();const hash=await communityHash(key);const row=await env.DB.prepare('INSERT INTO community_limits(key,count,expires_at) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN expires_at<=? THEN 1 ELSE count+1 END, expires_at=CASE WHEN expires_at<=? THEN ? ELSE expires_at END RETURNING count').bind(hash,now+windowMs,now,now,now+windowMs).first();await env.DB.prepare('DELETE FROM community_limits WHERE expires_at<?').bind(now-86400000).run();return row.count<=max;}
-async function communitySession(request,env){const token=communityReadCookie(request,'__Host-community');if(!/^[A-Za-z0-9_-]{43}$/.test(token))return null;return env.DB.prepare("SELECT u.id,u.alias,u.accepted_at,CASE WHEN o.user_id=u.id THEN 'owner' ELSE 'reader' END role FROM community_sessions s JOIN community_users u ON u.id=s.user_id LEFT JOIN community_owner o ON o.slot=1 WHERE s.token_hash=? AND s.expires_at>?").bind(await communityHash(token),Date.now()).first();}
+export async function communitySession(request,env){const token=communityReadCookie(request,'__Host-community');if(!/^[A-Za-z0-9_-]{43}$/.test(token))return null;return env.DB.prepare("SELECT u.id,u.alias,u.accepted_at,CASE WHEN o.user_id=u.id THEN 1 ELSE 0 END principal,CASE WHEN o.user_id=u.id OR EXISTS(SELECT 1 FROM community_coowners c WHERE c.user_id=u.id) THEN 'owner' ELSE 'reader' END role FROM community_sessions s JOIN community_users u ON u.id=s.user_id LEFT JOIN community_owner o ON o.slot=1 WHERE s.token_hash=? AND s.expires_at>?").bind(await communityHash(token),Date.now()).first();}
 function communityDecode(value){return Uint8Array.from(atob(value.replaceAll('-','+').replaceAll('_','/')),c=>c.charCodeAt(0));}
 export async function communityVerifyIdToken(jwt,client,nonce,fetcher=fetch){
  if(typeof jwt!=='string'||jwt.length>16000)throw Error('Invalid token');const parts=jwt.split('.');if(parts.length!==3)throw Error('Invalid token');
@@ -10088,7 +12772,7 @@ async function communityOAuth(request,env,url){
   if(!await communityLimit(env,'login:'+request.headers.get('cf-connecting-ip'),10,900000))return communityRedirect('/comunidad?acceso=limite');
   const state=communityRandom(),verifier=communityRandom(),nonce=communityRandom();
   await env.DB.prepare('DELETE FROM community_oauth WHERE expires_at<=?').bind(Date.now()).run();
-  await env.DB.prepare('INSERT INTO community_oauth VALUES(?,?,?,?)').bind(await communityHash(state),verifier,nonce,Date.now()+600000).run();
+  await env.DB.prepare('INSERT INTO community_oauth(state_hash,verifier,nonce,expires_at,return_path) VALUES(?,?,?,?,?)').bind(await communityHash(state),verifier,nonce,Date.now()+600000,url.searchParams.get('return_to')==='/propietario'?'/propietario':'/comunidad').run();
   const login=new URL('https://accounts.google.com/o/oauth2/v2/auth');login.search=new URLSearchParams({client_id:env.GOOGLE_CLIENT_ID,redirect_uri:callback,response_type:'code',scope:'openid email',state,nonce,code_challenge:await communityHash(verifier),code_challenge_method:'S256',prompt:'select_account'}).toString();
   return communityRedirect(login.href,communityCookie('__Host-community-oauth',state,600));
  }
@@ -10107,7 +12791,7 @@ async function communityOAuth(request,env,url){
   const token=communityRandom(),old=communityReadCookie(request,'__Host-community');
   await env.DB.prepare('DELETE FROM community_sessions WHERE token_hash=? OR expires_at<=?').bind(await communityHash(old),Date.now()).run();
   await env.DB.prepare('INSERT INTO community_sessions VALUES(?,?,?)').bind(await communityHash(token),user.id,Date.now()+7*86400000).run();
-  const result=communityRedirect('/comunidad',communityCookie('__Host-community',token,604800));result.headers.append('Set-Cookie',communityCookie('__Host-community-oauth','',0));return result;
+  const result=communityRedirect(transaction.return_path==='/propietario'?'/propietario':'/comunidad',communityCookie('__Host-community',token,604800));result.headers.append('Set-Cookie',communityCookie('__Host-community-oauth','',0));return result;
  }catch{return failed();}
 }
 async function communityBody(request){
@@ -10115,22 +12799,42 @@ async function communityBody(request){
  const reader=request.body?.getReader();if(!reader)return null;let size=0,text='';const decoder=new TextDecoder();try{while(true){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>20000){await reader.cancel();return null;}text+=decoder.decode(part.value,{stream:true});}const body=JSON.parse(text+decoder.decode());return body&&typeof body==='object'&&!Array.isArray(body)?body:null;}catch{return null;}finally{reader.releaseLock();}
 }
 const communityValid=(text,min,max)=>typeof text==='string'&&text.trim().length>=min&&text.length<=max&&!/[\x00-\x08\x0b-\x1f\x7f]/.test(text);
-const communitySelect="SELECT p.id,p.parent_id parentId,p.title,p.body,p.status,p.created_at createdAt,p.version,u.alias author,CASE WHEN o.user_id=p.author_id THEN 'owner' ELSE 'reader' END role,p.author_id authorId FROM community_posts p JOIN community_users u ON u.id=p.author_id LEFT JOIN community_owner o ON o.slot=1";
+const communitySelect="SELECT p.id,p.parent_id parentId,p.title,p.body,p.status,p.created_at createdAt,p.version,(SELECT count(*) FROM community_posts r WHERE r.parent_id=p.id AND r.status='published') replyCount,(SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status='published') lastReplyAt,u.alias author,CASE WHEN o.user_id=p.author_id OR EXISTS(SELECT 1 FROM community_coowners c WHERE c.user_id=p.author_id) THEN 'owner' ELSE 'reader' END role,p.author_id authorId FROM community_posts p JOIN community_users u ON u.id=p.author_id LEFT JOIN community_owner o ON o.slot=1";
 function communityPublicPost(post,user){const {authorId,...safe}=post;return {...safe,mine:authorId===user?.id};}
 async function communityReadPost(env,id){return env.DB.prepare(communitySelect+' WHERE p.id=?').bind(id).first();}
 function communityVisible(post,user){return post&&(post.status==='published'||user?.role==='owner'||post.authorId===user?.id);}
+function communityFold(column){let expression=column;for(const [from,to] of Object.entries({'Á':'a','á':'a','É':'e','é':'e','Í':'i','í':'i','Ó':'o','ó':'o','Ú':'u','ú':'u','Ü':'u','ü':'u','Ñ':'n','ñ':'n'}))expression="replace("+expression+",'"+from+"','"+to+"')";return 'lower('+expression+')';}
 export async function handleCommunity(request,env){
  const url=new URL(request.url),p=url.pathname;
  try{
   if(p.startsWith('/auth/google/'))return request.method==='GET'?await communityOAuth(request,env,url):communityJson({error:'Método no permitido.'},405);
   const user=await communitySession(request,env),configured=communityConfigured(env);
-  if(p==='/api/community/me'&&request.method==='GET')return communityJson({loginAvailable:configured,user,canLinkOwner:!!user&&await authorizeOwner(request,env)===200});
+  if(p==='/api/community/me'&&request.method==='GET')return communityJson({loginAvailable:configured,user,canManageOwners:!!user?.principal});
+  if(p==='/api/community/team'&&request.method==='GET'){
+   if(!user?.principal)return communityJson({error:'Solo el dueño principal puede gestionar permisos.'},403);
+   const rows=await env.DB.prepare("SELECT u.id,u.alias,u.email,CASE WHEN o.user_id=u.id THEN 1 ELSE 0 END principal FROM community_users u LEFT JOIN community_owner o ON o.slot=1 WHERE o.user_id=u.id OR EXISTS(SELECT 1 FROM community_coowners c WHERE c.user_id=u.id) ORDER BY principal DESC,u.alias,u.id").all();
+   return communityJson({members:rows.results});
+  }
   if(p==='/api/community/posts'&&request.method==='GET'){
    const offset=Math.floor(Math.max(0,Math.min(10000,Number(url.searchParams.get('offset'))||0)));const mine=url.searchParams.get('mine')==='1';
-   const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?'p.author_id=?':"p.status='published'")+" ORDER BY p.created_at DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),offset).all();
+   const query=(url.searchParams.get('q')||'').slice(0,120).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+   const search=" AND (?='' OR instr("+communityFold("p.title || ' ' || p.body || ' ' || u.alias")+",?)>0)";
+   const order=url.searchParams.get('sort')==='new'?'p.created_at':'max(p.created_at,coalesce((SELECT max(r.created_at) FROM community_posts r WHERE r.parent_id=p.id AND r.status=\'published\'),p.created_at))';
+   const rows=await env.DB.prepare(communitySelect+" WHERE p.parent_id IS NULL AND "+(mine?"p.author_id=? AND p.status!='hidden'":"p.status='published'")+search+" ORDER BY "+order+" DESC,p.id DESC LIMIT 21 OFFSET ?").bind(...(mine?[user?.id||'']:[]),query,query,offset).all();
    return communityJson({posts:rows.results.slice(0,20).map(row=>communityPublicPost(row,user)),hasMore:rows.results.length>20});
   }
+  if(p==='/api/community/reports'&&request.method==='GET'){
+   if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
+   const rows=await env.DB.prepare("SELECT r.id,r.reason,r.created_at createdAt,p.id postId,coalesce(p.parent_id,p.id) threadId,p.title,p.body,p.status,p.version,u.alias reporter FROM community_reports r JOIN community_posts p ON p.id=r.post_id JOIN community_users u ON u.id=r.reporter_id WHERE r.resolved_at IS NULL ORDER BY r.created_at,r.id LIMIT 50").all();
+   return communityJson({reports:rows.results});
+  }
+  if(p==='/api/community/moderation-history'&&request.method==='GET'){
+   if(user?.role!=='owner')return communityJson({error:'Acceso privado.'},403);
+   const rows=await env.DB.prepare('SELECT m.post_id postId,m.action,m.reason,m.created_at createdAt,u.alias actor FROM community_moderation m LEFT JOIN community_users u ON u.id=m.actor_id ORDER BY m.created_at DESC,m.id DESC LIMIT 50').all();
+   return communityJson({events:rows.results});
+  }
   if(p==='/api/community/moderation'&&request.method==='GET'){
+
    if(user?.role!=='owner')return communityJson({error:'Solo el dueño puede moderar.'},403);
    const rows=await env.DB.prepare(communitySelect+" WHERE p.status='pending' ORDER BY p.created_at,p.id LIMIT 50").all();return communityJson({posts:rows.results.map(row=>communityPublicPost(row,user))});
   }
@@ -10147,13 +12851,44 @@ export async function handleCommunity(request,env){
   if(url.origin!==env.COMMUNITY_ORIGIN||request.headers.get('origin')!==url.origin||request.headers.get('x-community-action')!=='write')return communityJson({error:'Solicitud no permitida.'},403);
   const body=await communityBody(request);if(!body)return communityJson({error:'Datos no válidos o demasiado grandes.'},400);
   if(p==='/api/community/logout'){await env.DB.prepare('DELETE FROM community_sessions WHERE token_hash=?').bind(await communityHash(communityReadCookie(request,'__Host-community'))).run();const response=communityJson({ok:true});response.headers.set('Set-Cookie',communityCookie('__Host-community','',0));return response;}
-  if(p==='/api/community/owner'){
-   if(await authorizeOwner(request,env)!==200)return communityJson({error:'Vincula la cuenta desde la sesión privada del titular.'},403);
-   await env.DB.prepare('INSERT INTO community_owner VALUES(1,?) ON CONFLICT(slot) DO NOTHING').bind(user.id).run();
-   const owner=await env.DB.prepare('SELECT user_id FROM community_owner WHERE slot=1').first();return owner.user_id===user.id?communityJson({ok:true}):communityJson({error:'Ya existe una cuenta de dueño vinculada.'},409);
-  }
+  if(p==='/api/community/owner')return communityJson({error:'La vinculación inicial ya no está disponible.'},410);
   if(!await communityLimit(env,'write:'+user.id,30,3600000))return communityJson({error:'Has enviado muchas acciones. Inténtalo más tarde.'},429);
+  if(p.startsWith('/api/community/team/')){
+   if(!user.principal)return communityJson({error:'Solo el dueño principal puede gestionar permisos.'},403);
+   if(p==='/api/community/team/lookup'){
+    if(typeof body.email!=='string'||body.email.length>320)return communityJson({error:'Indica un correo válido.'},400);
+    const rows=await env.DB.prepare('SELECT id,alias,email FROM community_users WHERE lower(email)=lower(?) LIMIT 2').bind(body.email.trim()).all();
+    if(rows.results.length!==1)return communityJson({error:'No se encuentra una única cuenta. Esa persona debe entrar primero con Google.'},404);
+    return communityJson({member:rows.results[0]});
+   }
+   if(!['/api/community/team/grant','/api/community/team/revoke'].includes(p))return communityJson({error:'No encontrado.'},404);
+   if(typeof body.userId!=='string'||typeof body.email!=='string'||body.confirmed!==true)return communityJson({error:'Confirma la cuenta y el cambio de permisos.'},400);
+   if(body.userId===user.id)return communityJson({error:'La cuenta principal está protegida.'},409);
+   const target=await env.DB.prepare('SELECT id FROM community_users WHERE id=? AND email=?').bind(body.userId,body.email).first();
+   if(!target)return communityJson({error:'La cuenta cambió. Vuelve a buscarla.'},409);
+   const grant=p.endsWith('/grant');
+   const results=await env.DB.batch([
+    grant?env.DB.prepare('INSERT INTO community_coowners(user_id,granted_by,created_at) VALUES(?,?,?) ON CONFLICT(user_id) DO NOTHING RETURNING user_id').bind(target.id,user.id,Date.now()):env.DB.prepare('DELETE FROM community_coowners WHERE user_id=? RETURNING user_id').bind(target.id),
+    env.DB.prepare('INSERT INTO community_role_events(id,actor_id,target_id,action,created_at) SELECT ?,?,?,?,? WHERE changes()=1').bind(crypto.randomUUID(),user.id,target.id,grant?'grant':'revoke',Date.now())
+   ]);
+   return communityJson({ok:true,changed:!!results[0].results?.length});
+  }
+  if(p==='/api/community/reports'){
+   if(!communityValid(body.reason,10,1000)||typeof body.postId!=='string'||body.postId.length>80)return communityJson({error:'Describe el problema entre 10 y 1000 caracteres.'},400);
+   const post=await communityReadPost(env,body.postId);if(!post||post.status!=='published')return communityJson({error:'La publicación no está disponible.'},404);
+   if(post.parentId){const parent=await communityReadPost(env,post.parentId);if(!parent||parent.status!=='published')return communityJson({error:'La conversación no está disponible.'},404);}
+   if(!await communityLimit(env,'reports:'+user.id,5,3600000))return communityJson({error:'Has enviado varios avisos. Espera una hora antes de enviar otro.'},429);
+   await env.DB.prepare('INSERT INTO community_reports(id,post_id,reporter_id,reason,created_at) SELECT ?,?,?,?,? WHERE NOT EXISTS(SELECT 1 FROM community_reports WHERE post_id=? AND reporter_id=? AND resolved_at IS NULL)').bind(crypto.randomUUID(),post.id,user.id,body.reason.trim(),Date.now(),post.id,user.id).run();
+   return communityJson({ok:true},201);
+  }
+  if(p==='/api/community/reports/resolve'){
+   if(user.role!=='owner')return communityJson({error:'Acceso privado.'},403);
+   if(typeof body.id!=='string'||!communityValid(body.resolution,3,500))return communityJson({error:'Explica la decisión para cerrar el aviso.'},400);
+   const row=await env.DB.prepare('UPDATE community_reports SET resolved_at=?,resolved_by=?,resolution=? WHERE id=? AND resolved_at IS NULL RETURNING id').bind(Date.now(),user.id,body.resolution.trim(),body.id).first();
+   return row?communityJson({ok:true}):communityJson({error:'Este aviso ya se ha cerrado. Actualiza la lista.'},409);
+  }
   if(p==='/api/community/profile'){
+
    if(!communityValid(body.alias,2,40)||body.accepted!==true)return communityJson({error:'Elige un nombre público y acepta las normas de participación.'},400);
    await env.DB.prepare('UPDATE community_users SET alias=?,accepted_at=? WHERE id=?').bind(body.alias.trim(),Date.now(),user.id).run();return communityJson({ok:true});
   }
@@ -10735,7 +13470,6 @@ function assetResponse(asset,request,isPrivate,status=200) {
 ARCHIVO: web-actual/worker/metrics.mjs
 ========================================================================
 
-import {authorizeOwner} from './database.mjs';
 import {communityHash,communityIsOwner} from './community.mjs';
 const metricsHeaders={'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex'};
 const metricsJson=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:metricsHeaders});
@@ -10743,7 +13477,7 @@ export async function handleMetrics(request,env){
  try{
   const url=new URL(request.url);
   if(url.pathname==='/api/site-metrics'&&request.method==='GET'){
-   if(await authorizeOwner(request,env)!==200&&!await communityIsOwner(request,env))return metricsJson({error:'Acceso privado.'},403);
+   if(!await communityIsOwner(request,env))return metricsJson({error:'Acceso privado.'},403);
    const since=new Date(Date.now()-30*86400000).toISOString().slice(0,10);const data=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? ORDER BY day DESC,event,page').bind(since).all();return metricsJson({days:30,rows:data.results,note:'Eventos de visitantes que aceptaron la analítica. Los clics no son ventas confirmadas en Amazon.'});
   }
   if(url.pathname!=='/api/event'||request.method!=='POST')return metricsJson({error:'No encontrado.'},404);
@@ -10963,8 +13697,7 @@ export async function handleAdminReturns(request,env,id,action){
 ARCHIVO: web-actual/worker/site.mjs
 ========================================================================
 
-import {authorizeOwner} from './database.mjs';
-import {handleCommunity,communityIsOwner} from './community.mjs';
+import {handleCommunity,communitySession} from './community.mjs';
 import {handleMetrics} from './metrics.mjs';
 const sitePrivateHeaders={'Cache-Control':'private, no-store','Vary':'Cookie, oai-authenticated-user-id','X-Robots-Tag':'noindex, nofollow','Referrer-Policy':'no-referrer'};
 const siteSecurityHeaders={'X-Content-Type-Options':'nosniff','Strict-Transport-Security':'max-age=31536000','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()'};
@@ -10981,7 +13714,7 @@ export function createPublicWorker(assets){return {async fetch(request,env){
   if(path.startsWith('/api/'))return siteJson({error:'No encontrado.'},404);
   if(!['GET','HEAD'].includes(request.method))return siteJson({error:'Método no permitido.'},405);
   if(path==='/propietario'){
-   const allowed=await authorizeOwner(request,env);if(allowed!==200&&!await communityIsOwner(request,env)){if(allowed!==401)return siteJson({error:'Solo la cuenta titular puede acceder.'},403);const redirect=siteRedirect('/signin-with-chatgpt?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}
+   const user=await communitySession(request,env);if(!user){const redirect=siteRedirect('/auth/google/start?return_to=%2Fpropietario',302);for(const [key,value]of Object.entries(sitePrivateHeaders))redirect.headers.set(key,value);return redirect;}if(user.role!=='owner')return siteJson({error:'Tu cuenta de Google no tiene permisos de dueño. Vuelve a la comunidad para cambiar de cuenta.'},403);
    return siteAsset(assets['@owner'],request,true);
   }
   if(path==='/admin'||path==='/admin/')return siteRedirect('/propietario');

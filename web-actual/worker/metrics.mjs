@@ -1,4 +1,3 @@
-import {authorizeOwner} from './database.mjs';
 import {communityHash,communityIsOwner} from './community.mjs';
 const metricsHeaders={'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex'};
 const metricsJson=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:metricsHeaders});
@@ -6,7 +5,7 @@ export async function handleMetrics(request,env){
  try{
   const url=new URL(request.url);
   if(url.pathname==='/api/site-metrics'&&request.method==='GET'){
-   if(await authorizeOwner(request,env)!==200&&!await communityIsOwner(request,env))return metricsJson({error:'Acceso privado.'},403);
+   if(!await communityIsOwner(request,env))return metricsJson({error:'Acceso privado.'},403);
    const since=new Date(Date.now()-30*86400000).toISOString().slice(0,10);const data=await env.DB.prepare('SELECT day,event,page,count FROM site_metrics WHERE day>=? ORDER BY day DESC,event,page').bind(since).all();return metricsJson({days:30,rows:data.results,note:'Eventos de visitantes que aceptaron la analítica. Los clics no son ventas confirmadas en Amazon.'});
   }
   if(url.pathname!=='/api/event'||request.method!=='POST')return metricsJson({error:'No encontrado.'},404);
