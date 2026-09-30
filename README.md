@@ -1,6 +1,6 @@
 # Donde siempre estuviste · Aleix
 
-Código de la web del libro, con las versiones anteriores conservadas. El nombre Fumada XXL era provisional. Fuente activa: `7a83526707bf07de1c1880ed962a0966b33ea99b`, 30 de septiembre de 2026.
+Código de la web del libro, con las versiones anteriores conservadas. El nombre Fumada XXL era provisional. Fuente activa: `cf0952aa37b88af773fd590acc40222f63fe8a5b`, 30 de septiembre de 2026.
 
 | Carpeta | Estado | Contenido |
 | --- | --- | --- |
